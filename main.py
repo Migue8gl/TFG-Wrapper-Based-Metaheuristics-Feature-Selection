@@ -127,7 +127,7 @@ def k_fold_cross_validation(dataset, k=5, parameters=None, target_function_param
         test_fitness.append(fitness(**target_function_parameters)['ValFitness'])
 
         fold_index += 1
-        print('\n##### Finished {} fold #####\n'.format(fold_index))
+        print('\n##### Finished fold {} #####\n'.format(fold_index))
 
     # Transpose fitness values to have each list represent values for a specific index
     transposed_fitness_val = np.array([[item['ValFitness'] for item in sublist] for sublist in fitness_each_fold.values()]).T
@@ -146,10 +146,8 @@ def population_test(dataset, k=5, parameters=None, target_function_parameters=No
 
     total_fitness_test = []
 
-    for size in range(initial_population_size, max_population_size + 5, population_size_step):
-        parameters['grasshoppers'] = size
-        test_fitness, _ = k_fold_cross_validation(dataset, k, parameters, target_function_parameters)
-        total_fitness_test.append(test_fitness)
+    total_fitness_test = [test_fitness for test_fitness, _ in (k_fold_cross_validation(dataset, k, {'grasshoppers': size, **parameters}, target_function_parameters) 
+                                                               for size in range(initial_population_size, max_population_size + 5, population_size_step))]
 
     total_fitness_array = np.array(total_fitness_test).T
     average_fitness_test = np.mean(total_fitness_array, axis=0)
@@ -185,7 +183,7 @@ def main(notify=False):
         'weights': weights,
         'data': dataset,
         'alpha': 0.5,
-        'classifier': 'knn'
+        'classifier': 'svc'
     }
 
     # Perform k-fold cross-validation
