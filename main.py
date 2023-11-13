@@ -8,6 +8,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.model_selection import StratifiedKFold
+import time
 
 def load_arff_data(file_path):
     try:
@@ -86,10 +87,18 @@ def plot_fitness_over_folds(fitness_values, iterations, k, ax=None):
         fig, ax = plt.subplots()
     ax.plot(iteration_numbers, fitness_values['TrainFitness'], label='Fitness', color='blue')
     ax.plot(iteration_numbers, fitness_values['ValFitness'], label='Validation Fitness', color='orange')
-    ax.set_title('Average Fitness Value Over {} Folds'.format(k))
+    ax.set_title('Average fitness {}-fold cross validation'.format(k))
     ax.set_xlabel('Iteration')
     ax.set_ylabel('Fitness Value')
-    ax.set_ylim(0, 1)
+    ax.legend()
+
+def plot_fitness_over_population_sizes(fitness_values, population_sizes, ax=None):
+    if ax is None:
+        fig, ax = plt.subplots()
+    ax.plot(population_sizes, fitness_values, label='Fitness', color='purple', marker='d')
+    ax.set_title('Fitness test value over population sizes')
+    ax.set_xlabel('Population Size')
+    ax.set_ylabel('Fitness Value')
     ax.legend()
 
 def k_fold_cross_validation(dataset, k=5, parameters=None, target_function_parameters=None):
@@ -130,7 +139,26 @@ def k_fold_cross_validation(dataset, k=5, parameters=None, target_function_param
 
     return test_fitness, {'TrainFitness': average_fitness_values_train, 'ValFitness': average_fitness_values_val}
 
-def main():
+def population_test(dataset, k=5, parameters=None, target_function_parameters=None):
+    initial_population_size = 5
+    max_population_size = 50
+    population_size_step = 5
+
+    total_fitness_test = []
+
+    for size in range(initial_population_size, max_population_size + 5, population_size_step):
+        parameters['grasshoppers'] = size
+        test_fitness, _ = k_fold_cross_validation(dataset, k, parameters, target_function_parameters)
+        total_fitness_test.append(test_fitness)
+
+    total_fitness_array = np.array(total_fitness_test).T
+    average_fitness_test = np.mean(total_fitness_array, axis=0)
+
+    return average_fitness_test
+
+def main(notify=False):
+    start_time = time.time()
+
     # Read data
     d1 = './datasets/spectf-heart.arff'
     d2 = './datasets/ionosphere.arff'
@@ -163,14 +191,23 @@ def main():
     # Perform k-fold cross-validation
     k = 5
     test_fitness, fitness_values = k_fold_cross_validation(dataset, k, parameters=parameters, target_function_parameters=target_function_parameters)
+    total_fitness_test = population_test(dataset, k, parameters=parameters, target_function_parameters=target_function_parameters)
 
     # Print average accuracy over k folds
-    print('Average Test fitness over 5 Folds: ', round(np.mean(test_fitness), 4))
+    print('Average test fitness over 5 Folds: ', round(np.mean(test_fitness), 2))
 
-    fig, axes = plt.subplots(nrows=1, ncols=1, figsize=(8, 10))
-    plot_fitness_over_folds(fitness_values, parameters['iterations'], k, ax=axes)
+    fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(7, 5))
+    plot_fitness_over_folds(fitness_values, parameters['iterations'], k, ax=axes[0])
+    plot_fitness_over_population_sizes(total_fitness_test, np.arange(5, 55, 5), ax=axes[1])
     plt.tight_layout()
-    plt.show()
+    plt.savefig('./images/dashboard.jpg')
+
+    total_time = time.time() - start_time
+
+    if(notify):
+        import notifications
+        notifications.send_telegram_message(message='### Ejecución Terminada - Tiempo total {} segundos ###'.format(round(total_time, 4)))
+        notifications.send_telegram_image(image_path='./images/dashboard.jpg', caption='-- Dashboard de la ejecución --')
 
 if __name__ == "__main__":
-    main()
+    main(notify=True)
