@@ -82,22 +82,28 @@ def fitness(weights, data, alpha=0.5, classifier='knn'):
 
     return {'TrainFitness': fitness_train, 'ValFitness': fitness_val}
 
-def plot_fitness_over_folds(fitness_values, iterations, k, ax=None):
+def plot_fitness_over_folds(fitness_values, iterations, k, ax=None, title=None):
     iteration_numbers = np.arange(0, iterations+1)
     if ax is None:
         fig, ax = plt.subplots()
     ax.plot(iteration_numbers, fitness_values['TrainFitness'], label='Fitness', color='blue')
     ax.plot(iteration_numbers, fitness_values['ValFitness'], label='Validation Fitness', color='orange')
-    ax.set_title('Average fitness {}-fold cross validation'.format(k))
+    if title == None:
+        ax.set_title('Average fitness {}-fold cross validation'.format(k))
+    else:
+        ax.set_title(title)
     ax.set_xlabel('Iteration')
     ax.set_ylabel('Fitness Value')
     ax.legend()
 
-def plot_fitness_over_population_sizes(fitness_values, population_sizes, ax=None):
+def plot_fitness_over_population_sizes(fitness_values, population_sizes, ax=None, title=None):
     if ax is None:
         fig, ax = plt.subplots()
     ax.plot(population_sizes, fitness_values, label='Fitness', color='purple', marker='d')
-    ax.set_title('Fitness test value over population sizes')
+    if title == None:
+        ax.set_title('Fitness test value over population sizes')
+    else:
+        ax.set_title(title)
     ax.set_xlabel('Population Size')
     ax.set_ylabel('Fitness Value')
     ax.legend()
@@ -124,7 +130,7 @@ def k_fold_cross_validation(dataset, optimizator, k=5, parameters=None, target_f
 
         # Evaluate the model on the test set of the current fold
         target_function_parameters['data'] = sample_test
-        target_function_parameters['weights'] = gao[:-1]
+        target_function_parameters['weights'] = gao[:-2]
         test_fitness.append(fitness(**target_function_parameters)['ValFitness'])
 
         fold_index += 1
@@ -147,7 +153,8 @@ def population_test(dataset, optimizator, k=5, parameters=None, target_function_
 
     total_fitness_test = []
 
-    total_fitness_test = [test_fitness for test_fitness, _ in (k_fold_cross_validation(dataset, optimizator, k, {'grasshoppers': size, **parameters}, target_function_parameters) 
+    first_key, _ = next(iter(parameters.items()))
+    total_fitness_test = [test_fitness for test_fitness, _ in (k_fold_cross_validation(dataset, optimizator, k, {first_key: size, **parameters}, target_function_parameters) 
                                                                for size in range(initial_population_size, max_population_size + 5, population_size_step))]
 
     total_fitness_array = np.array(total_fitness_test).T
@@ -177,7 +184,7 @@ def main(notify=False):
             'grasshoppers': 20,
             'min_values': [0] * (samples.shape[1]),
             'max_values': [1] * (samples.shape[1]),
-            'iterations': 100,
+            'iterations': 650,
             'binary': 's', 
         }
     elif optimizator == dragonfly_algorithm:
@@ -213,10 +220,10 @@ def main(notify=False):
 
     
     fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10, 5))
-    plot_fitness_over_folds(fitness_values, parameters['iterations'], k, ax=axes[0, 0])
-    plot_fitness_over_population_sizes(total_fitness_test, np.arange(5, 60, 10), ax=axes[0, 1])
-    plot_fitness_over_folds(fitness_values_2, parameters['iterations'], k, ax=axes[1, 0])
-    plot_fitness_over_population_sizes(total_fitness_test_2, np.arange(5, 60, 10), ax=axes[1, 1])
+    plot_fitness_over_folds(fitness_values, parameters['iterations'], k, ax=axes[0, 0], title='Average fitness {}-fold cross validation (SVC)'.format(k))
+    plot_fitness_over_population_sizes(total_fitness_test, np.arange(5, 60, 10), ax=axes[0, 1], title='Fitness test value over population sizes (SVC)')
+    plot_fitness_over_folds(fitness_values_2, parameters['iterations'], k, ax=axes[1, 0], title='Average fitness {}-fold cross validation (KNN)'.format(k))
+    plot_fitness_over_population_sizes(total_fitness_test_2, np.arange(5, 60, 10), ax=axes[1, 1], title='Fitness test value over population sizes (KNN)')
     plt.tight_layout()
     plt.savefig('./images/dashboard.jpg')
 

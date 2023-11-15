@@ -23,11 +23,11 @@ def target_function():
 
 # Function: Initialize Variables
 def initial_position(grasshoppers = 5, min_values = [-5,-5], max_values = [5,5], target_function = target_function, target_function_parameters = None):
-    position = np.zeros((grasshoppers, len(min_values)+1))
+    position = np.zeros((grasshoppers, len(min_values)+2))
     for i in range(0, grasshoppers):
         for j in range(0, len(min_values)):
              position[i,j] = random.uniform(min_values[j], max_values[j])
-        target_function_parameters['weights'] = position[i,0:position.shape[1]-1]
+        target_function_parameters['weights'] = position[i,0:position.shape[1]-2]
         position[i,-1] = target_function(**target_function_parameters)['ValFitness']
     return position
 
@@ -60,7 +60,7 @@ def s_function(r, F, L):
 
 # Function: Distance Matrix
 def build_distance_matrix(position):
-   a = position[:,:-1]
+   a = position[:,:-2]
    b = a.reshape(np.prod(a.shape[:-1]), 1, a.shape[-1])
    return np.sqrt(np.einsum('ijk,ijk->ij',  b - a,  b - a)).squeeze()
 
@@ -81,7 +81,7 @@ def update_position(position, best_position, min_values, max_values, C, F, L, ta
                 position[i, j] = hiperbolic_tan_threshold(np.clip(C*sum_grass + best_position[0, j], min_values[j], max_values[j]), np.clip(C*sum_grass, min_values[j], max_values[j]))
             else:
                 position[i, j] = np.clip(C*sum_grass + best_position[0, j], min_values[j], max_values[j])
-        target_function_parameters['weights'] = position[i,0:position.shape[1]-1]
+        target_function_parameters['weights'] = position[i,0:position.shape[1]-2]
         fitness_values = target_function(**target_function_parameters)
         position[i, -1] = fitness_values['ValFitness']
         position[i, -2] = fitness_values['TrainFitness']
