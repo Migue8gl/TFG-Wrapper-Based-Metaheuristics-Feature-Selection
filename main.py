@@ -1,4 +1,5 @@
 from pyMetaheuristic.algorithm import grasshopper_optimization_algorithm
+from pyMetaheuristic.algorithm import dragonfly_algorithm
 import numpy as np
 import arff
 import matplotlib.pyplot as plt
@@ -101,7 +102,7 @@ def plot_fitness_over_population_sizes(fitness_values, population_sizes, ax=None
     ax.set_ylabel('Fitness Value')
     ax.legend()
 
-def k_fold_cross_validation(dataset, k=5, parameters=None, target_function_parameters=None):
+def k_fold_cross_validation(dataset, optimizator, k=5, parameters=None, target_function_parameters=None):
     skf = StratifiedKFold(n_splits=k, shuffle=True, random_state=42)
     test_fitness = []
     fitness_each_fold = {}
@@ -118,7 +119,7 @@ def k_fold_cross_validation(dataset, k=5, parameters=None, target_function_param
         target_function_parameters['data'] = sample
 
         # Run optimization algorithm on the current fold
-        gao, fitness_values = grasshopper_optimization_algorithm(target_function=fitness, target_function_parameters=target_function_parameters, **parameters)
+        gao, fitness_values = optimizator(target_function=fitness, target_function_parameters=target_function_parameters, **parameters)
         fitness_each_fold[fold_index] = fitness_values
 
         # Evaluate the model on the test set of the current fold
@@ -139,14 +140,14 @@ def k_fold_cross_validation(dataset, k=5, parameters=None, target_function_param
 
     return test_fitness, {'TrainFitness': average_fitness_values_train, 'ValFitness': average_fitness_values_val}
 
-def population_test(dataset, k=5, parameters=None, target_function_parameters=None):
+def population_test(dataset, optimizator, k=5, parameters=None, target_function_parameters=None):
     initial_population_size = 5
-    max_population_size = 50
-    population_size_step = 5
+    max_population_size = 55
+    population_size_step = 10
 
     total_fitness_test = []
 
-    total_fitness_test = [test_fitness for test_fitness, _ in (k_fold_cross_validation(dataset, k, {'grasshoppers': size, **parameters}, target_function_parameters) 
+    total_fitness_test = [test_fitness for test_fitness, _ in (k_fold_cross_validation(dataset, optimizator, k, {'grasshoppers': size, **parameters}, target_function_parameters) 
                                                                for size in range(initial_population_size, max_population_size + 5, population_size_step))]
 
     total_fitness_array = np.array(total_fitness_test).T
@@ -168,14 +169,25 @@ def main(notify=False):
     classes = dataset[:, -1]
     dataset = {'data': samples, 'labels': classes}
 
+    k = 5
+    optimizator = grasshopper_optimization_algorithm
     # Optimization function's parameters
-    parameters = {
-        'grasshoppers': 20,
-        'min_values': [0] * (samples.shape[1]),
-        'max_values': [1] * (samples.shape[1]),
-        'iterations': 650,
-        'binary': 's', 
-    }
+    if optimizator == grasshopper_optimization_algorithm:
+        parameters = {
+            'grasshoppers': 20,
+            'min_values': [0] * (samples.shape[1]),
+            'max_values': [1] * (samples.shape[1]),
+            'iterations': 100,
+            'binary': 's', 
+        }
+    elif optimizator == dragonfly_algorithm:
+        parameters = {
+            'size': 20,
+            'min_values': [0] * (samples.shape[1]),
+            'max_values': [1] * (samples.shape[1]),
+            'generations': 100,
+            'binary': 's', 
+        }
 
     # Initial weights are set randomly between 0 and 1
     weights = np.random.uniform(low=0, high=1, size=samples.shape[1])
@@ -186,17 +198,25 @@ def main(notify=False):
         'classifier': 'svc'
     }
 
-    # Perform k-fold cross-validation
-    k = 5
-    test_fitness, fitness_values = k_fold_cross_validation(dataset, k, parameters=parameters, target_function_parameters=target_function_parameters)
-    total_fitness_test = population_test(dataset, k, parameters=parameters, target_function_parameters=target_function_parameters)
+    # SVC
+    test_fitness, fitness_values = k_fold_cross_validation(dataset=dataset, optimizator=optimizator, k=k, parameters=parameters, target_function_parameters=target_function_parameters)
+    total_fitness_test = population_test(dataset, optimizator, k, parameters=parameters, target_function_parameters=target_function_parameters)
+
+    # KNN
+    target_function_parameters['classifier'] = 'knn'
+    test_fitness_2, fitness_values_2 = k_fold_cross_validation(dataset, optimizator, k, parameters=parameters, target_function_parameters=target_function_parameters)
+    total_fitness_test_2 = population_test(dataset, optimizator, k, parameters=parameters, target_function_parameters=target_function_parameters)
 
     # Print average accuracy over k folds
-    print('Average test fitness over 5 Folds: ', round(np.mean(test_fitness), 2))
+    print('Average test fitness over 5 Folds (SVC): ', round(np.mean(test_fitness), 2))
+    print('Average test fitness over 5 Folds (KNN): ', round(np.mean(test_fitness_2), 2))
 
-    fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(7, 5))
-    plot_fitness_over_folds(fitness_values, parameters['iterations'], k, ax=axes[0])
-    plot_fitness_over_population_sizes(total_fitness_test, np.arange(5, 55, 5), ax=axes[1])
+    
+    fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10, 5))
+    plot_fitness_over_folds(fitness_values, parameters['iterations'], k, ax=axes[0, 0])
+    plot_fitness_over_population_sizes(total_fitness_test, np.arange(5, 60, 10), ax=axes[0, 1])
+    plot_fitness_over_folds(fitness_values_2, parameters['iterations'], k, ax=axes[1, 0])
+    plot_fitness_over_population_sizes(total_fitness_test_2, np.arange(5, 60, 10), ax=axes[1, 1])
     plt.tight_layout()
     plt.savefig('./images/dashboard.jpg')
 

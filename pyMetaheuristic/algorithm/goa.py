@@ -90,7 +90,7 @@ def update_position(position, best_position, min_values, max_values, C, F, L, ta
 ############################################################################
 
 # GOA Function
-def grasshopper_optimization_algorithm(grasshoppers = 5, min_values = [-5,-5], max_values = [5,5], c_min = 0.00004, c_max = 1, iterations = 1000, F = 0.5, L = 1.5, target_function = target_function, binary = 's', verbose = True, target_function_parameters = None):
+def grasshopper_optimization_algorithm(grasshoppers = 5, min_values = [-5,-5], max_values = [5,5], c_min = 0.00004, c_max = 1, iterations = 1000, F = 0.5, L = 1.5, target_function = target_function, binary = 'x', verbose = True, target_function_parameters = None):
     count         = 0
     position      = initial_position(grasshoppers, min_values, max_values, target_function, target_function_parameters)
     best_position = np.copy(position[np.argmin(position[:,-1]),:].reshape(1,-1))   
