@@ -221,7 +221,6 @@ def dragonfly_algorithm(size = 3, min_values = [-5,-5], max_values = [5,5], gene
             for j in range(0, dragonflies.shape[1]):
                 predator[0,j] = dragonflies[i,j]          
     best_dragon = np.copy(food_position[food_position[:,-1].argsort()][0,:])   
-    print(best_dragon)
     while (count <= generations):
         if (verbose == True):    
             print('Generation: ', count, ' f(x) = ', best_dragon[-1])
