@@ -107,7 +107,6 @@ def grasshopper_optimization_algorithm(grasshoppers = 5, min_values = [-5,-5], m
         if (verbose == True):
             print('Iteration = ', count,  ' f(x) = ', best_position[0, -1])
         fitness_values.append({'ValFitness': best_position[0, -1], 'TrainFitness': best_position[0, -2]})
-        print(best_position)
     return best_position.flatten(), fitness_values
 
 ############################################################################

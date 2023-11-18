@@ -2,12 +2,13 @@ from pyMetaheuristic.algorithm import grasshopper_optimization_algorithm
 from pyMetaheuristic.algorithm import dragonfly_algorithm
 from pyMetaheuristic.algorithm import grey_wolf_optimizer
 import numpy as np
+from matplotlib.gridspec import GridSpec
 import arff
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 import time
-from analysis_utils import k_fold_cross_validation, population_test
-from plots import plot_fitness_over_folds, plot_fitness_over_population_sizes
+from analysis_utils import k_fold_cross_validation, population_test, get_optimizer_parameters, optimizator_comparison
+from plots import plot_fitness_over_folds, plot_fitness_over_population_sizes, plot_fitness_all_optimizers
 
 def load_arff_data(file_path):
     try:
@@ -53,33 +54,7 @@ def main(notify=False):
     dataset = {'data': samples, 'labels': classes}
 
     k = 5 # F fold cross validation
-    optimizator = grey_wolf_optimizer
-
-    # Optimization function's parameters
-    if optimizator == grasshopper_optimization_algorithm:
-        parameters = {
-            'grasshoppers': 20,
-            'iterations': 100,
-            'min_values': [0] * (samples.shape[1]),
-            'max_values': [1] * (samples.shape[1]),
-            'binary': 's', 
-        }
-    elif optimizator == dragonfly_algorithm:
-        parameters = {
-            'size': 20,
-            'generations': 100,
-            'min_values': [0] * (samples.shape[1]),
-            'max_values': [1] * (samples.shape[1]),
-            'binary': 's', 
-        }
-    elif  optimizator == grey_wolf_optimizer:
-        parameters = {
-            'pack_size': 20,
-            'iterations': 100,
-            'min_values': [0] * (samples.shape[1]),
-            'max_values': [1] * (samples.shape[1]),
-            'binary': 's', 
-        }
+    optimizer_dict = {'GAO': grasshopper_optimization_algorithm, 'DA': dragonfly_algorithm, 'GWO': grey_wolf_optimizer}
 
     # Initial weights are set randomly between 0 and 1
     weights = np.random.uniform(low=0, high=1, size=samples.shape[1])
@@ -90,31 +65,54 @@ def main(notify=False):
         'classifier': 'svc',
         'n_neighbors': 20
     }
-
-    # SVC
-    test_fitness, fitness_values = k_fold_cross_validation(dataset=dataset, optimizator=optimizator, k=k, parameters=parameters, target_function_parameters=target_function_parameters)
-    total_fitness_test = population_test(dataset, optimizator, k, parameters=parameters, target_function_parameters=target_function_parameters)
-
-    # KNN
-    target_function_parameters['classifier'] = 'knn'
-    test_fitness_2, fitness_values_2 = k_fold_cross_validation(dataset, optimizator, k, parameters=parameters, target_function_parameters=target_function_parameters)
-    total_fitness_test_2 = population_test(dataset, optimizator, k, parameters=parameters, target_function_parameters=target_function_parameters)
-
-    # Print average accuracy over k folds
-    print('Average test fitness over 5 Folds (SVC): ', round(np.mean(test_fitness), 2))
-    print('Average test fitness over 5 Folds (KNN): ', round(np.mean(test_fitness_2), 2))
-
     
-    fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10, 5))
+    fig = plt.figure(figsize=(10, 30))
+    gs = GridSpec(2 * len(optimizer_dict) + 1, 2, figure=fig)
+    rows, columns = 0, 0
 
-    # Second key in parameters dict is the number of iterations/generations
-    second_key = list(parameters.keys())[1]
+    for opt in optimizer_dict.keys():
+        columns = 0
+        # Optimization function's parameters
+        parameters, optimizer_title = get_optimizer_parameters(opt, samples.shape[1])
 
-    plot_fitness_over_folds(fitness_values, parameters[second_key], k, ax=axes[0, 0], title='Average fitness {}-fold cross validation (SVC)'.format(k))
-    plot_fitness_over_population_sizes(total_fitness_test, np.arange(5, 60, 10), ax=axes[0, 1], title='Fitness test value over population sizes (SVC)')
-    plot_fitness_over_folds(fitness_values_2, parameters[second_key], k, ax=axes[1, 0], title='Average fitness {}-fold cross validation (KNN)'.format(k))
-    plot_fitness_over_population_sizes(total_fitness_test_2, np.arange(5, 60, 10), ax=axes[1, 1], title='Fitness test value over population sizes (KNN)')
-    fig.suptitle('Running DA', fontsize=16)
+        # SVC
+        test_fitness, fitness_values = k_fold_cross_validation(dataset=dataset, optimizator=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
+        total_fitness_test = population_test(dataset=dataset, optimizator=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
+
+        # KNN
+        target_function_parameters['classifier'] = 'knn'
+        test_fitness_2, fitness_values_2 = k_fold_cross_validation(dataset=dataset, optimizator=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
+        total_fitness_test_2 = population_test(dataset=dataset, optimizator=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
+
+        # Print average accuracy over k folds
+        print('Average test fitness over 5 Folds (SVC): ', round(np.mean(test_fitness), 2))
+        print('Average test fitness over 5 Folds (KNN): ', round(np.mean(test_fitness_2), 2))
+
+        # First set of plots
+        second_key = list(parameters.keys())[1]
+        ax1 = fig.add_subplot(gs[rows, columns])
+        plot_fitness_over_folds(fitness_values, parameters[second_key], k, ax=ax1, title='Average fitness {}-fold cross validation (SVC)'.format(k))
+        columns += 1
+        ax2 = fig.add_subplot(gs[rows, columns])
+        plot_fitness_over_population_sizes(total_fitness_test, np.arange(5, 60, 10), ax=ax2, title='Fitness test value over population sizes (SVC)')
+
+        # Second set of plots
+        rows += 1
+        columns = 0
+        ax3 = fig.add_subplot(gs[rows, columns])
+        plot_fitness_over_folds(fitness_values_2, parameters[second_key], k, ax=ax3, title='Average fitness {}-fold cross validation (KNN)'.format(k))
+        columns += 1
+        ax4 = fig.add_subplot(gs[rows, columns])
+        plot_fitness_over_population_sizes(total_fitness_test_2, np.arange(5, 60, 10), ax=ax4, title='Fitness test value over population sizes (KNN)')
+        rows += 1
+
+    # Third set of plots
+    ax5 = fig.add_subplot(gs[rows, :])
+    max_iterations = 30
+    fitness_from_all_optimizers = optimizator_comparison(dataset=dataset, optimizer_dict=optimizer_dict, k=5, target_function_parameters=target_function_parameters, max_iterations=max_iterations)
+    plot_fitness_all_optimizers(fitness_from_all_optimizers, 10, ax=ax5)  # Use entire row for the last plot
+
+    fig.suptitle(optimizer_title, fontsize=16)
     plt.tight_layout()
     plt.savefig('./images/dashboard.jpg')
 

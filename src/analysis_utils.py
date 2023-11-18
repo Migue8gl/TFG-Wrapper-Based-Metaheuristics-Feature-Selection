@@ -4,6 +4,11 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import train_test_split
 import numpy as np
+from pyMetaheuristic.algorithm import grasshopper_optimization_algorithm
+from pyMetaheuristic.algorithm import dragonfly_algorithm
+from pyMetaheuristic.algorithm import grey_wolf_optimizer
+
+# TODO change names of test functions 
 
 def compute_accuracy(weights, data, classifier='knn', n_neighbors=5):
     sample = data['data']
@@ -100,3 +105,52 @@ def population_test(dataset, optimizator, k=5, parameters=None, target_function_
     average_fitness_test = np.mean(total_fitness_array, axis=0)
 
     return average_fitness_test
+
+def get_optimizer_parameters(optimizer=None, solution_len=2):
+    optimizer_title = 'No Optimizer Selected'
+    parameters = {}
+
+    if optimizer == 'GAO':
+        parameters = {
+            'grasshoppers': 2,
+            'iterations': 2,
+            'min_values': [0] * (solution_len),
+            'max_values': [1] * (solution_len),
+            'binary': 's', 
+        }
+        optimizer_title = 'Running GAO'
+    elif optimizer == 'DA':
+        parameters = {
+            'size': 2,
+            'generations': 2,
+            'min_values': [0] * (solution_len),
+            'max_values': [1] * (solution_len),
+            'binary': 's', 
+        }
+        optimizer_title = 'Running DA'
+    elif optimizer == 'GWO':
+        parameters = {
+            'pack_size': 2,
+            'iterations': 2,
+            'min_values': [0] * (solution_len),
+            'max_values': [1] * (solution_len),
+            'binary': 's', 
+        }
+        optimizer_title = 'Running GWO'
+    return parameters, optimizer_title
+
+def optimizator_comparison(dataset, optimizer_dict, k=5, target_function_parameters=None, max_iterations = 30):
+    parameters_dict = {key: get_optimizer_parameters(key, dataset['data'].shape[1]) for key in optimizer_dict.keys()}
+    optimizers_fitness = {}
+
+    for key in optimizer_dict.keys():
+        fitness_values = []  
+        for _ in range(0, max_iterations):
+            _, fitness_val = k_fold_cross_validation(dataset=dataset, optimizator=optimizer_dict[key], k=k, parameters=parameters_dict[key][0], target_function_parameters=target_function_parameters)
+            fitness_values.append(np.array(fitness_val['ValFitness']))
+
+        fitness_values = np.array(fitness_values)
+        average_fitness = np.mean(fitness_values, axis=0)
+        optimizers_fitness[key] = average_fitness
+
+    return optimizers_fitness

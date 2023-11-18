@@ -46,16 +46,6 @@ def sigmoid(x):
 
 ############################################################################
 
-# Transfer functions V-Shaped
-def hiperbolic_tan_threshold(delta_x, x):
-    threshold = np.random.rand()
-    return 1-delta_x if hiperbolic_tan(x) > threshold else delta_x
-
-def hiperbolic_tan(x):
-    return np.abs(np.tanh(x))
-
-############################################################################
-
 # Function: Initialize Alpha
 def alpha_position(dimension = 2, target_function = target_function, target_function_parameters = None):
     alpha = np.zeros((1, dimension + 2))
