@@ -1,5 +1,6 @@
 from pyMetaheuristic.algorithm import grasshopper_optimization_algorithm
 from pyMetaheuristic.algorithm import dragonfly_algorithm
+from pyMetaheuristic.algorithm import grey_wolf_optimizer
 import numpy as np
 import arff
 import matplotlib.pyplot as plt
@@ -52,7 +53,7 @@ def main(notify=False):
     dataset = {'data': samples, 'labels': classes}
 
     k = 5 # F fold cross validation
-    optimizator = dragonfly_algorithm
+    optimizator = grey_wolf_optimizer
 
     # Optimization function's parameters
     if optimizator == grasshopper_optimization_algorithm:
@@ -67,6 +68,14 @@ def main(notify=False):
         parameters = {
             'size': 20,
             'generations': 100,
+            'min_values': [0] * (samples.shape[1]),
+            'max_values': [1] * (samples.shape[1]),
+            'binary': 's', 
+        }
+    elif  optimizator == grey_wolf_optimizer:
+        parameters = {
+            'pack_size': 20,
+            'iterations': 100,
             'min_values': [0] * (samples.shape[1]),
             'max_values': [1] * (samples.shape[1]),
             'binary': 's', 

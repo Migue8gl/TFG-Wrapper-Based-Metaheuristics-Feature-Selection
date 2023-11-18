@@ -64,12 +64,12 @@ def k_fold_cross_validation(dataset, optimizator, k=5, parameters=None, target_f
         target_function_parameters['data'] = sample
 
         # Run optimization algorithm on the current fold
-        gao, fitness_values = optimizator(target_function=fitness, target_function_parameters=target_function_parameters, **parameters)
+        result, fitness_values = optimizator(target_function=fitness, target_function_parameters=target_function_parameters, **parameters)
         fitness_each_fold[fold_index] = fitness_values
 
         # Evaluate the model on the test set of the current fold
         target_function_parameters['data'] = sample_test
-        target_function_parameters['weights'] = gao[:-2]
+        target_function_parameters['weights'] = result[:-2]
         test_fitness.append(fitness(**target_function_parameters)['ValFitness'])
 
         fold_index += 1
