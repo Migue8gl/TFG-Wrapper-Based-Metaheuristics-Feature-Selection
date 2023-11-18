@@ -26,12 +26,15 @@ def target_function():
 
 # Function: Initialize Variables
 def initial_variables(size = 5, min_values = [-5,-5], max_values = [5,5], target_function = target_function, target_function_parameters = None):
-    position = np.zeros((size, len(min_values)+1))
+    position = np.zeros((size, len(min_values)+2))
     for i in range(0, size):
         for j in range(0, len(min_values)):
              position[i,j] = random.uniform(min_values[j], max_values[j])
-        target_function_parameters['weights'] = position[i,:-1]
-        position[i,-1] = target_function(**target_function_parameters)['ValFitness']
+        target_function_parameters['weights'] = position[i,:-2]
+        fitness = target_function(**target_function_parameters)
+        position[i,-1] = fitness['ValFitness']
+        position[i,-2] = fitness['TrainFitness']
+
     return position
 
 ############################################################################
@@ -72,6 +75,7 @@ def levy_flight(beta = 1.5):
     sig_den = gamma((1+beta)/2)*beta*2**((beta-1)/2)
     sigma   = (sig_num/sig_den)**(1/beta)
     levy    = (0.01*r1*sigma)/(abs(r2)**(1/beta))
+
     return levy
 
 # Function: SAC
@@ -79,29 +83,29 @@ def separation_alignment_cohesion(dragonflies, radius, dragon = 0):
     dimensions = 0
     neighbours = 0
     index_list = []
-    separation = np.zeros((1, dragonflies.shape[1]-1))
-    alignment  = np.zeros((1, dragonflies.shape[1]-1))
-    cohesion   = np.zeros((1, dragonflies.shape[1]-1))
+    separation = np.zeros((1, dragonflies.shape[1]-2))
+    alignment  = np.zeros((1, dragonflies.shape[1]-2))
+    cohesion   = np.zeros((1, dragonflies.shape[1]-2))
     i          = dragon
     for j in range(0, dragonflies.shape[0]):
         if (i != j):
-            for k in range(0, dragonflies.shape[1]-1):
-                x  = dragonflies[i,0:dragonflies.shape[1]-1]
-                y  = dragonflies[j,0:dragonflies.shape[1]-1]
+            for k in range(0, dragonflies.shape[1]-2):
+                x  = dragonflies[i,0:dragonflies.shape[1]-2]
+                y  = dragonflies[j,0:dragonflies.shape[1]-2]
                 nd = euclidean_distance(x, y)
                 if (nd < radius[0,k]):
                     dimensions      = dimensions + 1
                     separation[0,k] = separation[0,k] + (dragonflies[i,k] - dragonflies[j,k])
                     alignment [0,k] = alignment [0,k] + dragonflies[j,k]
                     cohesion  [0,k] = cohesion  [0,k] + dragonflies[j,k]
-            if (dimensions == dragonflies.shape[1] - 1):
+            if (dimensions == dragonflies.shape[1] - 2):
                 neighbours = neighbours + 1
                 index_list.append(j)
     if (neighbours > 0):
         alignment = alignment/neighbours
         cohesion  = cohesion/neighbours
         for m in range(0, len(index_list)): 
-            for n in range(0, dragonflies.shape[1]-1):
+            for n in range(0, dragonflies.shape[1]-2):
                 cohesion[0,n] = cohesion[0,n] - dragonflies[index_list[m],n]                
     return separation, alignment, cohesion, neighbours
 
@@ -109,38 +113,42 @@ def separation_alignment_cohesion(dragonflies, radius, dragon = 0):
 def update_food(dragonflies, radius, food_position, min_values = [-5,-5], max_values = [5,5], dragon = 0, target_function = target_function, target_function_parameters = None):
     dimensions = 0 
     i          = dragon       
-    x          = food_position[0,:-1]
-    y          = dragonflies[i,:-1]
+    x          = food_position[0,:-2]
+    y          = dragonflies[i,:-2]
     fd         = euclidean_distance(x, y)
-    for k in range(0, dragonflies.shape[1]-1):
+    for k in range(0, dragonflies.shape[1]-2):
         if (fd <= radius[0,k]):
             dimensions = dimensions + 1
-    if (dimensions == dragonflies.shape[1] - 1):
-        for k in range(0, dragonflies.shape[1]-1):
+    if (dimensions == dragonflies.shape[1] - 2):
+        for k in range(0, dragonflies.shape[1]-2):
             food_position[0,k] = np.clip(food_position[0,k] - dragonflies[i,k], min_values[k], max_values[k])
     else:
         food_position[0,k] = np.clip(food_position[0,k] + levy_flight(beta = 1.5)*food_position[0,k], min_values[k], max_values[k])
-    target_function_parameters['weights'] = food_position[0,:-1]
-    food_position[0,-1] = target_function(**target_function_parameters)['ValFitness']
+    target_function_parameters['weights'] = food_position[0,:-2]
+    fitness_values = target_function(**target_function_parameters)
+    food_position[0,-1] = fitness_values['ValFitness']
+    food_position[0,-2] = fitness_values['TrainFitness']
     return food_position, dimensions
 
 # Function: Update Predator
 def update_predator(dragonflies, radius, predator, min_values = [-5,-5], max_values = [5,5], dragon = 0, target_function = target_function, target_function_parameters = None):
     dimensions = 0
     i          = dragon 
-    x          = predator[0,:-1]
-    y          = dragonflies[i,0:dragonflies.shape[1]-1]
+    x          = predator[0,:-2]
+    y          = dragonflies[i,0:dragonflies.shape[1]-2]
     pd         = euclidean_distance(x, y)
-    for k in range(0, dragonflies.shape[1]-1):
+    for k in range(0, dragonflies.shape[1]-2):
         if (pd <= radius[0,k]):
             dimensions = dimensions + 1
-    if (dimensions == dragonflies.shape[1]):
-        for k in range(0, dragonflies.shape[1]-1):
+    if (dimensions == dragonflies.shape[1]-2):
+        for k in range(0, dragonflies.shape[1]-2):
             predator[0,k] = np.clip(predator[0,k] + dragonflies[i,k], min_values[k], max_values[k])  
     else:
         predator[0,k] = np.clip(predator[0,k] + levy_flight(beta = 1.5)*predator[0,k], min_values[k], max_values[k])
-    target_function_parameters['weights'] = predator[0,0:predator.shape[1]-1]
-    predator[0,-1] = target_function(**target_function_parameters)['ValFitness']
+    target_function_parameters['weights'] = predator[0,0:predator.shape[1]-2]
+    fitness_values = target_function(**target_function_parameters)
+    predator[0,-1] = fitness_values['ValFitness']
+    predator[0,-2] = fitness_values['TrainFitness']
     return predator
 
 # Function: Update Search Matrices
@@ -165,6 +173,8 @@ def update_da(adjustment_const, weight_inertia, delta_max, dragonflies, best_dra
                     r2               = int.from_bytes(os.urandom(8), byteorder = 'big') / ((1 << 64) - 1)
                     r3               = int.from_bytes(os.urandom(8), byteorder = 'big') / ((1 << 64) - 1)
                     delta_flies[i,j] = np.clip(weight_inertia*delta_flies[i,j] + r1*alignment[0, j] + r2*cohesion[0, j] + r3*separation[0, j], -delta_max[0,j], delta_max[0,j])
+                    if binary == 's':
+                        dragonflies[i,j] = sigmoid_threshold(dragonflies[i,j] + delta_flies[i,j])
                     dragonflies[i,j] = dragonflies[i,j] + delta_flies[i,j]
             elif(neighbours < 1):
                 for k in (0, dragonflies.shape[1]-1):
@@ -172,15 +182,12 @@ def update_da(adjustment_const, weight_inertia, delta_max, dragonflies, best_dra
                     delta_flies[i,k] = 0
         elif(dimensions == 0):
             for m in range(0, len(min_values)):
+                delta_flies[i,m] = np.clip((weight_separation*separation[0,m] + weight_alignment*alignment[0,m] + weight_cohesion*cohesion[0,m]  + weight_food*food_position[0,m] + weight_predator*predator[0,m]) + weight_inertia*delta_flies[i,m], -delta_max[0,m], delta_max[0,m])
                 if binary == 's':
-                    delta_flies[i,m] = sigmoid_threshold(np.clip((weight_separation*separation[0,m] + weight_alignment*alignment[0,m] + weight_cohesion*cohesion[0,m]  + weight_food*food_position[0,m] + weight_predator*predator[0,m]) + weight_inertia*delta_flies[i,m], -delta_max[0,m], delta_max[0,m]))
-                elif binary == 'v':
-                    delta_flies[i,m] = hiperbolic_tan_threshold(np.clip((weight_separation*separation[0,m] + weight_alignment*alignment[0,m] + weight_cohesion*cohesion[0,m]  + weight_food*food_position[0,m] + weight_predator*predator[0,m]) + weight_inertia*delta_flies[i,m], -delta_max[0,m], delta_max[0,m]))
-                else:
-                    delta_flies[i,m] = np.clip((weight_separation*separation[0,m] + weight_alignment*alignment[0,m] + weight_cohesion*cohesion[0,m]  + weight_food*food_position[0,m] + weight_predator*predator[0,m]) + weight_inertia*delta_flies[i,m], -delta_max[0,m], delta_max[0,m])
+                    dragonflies[i,m] = sigmoid_threshold(np.clip(dragonflies[i,m] + delta_flies[i,m], min_values[m], max_values[m]))
                 dragonflies[i,m] = np.clip(dragonflies[i,m] + delta_flies[i,m], min_values[m], max_values[m])     
         
-        target_function_parameters['weights'] = dragonflies[i,:-1]
+        target_function_parameters['weights'] = dragonflies[i,:-2]
         fitness_values = target_function(**target_function_parameters)
         dragonflies[i, -1] = fitness_values['ValFitness']
         dragonflies[i, -2] = fitness_values['TrainFitness']
@@ -210,7 +217,7 @@ def dragonfly_algorithm(size = 3, min_values = [-5,-5], max_values = [5,5], gene
     dragonflies   = initial_variables(size, min_values, max_values, target_function, target_function_parameters)
     delta_flies   = initial_variables(size, min_values, max_values, target_function, target_function_parameters)   
     predator      = initial_variables(1,    min_values, max_values, target_function, target_function_parameters)
-    food_position = initial_variables(1,    min_values, max_values, target_function, target_function_parameters)   
+    food_position = initial_variables(1,    min_values, max_values, target_function, target_function_parameters)
     count         = 0
     fitness_values = []
     for i in range (0, dragonflies.shape[0]):   
@@ -220,7 +227,7 @@ def dragonfly_algorithm(size = 3, min_values = [-5,-5], max_values = [5,5], gene
         if (dragonflies[i,-1] > predator[0,-1]):
             for j in range(0, dragonflies.shape[1]):
                 predator[0,j] = dragonflies[i,j]          
-    best_dragon = np.copy(food_position[food_position[:,-1].argsort()][0,:])   
+    best_dragon = np.copy(food_position[food_position[:,-1].argsort()][0,:])  
     while (count <= generations):
         if (verbose == True):    
             print('Generation: ', count, ' f(x) = ', best_dragon[-1])
@@ -233,6 +240,6 @@ def dragonfly_algorithm(size = 3, min_values = [-5,-5], max_values = [5,5], gene
         dragonflies, food_position, predator, delta_flies, best_dragon = update_da(adjustment_const, weight_inertia, delta_max, dragonflies, best_dragon, radius, food_position, predator, delta_flies, min_values, max_values, target_function, binary, target_function_parameters)
         count = count + 1
         fitness_values.append({'ValFitness': best_dragon[-1], 'TrainFitness': best_dragon[-2]})
-    return best_dragon
+    return best_dragon, fitness_values
 
 ############################################################################

@@ -5,7 +5,7 @@ import arff
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import MinMaxScaler
 import time
-from src.analysis_utils import k_fold_cross_validation, population_test
+from analysis_utils import k_fold_cross_validation, population_test
 from plots import plot_fitness_over_folds, plot_fitness_over_population_sizes
 
 def load_arff_data(file_path):
@@ -44,7 +44,7 @@ def main(notify=False):
     d1 = './datasets/spectf-heart.arff'
     d2 = './datasets/ionosphere.arff'
     d3 = './datasets/parkinsons.arff'
-    dataset = load_arff_data(d2)
+    dataset = normalize_data(load_arff_data(d2))
 
     # Split the data into training and testing sets
     samples = dataset[:, :-1].astype(np.float64)
@@ -52,23 +52,23 @@ def main(notify=False):
     dataset = {'data': samples, 'labels': classes}
 
     k = 5 # F fold cross validation
-    optimizator = grasshopper_optimization_algorithm
+    optimizator = dragonfly_algorithm
 
     # Optimization function's parameters
     if optimizator == grasshopper_optimization_algorithm:
         parameters = {
             'grasshoppers': 20,
+            'iterations': 100,
             'min_values': [0] * (samples.shape[1]),
             'max_values': [1] * (samples.shape[1]),
-            'iterations': 650,
             'binary': 's', 
         }
     elif optimizator == dragonfly_algorithm:
         parameters = {
-            'size': 30,
+            'size': 20,
+            'generations': 100,
             'min_values': [0] * (samples.shape[1]),
             'max_values': [1] * (samples.shape[1]),
-            'generations': 500,
             'binary': 's', 
         }
 
@@ -97,9 +97,13 @@ def main(notify=False):
 
     
     fig, axes = plt.subplots(nrows=2, ncols=2, figsize=(10, 5))
-    plot_fitness_over_folds(fitness_values, parameters['iterations'], k, ax=axes[0, 0], title='Average fitness {}-fold cross validation (SVC)'.format(k))
+
+    # Second key in parameters dict is the number of iterations/generations
+    second_key = list(parameters.keys())[1]
+
+    plot_fitness_over_folds(fitness_values, parameters[second_key], k, ax=axes[0, 0], title='Average fitness {}-fold cross validation (SVC)'.format(k))
     plot_fitness_over_population_sizes(total_fitness_test, np.arange(5, 60, 10), ax=axes[0, 1], title='Fitness test value over population sizes (SVC)')
-    plot_fitness_over_folds(fitness_values_2, parameters['iterations'], k, ax=axes[1, 0], title='Average fitness {}-fold cross validation (KNN)'.format(k))
+    plot_fitness_over_folds(fitness_values_2, parameters[second_key], k, ax=axes[1, 0], title='Average fitness {}-fold cross validation (KNN)'.format(k))
     plot_fitness_over_population_sizes(total_fitness_test_2, np.arange(5, 60, 10), ax=axes[1, 1], title='Fitness test value over population sizes (KNN)')
     fig.suptitle('Running DA', fontsize=16)
     plt.tight_layout()
@@ -113,9 +117,5 @@ def main(notify=False):
         notifications.send_telegram_image(image_path='./images/dashboard.jpg', caption='-- Dashboard de la ejecución --')
 
 if __name__ == "__main__":
-    try:
-        main(notify=True)
-    except Exception as e:
-        import notifications
-        notifications.send_telegram_message('### Ha ocurrido un error en la ejecución del programa ###')
-        notifications.send_telegram_message('Error: {}'.format(e))
+    main(notify=True)
+   

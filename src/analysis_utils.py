@@ -92,7 +92,7 @@ def population_test(dataset, optimizator, k=5, parameters=None, target_function_
 
     total_fitness_test = []
 
-    first_key, _ = next(iter(parameters.items()))
+    first_key = next(iter(parameters.keys()))
     total_fitness_test = [test_fitness for test_fitness, _ in (k_fold_cross_validation(dataset, optimizator, k, {first_key: size, **parameters}, target_function_parameters) 
                                                                for size in range(initial_population_size, max_population_size + 5, population_size_step))]
 
