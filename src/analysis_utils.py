@@ -112,8 +112,8 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
 
     if optimizer == 'GAO':
         parameters = {
-            'grasshoppers': 2,
-            'iterations': 2,
+            'grasshoppers': 20,
+            'iterations': 100,
             'min_values': [0] * (solution_len),
             'max_values': [1] * (solution_len),
             'binary': 's', 
@@ -121,8 +121,8 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
         optimizer_title = 'Running GAO'
     elif optimizer == 'DA':
         parameters = {
-            'size': 2,
-            'generations': 2,
+            'size': 40,
+            'generations': 1000,
             'min_values': [0] * (solution_len),
             'max_values': [1] * (solution_len),
             'binary': 's', 
@@ -130,8 +130,8 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
         optimizer_title = 'Running DA'
     elif optimizer == 'GWO':
         parameters = {
-            'pack_size': 2,
-            'iterations': 2,
+            'pack_size': 20,
+            'iterations': 400,
             'min_values': [0] * (solution_len),
             'max_values': [1] * (solution_len),
             'binary': 's', 

@@ -10,6 +10,8 @@ import time
 from analysis_utils import k_fold_cross_validation, population_test, get_optimizer_parameters, optimizator_comparison
 from plots import plot_fitness_over_folds, plot_fitness_over_population_sizes, plot_fitness_all_optimizers
 
+# TODO use the improved vesion of GWO
+
 def load_arff_data(file_path):
     try:
         with open(file_path, 'r') as arff_file:
@@ -54,7 +56,7 @@ def main(notify=False):
     dataset = {'data': samples, 'labels': classes}
 
     k = 5 # F fold cross validation
-    optimizer_dict = {'GAO': grasshopper_optimization_algorithm, 'DA': dragonfly_algorithm, 'GWO': grey_wolf_optimizer}
+    optimizer_dict = {'DA': dragonfly_algorithm}
 
     # Initial weights are set randomly between 0 and 1
     weights = np.random.uniform(low=0, high=1, size=samples.shape[1])
