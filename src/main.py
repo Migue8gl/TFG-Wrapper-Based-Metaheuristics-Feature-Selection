@@ -58,7 +58,7 @@ def main(notify=False):
     dataset = {'data': samples, 'labels': classes}
 
     k = 5  # F fold cross validation
-    optimizer_dict = {'WOA': whale_optimization_algorithm}
+    optimizer_dict = {'DA': dragonfly_algorithm}
 
     # Initial weights are set randomly between 0 and 1
     weights = np.random.uniform(low=0, high=1, size=samples.shape[1])

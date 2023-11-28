@@ -58,9 +58,9 @@ def sigmoid(x):
 # Transfer functions V-Shaped
 
 
-def v_shaped_transfer_function(delta_x, x):
+def v_shaped_transfer_function(x):
     threshold = np.random.rand()
-    return 1-delta_x if hyperbolic_tan(x) > threshold else delta_x
+    return 1-x if hyperbolic_tan(x) > threshold else x
 
 
 def hyperbolic_tan(x):

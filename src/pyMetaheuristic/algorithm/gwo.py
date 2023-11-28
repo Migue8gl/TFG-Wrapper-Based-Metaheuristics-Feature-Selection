@@ -57,9 +57,9 @@ def sigmoid(x):
 # Transfer functions V-Shaped
 
 
-def v_shaped_transfer_function(delta_x, x):
+def v_shaped_transfer_function(x):
     threshold = np.random.rand()
-    return 1-delta_x if hyperbolic_tan(x) > threshold else delta_x
+    return 1-x if hyperbolic_tan(x) > threshold else x
 
 
 def hyperbolic_tan(x):
@@ -153,10 +153,10 @@ def update_position(position, alpha, beta, delta, a_linear_component=2, min_valu
             x3 = delta[0, j] - a_delta*distance_delta
             if binary == 's':
                 updated_position[i, j] = s_shaped_transfer_function(
-                    np.clip((x1 + x2 + x3)/3), min_values[j], max_values[j])
+                    np.clip((x1 + x2 + x3)/3, min_values[j], max_values[j]))
             elif binary == 'v':
                 updated_position[i, j] = v_shaped_transfer_function(
-                    np.clip((x1 + x2 + x3)/3), min_values[j], max_values[j])
+                    np.clip((x1 + x2 + x3)/3, min_values[j], max_values[j]))
             else:
                 updated_position[i, j] = np.clip(
                     ((x1 + x2 + x3)/3), min_values[j], max_values[j])

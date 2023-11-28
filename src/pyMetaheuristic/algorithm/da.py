@@ -170,7 +170,7 @@ def dragonfly_algorithm(size=3, min_values=[-5, -5], max_values=[5, 5], generati
         size, min_values, max_values, target_function, target_function_parameters)
     deltaflies = initial_variables(
         size, min_values, max_values, target_function, target_function_parameters)
-    beta = 3/2
+    beta = 3/2 # TODO probar y estudiar valores de beta y su función con la fase de explotación
     sigma = (gamma(1 + beta) * np.sin(np.pi * beta / 2) /
              (gamma((1 + beta) / 2) * beta * 2 ** ((beta - 1) / 2))) ** (1 / beta)
     count = 0
