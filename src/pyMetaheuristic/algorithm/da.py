@@ -38,12 +38,20 @@ def initial_variables(size = 5, min_values = [-5,-5], max_values = [5,5], target
 ############################################################################
 
 # Transfer functions S-Shaped
-def sigmoid_threshold(x):
+def s_shaped_transfer_function(x):
     threshold = np.random.rand()
     return 1 if sigmoid(x) > threshold else 0
 
 def sigmoid(x):
-    return 1 / (1 + np.exp(-10*(x-0.5)))
+    return 1 / (1 + np.exp(-x))
+
+# Transfer functions S-Shaped
+def v_shaped_transfer_function(x, delta_x):
+    threshold = np.random.rand()
+    return 1-x if hyperbolic(delta_x) > threshold else x
+
+def hyperbolic(x):
+    return np.abs(x / np.sqrt(x**2 +1))
 
 ############################################################################
 
@@ -98,7 +106,9 @@ def update_position(a, c, f, e, s, w, r, beta, sigma, enemy_pos, food_pos, delta
                 deltaflies[i, k] = (a * A[k] + c * C[k] + s * S[k] + f * F[k] + e * E[k]) + w * deltaflies[i, k]
             deltaflies [i, k] = np.clip(deltaflies[i, k], -delta_max[k], delta_max[k])
             if binary == 's':
-                dragonflies[i, k] = dragonflies[i, k] + sigmoid_threshold(deltaflies[i, k])
+                dragonflies[i, k] = s_shaped_transfer_function(deltaflies[i, k])
+            elif binary == 'v':
+                dragonflies[i, k] = v_shaped_transfer_function(dragonflies[i, k], deltaflies[i, k])
             else:
                 dragonflies[i, k] = dragonflies[i, k] + deltaflies[i, k]
             dragonflies[i, k] = np.clip(dragonflies[i, k], min_values[k], max_values[k])
@@ -145,7 +155,7 @@ def dragonfly_algorithm(size = 3, min_values = [-5,-5], max_values = [5,5], gene
         food_pos, enemy_pos = update_food_enemy(dragonflies, food_pos, enemy_pos)      
         enemy_pos, food_pos, dragonflies, deltaflies, best_dragon = update_position(a, c, f, e, s, w, r, beta, sigma, enemy_pos, food_pos, delta_max, dragonflies, deltaflies, min_values, max_values, target_function, target_function_parameters, binary)
         count = count + 1
-        fitness_values.append({'ValFitness': best_dragon[-1], 'TrainFitness': best_dragon[-2]})   
+        fitness_values.append({'ValFitness': best_dragon[-1], 'TrainFitness': best_dragon[-2]})  
     return best_dragon, fitness_values
 
 ############################################################################

@@ -1,6 +1,7 @@
 from pyMetaheuristic.algorithm import grasshopper_optimization_algorithm
 from pyMetaheuristic.algorithm import dragonfly_algorithm
 from pyMetaheuristic.algorithm import grey_wolf_optimizer
+from pyMetaheuristic.algorithm import whale_optimization_algorithm
 import numpy as np
 from matplotlib.gridspec import GridSpec
 import arff
@@ -9,8 +10,6 @@ from sklearn.preprocessing import MinMaxScaler
 import time
 from analysis_utils import k_fold_cross_validation, population_test, get_optimizer_parameters, optimizator_comparison
 from plots import plot_fitness_over_folds, plot_fitness_over_population_sizes, plot_fitness_all_optimizers
-
-# TODO use the improved vesion of GWO
 
 def load_arff_data(file_path):
     try:
@@ -56,7 +55,7 @@ def main(notify=False):
     dataset = {'data': samples, 'labels': classes}
 
     k = 5 # F fold cross validation
-    optimizer_dict = {'DA': dragonfly_algorithm}
+    optimizer_dict = {'WOA': whale_optimization_algorithm}
 
     # Initial weights are set randomly between 0 and 1
     weights = np.random.uniform(low=0, high=1, size=samples.shape[1])

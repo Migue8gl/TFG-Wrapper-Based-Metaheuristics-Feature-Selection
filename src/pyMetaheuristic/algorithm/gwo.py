@@ -37,12 +37,22 @@ def initial_position(pack_size = 5, min_values = [-5,-5], max_values = [5,5], ta
 ############################################################################
 
 # Transfer functions S-Shaped
-def sigmoid_threshold(x):
+def s_shaped_transfer_function(x):
     threshold = np.random.rand()
     return 1 if sigmoid(x) > threshold else 0
 
 def sigmoid(x):
     return 1 / (1 + np.exp(-10*(x-0.5)))
+
+############################################################################
+
+# Transfer functions V-Shaped
+def v_shaped_transfer_function(delta_x, x):
+    threshold = np.random.rand()
+    return 1-delta_x if hyperbolic_tan(x) > threshold else delta_x
+
+def hyperbolic_tan(x):
+    return np.abs(np.tanh(x))
 
 ############################################################################
 
@@ -115,7 +125,9 @@ def update_position(position, alpha, beta, delta, a_linear_component = 2, min_va
             distance_delta        = abs(c_delta*delta[0,j] - position[i,j]) 
             x3                    = delta[0,j] - a_delta*distance_delta
             if binary == 's':
-                updated_position[i,j] = np.clip(sigmoid_threshold((x1 + x2 + x3)/3),min_values[j],max_values[j])   
+                updated_position[i,j] = s_shaped_transfer_function(np.clip((x1 + x2 + x3)/3),min_values[j],max_values[j])   
+            elif binary == 'v':
+                updated_position[i,j] = v_shaped_transfer_function(np.clip((x1 + x2 + x3)/3),min_values[j],max_values[j])   
             else:                           
                 updated_position[i,j] = np.clip(((x1 + x2 + x3)/3),min_values[j],max_values[j])  
         target_function_parameters['weights'] = updated_position[i,0:updated_position.shape[1]-2]

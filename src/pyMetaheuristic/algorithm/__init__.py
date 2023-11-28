@@ -36,4 +36,4 @@ from .ssa import salp_swarm_algorithm
 from .sos import symbiotic_organisms_search
 from .spbo import student_psychology_based_optimization
 from .tlbo import teaching_learning_based_optimization
-from .whale_optimization_a import whale_optimization_algorithm
+from .woa import whale_optimization_algorithm

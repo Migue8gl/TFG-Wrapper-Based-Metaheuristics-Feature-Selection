@@ -34,7 +34,7 @@ def initial_position(grasshoppers = 5, min_values = [-5,-5], max_values = [5,5],
 ############################################################################
 
 # Transfer functions S-Shaped
-def sigmoid_threshold(x):
+def s_shaped_transfer_function(x):
     threshold = np.random.rand()
     return 1 if sigmoid(x) > threshold else 0
 
@@ -44,11 +44,11 @@ def sigmoid(x):
 ############################################################################
 
 # Transfer functions V-Shaped
-def hiperbolic_tan_threshold(delta_x, x):
+def v_shaped_transfer_function(delta_x, x):
     threshold = np.random.rand()
-    return 1-delta_x if hiperbolic_tan(x) > threshold else delta_x
+    return 1-delta_x if hyperbolic_tan(x) > threshold else delta_x
 
-def hiperbolic_tan(x):
+def hyperbolic_tan(x):
     return np.abs(np.tanh(x))
 
 ############################################################################
@@ -76,9 +76,9 @@ def update_position(position, best_position, min_values, max_values, C, F, L, ta
                 if (k != i):
                     sum_grass = sum_grass + C * ((max_values[j] - min_values[j])/2) * s_function(distance_matrix[k, i], F, L) * ((position[k, j] - position[i, j])/distance_matrix[k, i])
             if binary == 's':
-                position[i, j] = sigmoid_threshold(np.clip(C*sum_grass, min_values[j], max_values[j]))
+                position[i, j] = s_shaped_transfer_function(np.clip(C*sum_grass, min_values[j], max_values[j]))
             elif binary == 'v':
-                position[i, j] = hiperbolic_tan_threshold(np.clip(C*sum_grass + best_position[0, j], min_values[j], max_values[j]), np.clip(C*sum_grass, min_values[j], max_values[j]))
+                position[i, j] = v_shaped_transfer_function(np.clip(C*sum_grass + best_position[0, j], min_values[j], max_values[j]), np.clip(C*sum_grass, min_values[j], max_values[j]))
             else:
                 position[i, j] = np.clip(C*sum_grass + best_position[0, j], min_values[j], max_values[j])
         target_function_parameters['weights'] = position[i,0:position.shape[1]-2]

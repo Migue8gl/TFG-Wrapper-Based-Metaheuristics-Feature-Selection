@@ -113,30 +113,40 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
     if optimizer == 'GAO':
         parameters = {
             'grasshoppers': 20,
-            'iterations': 100,
+            'iterations': 500,
             'min_values': [0] * (solution_len),
             'max_values': [1] * (solution_len),
-            'binary': 's', 
+            'binary': 's', # Best binary version in paper
         }
         optimizer_title = 'Running GAO'
     elif optimizer == 'DA':
         parameters = {
-            'size': 40,
-            'generations': 1000,
+            'size': 20,
+            'generations': 500,
             'min_values': [0] * (solution_len),
             'max_values': [1] * (solution_len),
-            'binary': 's', 
+            'binary': 's', # Binary version proposed in paper
         }
         optimizer_title = 'Running DA'
     elif optimizer == 'GWO':
         parameters = {
             'pack_size': 20,
-            'iterations': 400,
+            'iterations': 500,
             'min_values': [0] * (solution_len),
             'max_values': [1] * (solution_len),
-            'binary': 's', 
+            'binary': 's', # Best binary version in the paper 
         }
         optimizer_title = 'Running GWO'
+    elif optimizer == 'WOA':
+        parameters = {
+            'hunting_party': 20,
+            'iterations': 500,
+            'min_values': [0] * (solution_len),
+            'max_values': [1] * (solution_len),
+            'spiral_param': 1,
+            'binary': 's', 
+        }
+        optimizer_title = 'Running WOA'
     return parameters, optimizer_title
 
 def optimizator_comparison(dataset, optimizer_dict, k=5, target_function_parameters=None, max_iterations = 30):
