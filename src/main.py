@@ -1,67 +1,42 @@
-from pyMetaheuristic.algorithm import grasshopper_optimization_algorithm
-from pyMetaheuristic.algorithm import dragonfly_algorithm
-from pyMetaheuristic.algorithm import grey_wolf_optimizer
-from pyMetaheuristic.algorithm import whale_optimization_algorithm
 import numpy as np
+from constants import *
 from matplotlib.gridspec import GridSpec
-import arff
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import MinMaxScaler
+from data_utils import *
 import time
-from analysis_utils import k_fold_cross_validation, population_test, get_optimizer_parameters, optimizator_comparison
+from test_utils import *
+from analysis_utils import k_fold_cross_validation, population_test, get_optimizer_parameters, optimizer_comparison
 from plots import plot_fitness_over_folds, plot_fitness_over_population_sizes, plot_fitness_all_optimizers
 
 
-def load_arff_data(file_path):
-    try:
-        with open(file_path, 'r') as arff_file:
-            dataset = arff.load(arff_file)
-            data = np.array(dataset['data'])
-
-            # Transform all columns except the last one to float64
-            data[:, :-1] = data[:, :-1].astype(np.float64)
-
-        return data
-    except Exception as e:
-        print(f"An error occurred while loading the ARFF data: {str(e)}")
-        return None
-
-
-def normalize_data(data):
-    # Separate the features (x) and labels (y)
-    x = data[:, :-1].astype(np.float64)
-    y = data[:, -1]
-
-    scaler = MinMaxScaler()
-
-    # Fit the scaler to the features and normalize the data between 0 and 1
-    x_normalized = scaler.fit_transform(x)
-
-    # Combine the normalized features (x_normalized) and labels (y) into a single array
-    normalized_data = np.column_stack((x_normalized, y))
-
-    return normalized_data
-
-
-def main(notify=False):
+def main(*args, **kwargs):
     start_time = time.time()
 
-    # Read data
-    d1 = './datasets/spectf-heart.arff'
-    d2 = './datasets/ionosphere.arff'
-    d3 = './datasets/parkinsons.arff'
-    dataset = normalize_data(load_arff_data(d2))
+    # Get parameters from the user
+    dataset_arg = kwargs.get('-d', D1)  # Chosen dataset
+    # Notifications meaning end of training
+    notify_arg = kwargs.get('-n', True)
+    k_arg = kwargs.get('-k', 5)  # Number of folds in cross validation
+    scaling_arg = kwargs.get('-s', -1)  # Type of scaling applied to dataset
 
-    # Split the data into training and testing sets
-    samples = dataset[:, :-1].astype(np.float64)
-    classes = dataset[:, -1]
-    dataset = {'data': samples, 'labels': classes}
+    # Core functionality
+    dataset = load_arff_data(dataset_arg)
+    if scaling_arg == 1:
+        norm_dataset = scaling_min_max(dataset)
+    elif scaling_arg == 2:
+        norm_dataset = scaling_standard_score(dataset)
+    else:
+        norm_dataset = dataset
 
-    k = 5  # F fold cross validation
-    optimizer_dict = {'DA': dragonfly_algorithm}
+    # Split the data into dict form
+    dataset_dict = split_data(norm_dataset)
+
+    k = k_arg  # F fold cross validation
+    optimizer_dict = {'DA': dragonfly_algorithm, }
 
     # Initial weights are set randomly between 0 and 1
-    weights = np.random.uniform(low=0, high=1, size=samples.shape[1])
+    weights = np.random.uniform(
+        low=0, high=1, size=dataset_dict[DATA].shape[1])
     target_function_parameters = {
         'weights': weights,
         'data': dataset,
@@ -78,20 +53,20 @@ def main(notify=False):
         columns = 0
         # Optimization function's parameters
         parameters, optimizer_title = get_optimizer_parameters(
-            opt, samples.shape[1])
+            opt, dataset_dict[DATA].shape[1])
 
         # SVC
         test_fitness, fitness_values = k_fold_cross_validation(
-            dataset=dataset, optimizator=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
+            dataset=dataset, optimizer=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
         total_fitness_test = population_test(
-            dataset=dataset, optimizator=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
+            dataset=dataset, optimizer=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
 
         # KNN
         target_function_parameters['classifier'] = 'knn'
         test_fitness_2, fitness_values_2 = k_fold_cross_validation(
-            dataset=dataset, optimizator=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
+            dataset=dataset, optimizer=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
         total_fitness_test_2 = population_test(
-            dataset=dataset, optimizator=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
+            dataset=dataset, optimizer=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
 
         # Print average accuracy over k folds
         print('Average test fitness over 5 Folds (SVC): ',
@@ -124,7 +99,7 @@ def main(notify=False):
     # Third set of plots
     ax5 = fig.add_subplot(gs[rows, :])
     max_iterations = 30
-    fitness_from_all_optimizers = optimizator_comparison(
+    fitness_from_all_optimizers = optimizer_comparison(
         dataset=dataset, optimizer_dict=optimizer_dict, k=5, target_function_parameters=target_function_parameters, max_iterations=max_iterations)
     # Use entire row for the last plot
     plot_fitness_all_optimizers(fitness_from_all_optimizers, 10, ax=ax5)
@@ -135,7 +110,7 @@ def main(notify=False):
 
     total_time = time.time() - start_time
 
-    if (notify):
+    if (notify_arg):
         import notifications
         notifications.send_telegram_message(
             message='### Ejecución Terminada - Tiempo total {} segundos ###'.format(round(total_time, 4)))
@@ -144,4 +119,4 @@ def main(notify=False):
 
 
 if __name__ == "__main__":
-    main(notify=True)
+    main()

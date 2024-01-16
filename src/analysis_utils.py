@@ -4,16 +4,13 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import train_test_split
 import numpy as np
-from pyMetaheuristic.algorithm import grasshopper_optimization_algorithm
-from pyMetaheuristic.algorithm import dragonfly_algorithm
-from pyMetaheuristic.algorithm import grey_wolf_optimizer
+from constants import *
 
-# TODO change names of test functions
-
+# TODO change names of functions
 
 def compute_accuracy(weights, data, classifier='knn', n_neighbors=5):
-    sample = data['data']
-    labels = data['labels']
+    sample = data[DATA]
+    labels = data[LABELS]
 
     sample_weighted = np.multiply(sample, weights)
     x_train, x_test, y_train, y_test = train_test_split(
@@ -60,29 +57,50 @@ def fitness(weights, data, alpha=0.5, classifier='knn', n_neighbors=5):
     return {'TrainFitness': fitness_train, 'ValFitness': fitness_val}
 
 
-def k_fold_cross_validation(dataset, optimizator, k=5, parameters=None, target_function_parameters=None):
+def calculate_average_fitness(fitness_each_fold, fitness_key):
+    """
+    Calculate the average fitness values from a dictionary of fitness values for each fold.
+
+    Parameters:
+    - fitness_each_fold: Dictionary of fitness values for each fold.
+    - fitness_key: Key specifying the fitness values to extract ('ValFitness' or 'TrainFitness').
+
+    Returns:
+    - An array of average fitness values across all folds.
+    """
+    # Transpose fitness values to have each list represent values for a specific index
+    transposed_fitness = np.array(
+        [[item[fitness_key] for item in sublist] for sublist in fitness_each_fold.values()]).T
+
+    # Calculate mean of each index across all lists
+    average_fitness_values = np.mean(transposed_fitness, axis=1)
+
+    return average_fitness_values
+
+
+def k_fold_cross_validation(dataset, optimizer, k=5, parameters=None, target_function_parameters=None):
     skf = StratifiedKFold(n_splits=k, shuffle=True, random_state=42)
     test_fitness = []
     fitness_each_fold = {}
     fold_index = 0
 
-    for train_index, test_index in skf.split(dataset['data'], dataset['labels']):
-        x_train, x_test = dataset['data'][train_index], dataset['data'][test_index]
-        y_train, y_test = dataset['labels'][train_index], dataset['labels'][test_index]
+    for train_index, test_index in skf.split(dataset[DATA], dataset[LABELS]):
+        x_train, x_test = dataset[DATA][train_index], dataset[DATA][test_index]
+        y_train, y_test = dataset[LABELS][train_index], dataset[LABELS][test_index]
 
-        sample = {'data': x_train, 'labels': y_train}
-        sample_test = {'data': x_test, 'labels': y_test}
+        sample = {DATA: x_train, LABELS: y_train}
+        sample_test = {DATA: x_test, LABELS: y_test}
 
         # Override the data to be optimized in the search process
-        target_function_parameters['data'] = sample
+        target_function_parameters[DATA] = sample
 
         # Run optimization algorithm on the current fold
-        result, fitness_values = optimizator(
+        result, fitness_values = optimizer(
             target_function=fitness, target_function_parameters=target_function_parameters, **parameters)
         fitness_each_fold[fold_index] = fitness_values
 
         # Evaluate the model on the test set of the current fold
-        target_function_parameters['data'] = sample_test
+        target_function_parameters[DATA] = sample_test
         target_function_parameters['weights'] = result[:-2]
         test_fitness.append(
             fitness(**target_function_parameters)['ValFitness'])
@@ -90,20 +108,15 @@ def k_fold_cross_validation(dataset, optimizator, k=5, parameters=None, target_f
         fold_index += 1
         print('\n##### Finished fold {} #####\n'.format(fold_index))
 
-    # Transpose fitness values to have each list represent values for a specific index
-    transposed_fitness_val = np.array(
-        [[item['ValFitness'] for item in sublist] for sublist in fitness_each_fold.values()]).T
-    transposed_fitness_train = np.array(
-        [[item['TrainFitness'] for item in sublist] for sublist in fitness_each_fold.values()]).T
+    average_fitness_val = calculate_average_fitness(
+        fitness_each_fold, 'ValFitness')
+    average_fitness_train = calculate_average_fitness(
+        fitness_each_fold, 'TrainFitness')
 
-    # Calculate mean of each index across all lists
-    average_fitness_values_train = np.mean(transposed_fitness_train, axis=1)
-    average_fitness_values_val = np.mean(transposed_fitness_val, axis=1)
-
-    return test_fitness, {'TrainFitness': average_fitness_values_train, 'ValFitness': average_fitness_values_val}
+    return test_fitness, {'TrainFitness': average_fitness_train, 'ValFitness': average_fitness_val}
 
 
-def population_test(dataset, optimizator, k=5, parameters=None, target_function_parameters=None):
+def population_test(dataset, optimizer, k=5, parameters=None, target_function_parameters=None):
     initial_population_size = 5
     max_population_size = 55
     population_size_step = 10
@@ -111,7 +124,7 @@ def population_test(dataset, optimizator, k=5, parameters=None, target_function_
     total_fitness_test = []
 
     first_key = next(iter(parameters.keys()))
-    total_fitness_test = [test_fitness for test_fitness, _ in (k_fold_cross_validation(dataset, optimizator, k, {first_key: size, **parameters}, target_function_parameters)
+    total_fitness_test = [test_fitness for test_fitness, _ in (k_fold_cross_validation(dataset, optimizer, k, {first_key: size, **parameters}, target_function_parameters)
                                                                for size in range(initial_population_size, max_population_size + 5, population_size_step))]
 
     total_fitness_array = np.array(total_fitness_test).T
@@ -121,7 +134,7 @@ def population_test(dataset, optimizator, k=5, parameters=None, target_function_
 
 
 def get_optimizer_parameters(optimizer=None, solution_len=2):
-    optimizer_title = 'No Optimizer Selected'
+    optimizer_title = 'No optimizer Selected'
     parameters = {}
 
     if optimizer == 'GAO':
@@ -164,16 +177,16 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
     return parameters, optimizer_title
 
 
-def optimizator_comparison(dataset, optimizer_dict, k=5, target_function_parameters=None, max_iterations=30):
+def optimizer_comparison(dataset, optimizer_dict, k=5, target_function_parameters=None, max_iterations=30):
     parameters_dict = {key: get_optimizer_parameters(
-        key, dataset['data'].shape[1]) for key in optimizer_dict.keys()}
+        key, dataset[DATA].shape[1]) for key in optimizer_dict.keys()}
     optimizers_fitness = {}
 
     for key in optimizer_dict.keys():
         fitness_values = []
         for _ in range(0, max_iterations):
             _, fitness_val = k_fold_cross_validation(
-                dataset=dataset, optimizator=optimizer_dict[key], k=k, parameters=parameters_dict[key][0], target_function_parameters=target_function_parameters)
+                dataset=dataset, optimizer=optimizer_dict[key], k=k, parameters=parameters_dict[key][0], target_function_parameters=target_function_parameters)
             fitness_values.append(np.array(fitness_val['ValFitness']))
 
         fitness_values = np.array(fitness_values)
