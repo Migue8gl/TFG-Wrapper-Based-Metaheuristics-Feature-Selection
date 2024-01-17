@@ -12,10 +12,10 @@ D3 = './datasets/parkinsons.arff'
 # --------------------------------- OPTIMIZERS ----------------------------------- #
 
 OPTIMIZERS = {
-    'gao': grasshopper_optimization_algorithm,
-    'wao': whale_optimization_algorithm,
-    'da': dragonfly_algorithm,
-    'gwo': grey_wolf_optimizer,
+    'GOA': grasshopper_optimization_algorithm,
+    'WAO': whale_optimization_algorithm,
+    'DA': dragonfly_algorithm,
+    'GWO': grey_wolf_optimizer,
 }
 
 # ----------------------------------- NAMES ------------------------------------- #
@@ -27,4 +27,4 @@ SVC = 'svc'
 
 # ---------------------------------- DEFAULT ------------------------------------ #
 
-DEFAULT_OPTIMIZER = 'gao'
+DEFAULT_OPTIMIZER = 'GOA'

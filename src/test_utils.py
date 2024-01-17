@@ -6,7 +6,7 @@ from plots import *
 import matplotlib.pyplot as plt
 
 
-def default_parameters():
+def default_parameters(opt=None):
     """
     Generates a dictionary with default parameters for a machine learning algorithm.
 
@@ -15,7 +15,7 @@ def default_parameters():
         - 'k' (int): The number of neighbors to consider in the algorithm.
             - 'dataset' (dict): The dataset to be used for training and testing.
             - 'optimizer' (object): The optimizer object used for optimizing the algorithm.
-            - 'optimizer_parameters' (dict): The parameters for the optimizer.
+            - 'optimizer_parameters' (dict): The parameters for the optimizer, example:
                 - 'grasshoppers' (int): The number of grasshoppers in the optimizer.
                 - 'iterations' (int): The number of iterations for the optimizer.
                 - 'min_values' (list): The minimum values for each feature in the dataset.
@@ -29,17 +29,12 @@ def default_parameters():
                 - 'n_neighbors' (int): The number of neighbors to consider in the target function.
     """
     dataset = split_data_to_dict(load_arff_data(D2))
+    optimizer = OPTIMIZERS[opt.upper()] if opt else OPTIMIZERS[DEFAULT_OPTIMIZER]
     return {
         'k': 5,
         'dataset': dataset,
-        'optimizer': OPTIMIZERS[DEFAULT_OPTIMIZER],
-        'optimizer_parameters': {
-            'grasshoppers': 20,
-            'iterations': 100,
-            'min_values': [0] * (dataset[DATA].shape[1]),
-            'max_values': [1] * (dataset[DATA].shape[1]),
-            'binary': 's',
-        },
+        'optimizer': optimizer,
+        'optimizer_parameters': get_optimizer_parameters(opt.upper() if opt else DEFAULT_OPTIMIZER, dataset[DATA].shape[1])[0],
         'target_function_parameters': {
             'weights': np.random.uniform(low=0, high=1, size=dataset[DATA].shape[1]),
             'data': dataset,
@@ -65,16 +60,16 @@ def test_run_optimizer(optimizer=OPTIMIZERS[DEFAULT_OPTIMIZER], optimizer_parame
     # Running the optimizer
     test_fitness, fitness_values = optimizer(
         target_function=fitness, target_function_parameters=target_function_parameters, **optimizer_parameters)
-    print('Test fitness for {} optimizer in {} classifier: {}'.format(DEFAULT_OPTIMIZER,
+    print('Test fitness for {} optimizer in {} classifier: {}'.format(target_function_parameters['optimizer'],
           target_function_parameters['classifier'], round(np.mean(test_fitness), 2)))
 
     # Plotting average fitness over k folds in cross validation
     fig = plt.figure(figsize=(5, 5))
     ax = fig.add_subplot(1, 1, 1)
     plot_fitness_over_training(
-        fitness_values, ax, 'Training curve on {} optimizer'.format(DEFAULT_OPTIMIZER))
+        fitness_values, ax, 'Training curve on {} optimizer'.format(target_function_parameters['optimizer']))
 
-    fig.suptitle('TEST RUNNING {}'.format(DEFAULT_OPTIMIZER),
+    fig.suptitle('TEST RUNNING {}'.format(target_function_parameters['optimizer']),
                  fontweight='bold', fontsize=16)
     plt.tight_layout()
     plt.savefig('./images/test_optimizer_training.jpg')
@@ -97,7 +92,7 @@ def test_cross_validation(k=5, dataset=None, optimizer=OPTIMIZERS[DEFAULT_OPTIMI
     # Test cross validation
     test_fitness, fitness_values = k_fold_cross_validation(dataset=dataset, optimizator=optimizer, k=k, parameters=optimizer_parameters,
                                                            target_function_parameters=target_function_parameters)
-    print('Average test fitness over {} Folds for {} optimizer ({}): {}'.format(k, DEFAULT_OPTIMIZER, target_function_parameters['classifier'],
+    print('Average test fitness over {} Folds for {} optimizer ({}): {}'.format(k, target_function_parameters['optimizer'], target_function_parameters['classifier'],
                                                                                 round(np.mean(test_fitness), 2)))
 
     # Plotting average fitness over k folds in cross validation
@@ -113,5 +108,6 @@ def test_cross_validation(k=5, dataset=None, optimizer=OPTIMIZERS[DEFAULT_OPTIMI
 
 
 if __name__ == '__main__':
+    optimizer = 'GWE'
     test_run_optimizer(
-        **{key: value for key, value in default_parameters().items() if key != 'k' and key != 'dataset'})
+        **{key: value for key, value in default_parameters(optimizer).items() if key != 'k' and key != 'dataset'})

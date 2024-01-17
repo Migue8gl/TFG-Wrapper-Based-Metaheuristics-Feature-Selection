@@ -137,7 +137,9 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
     optimizer_title = 'No optimizer Selected'
     parameters = {}
 
-    if optimizer == 'GAO':
+    optimizer_upper = optimizer.upper()
+
+    if optimizer_upper == 'GOA':
         parameters = {
             'grasshoppers': 20,
             'iterations': 500,
@@ -145,8 +147,8 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
             'max_values': [1] * (solution_len),
             'binary': 's',  # Best binary version in paper
         }
-        optimizer_title = 'Running GAO'
-    elif optimizer == 'DA':
+        optimizer_title = 'Running GOA'
+    elif optimizer_upper == 'DA':
         parameters = {
             'size': 20,
             'generations': 500,
@@ -155,7 +157,7 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
             'binary': 's',  # Binary version proposed in paper
         }
         optimizer_title = 'Running DA'
-    elif optimizer == 'GWO':
+    elif optimizer_upper == 'GWO':
         parameters = {
             'pack_size': 20,
             'iterations': 500,
@@ -164,7 +166,7 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
             'binary': 's',  # Best binary version in the paper
         }
         optimizer_title = 'Running GWO'
-    elif optimizer == 'WOA':
+    elif optimizer_upper == 'WOA':
         parameters = {
             'hunting_party': 20,
             'iterations': 500,
