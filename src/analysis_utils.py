@@ -178,6 +178,16 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
         optimizer_title = 'Running WOA'
     return parameters, optimizer_title
 
+def get_optimizers_list():
+    return list(OPTIMIZERS.keys())
+
+def get_optimizer(optimizer):
+    return OPTIMIZERS[optimizer.upper()]
+
+def get_optimizer_name_by_function(optimizer_func):
+    for key, value in OPTIMIZERS.items():
+        if value == optimizer_func:
+            return key
 
 def optimizer_comparison(dataset, optimizer_dict, k=5, target_function_parameters=None, max_iterations=30):
     parameters_dict = {key: get_optimizer_parameters(

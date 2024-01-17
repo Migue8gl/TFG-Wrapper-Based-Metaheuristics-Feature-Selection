@@ -29,7 +29,8 @@ def default_parameters(opt=None):
                 - 'n_neighbors' (int): The number of neighbors to consider in the target function.
     """
     dataset = split_data_to_dict(load_arff_data(D2))
-    optimizer = OPTIMIZERS[opt.upper()] if opt else OPTIMIZERS[DEFAULT_OPTIMIZER]
+    optimizer = OPTIMIZERS[opt.upper(
+    )] if opt else OPTIMIZERS[DEFAULT_OPTIMIZER]
     return {
         'k': 5,
         'dataset': dataset,
@@ -57,19 +58,21 @@ def test_run_optimizer(optimizer=OPTIMIZERS[DEFAULT_OPTIMIZER], optimizer_parame
     Returns:
     - None
     """
+    optimizer_name = get_optimizer_name_by_function(optimizer)
+
     # Running the optimizer
     test_fitness, fitness_values = optimizer(
         target_function=fitness, target_function_parameters=target_function_parameters, **optimizer_parameters)
-    print('Test fitness for {} optimizer in {} classifier: {}'.format(target_function_parameters['optimizer'],
+    print('Test fitness for {} optimizer in {} classifier: {}'.format(optimizer_name,
           target_function_parameters['classifier'], round(np.mean(test_fitness), 2)))
 
     # Plotting average fitness over k folds in cross validation
     fig = plt.figure(figsize=(5, 5))
     ax = fig.add_subplot(1, 1, 1)
     plot_fitness_over_training(
-        fitness_values, ax, 'Training curve on {} optimizer'.format(target_function_parameters['optimizer']))
+        fitness_values, ax, 'Training curve on {} optimizer'.format())
 
-    fig.suptitle('TEST RUNNING {}'.format(target_function_parameters['optimizer']),
+    fig.suptitle('TEST RUNNING {}'.format(optimizer_name),
                  fontweight='bold', fontsize=16)
     plt.tight_layout()
     plt.savefig('./images/test_optimizer_training.jpg')
@@ -89,10 +92,12 @@ def test_cross_validation(k=5, dataset=None, optimizer=OPTIMIZERS[DEFAULT_OPTIMI
     Returns:
     - None
     """
+    optimizer_name = get_optimizer_name_by_function(optimizer)
+
     # Test cross validation
     test_fitness, fitness_values = k_fold_cross_validation(dataset=dataset, optimizator=optimizer, k=k, parameters=optimizer_parameters,
                                                            target_function_parameters=target_function_parameters)
-    print('Average test fitness over {} Folds for {} optimizer ({}): {}'.format(k, target_function_parameters['optimizer'], target_function_parameters['classifier'],
+    print('Average test fitness over {} Folds for {} optimizer ({}): {}'.format(k, optimizer_name, target_function_parameters['classifier'],
                                                                                 round(np.mean(test_fitness), 2)))
 
     # Plotting average fitness over k folds in cross validation
@@ -102,12 +107,12 @@ def test_cross_validation(k=5, dataset=None, optimizer=OPTIMIZERS[DEFAULT_OPTIMI
         fitness_values, optimizer_parameters['iterations'], k, ax, 'Average fitness {}-fold cross validation'.format(k))
 
     fig.suptitle('TEST RUNNING {} ON {}-FOLD CROSS VALIDATION'.format(
-        DEFAULT_OPTIMIZER, k), fontweight='bold', fontsize=16)
+        optimizer_name, k), fontweight='bold', fontsize=16)
     plt.tight_layout()
     plt.savefig('./images/test_k_cross_validation.jpg')
 
 
 if __name__ == '__main__':
-    optimizer = 'GWE'
+    optimizer = 'GWO'
     test_run_optimizer(
         **{key: value for key, value in default_parameters(optimizer).items() if key != 'k' and key != 'dataset'})
