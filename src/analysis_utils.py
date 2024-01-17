@@ -5,8 +5,11 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import train_test_split
 import numpy as np
 from constants import *
+from data_utils import *
 
 # TODO change names of functions
+# TODO add to plot population sizes and optimizer names
+
 
 def compute_accuracy(weights, data, classifier='knn', n_neighbors=5):
     sample = data[DATA]
@@ -132,62 +135,6 @@ def population_test(dataset, optimizer, k=5, parameters=None, target_function_pa
 
     return average_fitness_test
 
-
-def get_optimizer_parameters(optimizer=None, solution_len=2):
-    optimizer_title = 'No optimizer Selected'
-    parameters = {}
-
-    optimizer_upper = optimizer.upper()
-
-    if optimizer_upper == 'GOA':
-        parameters = {
-            'grasshoppers': 20,
-            'iterations': 500,
-            'min_values': [0] * (solution_len),
-            'max_values': [1] * (solution_len),
-            'binary': 's',  # Best binary version in paper
-        }
-        optimizer_title = 'Running GOA'
-    elif optimizer_upper == 'DA':
-        parameters = {
-            'size': 20,
-            'generations': 500,
-            'min_values': [0] * (solution_len),
-            'max_values': [1] * (solution_len),
-            'binary': 's',  # Binary version proposed in paper
-        }
-        optimizer_title = 'Running DA'
-    elif optimizer_upper == 'GWO':
-        parameters = {
-            'pack_size': 20,
-            'iterations': 20,
-            'min_values': [0] * (solution_len),
-            'max_values': [1] * (solution_len),
-            'binary': 's',  # Best binary version in the paper
-        }
-        optimizer_title = 'Running GWO'
-    elif optimizer_upper == 'WOA':
-        parameters = {
-            'hunting_party': 20,
-            'iterations': 20,
-            'min_values': [0] * (solution_len),
-            'max_values': [1] * (solution_len),
-            'spiral_param': 1,
-            'binary': 's',
-        }
-        optimizer_title = 'Running WOA'
-    return parameters, optimizer_title
-
-def get_optimizers_list():
-    return list(OPTIMIZERS.keys())
-
-def get_optimizer(optimizer):
-    return OPTIMIZERS[optimizer.upper()]
-
-def get_optimizer_name_by_function(optimizer_func):
-    for key, value in OPTIMIZERS.items():
-        if value == optimizer_func:
-            return key
 
 def optimizer_comparison(dataset, optimizer_dict, k=5, target_function_parameters=None, max_iterations=30):
     parameters_dict = {key: get_optimizer_parameters(

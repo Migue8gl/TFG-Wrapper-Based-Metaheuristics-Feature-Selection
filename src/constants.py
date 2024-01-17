@@ -22,9 +22,13 @@ OPTIMIZERS = {
 
 DATA = 'data'
 LABELS = 'labels'
-KNN = 'knn'
-SVC = 'svc'
+KNN_CLASSIFIER = 'knn'
+SVC_CLASSIFIER = 'svc'
 
 # ---------------------------------- DEFAULT ------------------------------------ #
 
 DEFAULT_OPTIMIZER = 'GOA'
+DEFAULT_TEST_ITERATIONS = 50
+DEFAULT_ITERATIONS = 2
+DEFAULT_MAX_ITERATIONS = 30 # For analisys comparison between optimizers
+DEFAULT_POPULATION_SIZE = 20

@@ -13,11 +13,11 @@ def main(*args, **kwargs):
     start_time = time.time()
 
     # Get parameters from the user
-    dataset_arg = kwargs.get('-d', D1)  # Chosen dataset
+    dataset_arg = kwargs.get('-d', D2)  # Chosen dataset
     # Notifications meaning end of training
     notify_arg = kwargs.get('-n', True)
     k_arg = kwargs.get('-k', 5)  # Number of folds in cross validation
-    scaling_arg = kwargs.get('-s', -1)  # Type of scaling applied to dataset
+    scaling_arg = kwargs.get('-s', 1)  # Type of scaling applied to dataset
 
     # Core functionality
     dataset = load_arff_data(dataset_arg)
@@ -29,10 +29,10 @@ def main(*args, **kwargs):
         norm_dataset = dataset
 
     # Split the data into dict form
-    dataset_dict = split_data(norm_dataset)
+    dataset_dict = split_data_to_dict(norm_dataset)
 
     k = k_arg  # F fold cross validation
-    optimizer_dict = {'DA': dragonfly_algorithm, }
+    optimizer_dict = OPTIMIZERS
 
     # Initial weights are set randomly between 0 and 1
     weights = np.random.uniform(
@@ -55,24 +55,28 @@ def main(*args, **kwargs):
         parameters, optimizer_title = get_optimizer_parameters(
             opt, dataset_dict[DATA].shape[1])
 
-        # SVC
+        # SVC Cross validation for x optimizer alone
         test_fitness, fitness_values = k_fold_cross_validation(
-            dataset=dataset, optimizer=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
-        total_fitness_test = population_test(
-            dataset=dataset, optimizer=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
+            dataset=dataset_dict, optimizer=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
 
-        # KNN
+        # Test for x optimizer altering population size with SVC
+        total_fitness_test = population_test(
+            dataset=dataset_dict, optimizer=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
+
+        # KNN cross validation for x optimizer alone
         target_function_parameters['classifier'] = 'knn'
         test_fitness_2, fitness_values_2 = k_fold_cross_validation(
-            dataset=dataset, optimizer=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
-        total_fitness_test_2 = population_test(
-            dataset=dataset, optimizer=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
+            dataset=dataset_dict, optimizer=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
 
-        # Print average accuracy over k folds
-        print('Average test fitness over 5 Folds (SVC): ',
-              round(np.mean(test_fitness), 2))
-        print('Average test fitness over 5 Folds (KNN): ',
-              round(np.mean(test_fitness_2), 2))
+        # Test for x optimizer altering population size with KNN
+        total_fitness_test_2 = population_test(
+            dataset=dataset_dict, optimizer=optimizer_dict[opt], k=k, parameters=parameters, target_function_parameters=target_function_parameters)
+
+       # Print average accuracy over k folds
+        print('Average test fitness over {} Folds (SVC): {}'.format(
+            k, round(np.mean(test_fitness), 2)))
+        print('Average test fitness over {} Folds (KNN): {}'.format(
+            k, round(np.mean(test_fitness_2), 2)))
 
         # First set of plots
         second_key = list(parameters.keys())[1]
@@ -98,13 +102,14 @@ def main(*args, **kwargs):
 
     # Third set of plots
     ax5 = fig.add_subplot(gs[rows, :])
-    max_iterations = 30
+
+    # Comparison of all optimizers
     fitness_from_all_optimizers = optimizer_comparison(
-        dataset=dataset, optimizer_dict=optimizer_dict, k=5, target_function_parameters=target_function_parameters, max_iterations=max_iterations)
+        dataset=dataset_dict, optimizer_dict=optimizer_dict, k=5, target_function_parameters=target_function_parameters, max_iterations=DEFAULT_MAX_ITERATIONS)
     # Use entire row for the last plot
     plot_fitness_all_optimizers(fitness_from_all_optimizers, 10, ax=ax5)
 
-    fig.suptitle(optimizer_title, fontsize=16)
+    fig.suptitle(optimizer_title, fontsize=16) # TODO fix title for all plots and fix subtitle for subplots
     plt.tight_layout()
     plt.savefig('./images/dashboard.jpg')
 

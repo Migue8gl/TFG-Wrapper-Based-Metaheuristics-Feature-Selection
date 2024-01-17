@@ -121,3 +121,65 @@ def scaling_standard_score(data):
 
     # Combine the normalized features (x_normalized) and labels (y) into a single array
     return np.column_stack((x_scaled, y))
+
+# ------------------------------ OPTIMIZERS -------------------------------- #
+
+
+def get_optimizer_parameters(optimizer=None, solution_len=2):
+    optimizer_title = 'No optimizer Selected'
+    parameters = {}
+
+    optimizer_upper = optimizer.upper()
+
+    if optimizer_upper == 'GOA':
+        parameters = {
+            'grasshoppers': DEFAULT_POPULATION_SIZE,
+            'iterations': DEFAULT_ITERATIONS,
+            'min_values': [0] * (solution_len),
+            'max_values': [1] * (solution_len),
+            'binary': 's',  # Best binary version in paper
+        }
+        optimizer_title = 'Running GOA'
+    elif optimizer_upper == 'DA':
+        parameters = {
+            'size': DEFAULT_POPULATION_SIZE,
+            'generations': DEFAULT_ITERATIONS,
+            'min_values': [0] * (solution_len),
+            'max_values': [1] * (solution_len),
+            'binary': 's',  # Binary version proposed in paper
+        }
+        optimizer_title = 'Running DA'
+    elif optimizer_upper == 'GWO':
+        parameters = {
+            'pack_size': DEFAULT_POPULATION_SIZE,
+            'iterations': DEFAULT_ITERATIONS,
+            'min_values': [0] * (solution_len),
+            'max_values': [1] * (solution_len),
+            'binary': 's',  # Best binary version in the paper
+        }
+        optimizer_title = 'Running GWO'
+    elif optimizer_upper == 'WOA':
+        parameters = {
+            'hunting_party': DEFAULT_POPULATION_SIZE,
+            'iterations': DEFAULT_ITERATIONS,
+            'min_values': [0] * (solution_len),
+            'max_values': [1] * (solution_len),
+            'spiral_param': 1,
+            'binary': 's',
+        }
+        optimizer_title = 'Running WOA'
+    return parameters, optimizer_title
+
+
+def get_optimizers_list():
+    return list(OPTIMIZERS.keys())
+
+
+def get_optimizer(optimizer):
+    return OPTIMIZERS[optimizer.upper()]
+
+
+def get_optimizer_name_by_function(optimizer_func):
+    for key, value in OPTIMIZERS.items():
+        if value == optimizer_func:
+            return key
