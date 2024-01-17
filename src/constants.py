@@ -13,7 +13,7 @@ D3 = './datasets/parkinsons.arff'
 
 OPTIMIZERS = {
     'GOA': grasshopper_optimization_algorithm,
-    'WAO': whale_optimization_algorithm,
+    'WOA': whale_optimization_algorithm,
     'DA': dragonfly_algorithm,
     'GWO': grey_wolf_optimizer,
 }

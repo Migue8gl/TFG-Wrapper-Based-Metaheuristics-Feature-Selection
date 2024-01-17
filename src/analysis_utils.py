@@ -160,7 +160,7 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
     elif optimizer_upper == 'GWO':
         parameters = {
             'pack_size': 20,
-            'iterations': 500,
+            'iterations': 20,
             'min_values': [0] * (solution_len),
             'max_values': [1] * (solution_len),
             'binary': 's',  # Best binary version in the paper
@@ -169,7 +169,7 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
     elif optimizer_upper == 'WOA':
         parameters = {
             'hunting_party': 20,
-            'iterations': 500,
+            'iterations': 20,
             'min_values': [0] * (solution_len),
             'max_values': [1] * (solution_len),
             'spiral_param': 1,

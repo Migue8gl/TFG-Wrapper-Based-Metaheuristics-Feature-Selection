@@ -70,7 +70,7 @@ def test_run_optimizer(optimizer=OPTIMIZERS[DEFAULT_OPTIMIZER], optimizer_parame
     fig = plt.figure(figsize=(5, 5))
     ax = fig.add_subplot(1, 1, 1)
     plot_fitness_over_training(
-        fitness_values, ax, 'Training curve on {} optimizer'.format())
+        fitness_values, ax, 'Training curve on {} optimizer'.format(optimizer_name))
 
     fig.suptitle('TEST RUNNING {}'.format(optimizer_name),
                  fontweight='bold', fontsize=16)
@@ -113,6 +113,6 @@ def test_cross_validation(k=5, dataset=None, optimizer=OPTIMIZERS[DEFAULT_OPTIMI
 
 
 if __name__ == '__main__':
-    optimizer = 'GWO'
+    optimizer = 'WOA'
     test_run_optimizer(
         **{key: value for key, value in default_parameters(optimizer).items() if key != 'k' and key != 'dataset'})
