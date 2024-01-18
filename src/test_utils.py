@@ -35,7 +35,7 @@ def default_parameters(opt=None):
     )] if opt else OPTIMIZERS[DEFAULT_OPTIMIZER]
 
     optimizer_parameters = get_optimizer_parameters(opt.upper() if opt else DEFAULT_OPTIMIZER, dataset[DATA].shape[1])[0]
-    if 'iterarions' in optimizer_parameters:
+    if 'iterations' in optimizer_parameters:
         optimizer_parameters['iterations'] = DEFAULT_TEST_ITERATIONS
     elif 'generations' in optimizer_parameters:
         optimizer_parameters['generations'] = DEFAULT_TEST_ITERATIONS
@@ -122,6 +122,6 @@ def test_cross_validation(k=5, dataset=None, optimizer=OPTIMIZERS[DEFAULT_OPTIMI
 
 
 if __name__ == '__main__':
-    optimizer = 'DA'
+    optimizer = 'ABCO'
     test_run_optimizer(
         **{key: value for key, value in default_parameters(optimizer).items() if key != 'k' and key != 'dataset'})

@@ -168,6 +168,19 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
             'binary': 's',
         }
         optimizer_title = 'Running WOA'
+    elif optimizer_upper == 'ABCO':
+        parameters = {
+            'food_sources': DEFAULT_POPULATION_SIZE,
+            'iterations': DEFAULT_ITERATIONS,
+            'min_values': [0] * (solution_len),
+            'max_values': [1] * (solution_len),
+            'employed_bees': 3,
+            'outlookers_bees': 3,
+            'limit': 3,
+            'binary': 's',
+        }
+        optimizer_title = 'Running ABCO'
+
     return parameters, optimizer_title
 
 
