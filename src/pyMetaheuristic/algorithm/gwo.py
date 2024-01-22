@@ -152,11 +152,9 @@ def update_position(position, alpha, beta, delta, a_linear_component=2, min_valu
             distance_delta = abs(c_delta*delta[0, j] - position[i, j])
             x3 = delta[0, j] - a_delta*distance_delta
             if binary == 's':
-                updated_position[i, j] = s_shaped_transfer_function(
-                    np.clip((x1 + x2 + x3)/3, min_values[j], max_values[j]))
+                updated_position[i, j] = s_shaped_transfer_function((x1 + x2 + x3)/3)
             elif binary == 'v':
-                updated_position[i, j] = v_shaped_transfer_function(
-                    np.clip((x1 + x2 + x3)/3, min_values[j], max_values[j]))
+                updated_position[i, j] = v_shaped_transfer_function((x1 + x2 + x3)/3)
             else:
                 updated_position[i, j] = np.clip(
                     ((x1 + x2 + x3)/3), min_values[j], max_values[j])

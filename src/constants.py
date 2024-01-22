@@ -38,7 +38,7 @@ PLOT_TITLE = 'Metaheuristic optimization analysis visualization'
 # ---------------------------------- DEFAULT ------------------------------------ #
 
 DEFAULT_OPTIMIZER = 'GOA'
-DEFAULT_TEST_ITERATIONS = 50+200
+DEFAULT_TEST_ITERATIONS = 100
 DEFAULT_ITERATIONS = 500
 DEFAULT_MAX_ITERATIONS = 30  # For analisys comparison between optimizers
 DEFAULT_POPULATION_SIZE = 20

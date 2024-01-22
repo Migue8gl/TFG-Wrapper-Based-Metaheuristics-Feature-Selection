@@ -112,11 +112,9 @@ def update_position(position, leader, a_linear_component=2, b_linear_component=1
                     x_rand = position[rand_leader_index, :]
                     distance_x_rand = abs(c_leader*x_rand[j] - position[i, j])
                     if binary == 's':
-                        position[i, j] = s_shaped_transfer_function(
-                            np.clip(x_rand[j] - a_leader*distance_x_rand, min_values[j],  max_values[j]))
+                        position[i, j] = s_shaped_transfer_function(x_rand[j] - a_leader*distance_x_rand)
                     elif binary == 'v':
-                        position[i, j] = v_shaped_transfer_function(
-                            np.clip(x_rand[j] - a_leader*distance_x_rand, min_values[j],  max_values[j]))
+                        position[i, j] = v_shaped_transfer_function(x_rand[j] - a_leader*distance_x_rand)
                     else:
                         position[i, j] = np.clip(
                             x_rand[j] - a_leader*distance_x_rand, min_values[j],  max_values[j])

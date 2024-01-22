@@ -33,8 +33,10 @@ def initial_position(grasshoppers=5, min_values=[-5, -5], max_values=[5, 5], tar
             position[i, j] = random.uniform(min_values[j], max_values[j])
         target_function_parameters['weights'] = position[i,
                                                          0:position.shape[1]-2]
-        position[i, -1] = target_function(**
-                                          target_function_parameters)['ValFitness']
+        target_function_parameters['weights'] = position[i, :-2]
+        fitness = target_function(**target_function_parameters)
+        position[i, -1] = fitness['ValFitness']
+        position[i, -2] = fitness['TrainFitness']
     return position
 
 ############################################################################
@@ -55,9 +57,9 @@ def sigmoid(x):
 # Transfer functions V-Shaped
 
 
-def v_shaped_transfer_function(delta_x, x):
+def v_shaped_transfer_function(x, delta_x):
     threshold = np.random.rand()
-    return 1-delta_x if hyperbolic_tan(x) > threshold else delta_x
+    return 1-x if hyperbolic_tan(delta_x) > threshold else x
 
 
 def hyperbolic_tan(x):
@@ -96,11 +98,9 @@ def update_position(position, best_position, min_values, max_values, C, F, L, ta
                     sum_grass = sum_grass + C * ((max_values[j] - min_values[j])/2) * s_function(
                         distance_matrix[k, i], F, L) * ((position[k, j] - position[i, j])/distance_matrix[k, i])
             if binary == 's':
-                position[i, j] = s_shaped_transfer_function(
-                    np.clip(C*sum_grass, min_values[j], max_values[j]))
+                position[i, j] = s_shaped_transfer_function(C*sum_grass)
             elif binary == 'v':
-                position[i, j] = v_shaped_transfer_function(np.clip(
-                    C*sum_grass + best_position[0, j], min_values[j], max_values[j]), np.clip(C*sum_grass, min_values[j], max_values[j]))
+                position[i, j] = v_shaped_transfer_function(C*sum_grass + best_position[0, j], C*sum_grass)
             else:
                 position[i, j] = np.clip(
                     C*sum_grass + best_position[0, j], min_values[j], max_values[j])
