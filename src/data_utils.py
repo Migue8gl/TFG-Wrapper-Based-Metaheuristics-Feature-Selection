@@ -189,7 +189,7 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
             'gama': 0.9,
             'fmin': 0,
             'fmax': 10,
-            'binary': 'x',
+            'binary': 's',
         }
         optimizer_title = 'Running BA'
     elif optimizer_upper == 'PSO':
@@ -203,9 +203,9 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
             'c1': 2,
             'c2': 2,
             'verbose': True,
-            'binary': 'x',
+            'binary': 'v',
         }
-        optimizer_title = 'Running BA'
+        optimizer_title = 'Running PSO'
 
     return parameters, optimizer_title
 

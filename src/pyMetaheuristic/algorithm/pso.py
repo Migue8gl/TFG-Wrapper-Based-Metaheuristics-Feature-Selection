@@ -107,7 +107,7 @@ def update_position(position, velocity, min_values=[-5, -5], max_values=[5, 5], 
             if binary == 's':
                 position[i, j] = s_shaped_transfer_function(velocity[i, j])
             elif binary == 'v':
-                position[i, j] = v_shaped_transfer_function(velocity[i, j])
+                position[i, j] = v_shaped_transfer_function(position[i,j], velocity[i, j])
             else:
                 position[i, j] = np.clip(
                     (position[i, j] + velocity[i, j]),  min_values[j],  max_values[j])
