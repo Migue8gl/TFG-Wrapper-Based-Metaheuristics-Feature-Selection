@@ -102,14 +102,14 @@ def main(*args, **kwargs):
 
     # Third set of plots
     ax5 = fig.add_subplot(gs[rows, :])
-
+    
     # Comparison of all optimizers
     fitness_from_all_optimizers = optimizer_comparison(
         dataset=dataset_dict, optimizer_dict=optimizer_dict, k=5, target_function_parameters=target_function_parameters, max_iterations=DEFAULT_MAX_ITERATIONS)
     # Use entire row for the last plot
     plot_fitness_all_optimizers(fitness_from_all_optimizers, 10, ax=ax5)
 
-    fig.suptitle(optimizer_title, fontsize=16) # TODO fix title for all plots and fix subtitle for subplots
+    fig.suptitle(PLOT_TITLE, fontsize=16) # TODO fix title for all plots and fix subtitle for subplots
     plt.tight_layout()
     plt.savefig('./images/dashboard.jpg')
 

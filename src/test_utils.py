@@ -122,6 +122,6 @@ def test_cross_validation(k=5, dataset=None, optimizer=OPTIMIZERS[DEFAULT_OPTIMI
 
 
 if __name__ == '__main__':
-    optimizer = 'ABCO'
+    optimizer = 'PSO'
     test_run_optimizer(
         **{key: value for key, value in default_parameters(optimizer).items() if key != 'k' and key != 'dataset'})

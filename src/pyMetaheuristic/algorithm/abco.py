@@ -233,6 +233,8 @@ def artificial_bee_colony_optimization(food_sources=3, iterations=50, min_values
         fitness_values.append(
             {'ValFitness': best_solution[-1], 'TrainFitness': best_solution[-2]})
         count = count + 1
+
+        print(best_solution)
     return best_solution, fitness_values
 
 ############################################################################

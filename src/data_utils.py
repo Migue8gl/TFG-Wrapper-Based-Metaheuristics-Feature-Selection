@@ -76,7 +76,6 @@ def split_dicts_keys(list_of_dicts):
 
     return first_key_values, second_key_values
 
-
 # ---------------------------- NORMALIZE / SCALING DATA ------------------------------ #
 # https://en.wikipedia.org/wiki/Normalization_(statistics)
 
@@ -180,6 +179,33 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
             'binary': 's',
         }
         optimizer_title = 'Running ABCO'
+    elif optimizer_upper == 'BA':
+        parameters = {
+            'swarm_size': DEFAULT_POPULATION_SIZE,
+            'iterations': DEFAULT_ITERATIONS,
+            'min_values': [0] * (solution_len),
+            'max_values': [1] * (solution_len),
+            'alpha': 0.9,
+            'gama': 0.9,
+            'fmin': 0,
+            'fmax': 10,
+            'binary': 'x',
+        }
+        optimizer_title = 'Running BA'
+    elif optimizer_upper == 'PSO':
+        parameters = {
+            'swarm_size': DEFAULT_POPULATION_SIZE,
+            'iterations': DEFAULT_ITERATIONS,
+            'min_values': [0] * (solution_len),
+            'max_values': [1] * (solution_len),
+            'decay': 0,
+            'w': 0.9,
+            'c1': 2,
+            'c2': 2,
+            'verbose': True,
+            'binary': 'x',
+        }
+        optimizer_title = 'Running BA'
 
     return parameters, optimizer_title
 
