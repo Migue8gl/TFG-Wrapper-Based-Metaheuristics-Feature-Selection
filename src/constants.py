@@ -4,9 +4,8 @@ from pyMetaheuristic.algorithm import grey_wolf_optimizer
 from pyMetaheuristic.algorithm import whale_optimization_algorithm
 from pyMetaheuristic.algorithm import artificial_bee_colony_optimization
 from pyMetaheuristic.algorithm import bat_algorithm
-from pyMetaheuristic.algorithm import bat_algorithm
+from pyMetaheuristic.algorithm import firefly_algorithm
 from pyMetaheuristic.algorithm import particle_swarm_optimization
-
 
 # ---------------------------------- DATASETS ------------------------------------ #
 
@@ -23,8 +22,8 @@ OPTIMIZERS = {
     'GWO': grey_wolf_optimizer,
     'ABCO': artificial_bee_colony_optimization,
     'BA': bat_algorithm,
-    'PSO': particle_swarm_optimization
-
+    'PSO': particle_swarm_optimization,
+    'FA': firefly_algorithm
 }
 
 # ----------------------------------- NAMES ------------------------------------- #

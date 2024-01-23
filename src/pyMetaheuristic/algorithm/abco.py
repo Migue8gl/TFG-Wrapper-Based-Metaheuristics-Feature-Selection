@@ -192,8 +192,6 @@ def scouter_bee(improving_sources, trial_update, limit=3, target_function=target
             fitness_values = target_function(**target_function_parameters)
             improving_sources[i, -1] = fitness_values['ValFitness']
             improving_sources[i, -2] = fitness_values['TrainFitness']
-            function_value = improving_sources[i, -1]
-            improving_sources[i, -1] = function_value
     return improving_sources
 
 ############################################################################
@@ -234,7 +232,6 @@ def artificial_bee_colony_optimization(food_sources=3, iterations=50, min_values
             {'ValFitness': best_solution[-1], 'TrainFitness': best_solution[-2]})
         count = count + 1
 
-        print(best_solution)
     return best_solution, fitness_values
 
 ############################################################################

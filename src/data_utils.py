@@ -76,6 +76,7 @@ def split_dicts_keys(list_of_dicts):
 
     return first_key_values, second_key_values
 
+
 # ---------------------------- NORMALIZE / SCALING DATA ------------------------------ #
 # https://en.wikipedia.org/wiki/Normalization_(statistics)
 
@@ -120,6 +121,7 @@ def scaling_standard_score(data):
 
     # Combine the normalized features (x_normalized) and labels (y) into a single array
     return np.column_stack((x_scaled, y))
+
 
 # ------------------------------ OPTIMIZERS -------------------------------- #
 
@@ -203,7 +205,20 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
             'c1': 2,
             'c2': 2,
             'verbose': True,
-            'binary': 'v',
+            'binary': 's',
+        }
+        optimizer_title = 'Running PSO'
+    elif optimizer_upper == 'FA':
+        parameters = {
+            'swarm_size': DEFAULT_POPULATION_SIZE,
+            'generations': DEFAULT_ITERATIONS,
+            'min_values': [0] * (solution_len),
+            'max_values': [1] * (solution_len),
+            'alpha_0': 0.02,
+            'beta_0': 0.1,
+            'gama': 1,
+            'verbose': True,
+            'binary': 's',
         }
         optimizer_title = 'Running PSO'
 
