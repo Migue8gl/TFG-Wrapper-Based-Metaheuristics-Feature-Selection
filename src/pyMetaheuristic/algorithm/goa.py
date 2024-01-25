@@ -45,7 +45,7 @@ def initial_position(grasshoppers=5, min_values=[-5, -5], max_values=[5, 5], tar
 
 
 def s_shaped_transfer_function(x):
-    threshold = np.random.rand()
+    threshold = np.random.random()
     return 1 if sigmoid(x) > threshold else 0
 
 
@@ -58,7 +58,7 @@ def sigmoid(x):
 
 
 def v_shaped_transfer_function(x, delta_x):
-    threshold = np.random.rand()
+    threshold = np.random.random()
     return 1-x if hyperbolic_tan(delta_x) > threshold else x
 
 

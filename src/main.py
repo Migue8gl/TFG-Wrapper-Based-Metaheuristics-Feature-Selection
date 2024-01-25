@@ -8,6 +8,8 @@ from test_utils import *
 from analysis_utils import k_fold_cross_validation, population_test, get_optimizer_parameters, optimizer_comparison
 from plots import plot_fitness_over_folds, plot_fitness_over_population_sizes, plot_fitness_all_optimizers
 
+plt.style.use(['science', 'ieee'])  # Style of plots
+
 
 def main(*args, **kwargs):
     start_time = time.time()
@@ -46,12 +48,7 @@ def main(*args, **kwargs):
         'n_neighbors': 20
     }
 
-    fig = plt.figure(figsize=(10, 30))
-    gs = GridSpec(2 * len(optimizer_dict) + 1, 2, figure=fig)
-    rows, columns = 0, 0
-
     for opt in optimizer_dict.keys():
-        columns = 0
         # Optimization function's parameters
         parameters, optimizer_title = get_optimizer_parameters(
             opt, dataset_dict[DATA].shape[1])
@@ -95,44 +92,48 @@ def main(*args, **kwargs):
         print('Average test fitness over {} Folds (KNN): {}'.format(
             k, round(np.mean(test_fitness_2), 2)))
 
+        fig, axs = plt.subplots(2, 2, figsize=(10, 5))
+        row, column = 0, 0
+
         # First set of plots
         second_key = list(parameters.keys())[1]
-        ax1 = fig.add_subplot(gs[rows, columns])
         plot_fitness_over_folds(
             fitness_values,
             parameters[second_key],
             k,
-            ax=ax1,
-            title='Average fitness {}-fold cross validation (SVC)'.format(k))
-        columns += 1
-        ax2 = fig.add_subplot(gs[rows, columns])
+            ax=axs[row, column],
+            title='Average fitness {}-fold cross validation running {} (SVC)'.
+            format(k, opt))
+
+        column += 1
         plot_fitness_over_population_sizes(
             total_fitness_test,
             np.arange(5, 60, 10),
-            ax=ax2,
-            title='Fitness test value over population sizes (SVC)')
+            ax=axs[row, column],
+            title='Fitness test value over population sizes for {} (SVC)'.
+            format(opt))
 
+        column = 0
+        row += 1
         # Second set of plots
-        rows += 1
-        columns = 0
-        ax3 = fig.add_subplot(gs[rows, columns])
         plot_fitness_over_folds(
             fitness_values_2,
             parameters[second_key],
             k,
-            ax=ax3,
-            title='Average fitness {}-fold cross validation (KNN)'.format(k))
-        columns += 1
-        ax4 = fig.add_subplot(gs[rows, columns])
+            ax=axs[row, column],
+            title='Average fitness {}-fold cross validation running {} (KNN)'.
+            format(k, opt))
+
+        column += 1
         plot_fitness_over_population_sizes(
             total_fitness_test_2,
             np.arange(5, 60, 10),
-            ax=ax4,
-            title='Fitness test value over population sizes (KNN)')
-        rows += 1
+            ax=axs[row, column],
+            title='Fitness test value over population sizes for {} (KNN)'.
+            format(opt))
 
-    # Third set of plots
-    ax5 = fig.add_subplot(gs[rows, :])
+        plt.tight_layout()
+        plt.savefig('./images/{}'.format(opt))
 
     # Comparison of all optimizers
     fitness_from_all_optimizers = optimizer_comparison(
@@ -142,13 +143,9 @@ def main(*args, **kwargs):
         target_function_parameters=target_function_parameters,
         max_iterations=DEFAULT_MAX_ITERATIONS)
     # Use entire row for the last plot
-    plot_fitness_all_optimizers(fitness_from_all_optimizers, 10, ax=ax5)
-
-    fig.suptitle(
-        PLOT_TITLE, fontsize=16
-    )  # TODO fix title for all plots and fix subtitle for subplots
+    plot_fitness_all_optimizers(fitness_from_all_optimizers, 10, ax=None)
     plt.tight_layout()
-    plt.savefig('./images/dashboard.jpg')
+    plt.savefig('./images/optimizers_comparison.jpg')
 
     total_time = time.time() - start_time
 

@@ -29,7 +29,7 @@ def target_function():
 
 
 def s_shaped_transfer_function(x):
-    threshold = np.random.rand()
+    threshold = np.random.random()
     return 1 if sigmoid(x) > threshold else 0
 
 
@@ -40,9 +40,9 @@ def sigmoid(x):
 # Transfer functions V-Shaped
 
 
-def v_shaped_transfer_function(x, delta_x):
-    threshold = np.random.rand()
-    return 1 - x if hyperbolic(delta_x) > threshold else x
+def v_shaped_transfer_function(x):
+    threshold = np.random.random()
+    return 1 - x if hyperbolic(x) > threshold else x
 
 
 def hyperbolic(x):

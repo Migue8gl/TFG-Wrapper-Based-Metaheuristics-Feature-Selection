@@ -1,5 +1,3 @@
-############################################################################
-
 # Created by: Prof. Valdecy Pereira, D.Sc.
 # UFF - Universidade Federal Fluminense (Brazil)
 # email:  valdecy.pereira@gmail.com
@@ -7,23 +5,16 @@
 
 # PEREIRA, V. (2022). GitHub repository: https://github.com/Valdecy/pyMetaheuristic
 
-############################################################################
-
 # Required Libraries
 import numpy as np
 import random
 import math
 import os
 
-############################################################################
-
 
 # Function
 def target_function():
     return
-
-
-############################################################################
 
 
 # Function: Initialize Variables
@@ -46,10 +37,7 @@ def initial_position(swarm_size=3,
     return position, velocity, frequency, rate, loudness
 
 
-############################################################################
-
-
-# Function: Updtade Position
+# Function: Update Position
 def update_position(position,
                     velocity,
                     frequency,
@@ -110,9 +98,6 @@ def update_position(position,
     return position, velocity, frequency, rate, loudness, best_ind
 
 
-############################################################################
-
-
 # BA Function
 def bat_algorithm(swarm_size=3,
                   min_values=[-5, -5],
@@ -136,6 +121,3 @@ def bat_algorithm(swarm_size=3,
             gama, fmin, fmax, count, min_values, max_values, target_function)
         count = count + 1
     return best_ind
-
-
-############################################################################

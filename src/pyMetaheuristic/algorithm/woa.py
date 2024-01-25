@@ -1,5 +1,3 @@
-############################################################################
-
 # Created by: Prof. Valdecy Pereira, D.Sc.
 # UFF - Universidade Federal Fluminense (Brazil)
 # email:  valdecy.pereira@gmail.com
@@ -7,28 +5,19 @@
 
 # PEREIRA, V. (2022). GitHub repository: https://github.com/Valdecy/pyMetaheuristic
 
-############################################################################
-
 # Required Libraries
 import numpy as np
 import math
 import random
 import os
 
-############################################################################
 
 # Function
-
-
 def target_function():
     return
 
 
-############################################################################
-
 # Function: Initialize Variables
-
-
 def initial_position(hunting_party=5,
                      min_values=[-5, -5],
                      max_values=[5, 5],
@@ -47,11 +36,7 @@ def initial_position(hunting_party=5,
     return position
 
 
-############################################################################
-
 # Transfer functions S-Shaped
-
-
 def s_shaped_transfer_function(x):
     threshold = np.random.rand()
     return 1 if sigmoid(x) > threshold else 0
@@ -61,11 +46,7 @@ def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 
-############################################################################
-
 # Transfer functions V-Shaped
-
-
 def v_shaped_transfer_function(x):
     threshold = np.random.rand()
     return 1 - x if hyperbolic_tan(x) > threshold else x
@@ -75,11 +56,7 @@ def hyperbolic_tan(x):
     return np.abs(np.tanh(x))
 
 
-############################################################################
-
 # Function: Initialize Alpha
-
-
 def leader_position(dimension=2,
                     min_values=[-5, -5],
                     max_values=[5, 5],
@@ -95,9 +72,7 @@ def leader_position(dimension=2,
     return leader
 
 
-# Function: Updtade Leader by Fitness
-
-
+# Function: Update Leader by Fitness
 def update_leader(position, leader):
     for i in range(0, position.shape[0]):
         if (leader[0, -1] > position[i, -1]):
@@ -106,9 +81,7 @@ def update_leader(position, leader):
     return leader
 
 
-# Function: Updtade Position
-
-
+# Function: Update Position
 def update_position(position,
                     leader,
                     a_linear_component=2,
@@ -192,11 +165,7 @@ def update_position(position,
     return position
 
 
-############################################################################
-
 # WOA Function
-
-
 def whale_optimization_algorithm(hunting_party=5,
                                  spiral_param=1,
                                  min_values=[-5, -5],
@@ -232,6 +201,3 @@ def whale_optimization_algorithm(hunting_party=5,
             'TrainFitness': leader[0, -2]
         })
     return leader.flatten(), fitness_values
-
-
-############################################################################

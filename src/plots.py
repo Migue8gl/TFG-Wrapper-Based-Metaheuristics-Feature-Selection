@@ -1,11 +1,14 @@
 import matplotlib.pyplot as plt
+import scienceplots
 import numpy as np
 from data_utils import *
+
+plt.style.use(['science', 'ieee'])  # Style of plots
 
 # ---------------------------- PLOTTING FUNCTIONS ------------------------------ #
 
 
-def plot_fitness_over_training(fitness_values, ax, title):
+def plot_fitness_over_training(fitness_values, ax=None, title=None):
     """
     Generate a plot of fitness values over training iterations.
 
@@ -33,7 +36,11 @@ def plot_fitness_over_training(fitness_values, ax, title):
     ax.legend()
 
 
-def plot_fitness_over_folds(fitness_values, iterations, k, ax=None, title=None):
+def plot_fitness_over_folds(fitness_values,
+                            iterations,
+                            k,
+                            ax=None,
+                            title=None):
     """
     Generate a plot of fitness values over folds.
 
@@ -47,14 +54,18 @@ def plot_fitness_over_folds(fitness_values, iterations, k, ax=None, title=None):
     Returns:
     - None
     """
-    iteration_numbers = np.linspace(
-        0, iterations+1, len(fitness_values['ValFitness']))
+    iteration_numbers = np.linspace(0, iterations + 1,
+                                    len(fitness_values['ValFitness']))
     if ax is None:
         _, ax = plt.subplots()
     ax.plot(iteration_numbers,
-            fitness_values['TrainFitness'], label='Fitness', color='blue')
+            fitness_values['TrainFitness'],
+            label='Fitness',
+            color='blue')
     ax.plot(iteration_numbers,
-            fitness_values['ValFitness'], label='Validation Fitness', color='orange')
+            fitness_values['ValFitness'],
+            label='Validation Fitness',
+            color='orange')
     if title == None:
         ax.set_title('Average fitness {}-fold cross validation'.format(k))
     else:
@@ -64,7 +75,10 @@ def plot_fitness_over_folds(fitness_values, iterations, k, ax=None, title=None):
     ax.legend()
 
 
-def plot_fitness_over_population_sizes(fitness_values, population_sizes, ax=None, title=None):
+def plot_fitness_over_population_sizes(fitness_values,
+                                       population_sizes,
+                                       ax=None,
+                                       title=None):
     """
     Plots the fitness values over different population sizes.
 
@@ -79,8 +93,11 @@ def plot_fitness_over_population_sizes(fitness_values, population_sizes, ax=None
     """
     if ax is None:
         _, ax = plt.subplots()
-    ax.plot(population_sizes, fitness_values,
-            label='Fitness', color='purple', marker='d')
+    ax.plot(population_sizes,
+            fitness_values,
+            label='Fitness',
+            color='purple',
+            marker='d')
     if title == None:
         ax.set_title('Fitness test value over population sizes')
     else:
@@ -90,7 +107,10 @@ def plot_fitness_over_population_sizes(fitness_values, population_sizes, ax=None
     ax.legend()
 
 
-def plot_fitness_all_optimizers(optimizers_fitness, iterations, ax=None, title=None):
+def plot_fitness_all_optimizers(optimizers_fitness,
+                                iterations,
+                                ax=None,
+                                title=None):
     """
     Plots the fitness values of multiple optimizers over a specified number of iterations.
 
@@ -104,7 +124,7 @@ def plot_fitness_all_optimizers(optimizers_fitness, iterations, ax=None, title=N
     - None
     """
     iteration_numbers = np.linspace(
-        0, iterations+1, len(next(iter(optimizers_fitness.values()))))
+        0, iterations + 1, len(next(iter(optimizers_fitness.values()))))
     if ax is None:
         _, ax = plt.subplots()
     for key, fitness_values in optimizers_fitness.items():

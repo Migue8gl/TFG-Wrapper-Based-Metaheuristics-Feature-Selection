@@ -91,16 +91,10 @@ def test_run_optimizer(
     ))
 
     # Plotting average fitness over k folds in cross validation
-    fig = plt.figure(figsize=(5, 5))
-    ax = fig.add_subplot(1, 1, 1)
     plot_fitness_over_training(
-        fitness_values, ax,
-        "Training curve on {} optimizer".format(optimizer_name))
+        fitness_values=fitness_values,
+        title="Training curve on {} optimizer".format(optimizer_name))
 
-    fig.suptitle("TEST RUNNING {}".format(optimizer_name),
-                 fontweight="bold",
-                 fontsize=16)
-    plt.tight_layout()
     plt.savefig("./images/test_optimizer_training.jpg")
 
 
@@ -164,7 +158,7 @@ def test_cross_validation(
 
 
 if __name__ == "__main__":
-    optimizer = "FA"
+    optimizer = "WOA"
     test_run_optimizer(
         **{
             key: value
