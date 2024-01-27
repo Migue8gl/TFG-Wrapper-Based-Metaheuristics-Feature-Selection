@@ -137,3 +137,51 @@ def plot_fitness_all_optimizers(optimizers_fitness,
         ax.set_title(title)
     ax.legend()
     ax.grid(True)
+
+
+def plot_s_shaped_transfer_function(ax=None, title=None):
+    """
+    Plots the s-shape transfer function.
+
+    Parameters:
+    - ax (matplotlib.axes.Axes, optional): The matplotlib axes to plot the fitness values on. If not provided, a new figure and axes will be created.
+
+    Returns:
+    - None
+    """
+    if ax is None:
+        _, ax = plt.subplots()
+    x = np.linspace(-5, 5, 100)
+    y = 1 / (1 + np.exp(-x))
+    ax.plot(x, y, color='darkgreen', label='S-shape (sigmoid)')
+    ax.set_xlabel('x')
+    ax.set_ylabel(r'$\frac{1}{1 + e^{-x}}$')
+    if title is None:
+        ax.set_title('S-Shaped Transfer Function')
+    else:
+        ax.set_title(title)
+    ax.legend()
+
+
+def plot_v_shaped_transfer_function(ax=None, title=None):
+    """
+    Plots the s-shape transfer function.
+
+    Parameters:
+    - ax (matplotlib.axes.Axes, optional): The matplotlib axes to plot the fitness values on. If not provided, a new figure and axes will be created.
+
+    Returns:
+    - None
+    """
+    if ax is None:
+        _, ax = plt.subplots()
+    x = np.linspace(-5, 5, 100)
+    y = np.abs(np.tanh(x))
+    ax.plot(x, y, color='red', label='V-shape (hyperbolic tangent)')
+    ax.set_xlabel('x')
+    ax.set_ylabel(r'$|\tanh(x)|$')
+    if title is None:
+        ax.set_title('Optimizer Comparison - Fitness Over Time')
+    else:
+        ax.set_title(title)
+    ax.legend()
