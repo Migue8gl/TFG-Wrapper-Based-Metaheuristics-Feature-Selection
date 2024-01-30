@@ -3,7 +3,7 @@ import scienceplots
 import numpy as np
 from data_utils import *
 
-plt.style.use(['science', 'ieee'])  # Style of plots
+plt.style.use(["science", "ieee"])  # Style of plots
 
 # ---------------------------- PLOTTING FUNCTIONS ------------------------------ #
 
@@ -25,14 +25,14 @@ def plot_fitness_over_training(fitness_values, ax=None, title=None):
 
     if ax is None:
         _, ax = plt.subplots()
-    ax.plot(validation_fitness, label='Training Fitness', color='blue')
-    ax.plot(training_fitness, label='Validation Fitness', color='orange')
+    ax.plot(validation_fitness, label="Training Fitness", color="blue")
+    ax.plot(training_fitness, label="Validation Fitness", color="orange")
     if title == None:
-        ax.set_title('Training curves')
+        ax.set_title("Training curves")
     else:
         ax.set_title(title)
-    ax.set_xlabel('Iteration')
-    ax.set_ylabel('Fitness Value')
+    ax.set_xlabel("Iteration")
+    ax.set_ylabel("Fitness Value")
     ax.legend()
 
 
@@ -55,23 +55,36 @@ def plot_fitness_over_folds(fitness_values,
     - None
     """
     iteration_numbers = np.linspace(0, iterations + 1,
-                                    len(fitness_values['ValFitness']))
+                                    len(fitness_values["ValFitness"]))
     if ax is None:
         _, ax = plt.subplots()
     ax.plot(iteration_numbers,
-            fitness_values['TrainFitness'],
-            label='Fitness',
-            color='blue')
-    ax.plot(iteration_numbers,
-            fitness_values['ValFitness'],
-            label='Validation Fitness',
-            color='orange')
+            fitness_values["TrainFitness"],
+            label="Fitness",
+            color="blue")
+    ax.plot(
+        iteration_numbers,
+        fitness_values["ValFitness"],
+        label="Validation Fitness",
+        color="orange",
+    )
     if title == None:
-        ax.set_title('Average fitness {}-fold cross validation'.format(k))
+        ax.set_title("Average fitness {}-fold cross validation".format(k))
     else:
         ax.set_title(title)
-    ax.set_xlabel('Iteration')
-    ax.set_ylabel('Fitness Value')
+    ax.set_xlabel("Iteration")
+    ax.set_ylabel("Fitness Value")
+    metrics = "Average: {:.2f}\nStandard Deviation: {:.2f}".format(
+        fitness_values['TestFitness']['Average'],
+        fitness_values['TestFitness']['StandardDeviation'])
+
+    ax.text(0.7,
+            0.5,
+            metrics,
+            transform=ax.transAxes,
+            bbox=dict(facecolor='white',
+                      edgecolor='black',
+                      boxstyle='round,pad=0.5'))
     ax.legend()
 
 
@@ -95,15 +108,15 @@ def plot_fitness_over_population_sizes(fitness_values,
         _, ax = plt.subplots()
     ax.plot(population_sizes,
             fitness_values,
-            label='Fitness',
-            color='purple',
-            marker='d')
+            label="Fitness",
+            color="purple",
+            marker="d")
     if title == None:
-        ax.set_title('Fitness test value over population sizes')
+        ax.set_title("Fitness test value over population sizes")
     else:
         ax.set_title(title)
-    ax.set_xlabel('Population Size')
-    ax.set_ylabel('Fitness Value')
+    ax.set_xlabel("Population Size")
+    ax.set_ylabel("Fitness Value")
     ax.legend()
 
 
@@ -128,11 +141,11 @@ def plot_fitness_all_optimizers(optimizers_fitness,
     if ax is None:
         _, ax = plt.subplots()
     for key, fitness_values in optimizers_fitness.items():
-        ax.plot(iteration_numbers, fitness_values, label=key, marker='X')
-    ax.set_xlabel('Iteration')
-    ax.set_ylabel('Fitness')
+        ax.plot(iteration_numbers, fitness_values, label=key, marker="X")
+    ax.set_xlabel("Iteration")
+    ax.set_ylabel("Fitness")
     if title is None:
-        ax.set_title('Optimizer Comparison - Fitness Over Time')
+        ax.set_title("Optimizer Comparison - Fitness Over Time")
     else:
         ax.set_title(title)
     ax.legend()
@@ -153,11 +166,11 @@ def plot_s_shaped_transfer_function(ax=None, title=None):
         _, ax = plt.subplots()
     x = np.linspace(-5, 5, 100)
     y = 1 / (1 + np.exp(-x))
-    ax.plot(x, y, color='darkgreen', label='S-shape (sigmoid)')
-    ax.set_xlabel('x')
-    ax.set_ylabel(r'$\frac{1}{1 + e^{-x}}$')
+    ax.plot(x, y, color="darkgreen", label=r"$\frac{1}{1 + e^{-x}}$")
+    ax.set_xlabel("x")
+    ax.set_ylabel("T(x)")
     if title is None:
-        ax.set_title('S-Shaped Transfer Function')
+        ax.set_title("S-Shaped Transfer Function")
     else:
         ax.set_title(title)
     ax.legend()
@@ -177,11 +190,11 @@ def plot_v_shaped_transfer_function(ax=None, title=None):
         _, ax = plt.subplots()
     x = np.linspace(-5, 5, 100)
     y = np.abs(np.tanh(x))
-    ax.plot(x, y, color='red', label='V-shape (hyperbolic tangent)')
-    ax.set_xlabel('x')
-    ax.set_ylabel(r'$|\tanh(x)|$')
+    ax.plot(x, y, color="red", label=r"$|\tanh(x)|$")
+    ax.set_xlabel("x")
+    ax.set_ylabel("T(x)")
     if title is None:
-        ax.set_title('Optimizer Comparison - Fitness Over Time')
+        ax.set_title("Optimizer Comparison - Fitness Over Time")
     else:
         ax.set_title(title)
     ax.legend()

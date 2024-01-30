@@ -81,14 +81,13 @@ def fitness_calc(function_value):
 
 def fitness_function(searching_in_sources):
     fitness = np.zeros((searching_in_sources.shape[0], 2))
-    for i in range(0, fitness.shape[0]):
-        fitness[i, 0] = fitness_calc(searching_in_sources[i, -1])
+
+    fitness[:fitness.shape[0], 0] = [fitness_calc(x) for x in searching_in_sources[:, -1]]
     fit_sum = fitness[:, 0].sum()
+
     fitness[0, 1] = fitness[0, 0]
-    for i in range(1, fitness.shape[0]):
-        fitness[i, 1] = (fitness[i, 0] + fitness[i-1, 1])
-    for i in range(0, fitness.shape[0]):
-        fitness[i, 1] = fitness[i, 1]/fit_sum
+    fitness[1:, 1] = fitness[1:, 1] + fitness[0:-1, 1] 
+    fitness[:fitness.shape[0], 1] = fitness[:fitness.shape[0], 1]/fit_sum
     return fitness
 
 # Function: Selection
@@ -121,8 +120,7 @@ def employed_bee(sources, min_values=[-5, -5], max_values=[5, 5], target_functio
         xij = searching_in_sources[i, j]
         xkj = searching_in_sources[k, j]
         vij = xij + phi*(xij - xkj)
-        for variable in range(0, len(min_values)):
-            new_solution[0, variable] = searching_in_sources[i, variable]
+        new_solution[0, :len(min_values)] = searching_in_sources[i, :len(min_values)]
         new_solution[0, j] = np.clip(vij, min_values[j], max_values[j])
         target_function_parameters['weights'] = new_solution[0, :-2]
         fitness_values = target_function(**target_function_parameters)
@@ -134,8 +132,7 @@ def employed_bee(sources, min_values=[-5, -5], max_values=[5, 5], target_functio
             searching_in_sources[i, -1] = new_function_value
         else:
             trial[i, 0] = trial[i, 0] + 1
-        for variable in range(0, len(min_values)):
-            new_solution[0, variable] = 0.0
+        new_solution[0, :len(min_values)] = 0.0
     return searching_in_sources, trial
 
 # Function: Oulooker
@@ -155,8 +152,7 @@ def outlooker_bee(searching_in_sources, fitness, trial, min_values=[-5, -5], max
         xij = improving_sources[i, j]
         xkj = improving_sources[k, j]
         vij = xij + phi*(xij - xkj)
-        for variable in range(0, len(min_values)):
-            new_solution[0, variable] = improving_sources[i, variable]
+        new_solution[0, :len(min_values)] = improving_sources[i, :len(min_values)]
         new_solution[0, j] = np.clip(vij,  min_values[j], max_values[j])
         target_function_parameters['weights'] = new_solution[0, :-2]
         fitness_values = target_function(**target_function_parameters)
@@ -169,8 +165,8 @@ def outlooker_bee(searching_in_sources, fitness, trial, min_values=[-5, -5], max
             trial_update[i, 0] = 0
         else:
             trial_update[i, 0] = trial_update[i, 0] + 1
-        for variable in range(0, len(min_values)):
-            new_solution[0, variable] = 0.0
+        new_solution[0, :len(min_values)] = 0.0
+
     return improving_sources, trial_update
 
 # Function: Scouter

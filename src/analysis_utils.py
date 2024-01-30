@@ -127,10 +127,16 @@ def k_fold_cross_validation(dataset,
                                                     'ValFitness')
     average_fitness_train = calculate_average_fitness(fitness_each_fold,
                                                       'TrainFitness')
+    # Compute standard deviation of test fitness values
+    std_deviation_test_fitness = np.std(test_fitness)
 
     return test_fitness, {
         'TrainFitness': average_fitness_train,
-        'ValFitness': average_fitness_val
+        'ValFitness': average_fitness_val,
+        'TestFitness': {
+            'Average': np.mean(test_fitness),
+            'StandardDeviation': std_deviation_test_fitness
+        }
     }
 
 

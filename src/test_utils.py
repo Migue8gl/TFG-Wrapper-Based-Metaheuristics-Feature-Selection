@@ -121,9 +121,9 @@ def test_cross_validation(
     optimizer_name = get_optimizer_name_by_function(optimizer)
 
     # Test cross validation
-    test_fitness, fitness_values = k_fold_cross_validation(
+    test_fitness, metrics = k_fold_cross_validation(
         dataset=dataset,
-        optimizator=optimizer,
+        optimizer=optimizer,
         k=k,
         parameters=optimizer_parameters,
         target_function_parameters=target_function_parameters,
@@ -140,7 +140,7 @@ def test_cross_validation(
     fig = plt.figure(figsize=(5, 5))
     ax = fig.add_subplot(1, 1, 1)
     plot_fitness_over_folds(
-        fitness_values,
+        metrics,
         optimizer_parameters["iterations"],
         k,
         ax,
@@ -154,22 +154,23 @@ def test_cross_validation(
         fontsize=16,
     )
     plt.tight_layout()
-    plt.savefig("./images/test_k_cross_validation.jpg")
+    plt.savefig("./images/test_k_cross_validation_{}.jpg".format(optimizer_name))
 
 
 if __name__ == "__main__":
     optimizer = "WOA"
+    """
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     plot_s_shaped_transfer_function(axs[0])
     plot_v_shaped_transfer_function(axs[1])
     plt.savefig("./images/transfer_functions.jpg")
+    """
     """
     test_run_optimizer(
         **{
             key: value
             for key, value in default_parameters(optimizer).items()
             if key != "k" and key != "dataset"
-        })
-
+        })     
     """
-    
+    test_cross_validation(**default_parameters(optimizer))

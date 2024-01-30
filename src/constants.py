@@ -23,7 +23,7 @@ OPTIMIZERS = {
     'ABCO': artificial_bee_colony_optimization,
     'BA': bat_algorithm,
     'PSO': particle_swarm_optimization,
-    'FA': firefly_algorithm
+    'FA': firefly_algorithm,
 }
 
 # ----------------------------------- NAMES ------------------------------------- #
