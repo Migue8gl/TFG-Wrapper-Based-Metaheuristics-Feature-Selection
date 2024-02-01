@@ -221,6 +221,18 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
             'binary': 's',
         }
         optimizer_title = 'Running PSO'
+    elif optimizer_upper == 'GA':
+        parameters = {
+            'population_size': DEFAULT_POPULATION_SIZE,
+            'generations': DEFAULT_ITERATIONS,
+            'min_values': [0] * (solution_len),
+            'max_values': [1] * (solution_len),
+            'crossover_rate': 1,
+            'mutation_rate': 0.1,
+            'elite': 2,
+            'verbose': True,
+        }
+        optimizer_title = 'Running GA'
 
     return parameters, optimizer_title
 

@@ -158,14 +158,14 @@ def test_cross_validation(
 
 
 if __name__ == "__main__":
-    optimizer = "WOA"
+    optimizer = "GA"
     """
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     plot_s_shaped_transfer_function(axs[0])
     plot_v_shaped_transfer_function(axs[1])
     plt.savefig("./images/transfer_functions.jpg")
     """
-    """
+    
     test_run_optimizer(
         **{
             key: value
@@ -173,4 +173,6 @@ if __name__ == "__main__":
             if key != "k" and key != "dataset"
         })     
     """
+
     test_cross_validation(**default_parameters(optimizer))
+    """

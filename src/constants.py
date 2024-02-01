@@ -6,6 +6,7 @@ from pyMetaheuristic.algorithm import artificial_bee_colony_optimization
 from pyMetaheuristic.algorithm import bat_algorithm
 from pyMetaheuristic.algorithm import firefly_algorithm
 from pyMetaheuristic.algorithm import particle_swarm_optimization
+from pyMetaheuristic.algorithm import genetic_algorithm
 
 # ---------------------------------- DATASETS ------------------------------------ #
 
@@ -24,6 +25,7 @@ OPTIMIZERS = {
     'BA': bat_algorithm,
     'PSO': particle_swarm_optimization,
     'FA': firefly_algorithm,
+    'GA': genetic_algorithm
 }
 
 # ----------------------------------- NAMES ------------------------------------- #

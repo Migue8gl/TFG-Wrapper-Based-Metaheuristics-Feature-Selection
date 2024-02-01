@@ -10,119 +10,190 @@
 ############################################################################
 
 # Required Libraries
-import numpy  as np
+import numpy as np
 import random
 import os
 
 ############################################################################
 
+
 # Function
 def target_function():
     return
 
+
 ############################################################################
+
 
 # Function: Initialize Variables
-def initial_population(population_size = 5, min_values = [-5,-5], max_values = [5,5], target_function = target_function):
-    population = np.zeros((population_size, len(min_values) + 1))
+def initial_population(population_size=5,
+                       min_values=[-5, -5],
+                       max_values=[5, 5],
+                       target_function=target_function,
+                       target_function_parameters=None):
+    population = np.zeros((population_size, len(min_values) + 2))
     for i in range(0, population_size):
         for j in range(0, len(min_values)):
-             population[i,j] = random.uniform(min_values[j], max_values[j]) 
-        population[i,-1] = target_function(population[i,0:population.shape[1]-1])
+            population[i, j] = random.choice([0, 1])
+        target_function_parameters['weights'] = population[
+            i, 0:population.shape[1] - 2]
+        fitness = target_function(**target_function_parameters)
+        population[i, -1] = fitness['ValFitness']
+        population[i, -2] = fitness['TrainFitness']
     return population
 
+
 ############################################################################
 
-# Function: Fitness
-def fitness_function(population): 
-    fitness = np.zeros((population.shape[0], 2))
-    for i in range(0, fitness.shape[0]):
-        fitness[i,0] = 1/(1+ population[i,-1] + abs(population[:,-1].min()))
-    fit_sum      = fitness[:,0].sum()
-    fitness[0,1] = fitness[0,0]
-    for i in range(1, fitness.shape[0]):
-        fitness[i,1] = (fitness[i,0] + fitness[i-1,1])
-    for i in range(0, fitness.shape[0]):
-        fitness[i,1] = fitness[i,1]/fit_sum
+
+def fitness_function(population):
+    min_pop = abs(population[:, -1].min())
+    fitness_first_col = 1 / (1 + population[:, -1] + min_pop)
+    fitness_second_col = np.cumsum(fitness_first_col)
+    fitness_second_col = fitness_second_col / fitness_second_col[-1]
+    fitness = np.column_stack((fitness_first_col, fitness_second_col))
     return fitness
 
+
 # Function: Selection
-def roulette_wheel(fitness): 
-    ix     = 0
-    random = int.from_bytes(os.urandom(8), byteorder = 'big') / ((1 << 64) - 1)
+def roulette_wheel(fitness):
+    ix = 0
+    random = np.random.rand()
     for i in range(0, fitness.shape[0]):
         if (random <= fitness[i, 1]):
-          ix = i
-          break
+            ix = i
+            break
     return ix
 
-# Function: Offspring
-def breeding(population, fitness, min_values = [-5,-5], max_values = [5,5], mu = 1, elite = 0, target_function = target_function):
-    offspring   = np.copy(population)
-    b_offspring = 0
-    if (elite > 0):
-        preserve = np.copy(population[population[:,-1].argsort()])
-        for i in range(0, elite):
-            for j in range(0, offspring.shape[1]):
-                offspring[i,j] = preserve[i,j]
-    for i in range (elite, offspring.shape[0]):
-        parent_1, parent_2 = roulette_wheel(fitness), roulette_wheel(fitness)
-        while parent_1 == parent_2:
-            parent_2 = random.sample(range(0, len(population) - 1), 1)[0]
-        for j in range(0, offspring.shape[1] - 1):
-            rand   = int.from_bytes(os.urandom(8), byteorder = 'big') / ((1 << 64) - 1)
-            rand_b = int.from_bytes(os.urandom(8), byteorder = 'big') / ((1 << 64) - 1)  
-            rand_c = int.from_bytes(os.urandom(8), byteorder = 'big') / ((1 << 64) - 1)                              
-            if (rand <= 0.5):
-                b_offspring = 2*(rand_b)
-                b_offspring = b_offspring**(1/(mu + 1))
-            elif (rand > 0.5):  
-                b_offspring = 1/(2*(1 - rand_b))
-                b_offspring = b_offspring**(1/(mu + 1))       
-            if (rand_c >= 0.5):
-                offspring[i,j] = np.clip(((1 + b_offspring)*population[parent_1, j] + (1 - b_offspring)*population[parent_2, j])/2, min_values[j], max_values[j])           
-            else:   
-                offspring[i,j] = np.clip(((1 - b_offspring)*population[parent_1, j] + (1 + b_offspring)*population[parent_2, j])/2, min_values[j], max_values[j]) 
-        offspring[i,-1] = target_function(offspring[i,0:offspring.shape[1]-1]) 
+
+# Function: Breeding
+def breeding(population,
+             fitness,
+             crossover_rate,
+             elite,
+             target_function,
+             target_function_parameters=None):
+    offspring = np.copy(population)
+    offspring = offspring[np.argsort(offspring[:, -1])[::-1]]
+
+    if elite > 0:
+        preserve = np.copy(population[population[:, -1].argsort()])
+        offspring[:elite, :] = preserve[:elite, :]
+
+    for _ in range(elite, offspring.shape[0], 2):
+        # Sort offspring only once before the loop
+        sorted_offspring_indices = np.argsort(offspring[:, -1])[::-1]
+        worst_individuals = sorted_offspring_indices[-2:]
+        parent_1_idx, parent_2_idx = roulette_wheel(fitness), roulette_wheel(fitness)
+
+        # Ensure parents are different
+        while parent_1_idx == parent_2_idx:
+            parent_2_idx = np.random.choice(len(population) - 1)
+
+        parent_1 = population[parent_1_idx, :]
+        parent_2 = population[parent_2_idx, :]
+
+        # Check if crossover should occur
+        if np.random.rand() < crossover_rate:
+            # Randomly choose the crossover point
+            crossover_point = np.random.randint(1, len(parent_1) - 1)
+
+            # Create offspring using binary crossover
+            child1 = np.copy(parent_1)
+            child2 = np.copy(parent_2)
+
+            child1[crossover_point:] = parent_2[crossover_point:]
+            child2[crossover_point:] = parent_1[crossover_point:]
+
+            # Evaluate fitness for the offspring
+            target_function_parameters['weights'] = child1[:-2]
+            fitness_values_child1 = target_function(**target_function_parameters)
+            child1[-1] = fitness_values_child1['ValFitness']
+            child1[-2] = fitness_values_child1['TrainFitness']
+
+            target_function_parameters['weights'] = child2[:-2]
+            fitness_values_child2 = target_function(**target_function_parameters)
+            child2[-1] = fitness_values_child2['ValFitness']
+            child2[-2] = fitness_values_child2['TrainFitness']
+
+            # Check if the child's fitness is better than the worst individuals
+            worst_idx0, worst_idx1 = worst_individuals[0], worst_individuals[1]
+            if child1[-1] < offspring[worst_idx0, -1]:
+                offspring[worst_idx0] = child1[:]
+
+            if child2[-1] < offspring[worst_idx1, -1]:
+                offspring[worst_idx1] = child2[:]
+
+        else:
+            # If no crossover, offspring are identical to parents
+            offspring[parent_1_idx] = parent_1[:]
+            offspring[parent_2_idx] = parent_2[:]
+
     return offspring
- 
-# Function: Mutation
-def mutation(offspring, mutation_rate = 0.1, eta = 1, min_values = [-5,-5], max_values = [5,5], target_function = target_function):
-    d_mutation = 0            
-    for i in range (0, offspring.shape[0]):
-        for j in range(0, offspring.shape[1] - 1):
-            probability = int.from_bytes(os.urandom(8), byteorder = 'big') / ((1 << 64) - 1)
-            if (probability < mutation_rate):
-                rand   = int.from_bytes(os.urandom(8), byteorder = 'big') / ((1 << 64) - 1)
-                rand_d = int.from_bytes(os.urandom(8), byteorder = 'big') / ((1 << 64) - 1)                                     
-                if (rand <= 0.5):
-                    d_mutation = 2*(rand_d)
-                    d_mutation = d_mutation**(1/(eta + 1)) - 1
-                elif (rand > 0.5):  
-                    d_mutation = 2*(1 - rand_d)
-                    d_mutation = 1 - d_mutation**(1/(eta + 1))                
-                offspring[i,j] = np.clip((offspring[i,j] + d_mutation), min_values[j], max_values[j])
-        offspring[i,-1] = target_function(offspring[i,0:offspring.shape[1]-1])                        
+
+
+
+# Function: Mutation (Modified for Binary Representation)
+def mutation(offspring,
+             mutation_rate=0.1,
+             target_function=target_function,
+             target_function_parameters=None):
+    for i in range(0, offspring.shape[0]):
+        random_numbers = [
+            random.uniform(0, 1) for _ in range(offspring.shape[1] - 2)
+        ]
+        offspring[i, :-2] = [
+            1 - bit if probability < mutation_rate else bit
+            for bit, probability in zip(offspring[i, :-2], random_numbers)
+        ]
+
+        target_function_parameters['weights'] = offspring[i, 0:-2]
+        fitness_values = target_function(**target_function_parameters)
+        offspring[i, -1] = fitness_values['ValFitness']
+        offspring[i, -2] = fitness_values['TrainFitness']
+
     return offspring
+
 
 ############################################################################
 
+
 # GA Function
-def genetic_algorithm(population_size = 5, mutation_rate = 0.1, elite = 0, min_values = [-5,-5], max_values = [5,5], eta = 1, mu = 1, generations = 50, target_function = target_function, verbose = True):    
-    count      = 0
-    population = initial_population(population_size, min_values, max_values, target_function)
-    fitness    = fitness_function(population)    
-    elite_ind  = np.copy(population[population[:,-1].argsort()][0,:])
-    while (count <= generations):  
+def genetic_algorithm(population_size=5,
+                      mutation_rate=0.1,
+                      elite=0,
+                      min_values=[-5, -5],
+                      max_values=[5, 5],
+                      crossover_rate=0.8,
+                      generations=50,
+                      target_function=target_function,
+                      target_function_parameters=None,
+                      verbose=True):
+    count = 0
+    fitness_values = []
+    population = initial_population(population_size, min_values, max_values,
+                                    target_function,
+                                    target_function_parameters)
+    fitness = fitness_function(population)
+    elite_ind = np.copy(population[population[:, -1].argsort()][0, :])
+    while (count <= generations):
         if (verbose == True):
-            print('Generation = ', count, ' f(x) = ', elite_ind[-1])  
-        offspring  = breeding(population, fitness, min_values, max_values, mu, elite, target_function) 
-        population = mutation(offspring, mutation_rate, eta, min_values, max_values, target_function)
-        fitness    = fitness_function(population)
-        value      = np.copy(population[population[:,-1].argsort()][0,:])
-        if(elite_ind[-1] > value[-1]):
-            elite_ind = np.copy(value) 
-        count = count + 1       
-    return elite_ind 
+            print('Generation = ', count, ' f(x) = ', elite_ind[-1])
+        offspring = breeding(population, fitness, crossover_rate, elite,
+                             target_function, target_function_parameters)
+        population = mutation(offspring, mutation_rate, target_function,
+                              target_function_parameters)
+        fitness = fitness_function(population)
+        value = np.copy(population[population[:, -1].argsort()][0, :])
+        if (elite_ind[-1] > value[-1]):
+            elite_ind = np.copy(value)
+        count = count + 1
+        fitness_values.append({
+            'ValFitness': elite_ind[-1],
+            'TrainFitness': elite_ind[-2]
+        })
+
+    return elite_ind, fitness_values
+
 
 ############################################################################
