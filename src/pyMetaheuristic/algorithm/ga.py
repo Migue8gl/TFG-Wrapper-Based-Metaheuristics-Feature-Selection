@@ -84,7 +84,8 @@ def breeding(population,
         # Sort offspring only once before the loop
         sorted_offspring_indices = np.argsort(offspring[:, -1])[::-1]
         worst_individuals = sorted_offspring_indices[-2:]
-        parent_1_idx, parent_2_idx = roulette_wheel(fitness), roulette_wheel(fitness)
+        parent_1_idx, parent_2_idx = roulette_wheel(fitness), roulette_wheel(
+            fitness)
 
         # Ensure parents are different
         while parent_1_idx == parent_2_idx:
@@ -107,12 +108,14 @@ def breeding(population,
 
             # Evaluate fitness for the offspring
             target_function_parameters['weights'] = child1[:-2]
-            fitness_values_child1 = target_function(**target_function_parameters)
+            fitness_values_child1 = target_function(
+                **target_function_parameters)
             child1[-1] = fitness_values_child1['ValFitness']
             child1[-2] = fitness_values_child1['TrainFitness']
 
             target_function_parameters['weights'] = child2[:-2]
-            fitness_values_child2 = target_function(**target_function_parameters)
+            fitness_values_child2 = target_function(
+                **target_function_parameters)
             child2[-1] = fitness_values_child2['ValFitness']
             child2[-2] = fitness_values_child2['TrainFitness']
 
@@ -130,7 +133,6 @@ def breeding(population,
             offspring[parent_2_idx] = parent_2[:]
 
     return offspring
-
 
 
 # Function: Mutation (Modified for Binary Representation)

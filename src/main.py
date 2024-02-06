@@ -17,8 +17,8 @@ def main(*args, **kwargs):
     # Get parameters from the user
     dataset_arg = kwargs.get('-d', D2)  # Chosen dataset
     # Notifications meaning end of training
-    notify_arg = kwargs.get('-n', True)
-    k_arg = kwargs.get('-k', 5)  # Number of folds in cross validation
+    notify_arg = kwargs.get('-n', False)
+    k_arg = kwargs.get('-k', DEFAULT_FOLDS)  # Number of folds in cross validation
     scaling_arg = kwargs.get('-s', 1)  # Type of scaling applied to dataset
 
     # Core functionality
@@ -45,7 +45,7 @@ def main(*args, **kwargs):
         'data': dataset,
         'alpha': 0.5,
         'classifier': 'svc',
-        'n_neighbors': 20
+        'n_neighbors': DEFAULT_NEIGHBORS
     }
 
     for opt in optimizer_dict.keys():

@@ -228,8 +228,8 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
             'min_values': [0] * (solution_len),
             'max_values': [1] * (solution_len),
             'crossover_rate': 1,
-            'mutation_rate': 0.1,
-            'elite': 2,
+            'mutation_rate': 0.05,
+            'elite': 3,
             'verbose': True,
         }
         optimizer_title = 'Running GA'
