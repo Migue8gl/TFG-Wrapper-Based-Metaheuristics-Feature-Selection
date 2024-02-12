@@ -194,7 +194,7 @@ def plot_v_shaped_transfer_function(ax=None, title=None):
     ax.set_xlabel("x")
     ax.set_ylabel("T(x)")
     if title is None:
-        ax.set_title("Optimizer Comparison - Fitness Over Time")
+        ax.set_title("V-Shaped Transfer Function")
     else:
         ax.set_title(title)
     ax.legend()

@@ -1,5 +1,6 @@
 from .abco import artificial_bee_colony_optimization
 from .afsa import artificial_fish_swarm_algorithm
+from .aco import ant_colony_optimization
 from .ars import adaptive_random_search
 from .alo import ant_lion_optimizer
 from .aoa import arithmetic_optimization_algorithm

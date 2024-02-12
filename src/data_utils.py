@@ -233,6 +233,18 @@ def get_optimizer_parameters(optimizer=None, solution_len=2):
             'verbose': True,
         }
         optimizer_title = 'Running GA'
+    elif optimizer_upper == 'ACO':
+        parameters = {
+            'n_ants': DEFAULT_POPULATION_SIZE,
+            'iterations': DEFAULT_ITERATIONS,
+            'n_features': solution_len,
+            'alpha': 1,
+            'q': 1,
+            'initial_pheromone': 0.1,
+            'evaporation_rate': 0.049,
+            'verbose': True,
+        }
+        optimizer_title = 'Running ACO'
 
     return parameters, optimizer_title
 

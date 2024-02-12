@@ -4,7 +4,6 @@ from matplotlib.gridspec import GridSpec
 import matplotlib.pyplot as plt
 from data_utils import *
 import time
-from test_utils import *
 from analysis_utils import k_fold_cross_validation, population_test, get_optimizer_parameters, optimizer_comparison
 from plots import plot_fitness_over_folds, plot_fitness_over_population_sizes, plot_fitness_all_optimizers
 

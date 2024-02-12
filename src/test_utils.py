@@ -30,7 +30,7 @@ def default_parameters(opt=None):
     """
 
     # Test parameters
-    dataset = split_data_to_dict(load_arff_data(D2))
+    dataset = split_data_to_dict(load_arff_data(D1))
     optimizer = OPTIMIZERS[
         opt.upper()] if opt else OPTIMIZERS[DEFAULT_OPTIMIZER]
 
@@ -84,6 +84,7 @@ def test_run_optimizer(
         target_function=fitness,
         target_function_parameters=target_function_parameters,
         **optimizer_parameters)
+    print(test_fitness)
     print("Test fitness for {} optimizer in {} classifier: {}".format(
         optimizer_name,
         target_function_parameters["classifier"],
@@ -158,7 +159,7 @@ def test_cross_validation(
 
 
 if __name__ == "__main__":
-    optimizer = "GA"
+    optimizer = "ACO"
     """
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     plot_s_shaped_transfer_function(axs[0])

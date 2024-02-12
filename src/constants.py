@@ -7,6 +7,7 @@ from pyMetaheuristic.algorithm import bat_algorithm
 from pyMetaheuristic.algorithm import firefly_algorithm
 from pyMetaheuristic.algorithm import particle_swarm_optimization
 from pyMetaheuristic.algorithm import genetic_algorithm
+from pyMetaheuristic.algorithm import ant_colony_optimization
 
 # ---------------------------------- DATASETS ------------------------------------ #
 
@@ -17,15 +18,16 @@ D3 = './datasets/parkinsons.arff'
 # --------------------------------- OPTIMIZERS ----------------------------------- #
 
 OPTIMIZERS = {
-    'GOA': grasshopper_optimization_algorithm,
-    'WOA': whale_optimization_algorithm,
-    'DA': dragonfly_algorithm,
-    'GWO': grey_wolf_optimizer,
+    #'GOA': grasshopper_optimization_algorithm,
+    #'WOA': whale_optimization_algorithm,
+    #'DA': dragonfly_algorithm,
+    # 'GWO': grey_wolf_optimizer,
     'ABCO': artificial_bee_colony_optimization,
     'BA': bat_algorithm,
     'PSO': particle_swarm_optimization,
     'FA': firefly_algorithm,
-    'GA': genetic_algorithm
+    'GA': genetic_algorithm,
+    'ACO': ant_colony_optimization
 }
 
 # ----------------------------------- NAMES ------------------------------------- #
@@ -38,7 +40,7 @@ PLOT_TITLE = 'Metaheuristic optimization analysis visualization'
 
 # ---------------------------------- DEFAULT ------------------------------------ #
 
-DEFAULT_OPTIMIZER = 'GOA'
+DEFAULT_OPTIMIZER = 'ACO'
 DEFAULT_TEST_ITERATIONS = 100
 DEFAULT_ITERATIONS = 500
 DEFAULT_MAX_ITERATIONS = 30  # For analisys comparison between optimizers
