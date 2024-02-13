@@ -18,10 +18,10 @@ D3 = './datasets/parkinsons.arff'
 # --------------------------------- OPTIMIZERS ----------------------------------- #
 
 OPTIMIZERS = {
-    #'GOA': grasshopper_optimization_algorithm,
-    #'WOA': whale_optimization_algorithm,
-    #'DA': dragonfly_algorithm,
-    # 'GWO': grey_wolf_optimizer,
+    'GOA': grasshopper_optimization_algorithm,
+    'WOA': whale_optimization_algorithm,
+    'DA': dragonfly_algorithm,
+    'GWO': grey_wolf_optimizer,
     'ABCO': artificial_bee_colony_optimization,
     'BA': bat_algorithm,
     'PSO': particle_swarm_optimization,

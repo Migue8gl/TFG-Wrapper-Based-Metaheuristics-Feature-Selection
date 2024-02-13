@@ -44,7 +44,8 @@ def main(*args, **kwargs):
         'data': dataset,
         'alpha': 0.5,
         'classifier': 'svc',
-        'n_neighbors': DEFAULT_NEIGHBORS
+        'n_neighbors': DEFAULT_NEIGHBORS,
+        'c': 0.1
     }
 
     for opt in optimizer_dict.keys():

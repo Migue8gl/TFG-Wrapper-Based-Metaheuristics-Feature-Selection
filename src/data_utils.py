@@ -2,6 +2,7 @@ import arff
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
 from constants import *
+from sklearn.preprocessing import StandardScaler
 
 # ---------------------------------- DATA GENERAL ------------------------------------ #
 
@@ -40,9 +41,36 @@ def split_data_to_dict(dataset):
     Returns:
     - dict: A dictionary containing the samples and labels.
     """
+    np.random.shuffle(dataset)
     samples = dataset[:, :-1].astype(np.float64)
     classes = dataset[:, -1]
     return {DATA: samples, LABELS: classes}
+
+def split_data_to_dict_train_test(dataset, train_ratio=0.8):
+    """
+    Splits the given dataset into a dictionary containing the samples and labels for training and testing.
+
+    Parameters:
+    - dataset (numpy.ndarray): The dataset to be split.
+    - train_ratio (float): The ratio of data to be used for training. Default is 0.8.
+
+    Returns:
+    - dict: A dictionary containing the training and testing samples and labels.
+    """
+    np.random.shuffle(dataset)
+    num_samples = len(dataset)
+    train_size = int(num_samples * train_ratio)
+    
+    train_data = dataset[:train_size, :-1].astype(np.float64)
+    train_labels = dataset[:train_size, -1]
+    
+    test_data = dataset[train_size:, :-1].astype(np.float64)
+    test_labels = dataset[train_size:, -1]
+    
+    return {
+        "train": {DATA: train_data, LABELS: train_labels},
+        "test": {DATA: test_data, LABELS: test_labels}
+    }
 
 
 def split_data(dataset):
@@ -114,12 +142,17 @@ def scaling_standard_score(data):
     - ndarray: The scaled data array with normalized features and labels.
     """
     # Separate the features (x) and labels (y)
-    x, y = split_data(data)
+    # Separate the features (x) and labels (y)
+    x = data[:, :-1]
+    y = data[:, -1]
 
-    # Scale data to meet std deviation of 0 and mean 1
-    x_scaled = (np.mean(x, axis=0) - x) / np.std(x, axis=0)
+    # Initialize the scaler
+    scaler = StandardScaler()
 
-    # Combine the normalized features (x_normalized) and labels (y) into a single array
+    # Fit and transform the features
+    x_scaled = scaler.fit_transform(x)
+
+    # Combine the normalized features (x_scaled) and labels (y) into a single array
     return np.column_stack((x_scaled, y))
 
 

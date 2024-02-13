@@ -4,6 +4,7 @@ from data_utils import *
 from analysis_utils import *
 from plots import *
 import matplotlib.pyplot as plt
+from math import sqrt
 
 
 def default_parameters(opt=None):
@@ -30,7 +31,7 @@ def default_parameters(opt=None):
     """
 
     # Test parameters
-    dataset = split_data_to_dict(load_arff_data(D1))
+    dataset = split_data_to_dict(scaling_min_max(load_arff_data(D2)))
     optimizer = OPTIMIZERS[
         opt.upper()] if opt else OPTIMIZERS[DEFAULT_OPTIMIZER]
 
@@ -54,9 +55,11 @@ def default_parameters(opt=None):
             "alpha":
             0.5,
             "classifier":
-            KNN_CLASSIFIER,
+            SVC_CLASSIFIER,
             "n_neighbors":
-            20,
+            DEFAULT_NEIGHBORS,
+            "c":
+            0.1
         },
     }
 
@@ -65,6 +68,7 @@ def test_run_optimizer(
     optimizer=OPTIMIZERS[DEFAULT_OPTIMIZER],
     optimizer_parameters=None,
     target_function_parameters=None,
+    dataset=None,
 ):
     """
     Run the optimizer and plot the fitness curves over training.
@@ -77,21 +81,32 @@ def test_run_optimizer(
     Returns:
     - None
     """
+    x_train, x_test, y_train, y_test = train_test_split(dataset[DATA],
+                                                        dataset[LABELS],
+                                                        test_size=0.2,
+                                                        random_state=42)
     optimizer_name = get_optimizer_name_by_function(optimizer)
+    target_function_parameters[DATA] = {DATA: x_train, LABELS: y_train}
+    target_function_parameters['n_neighbors'] = int(sqrt(x_train.shape[0]))
 
     # Running the optimizer
-    test_fitness, fitness_values = optimizer(
+    best_result, fitness_values = optimizer(
         target_function=fitness,
         target_function_parameters=target_function_parameters,
         **optimizer_parameters)
-    print(test_fitness)
-    print("Test fitness for {} optimizer in {} classifier: {}".format(
+    print("Best result for {} optimizer in {} classifier: {}".format(
         optimizer_name,
         target_function_parameters["classifier"],
-        round(np.mean(test_fitness), 2),
+        round(best_result[-1], 2),
     ))
 
-    # Plotting average fitness over k folds in cross validation
+    target_function_parameters[DATA] = {DATA: x_test, LABELS: y_test}
+    target_function_parameters['weights'] = best_result[:-2]
+    test = fitness(**target_function_parameters)['ValFitness']
+
+    print("Test result: {}".format(round(test, 2), ))
+
+    # Plotting average fitness curves
     plot_fitness_over_training(
         fitness_values=fitness_values,
         title="Training curve on {} optimizer".format(optimizer_name))
@@ -155,7 +170,8 @@ def test_cross_validation(
         fontsize=16,
     )
     plt.tight_layout()
-    plt.savefig("./images/test_k_cross_validation_{}.jpg".format(optimizer_name))
+    plt.savefig(
+        "./images/test_k_cross_validation_{}.jpg".format(optimizer_name))
 
 
 if __name__ == "__main__":
@@ -165,15 +181,16 @@ if __name__ == "__main__":
     plot_s_shaped_transfer_function(axs[0])
     plot_v_shaped_transfer_function(axs[1])
     plt.savefig("./images/transfer_functions.jpg")
-    """
     
+    """
     test_run_optimizer(
         **{
             key: value
             for key, value in default_parameters(optimizer).items()
-            if key != "k" and key != "dataset"
-        })     
+            if key != "k"
+        })
     """
 
     test_cross_validation(**default_parameters(optimizer))
+
     """

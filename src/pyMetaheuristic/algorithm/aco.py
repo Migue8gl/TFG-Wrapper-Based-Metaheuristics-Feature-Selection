@@ -26,14 +26,15 @@ def ant_build_subset(ant, n_features, feature_pheromone, alpha):
             p_num[node_j] = (tau**alpha)
         den = np.sum(p_num)
         p = p_num / den
-        r = np.random.random()
-        if r < p[node_i]:
+        r = np.random.rand()
+        if r <= p[node_i]:
             ant[0].append(1)
         else:
             ant[0].append(0)
 
 
 # Function: Update Pheromones
+# TODO revisar
 def update_pheromones(best_ant, feature_pheromone, evaporation_rate, Q_constant):
     delta_pheromones = np.zeros(shape=feature_pheromone.shape)
     for feature in best_ant[0]:

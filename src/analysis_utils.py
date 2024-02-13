@@ -11,7 +11,7 @@ from data_utils import *
 # TODO add to plot population sizes and optimizer names
 
 
-def compute_accuracy(weights, data, classifier='knn', n_neighbors=5):
+def compute_accuracy(weights, data, classifier='knn', n_neighbors=5, c=0.1):
     sample = data[DATA]
     labels = data[LABELS]
 
@@ -25,7 +25,7 @@ def compute_accuracy(weights, data, classifier='knn', n_neighbors=5):
         classifier = KNeighborsClassifier(n_neighbors=n_neighbors,
                                           weights='distance')
     elif (classifier == 'svc'):
-        classifier = SVC(kernel='rbf')
+        classifier = SVC(C=c, kernel='rbf')
     else:
         print('No valid classifier, using KNN by default')
         classifier = KNeighborsClassifier(n_neighbors=n_neighbors,
@@ -42,13 +42,14 @@ def compute_accuracy(weights, data, classifier='knn', n_neighbors=5):
     return {'TrainError': e_in, 'ValError': e_out}
 
 
-def fitness(weights, data, alpha=0.5, classifier='knn', n_neighbors=5):
+def fitness(weights, data, alpha=0.5, classifier='knn', n_neighbors=5, c=0.1):
     reduction_count = np.sum(weights == 0)
     weights[weights < 0.1] = 0.0
     classification_rate = compute_accuracy(weights,
                                            data=data,
                                            classifier=classifier,
-                                           n_neighbors=n_neighbors)
+                                           n_neighbors=n_neighbors,
+                                           c=c)
     reduction_rate = reduction_count / len(weights)
 
     # Calculate the error as a percentage
