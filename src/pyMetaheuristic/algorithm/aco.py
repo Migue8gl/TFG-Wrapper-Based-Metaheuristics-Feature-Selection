@@ -1,7 +1,7 @@
 import numpy as np
 import random
 
-
+# TODO add parameters
 # Function
 def target_function():
     return
@@ -34,7 +34,7 @@ def ant_build_subset(ant, n_features, feature_pheromone, alpha):
 
 
 # Function: Update Pheromones
-# TODO revisar
+# TODO update function 
 def update_pheromones(best_ant, feature_pheromone, evaporation_rate, Q_constant):
     delta_pheromones = np.zeros(shape=feature_pheromone.shape)
     for feature in best_ant[0]:

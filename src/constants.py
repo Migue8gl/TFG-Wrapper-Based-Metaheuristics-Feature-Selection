@@ -1,38 +1,12 @@
-from pyMetaheuristic.algorithm import grasshopper_optimization_algorithm
-from pyMetaheuristic.algorithm import dragonfly_algorithm
-from pyMetaheuristic.algorithm import grey_wolf_optimizer
-from pyMetaheuristic.algorithm import whale_optimization_algorithm
-from pyMetaheuristic.algorithm import artificial_bee_colony_optimization
-from pyMetaheuristic.algorithm import bat_algorithm
-from pyMetaheuristic.algorithm import firefly_algorithm
-from pyMetaheuristic.algorithm import particle_swarm_optimization
-from pyMetaheuristic.algorithm import genetic_algorithm
-from pyMetaheuristic.algorithm import ant_colony_optimization
-
 # ---------------------------------- DATASETS ------------------------------------ #
 
 D1 = './datasets/spectf-heart.arff'
 D2 = './datasets/ionosphere.arff'
 D3 = './datasets/parkinsons.arff'
 
-# --------------------------------- OPTIMIZERS ----------------------------------- #
-
-OPTIMIZERS = {
-    'GOA': grasshopper_optimization_algorithm,
-    'WOA': whale_optimization_algorithm,
-    'DA': dragonfly_algorithm,
-    'GWO': grey_wolf_optimizer,
-    'ABCO': artificial_bee_colony_optimization,
-    'BA': bat_algorithm,
-    'PSO': particle_swarm_optimization,
-    'FA': firefly_algorithm,
-    'GA': genetic_algorithm,
-    'ACO': ant_colony_optimization
-}
-
 # ----------------------------------- NAMES ------------------------------------- #
 
-DATA = 'data'
+SAMPLE = 'sample'
 LABELS = 'labels'
 KNN_CLASSIFIER = 'knn'
 SVC_CLASSIFIER = 'svc'
@@ -41,9 +15,11 @@ PLOT_TITLE = 'Metaheuristic optimization analysis visualization'
 # ---------------------------------- DEFAULT ------------------------------------ #
 
 DEFAULT_OPTIMIZER = 'ACO'
-DEFAULT_TEST_ITERATIONS = 100
-DEFAULT_ITERATIONS = 500
+DEFAULT_TEST_ITERATIONS = 100 # Testing purposes, can be changed
+DEFAULT_ITERATIONS = 500 # Analisys iterations for each optimizer
 DEFAULT_MAX_ITERATIONS = 30  # For analisys comparison between optimizers
-DEFAULT_POPULATION_SIZE = 20
-DEFAULT_FOLDS = 5
-DEFAULT_NEIGHBORS = 10
+DEFAULT_POPULATION_SIZE = 20 # Vector solution length
+DEFAULT_FOLDS = 5 # Number of folds for k-fold cross validation
+DEFAULT_NEIGHBORS = 10 # Number of neighbors for KNN
+DEFAULT_LOWER_BOUND = 0 # Min value for features in solution
+DEFAULT_UPPER_BOUND= 1 # Max value for features in solution

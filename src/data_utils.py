@@ -1,21 +1,23 @@
 import arff
 import numpy as np
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.model_selection import train_test_split
 from constants import *
 from sklearn.preprocessing import StandardScaler
+from typing import Optional
 
-# ---------------------------------- DATA GENERAL ------------------------------------ #
+# ---------------------------------- DATA ------------------------------------ #
 
 
-def load_arff_data(file_path):
+def load_arff_data(file_path: str) -> Optional[np.ndarray]:
     """
     Loads ARFF data from a file.
 
     Parameters:
-    - file_path (str): The path to the ARFF file.
+        - file_path (str): The path to the ARFF file.
 
     Returns:
-    - numpy.ndarray or None: The loaded ARFF data as a numpy array, or None if an error occurred.
+        - data (numpy.ndarray): The loaded ARFF data as a numpy array, or None if an error occurred.
     """
     try:
         with open(file_path, 'r') as arff_file:
@@ -31,7 +33,7 @@ def load_arff_data(file_path):
         return None
 
 
-def split_data_to_dict(dataset):
+def split_data_to_dict(dataset: np.narray) -> dict:
     """
     Splits the given dataset into a dictionary containing the samples and labels.
 
@@ -39,14 +41,17 @@ def split_data_to_dict(dataset):
     - dataset (numpy.ndarray): The dataset to be split.
 
     Returns:
-    - dict: A dictionary containing the samples and labels.
+    - data (dict): A dictionary containing the samples and labels.
     """
     np.random.shuffle(dataset)
     samples = dataset[:, :-1].astype(np.float64)
     classes = dataset[:, -1]
-    return {DATA: samples, LABELS: classes}
 
-def split_data_to_dict_train_test(dataset, train_ratio=0.8):
+    return {SAMPLE: samples, LABELS: classes}
+
+
+def split_data_to_dict_train_test(dataset: np.narray,
+                                  train_ratio: float = 0.8) -> dict:
     """
     Splits the given dataset into a dictionary containing the samples and labels for training and testing.
 
@@ -55,25 +60,31 @@ def split_data_to_dict_train_test(dataset, train_ratio=0.8):
     - train_ratio (float): The ratio of data to be used for training. Default is 0.8.
 
     Returns:
-    - dict: A dictionary containing the training and testing samples and labels.
+    - data (dict): A dictionary containing the training and testing samples and labels.
     """
     np.random.shuffle(dataset)
-    num_samples = len(dataset)
-    train_size = int(num_samples * train_ratio)
-    
-    train_data = dataset[:train_size, :-1].astype(np.float64)
-    train_labels = dataset[:train_size, -1]
-    
-    test_data = dataset[train_size:, :-1].astype(np.float64)
-    test_labels = dataset[train_size:, -1]
-    
+
+    # Split the dataset into training and testing sets
+    train_data, test_data, train_labels, test_labels = train_test_split(
+        dataset[:, :-1].astype(np.float64),  # Features
+        dataset[:, -1],  # Labels
+        train_size=train_ratio,  # Ratio for training data
+        random_state=42  # Random seed for reproducibility
+    )
+
     return {
-        "train": {DATA: train_data, LABELS: train_labels},
-        "test": {DATA: test_data, LABELS: test_labels}
+        "train": {
+            SAMPLE: train_data,
+            LABELS: train_labels
+        },
+        "test": {
+            SAMPLE: test_data,
+            LABELS: test_labels
+        }
     }
 
 
-def split_data(dataset):
+def split_data(dataset: np.narray) -> tuple:
     """
     Split the given dataset into samples and classes.
 
@@ -81,14 +92,15 @@ def split_data(dataset):
     - dataset (numpy.ndarray): The dataset to be split.
 
     Returns:
-    - tuple: A tuple containing two numpy.ndarrays. The first array contains the samples, and the second array contains the classes.
+    - data (tuple): A tuple containing two numpy.ndarrays. The first array contains the samples, and the second array contains the classes.
     """
     samples = dataset[:, :-1].astype(np.float64)
     classes = dataset[:, -1]
+
     return samples, classes
 
 
-def split_dicts_keys(list_of_dicts):
+def split_dicts_keys_to_lists(list_of_dicts: list) -> tuple:
     """
     Extracts values from two keys in a list of dicts.
 
@@ -96,7 +108,7 @@ def split_dicts_keys(list_of_dicts):
     - list_of_dicts (list): List of dictionaries with two keys.
 
     Returns:
-    - Two lists, one with values from the first key and another with values from the second key.
+    -  values (tuple): Two lists, one with values from the first key and another with values from the second key.
     """
     keys = list(list_of_dicts[0].keys())
     first_key_values = [item[keys[0]] for item in list_of_dicts]
@@ -109,7 +121,7 @@ def split_dicts_keys(list_of_dicts):
 # https://en.wikipedia.org/wiki/Normalization_(statistics)
 
 
-def scaling_min_max(data):
+def scaling_min_max(data: np.narray) -> np.narray:
     """
     Normalize the features of a dataset using the MinMaxScaler.
 
@@ -117,7 +129,7 @@ def scaling_min_max(data):
     - data (numpy.ndarray): The input dataset.
 
     Returns:
-    - numpy.ndarray: The normalized dataset with features and labels combined.
+    - normalized_data (numpy.ndarray): The normalized dataset.
     """
     # Separate the features (x) and labels (y)
     x, y = split_data(data)
@@ -131,15 +143,15 @@ def scaling_min_max(data):
     return np.column_stack((x_normalized, y))
 
 
-def scaling_standard_score(data):
+def scaling_std_score(data: np.narray) -> np.narray:
     """
     Scale the input data using the standard score method.
 
     Parameters:
-    - data (ndarray): Input data array containing both features and labels.
+    - data (numpy.ndarray): Input data array containing both features and labels.
 
     Returns:
-    - ndarray: The scaled data array with normalized features and labels.
+    - scaled_data (numpy.ndarray): The scaled data array.
     """
     # Separate the features (x) and labels (y)
     # Separate the features (x) and labels (y)
@@ -154,143 +166,3 @@ def scaling_standard_score(data):
 
     # Combine the normalized features (x_scaled) and labels (y) into a single array
     return np.column_stack((x_scaled, y))
-
-
-# ------------------------------ OPTIMIZERS -------------------------------- #
-
-
-def get_optimizer_parameters(optimizer=None, solution_len=2):
-    optimizer_title = 'No optimizer Selected'
-    parameters = {}
-
-    optimizer_upper = optimizer.upper()
-
-    if optimizer_upper == 'GOA':
-        parameters = {
-            'grasshoppers': DEFAULT_POPULATION_SIZE,
-            'iterations': DEFAULT_ITERATIONS,
-            'min_values': [0] * (solution_len),
-            'max_values': [1] * (solution_len),
-            'binary': 's',  # Best binary version in paper
-        }
-        optimizer_title = 'Running GOA'
-    elif optimizer_upper == 'DA':
-        parameters = {
-            'size': DEFAULT_POPULATION_SIZE,
-            'generations': DEFAULT_ITERATIONS,
-            'min_values': [0] * (solution_len),
-            'max_values': [1] * (solution_len),
-            'binary': 's',  # Binary version proposed in paper
-        }
-        optimizer_title = 'Running DA'
-    elif optimizer_upper == 'GWO':
-        parameters = {
-            'pack_size': DEFAULT_POPULATION_SIZE,
-            'iterations': DEFAULT_ITERATIONS,
-            'min_values': [0] * (solution_len),
-            'max_values': [1] * (solution_len),
-            'binary': 's',  # Best binary version in the paper
-        }
-        optimizer_title = 'Running GWO'
-    elif optimizer_upper == 'WOA':
-        parameters = {
-            'hunting_party': DEFAULT_POPULATION_SIZE,
-            'iterations': DEFAULT_ITERATIONS,
-            'min_values': [0] * (solution_len),
-            'max_values': [1] * (solution_len),
-            'spiral_param': 1,
-            'binary': 's',
-        }
-        optimizer_title = 'Running WOA'
-    elif optimizer_upper == 'ABCO':
-        parameters = {
-            'food_sources': DEFAULT_POPULATION_SIZE,
-            'iterations': DEFAULT_ITERATIONS,
-            'min_values': [0] * (solution_len),
-            'max_values': [1] * (solution_len),
-            'employed_bees': 3,
-            'outlookers_bees': 3,
-            'limit': 3,
-            'binary': 's',
-        }
-        optimizer_title = 'Running ABCO'
-    elif optimizer_upper == 'BA':
-        parameters = {
-            'swarm_size': DEFAULT_POPULATION_SIZE,
-            'iterations': DEFAULT_ITERATIONS,
-            'min_values': [0] * (solution_len),
-            'max_values': [1] * (solution_len),
-            'alpha': 0.9,
-            'gama': 0.9,
-            'fmin': 0,
-            'fmax': 10,
-            'binary': 's',
-        }
-        optimizer_title = 'Running BA'
-    elif optimizer_upper == 'PSO':
-        parameters = {
-            'swarm_size': DEFAULT_POPULATION_SIZE,
-            'iterations': DEFAULT_ITERATIONS,
-            'min_values': [0] * (solution_len),
-            'max_values': [1] * (solution_len),
-            'decay': 0,
-            'w': 0.9,
-            'c1': 2,
-            'c2': 2,
-            'verbose': True,
-            'binary': 's',
-        }
-        optimizer_title = 'Running PSO'
-    elif optimizer_upper == 'FA':
-        parameters = {
-            'swarm_size': DEFAULT_POPULATION_SIZE,
-            'generations': DEFAULT_ITERATIONS,
-            'min_values': [0] * (solution_len),
-            'max_values': [1] * (solution_len),
-            'alpha_0': 0.02,
-            'beta_0': 0.1,
-            'gama': 1,
-            'verbose': True,
-            'binary': 's',
-        }
-        optimizer_title = 'Running PSO'
-    elif optimizer_upper == 'GA':
-        parameters = {
-            'population_size': DEFAULT_POPULATION_SIZE,
-            'generations': DEFAULT_ITERATIONS,
-            'min_values': [0] * (solution_len),
-            'max_values': [1] * (solution_len),
-            'crossover_rate': 1,
-            'mutation_rate': 0.05,
-            'elite': 3,
-            'verbose': True,
-        }
-        optimizer_title = 'Running GA'
-    elif optimizer_upper == 'ACO':
-        parameters = {
-            'n_ants': DEFAULT_POPULATION_SIZE,
-            'iterations': DEFAULT_ITERATIONS,
-            'n_features': solution_len,
-            'alpha': 1,
-            'q': 1,
-            'initial_pheromone': 0.1,
-            'evaporation_rate': 0.049,
-            'verbose': True,
-        }
-        optimizer_title = 'Running ACO'
-
-    return parameters, optimizer_title
-
-
-def get_optimizers_list():
-    return list(OPTIMIZERS.keys())
-
-
-def get_optimizer(optimizer):
-    return OPTIMIZERS[optimizer.upper()]
-
-
-def get_optimizer_name_by_function(optimizer_func):
-    for key, value in OPTIMIZERS.items():
-        if value == optimizer_func:
-            return key

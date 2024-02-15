@@ -21,7 +21,7 @@ def plot_fitness_over_training(fitness_values, ax=None, title=None):
     Returns:
     - None
     """
-    validation_fitness, training_fitness = split_dicts_keys(fitness_values)
+    validation_fitness, training_fitness = split_dicts_keys_to_lists(fitness_values)
 
     if ax is None:
         _, ax = plt.subplots()

@@ -12,7 +12,7 @@ from data_utils import *
 
 
 def compute_accuracy(weights, data, classifier='knn', n_neighbors=5, c=0.1):
-    sample = data[DATA]
+    sample = data[SAMPLE]
     labels = data[LABELS]
 
     sample_weighted = np.multiply(sample, weights)
@@ -97,16 +97,16 @@ def k_fold_cross_validation(dataset,
     fitness_each_fold = {}
     fold_index = 0
 
-    for train_index, test_index in skf.split(dataset[DATA], dataset[LABELS]):
-        x_train, x_test = dataset[DATA][train_index], dataset[DATA][test_index]
+    for train_index, test_index in skf.split(dataset[SAMPLE], dataset[LABELS]):
+        x_train, x_test = dataset[SAMPLE][train_index], dataset[SAMPLE][test_index]
         y_train, y_test = dataset[LABELS][train_index], dataset[LABELS][
             test_index]
 
-        sample = {DATA: x_train, LABELS: y_train}
-        sample_test = {DATA: x_test, LABELS: y_test}
+        sample = {SAMPLE: x_train, LABELS: y_train}
+        sample_test = {SAMPLE: x_test, LABELS: y_test}
 
         # Override the data to be optimized in the search process
-        target_function_parameters[DATA] = sample
+        target_function_parameters[SAMPLE] = sample
 
         # Run optimization algorithm on the current fold
         result, fitness_values = optimizer(
@@ -116,7 +116,7 @@ def k_fold_cross_validation(dataset,
         fitness_each_fold[fold_index] = fitness_values
 
         # Evaluate the model on the test set of the current fold
-        target_function_parameters[DATA] = sample_test
+        target_function_parameters[SAMPLE] = sample_test
         target_function_parameters['weights'] = result[:-2]
         test_fitness.append(
             fitness(**target_function_parameters)['ValFitness'])
@@ -175,7 +175,7 @@ def optimizer_comparison(dataset,
                          target_function_parameters=None,
                          max_iterations=30):
     parameters_dict = {
-        key: get_optimizer_parameters(key, dataset[DATA].shape[1])
+        key: get_optimizer_parameters(key, dataset[SAMPLE].shape[1])
         for key in optimizer_dict.keys()
     }
     optimizers_fitness = {}

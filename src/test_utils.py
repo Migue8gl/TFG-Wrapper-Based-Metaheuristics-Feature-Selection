@@ -36,7 +36,7 @@ def default_parameters(opt=None):
         opt.upper()] if opt else OPTIMIZERS[DEFAULT_OPTIMIZER]
 
     optimizer_parameters = get_optimizer_parameters(
-        opt.upper() if opt else DEFAULT_OPTIMIZER, dataset[DATA].shape[1])[0]
+        opt.upper() if opt else DEFAULT_OPTIMIZER, dataset[SAMPLE].shape[1])[0]
     if "iterations" in optimizer_parameters:
         optimizer_parameters["iterations"] = DEFAULT_TEST_ITERATIONS
     elif "generations" in optimizer_parameters:
@@ -49,7 +49,7 @@ def default_parameters(opt=None):
         "optimizer_parameters": optimizer_parameters,
         "target_function_parameters": {
             "weights":
-            np.random.uniform(low=0, high=1, size=dataset[DATA].shape[1]),
+            np.random.uniform(low=0, high=1, size=dataset[SAMPLE].shape[1]),
             "data":
             dataset,
             "alpha":
@@ -81,12 +81,12 @@ def test_run_optimizer(
     Returns:
     - None
     """
-    x_train, x_test, y_train, y_test = train_test_split(dataset[DATA],
+    x_train, x_test, y_train, y_test = train_test_split(dataset[SAMPLE],
                                                         dataset[LABELS],
                                                         test_size=0.2,
                                                         random_state=42)
     optimizer_name = get_optimizer_name_by_function(optimizer)
-    target_function_parameters[DATA] = {DATA: x_train, LABELS: y_train}
+    target_function_parameters[SAMPLE] = {SAMPLE: x_train, LABELS: y_train}
     target_function_parameters['n_neighbors'] = int(sqrt(x_train.shape[0]))
 
     # Running the optimizer
@@ -100,7 +100,7 @@ def test_run_optimizer(
         round(best_result[-1], 2),
     ))
 
-    target_function_parameters[DATA] = {DATA: x_test, LABELS: y_test}
+    target_function_parameters[SAMPLE] = {SAMPLE: x_test, LABELS: y_test}
     target_function_parameters['weights'] = best_result[:-2]
     test = fitness(**target_function_parameters)['ValFitness']
 

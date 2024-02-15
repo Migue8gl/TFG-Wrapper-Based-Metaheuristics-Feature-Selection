@@ -25,7 +25,7 @@ def main(*args, **kwargs):
     if scaling_arg == 1:
         norm_dataset = scaling_min_max(dataset)
     elif scaling_arg == 2:
-        norm_dataset = scaling_standard_score(dataset)
+        norm_dataset = scaling_std_score(dataset)
     else:
         norm_dataset = dataset
 
@@ -38,7 +38,7 @@ def main(*args, **kwargs):
     # Initial weights are set randomly between 0 and 1
     weights = np.random.uniform(low=0,
                                 high=1,
-                                size=dataset_dict[DATA].shape[1])
+                                size=dataset_dict[SAMPLE].shape[1])
     target_function_parameters = {
         'weights': weights,
         'data': dataset,
@@ -51,7 +51,7 @@ def main(*args, **kwargs):
     for opt in optimizer_dict.keys():
         # Optimization function's parameters
         parameters, optimizer_title = get_optimizer_parameters(
-            opt, dataset_dict[DATA].shape[1])
+            opt, dataset_dict[SAMPLE].shape[1])
 
         # SVC Cross validation for x optimizer alone
         test_fitness, fitness_values = k_fold_cross_validation(
