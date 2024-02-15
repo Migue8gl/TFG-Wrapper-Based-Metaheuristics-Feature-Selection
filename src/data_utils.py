@@ -17,7 +17,7 @@ def load_arff_data(file_path: str) -> Optional[np.ndarray]:
         - file_path (str): The path to the ARFF file.
 
     Returns:
-        - data (numpy.ndarray): The loaded ARFF data as a numpy array, or None if an error occurred.
+        - data (numpy.ndarray, None): The loaded ARFF data as a numpy array, or None if an error occurred.
     """
     try:
         with open(file_path, 'r') as arff_file:
@@ -38,10 +38,10 @@ def split_data_to_dict(dataset: np.narray) -> dict:
     Splits the given dataset into a dictionary containing the samples and labels.
 
     Parameters:
-    - dataset (numpy.ndarray): The dataset to be split.
+        - dataset (numpy.ndarray): The dataset to be split.
 
     Returns:
-    - data (dict): A dictionary containing the samples and labels.
+        - data (dict): A dictionary containing the samples and labels.
     """
     np.random.shuffle(dataset)
     samples = dataset[:, :-1].astype(np.float64)
@@ -56,11 +56,11 @@ def split_data_to_dict_train_test(dataset: np.narray,
     Splits the given dataset into a dictionary containing the samples and labels for training and testing.
 
     Parameters:
-    - dataset (numpy.ndarray): The dataset to be split.
-    - train_ratio (float): The ratio of data to be used for training. Default is 0.8.
+        - dataset (numpy.ndarray): The dataset to be split.
+        - train_ratio (float): The ratio of data to be used for training. Default is 0.8.
 
     Returns:
-    - data (dict): A dictionary containing the training and testing samples and labels.
+        - data (dict): A dictionary containing the training and testing samples and labels.
     """
     np.random.shuffle(dataset)
 
@@ -89,10 +89,10 @@ def split_data(dataset: np.narray) -> tuple:
     Split the given dataset into samples and classes.
 
     Parameters:
-    - dataset (numpy.ndarray): The dataset to be split.
+        - dataset (numpy.ndarray): The dataset to be split.
 
     Returns:
-    - data (tuple): A tuple containing two numpy.ndarrays. The first array contains the samples, and the second array contains the classes.
+        - data (tuple): A tuple containing two numpy.ndarrays. The first array contains the samples, and the second array contains the classes.
     """
     samples = dataset[:, :-1].astype(np.float64)
     classes = dataset[:, -1]
@@ -105,10 +105,10 @@ def split_dicts_keys_to_lists(list_of_dicts: list) -> tuple:
     Extracts values from two keys in a list of dicts.
 
     Parameters:
-    - list_of_dicts (list): List of dictionaries with two keys.
+        - list_of_dicts (list): List of dictionaries with two keys.
 
     Returns:
-    -  values (tuple): Two lists, one with values from the first key and another with values from the second key.
+        -  values (tuple): Two lists, one with values from the first key and another with values from the second key.
     """
     keys = list(list_of_dicts[0].keys())
     first_key_values = [item[keys[0]] for item in list_of_dicts]
@@ -126,14 +126,14 @@ def scaling_min_max(data: np.narray) -> np.narray:
     Normalize the features of a dataset using the MinMaxScaler.
 
     Parameters:
-    - data (numpy.ndarray): The input dataset.
+        - data (numpy.ndarray): The input dataset.
 
     Returns:
-    - normalized_data (numpy.ndarray): The normalized dataset.
+        - normalized_data (numpy.ndarray): The normalized dataset.
     """
     # Separate the features (x) and labels (y)
     x, y = split_data(data)
-
+ 
     scaler = MinMaxScaler()
 
     # Fit the scaler to the features and normalize the data between 0 and 1
@@ -148,10 +148,10 @@ def scaling_std_score(data: np.narray) -> np.narray:
     Scale the input data using the standard score method.
 
     Parameters:
-    - data (numpy.ndarray): Input data array containing both features and labels.
+        - data (numpy.ndarray): Input data array containing both features and labels.
 
     Returns:
-    - scaled_data (numpy.ndarray): The scaled data array.
+        - scaled_data (numpy.ndarray): The scaled data array.
     """
     # Separate the features (x) and labels (y)
     # Separate the features (x) and labels (y)

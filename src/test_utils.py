@@ -5,97 +5,71 @@ from analysis_utils import *
 from plots import *
 import matplotlib.pyplot as plt
 from math import sqrt
+from typing import Optional
+from optimizer import Optimizer
 
 
-def default_parameters(opt=None):
+def default_parameters(opt: Optional[str] = None):
     """
-    Generates a dictionary with default parameters for a machine learning algorithm.
+    Generates a dictionary with default parameters testing purposes.
+
+    Parameters:
+        - opt (str, optional): Name of the optimizer's parameters to return.
 
     Returns:
-    - dict: A dictionary containing the default parameters for the algorithm:
-        - 'k' (int): The number of neighbors to consider in the algorithm.
-            - 'dataset' (dict): The dataset to be used for training and testing.
+        - parameters (dict): A dictionary containing default parameters for testing:
+            - 'k' (int): The number of neighbors to consider in the algorithm.
             - 'optimizer' (object): The optimizer object used for optimizing the algorithm.
-            - 'optimizer_parameters' (dict): The parameters for the optimizer, example:
-                - 'grasshoppers' (int): The number of grasshoppers in the optimizer.
-                - 'iterations' (int): The number of iterations for the optimizer.
-                - 'min_values' (list): The minimum values for each feature in the dataset.
-                - 'max_values' (list): The maximum values for each feature in the dataset.
-                - 'binary' (str): The binary value for the optimizer.
-            - 'target_function_parameters' (dict): The parameters for the target function.
-                - 'weights' (ndarray): The weights for the target function.
-                - 'data' (dict): The dataset to be used by the target function.
-                - 'alpha' (float): Classification percentage for the target function.
-                - 'classifier' (string): The classifier's name used by the target function.
-                - 'n_neighbors' (int): The number of neighbors to consider in the target function.
+               
     """
 
     # Test parameters
     dataset = split_data_to_dict(scaling_min_max(load_arff_data(D2)))
-    optimizer = OPTIMIZERS[
-        opt.upper()] if opt else OPTIMIZERS[DEFAULT_OPTIMIZER]
-
-    optimizer_parameters = get_optimizer_parameters(
+    optimizer_parameters = Optimizer.get_default_optimizer_parameters(
         opt.upper() if opt else DEFAULT_OPTIMIZER, dataset[SAMPLE].shape[1])[0]
     if "iterations" in optimizer_parameters:
         optimizer_parameters["iterations"] = DEFAULT_TEST_ITERATIONS
     elif "generations" in optimizer_parameters:
         optimizer_parameters["generations"] = DEFAULT_TEST_ITERATIONS
 
-    return {
-        "k": 5,
-        "dataset": dataset,
-        "optimizer": optimizer,
-        "optimizer_parameters": optimizer_parameters,
-        "target_function_parameters": {
-            "weights":
-            np.random.uniform(low=0, high=1, size=dataset[SAMPLE].shape[1]),
-            "data":
-            dataset,
-            "alpha":
-            0.5,
-            "classifier":
-            SVC_CLASSIFIER,
-            "n_neighbors":
-            DEFAULT_NEIGHBORS,
-            "c":
-            0.1
-        },
-    }
+    optimizer_parameters['target_function_parameters']['data'] = dataset
+    optimizer = Optimizer(opt if opt else DEFAULT_OPTIMIZER,
+                          optimizer_parameters)
+
+    return {"k": DEFAULT_FOLDS, "optimizer": optimizer}
 
 
-def test_run_optimizer(
-    optimizer=OPTIMIZERS[DEFAULT_OPTIMIZER],
-    optimizer_parameters=None,
-    target_function_parameters=None,
-    dataset=None,
-):
+def test_run_optimizer(opt: Optional[str] = None,
+                       dataset: Optional[dict] = None):
     """
     Run the optimizer and plot the fitness curves over training.
 
     Parameters:
-    - optimizer (function): The optimizer to be used. Defaults is OPTIMIZERS[DEFAULT_OPTIMIZER].
-    - optimizer_parameters (dict): Additional parameters to be passed to the optimizer function.
-    - target_function_parameters (dict): Additional parameters to be passed to the target function.
-
-    Returns:
-    - None
+        - optimizer (str, optional): The optimizer to be used.
     """
+    optimizer_parameters = Optimizer.get_default_optimizer_parameters(opt, dataset[SAMPLE].shape[1])
+    dataset = optimizer_parameters['target_function_parameters']['data']
+
     x_train, x_test, y_train, y_test = train_test_split(dataset[SAMPLE],
                                                         dataset[LABELS],
                                                         test_size=0.2,
                                                         random_state=42)
-    optimizer_name = get_optimizer_name_by_function(optimizer)
+    
+    optimizer_parameters['target_function_parameters']['data'] = {SAMPLE: x_train, LABELS: y_train}
+    
+    optimizer = Optimizer(opt if opt else DEFAULT_OPTIMIZER,
+                          optimizer_parameters)
     target_function_parameters[SAMPLE] = {SAMPLE: x_train, LABELS: y_train}
+
+    # https://stackoverflow.com/questions/11568897/value-of-k-in-k-nearest-neighbor-algorithm
     target_function_parameters['n_neighbors'] = int(sqrt(x_train.shape[0]))
 
     # Running the optimizer
-    best_result, fitness_values = optimizer(
-        target_function=fitness,
-        target_function_parameters=target_function_parameters,
-        **optimizer_parameters)
+    optimizer.params
+    best_result, fitness_values = optimizer.optimize()
+
     print("Best result for {} optimizer in {} classifier: {}".format(
-        optimizer_name,
+        optimizer.name,
         target_function_parameters["classifier"],
         round(best_result[-1], 2),
     ))
@@ -107,7 +81,7 @@ def test_run_optimizer(
     print("Test result: {}".format(round(test, 2), ))
 
     # Plotting average fitness curves
-    plot_fitness_over_training(
+    plot_training_curves(
         fitness_values=fitness_values,
         title="Training curve on {} optimizer".format(optimizer_name))
 

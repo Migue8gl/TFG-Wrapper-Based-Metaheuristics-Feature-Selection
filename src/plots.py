@@ -1,27 +1,28 @@
 import matplotlib.pyplot as plt
+import matplotlib
 import scienceplots
 import numpy as np
 from data_utils import *
+from typing import Optional
 
 plt.style.use(["science", "ieee"])  # Style of plots
 
 # ---------------------------- PLOTTING FUNCTIONS ------------------------------ #
 
 
-def plot_fitness_over_training(fitness_values, ax=None, title=None):
+def plot_training_curves(fitness_values: dict,
+                         ax: Optional[matplotlib.axes.Axes] = None,
+                         title: Optional[str] = None):
     """
     Generate a plot of fitness values over training iterations.
 
     Parameters:
-    - fitness_values (dict): A dictionary containing fitness values for training and validation.
-    - iterations (int): The total number of training iterations.
-    - ax (matplotlib.axes._subplots.AxesSubplot): The axes on which to plot the fitness values.
-    - title (str): The title of the plot.
-
-    Returns:
-    - None
+        - fitness_values (dict): A dictionary containing fitness values for training and validation.
+        - ax (matplotlib.axes.Axes, optional): The axes on which to plot the fitness values.
+        - title (str, optional): The title of the plot.
     """
-    validation_fitness, training_fitness = split_dicts_keys_to_lists(fitness_values)
+    validation_fitness, training_fitness = split_dicts_keys_to_lists(
+        fitness_values)
 
     if ax is None:
         _, ax = plt.subplots()
@@ -36,23 +37,20 @@ def plot_fitness_over_training(fitness_values, ax=None, title=None):
     ax.legend()
 
 
-def plot_fitness_over_folds(fitness_values,
-                            iterations,
-                            k,
-                            ax=None,
-                            title=None):
+def plot_fitness_over_folds(fitness_values: dict,
+                            iterations: int,
+                            k: int,
+                            ax: Optional[matplotlib.axes.Axes] = None,
+                            title: str = None):
     """
     Generate a plot of fitness values over folds.
 
     Parameters:
-    - fitness_values (dict): A dictionary containing fitness values for training and validation.
-    - iterations (int): The number of iterations.
-    - k (int): The number of folds.
-    - ax (AxesSubplot, optional): The axes to plot on. If not provided, a new figure and axes will be created.
-    - title (str, optional): The title of the plot. If not provided, a default title will be used.
-
-    Returns:
-    - None
+        - fitness_values (dict): A dictionary containing fitness values for training and validation.
+        - iterations (int): The number of iterations.
+        - k (int): The number of folds.
+        - ax (matplotlib.axes.Axes, optional): The axes to plot on. If not provided, a new figure and axes will be created.
+        - title (str, optional): The title of the plot. If not provided, a default title will be used.
     """
     iteration_numbers = np.linspace(0, iterations + 1,
                                     len(fitness_values["ValFitness"]))
@@ -88,21 +86,19 @@ def plot_fitness_over_folds(fitness_values,
     ax.legend()
 
 
-def plot_fitness_over_population_sizes(fitness_values,
-                                       population_sizes,
-                                       ax=None,
-                                       title=None):
+def plot_fitness_over_population_sizes(
+        fitness_values: list,
+        population_sizes: list,
+        ax: Optional[matplotlib.axes.Axes] = None,
+        title: str = None):
     """
     Plots the fitness values over different population sizes.
 
     Parameters:
-    - fitness_values (list): A list of fitness values.
-    - population_sizes (list): A list of population sizes.
-    - ax (Axes, optional): The axes on which to plot the fitness values. If not provided, a new figure and axes will be created.
-    - title (str, optional): The title of the plot. If not provided, a default title will be set.
-
-    Returns:
-    - None
+        - fitness_values (list): A list of fitness values.
+        - population_sizes (list): A list of population sizes.
+        - ax (matplotlib.axes.Axes, optional): The axes on which to plot the fitness values. If not provided, a new figure and axes will be created.
+        - title (str, optional): The title of the plot. If not provided, a default title will be set.
     """
     if ax is None:
         _, ax = plt.subplots()
@@ -120,21 +116,18 @@ def plot_fitness_over_population_sizes(fitness_values,
     ax.legend()
 
 
-def plot_fitness_all_optimizers(optimizers_fitness,
-                                iterations,
-                                ax=None,
-                                title=None):
+def plot_fitness_all_optimizers(optimizers_fitness: dict,
+                                iterations: list,
+                                ax: Optional[matplotlib.axes.Axes] = None,
+                                title: str = None):
     """
     Plots the fitness values of multiple optimizers over a specified number of iterations.
 
     Parameters:
-    - optimizers_fitness (dict): A dictionary containing the fitness values of each optimizer. The keys are the names of the optimizers and the values are lists of fitness values.
-    - iterations (int): The total number of iterations.
-    - ax (matplotlib.axes.Axes, optional): The matplotlib axes to plot the fitness values on. If not provided, a new figure and axes will be created.
-    - title (str, optional): The title of the plot. If not provided, a default title will be used.
-
-    Returns:
-    - None
+        - optimizers_fitness (dict): A dictionary containing the fitness values of each optimizer. The keys are the names of the optimizers and the values are lists of fitness values.
+        - iterations (int): The total number of iterations.
+        - ax (matplotlib.axes.Axes, optional): The matplotlib axes to plot the fitness values on. If not provided, a new figure and axes will be created.
+        - title (str, optional): The title of the plot. If not provided, a default title will be used.
     """
     iteration_numbers = np.linspace(
         0, iterations + 1, len(next(iter(optimizers_fitness.values()))))
@@ -152,15 +145,14 @@ def plot_fitness_all_optimizers(optimizers_fitness,
     ax.grid(True)
 
 
-def plot_s_shaped_transfer_function(ax=None, title=None):
+def plot_s_shaped_transfer_function(ax: Optional[matplotlib.axes.Axes] = None,
+                                    title: str = None):
     """
     Plots the s-shape transfer function.
 
     Parameters:
-    - ax (matplotlib.axes.Axes, optional): The matplotlib axes to plot the fitness values on. If not provided, a new figure and axes will be created.
-
-    Returns:
-    - None
+        - ax (matplotlib.axes.Axes, optional): The matplotlib axes to plot the fitness values on. If not provided, a new figure and axes will be created.
+        - title (str, optional): The title of the plot. If not provided, a default title will be used.
     """
     if ax is None:
         _, ax = plt.subplots()
@@ -176,15 +168,14 @@ def plot_s_shaped_transfer_function(ax=None, title=None):
     ax.legend()
 
 
-def plot_v_shaped_transfer_function(ax=None, title=None):
+def plot_v_shaped_transfer_function(ax: Optional[matplotlib.axes.Axes] = None,
+                                    title: str = None):
     """
     Plots the s-shape transfer function.
 
     Parameters:
-    - ax (matplotlib.axes.Axes, optional): The matplotlib axes to plot the fitness values on. If not provided, a new figure and axes will be created.
-
-    Returns:
-    - None
+        - ax (matplotlib.axes.Axes, optional): The matplotlib axes to plot the fitness values on. If not provided, a new figure and axes will be created.
+        - title (str, optional): The title of the plot. If not provided, a default title will be used.
     """
     if ax is None:
         _, ax = plt.subplots()

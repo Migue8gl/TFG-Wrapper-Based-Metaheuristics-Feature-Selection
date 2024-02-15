@@ -1,6 +1,5 @@
 import numpy as np
 from constants import *
-from matplotlib.gridspec import GridSpec
 import matplotlib.pyplot as plt
 from data_utils import *
 import time
