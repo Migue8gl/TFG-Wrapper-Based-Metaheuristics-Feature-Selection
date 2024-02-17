@@ -1,3 +1,4 @@
 credentials.txt
 env
 __pycache__
+!credentials/
