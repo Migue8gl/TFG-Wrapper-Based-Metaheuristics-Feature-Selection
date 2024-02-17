@@ -5,7 +5,10 @@ from pyMetaheuristic.algorithm import (
     particle_swarm_optimization, genetic_algorithm, ant_colony_optimization)
 from constants import *
 import numpy as np
-from analysis_utils import fitness
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
 
 
 class Optimizer:
@@ -64,6 +67,98 @@ class Optimizer:
         return self.strategy(**self.params)
 
     # --------------------------- STATIC METHODS ---------------------------- #
+
+    @staticmethod
+    def fitness(weights: np.ndarray,
+                data: dict,
+                classifier_parameters: dict,
+                alpha: float = 0.5,
+                classifier: str = 'knn') -> dict:
+        """
+        Functionality to compute the accuracy using KNN or SVC classifier
+
+        Parameters:
+            - weights (np.ndarray): The weights to be used for each feature.
+            - data (dict): The dataset in dict form splitted into samples and labels.
+            - classifier_parameters (dict): The classifier parameters. 
+            - alpha (float, optional): The alpha parameter for combining classification and reduction errors. Defaults to 0.5.
+            - classifier (str, optional): The classifier to be used. Defaults to 'knn'.
+
+        Returns:
+            - fitness (dict): The dictionary containing training fitness and validation fitness.
+        """
+        # Count number of features with zero importance.
+        reduction_count = np.sum(weights == 0)
+        classification_rate = Optimizer.compute_accuracy(
+            weights,
+            data=data,
+            classifier=classifier,
+            classifier_parameters=classifier_parameters)
+        reduction_rate = reduction_count / len(weights)
+
+        # Calculate the error rates in training
+        classification_error = 1 - classification_rate['TrainError']
+        reduction_error = 1 - reduction_rate
+
+        # Compute fitness as a combination of classification and reduction errors
+        fitness_train = alpha * classification_error + \
+            (1 - alpha) * reduction_error
+        classification_error = 1 - classification_rate['ValError']
+        fitness_val = alpha * classification_error + (1 -
+                                                      alpha) * reduction_error
+
+        return {'TrainFitness': fitness_train, 'ValFitness': fitness_val}
+
+    @staticmethod
+    def compute_accuracy(weights: np.ndarray,
+                         data: dict,
+                         classifier_parameters: dict,
+                         classifier: str = 'knn') -> dict:
+        """
+        Functionality to compute the accuracy using KNN or SVC classifier
+
+        Parameters:
+            - weights (np.ndarray): The weights to be used for each feature.
+            - data (dict): The dataset in dict form splitted into samples and labels.
+            - classifier_parameters (dict): The classifier parameters. 
+            - classifier (str, optional): The classifier to be used.
+
+        Returns:
+            - errors (dict): The dictionary containing e_in error and e_out error.
+        """
+        sample = data[SAMPLE]
+        labels = data[LABELS]
+
+        # Giving each characteristic an importance by multiplying the sample and weights
+        sample_weighted = np.multiply(sample, weights)
+        # Split into train and test data
+        x_train, x_test, y_train, y_test = train_test_split(sample_weighted,
+                                                            labels,
+                                                            test_size=0.2,
+                                                            random_state=42)
+
+        if (classifier == 'knn'):
+            classifier = KNeighborsClassifier(
+                n_neighbors=classifier_parameters['n_neighbors'],
+                weights=classifier_parameters['weights'])
+        elif (classifier == 'svc'):
+            classifier = SVC(C=classifier_parameters['C'],
+                             kernel=classifier_parameters['kernel'])
+        else:
+            print('No valid classifier, using KNN by default')
+            classifier = KNeighborsClassifier(
+                n_neighbors=classifier_parameters['n_neighbors'],
+                weights=classifier_parameters['weights'])
+
+        # Train the classifier
+        classifier.fit(x_train, y_train)
+        y_pred = classifier.predict(x_train)
+        e_in = accuracy_score(y_train, y_pred)
+
+        y_pred = classifier.predict(x_test)
+        e_out = accuracy_score(y_test, y_pred)
+
+        return {'TrainError': e_in, 'ValError': e_out}
 
     @staticmethod
     def get_optimizers():
@@ -184,7 +279,7 @@ class Optimizer:
         parameters['binary'] = 's'
         parameters['min_values'] = [DEFAULT_LOWER_BOUND] * (solution_len)
         parameters['max_values'] = [DEFAULT_UPPER_BOUND] * (solution_len)
-        parameters['target_function'] = fitness
+        parameters['target_function'] = Optimizer.fitness
         parameters['target_function_parameters'] = {
             'weights':
             np.random.uniform(low=DEFAULT_LOWER_BOUND,

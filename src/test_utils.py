@@ -85,11 +85,11 @@ def test_run_optimizer(optimizer: object, dataset: Optional[dict] = None):
     }
     optimizer.params['target_function_parameters'][
         'weights'] = best_result[:-2]
-    test = fitness(
+    test = Optimizer.fitness(
         **optimizer.params['target_function_parameters'])['ValFitness']
 
     # Printing test results
-    print("Test result: {}".format(round(test, 2), ))
+    print("Test result: {}".format(round(test, 2)))
 
     # Plotting average fitness curves
     plot_training_curves(fitness_values=fitness_values,
@@ -101,7 +101,7 @@ def test_run_optimizer(optimizer: object, dataset: Optional[dict] = None):
 
 def test_cross_validation(optimizer: object,
                           dataset: Optional[dict] = None,
-                          k: int = 5):
+                          k: int = DEFAULT_FOLDS):
     """
     Test cross-validation function.
 
@@ -119,7 +119,7 @@ def test_cross_validation(optimizer: object,
         'Average test fitness over {} Folds for {} optimizer ({}): {}'.format(
             k, optimizer.name,
             optimizer.params['target_function_parameters']['classifier'],
-            round(metrics['TestFitness']['Average'])))
+            round(metrics['TestFitness']['Average'], 2)))
 
     # Plotting average fitness over k folds in cross validation
     fig = plt.figure(figsize=(5, 5))
@@ -138,7 +138,7 @@ def test_cross_validation(optimizer: object,
 
 
 if __name__ == "__main__":
-    optimizer = "GWO"
+    optimizer = "BA"
     """
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     plot_s_shaped_transfer_function(axs[0])
