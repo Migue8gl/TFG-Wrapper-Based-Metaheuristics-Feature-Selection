@@ -8,7 +8,7 @@ D3 = './datasets/parkinsons.arff'
 
 SAMPLE = 'sample'
 LABELS = 'labels'
-DATA = ' data'
+DATA = 'data'
 KNN_CLASSIFIER = 'knn'
 SVC_CLASSIFIER = 'svc'
 PLOT_TITLE = 'Metaheuristic optimization analysis visualization'

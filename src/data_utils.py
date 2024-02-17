@@ -33,7 +33,7 @@ def load_arff_data(file_path: str) -> Optional[np.ndarray]:
         return None
 
 
-def split_data_to_dict(dataset: np.narray) -> dict:
+def split_data_to_dict(dataset: np.ndarray) -> dict:
     """
     Splits the given dataset into a dictionary containing the samples and labels.
 
@@ -50,7 +50,7 @@ def split_data_to_dict(dataset: np.narray) -> dict:
     return {SAMPLE: samples, LABELS: classes}
 
 
-def split_data_to_dict_train_test(dataset: np.narray,
+def split_data_to_dict_train_test(dataset: np.ndarray,
                                   train_ratio: float = 0.8) -> dict:
     """
     Splits the given dataset into a dictionary containing the samples and labels for training and testing.
@@ -84,7 +84,7 @@ def split_data_to_dict_train_test(dataset: np.narray,
     }
 
 
-def split_data(dataset: np.narray) -> tuple:
+def split_data(dataset: np.ndarray) -> tuple:
     """
     Split the given dataset into samples and classes.
 
@@ -121,7 +121,7 @@ def split_dicts_keys_to_lists(list_of_dicts: list) -> tuple:
 # https://en.wikipedia.org/wiki/Normalization_(statistics)
 
 
-def scaling_min_max(data: np.narray) -> np.narray:
+def scaling_min_max(data: np.ndarray) -> np.ndarray:
     """
     Normalize the features of a dataset using the MinMaxScaler.
 
@@ -143,7 +143,7 @@ def scaling_min_max(data: np.narray) -> np.narray:
     return np.column_stack((x_normalized, y))
 
 
-def scaling_std_score(data: np.narray) -> np.narray:
+def scaling_std_score(data: np.ndarray) -> np.ndarray:
     """
     Scale the input data using the standard score method.
 

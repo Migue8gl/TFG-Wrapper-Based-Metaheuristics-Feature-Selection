@@ -87,39 +87,33 @@ def calculate_average_fitness(fitness_each_fold, fitness_key):
     return average_fitness_values
 
 
-def k_fold_cross_validation(dataset,
-                            optimizer,
-                            k=5,
-                            parameters=None,
-                            target_function_parameters=None):
+def k_fold_cross_validation(optimizer: object,
+                            dataset: Optional[dict] = None,
+                            k: int = 5):
     skf = StratifiedKFold(n_splits=k, shuffle=True, random_state=42)
     test_fitness = []
     fitness_each_fold = {}
     fold_index = 0
 
     for train_index, test_index in skf.split(dataset[SAMPLE], dataset[LABELS]):
-        x_train, x_test = dataset[SAMPLE][train_index], dataset[SAMPLE][test_index]
+        x_train, x_test = dataset[SAMPLE][train_index], dataset[SAMPLE][
+            test_index]
         y_train, y_test = dataset[LABELS][train_index], dataset[LABELS][
             test_index]
 
         sample = {SAMPLE: x_train, LABELS: y_train}
         sample_test = {SAMPLE: x_test, LABELS: y_test}
 
-        # Override the data to be optimized in the search process
-        target_function_parameters[SAMPLE] = sample
-
         # Run optimization algorithm on the current fold
-        result, fitness_values = optimizer(
-            target_function=fitness,
-            target_function_parameters=target_function_parameters,
-            **parameters)
+        result, fitness_values = optimizer.optimize(sample)
         fitness_each_fold[fold_index] = fitness_values
 
         # Evaluate the model on the test set of the current fold
-        target_function_parameters[SAMPLE] = sample_test
-        target_function_parameters['weights'] = result[:-2]
+        optimizer.params['target_function_parameters'][DATA] = sample_test
+        optimizer.params['target_function_parameters']['weights'] = result[:-2]
         test_fitness.append(
-            fitness(**target_function_parameters)['ValFitness'])
+            fitness(**optimizer.params['target_function_parameters'])
+            ['ValFitness'])
 
         fold_index += 1
         print('\n##### Finished fold {} #####\n'.format(fold_index))

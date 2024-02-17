@@ -5,6 +5,7 @@ from pyMetaheuristic.algorithm import (
     particle_swarm_optimization, genetic_algorithm, ant_colony_optimization)
 from constants import *
 import numpy as np
+from analysis_utils import fitness
 
 
 class Optimizer:
@@ -49,14 +50,18 @@ class Optimizer:
 
     # ------------------------------ METHODS ------------------------------- #
 
-    def optimize(self):
+    def optimize(self, problem: dict) -> tuple:
         """
         Optimize the given problem using the selected strategy and parameters.
+
+        Parameters:
+            - problem (dict): The problem to be optimized in dict form. It keys must be 'samples' and 'labels'.
 
         Returns:
             - best_solution, fitness_values (tuple): Numpy.ndarray with the best solution and a list of fitness values for each generation.
         """
-        return self.strategy(self.params)
+        self.params['target_function_parameters'][DATA] = problem
+        return self.strategy(**self.params)
 
     # --------------------------- STATIC METHODS ---------------------------- #
 
@@ -179,6 +184,7 @@ class Optimizer:
         parameters['binary'] = 's'
         parameters['min_values'] = [DEFAULT_LOWER_BOUND] * (solution_len)
         parameters['max_values'] = [DEFAULT_UPPER_BOUND] * (solution_len)
+        parameters['target_function'] = fitness
         parameters['target_function_parameters'] = {
             'weights':
             np.random.uniform(low=DEFAULT_LOWER_BOUND,
