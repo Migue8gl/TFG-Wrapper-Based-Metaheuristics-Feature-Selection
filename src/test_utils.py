@@ -27,7 +27,8 @@ def default_parameters(opt: Optional[str] = None,
 
     # Test parameters
     # Load, normalize and split dataset into samples and labels
-    dataset = split_data_to_dict(scaling_min_max(load_arff_data(dataset_path)))
+    dataset = split_data_to_dict(
+        scaling_min_max(scaling_std_score(load_arff_data(dataset_path))))
 
     # Catching optimizer default parameters
     optimizer_parameters = Optimizer.get_default_optimizer_parameters(
@@ -110,25 +111,26 @@ def test_cross_validation(optimizer: object,
         - k (int): The number of folds for cross-validation. Default is 5.
     """
     # Test cross validation
-    test_fitness, fitness_values = k_fold_cross_validation(dataset=dataset,
-                                                           optimizer=optimizer,
-                                                           k=k)
+    metrics = k_fold_cross_validation(dataset=dataset,
+                                      optimizer=optimizer,
+                                      k=k)
 
     print(
         'Average test fitness over {} Folds for {} optimizer ({}): {}'.format(
-            k, DEFAULT_OPTIMIZER,
+            k, optimizer.name,
             optimizer.params['target_function_parameters']['classifier'],
-            round(np.mean(test_fitness), 2)))
+            round(metrics['TestFitness']['Average'])))
 
     # Plotting average fitness over k folds in cross validation
     fig = plt.figure(figsize=(5, 5))
     ax = fig.add_subplot(1, 1, 1)
     plot_fitness_over_folds(
-        fitness_values, optimizer.params['iterations'], k, ax,
+        metrics, optimizer.params['iterations'], k, ax,
         'Average fitness {}-fold cross validation'.format(k))
 
-    fig.suptitle('TEST RUNNING {} ON {}-FOLD CROSS VALIDATION'.format(
-        DEFAULT_OPTIMIZER, k),
+    fig.suptitle('TEST RUNNING {} ON {}-FOLD CROSS VALIDATION WITH {}'.format(
+        optimizer.name, k,
+        optimizer.params['target_function_parameters']['classifier'].upper()),
                  fontweight='bold',
                  fontsize=16)
     plt.tight_layout()
@@ -136,7 +138,7 @@ def test_cross_validation(optimizer: object,
 
 
 if __name__ == "__main__":
-    optimizer = "PSO"
+    optimizer = "GWO"
     """
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     plot_s_shaped_transfer_function(axs[0])

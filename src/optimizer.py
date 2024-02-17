@@ -196,10 +196,12 @@ class Optimizer:
             0.5,
             'classifier':
             SVC_CLASSIFIER,
-            'n_neighbors':
-            DEFAULT_NEIGHBORS,
-            'c':
-            0.1
+            'classifier_parameters': {
+                'n_neighbors': DEFAULT_NEIGHBORS,
+                'weights': 'distance',
+                'C': 1,
+                'kernel': 'rbf'
+            }
         }
 
         return parameters
