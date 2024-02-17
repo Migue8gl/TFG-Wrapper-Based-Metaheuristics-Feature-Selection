@@ -108,7 +108,7 @@ def anaysis_fitness_over_population(dataset: dict,
     max_population_size = 55
     population_size_step = 10
 
-    key = 'generation' if 'generation' in optimizer.params else 'iteration'
+    key = 'generations' if 'generations' in optimizer.params else 'iterations'
     total_average_fitness_test = []
     for size in range(initial_population_size, max_population_size + 5,
                       population_size_step):
@@ -118,9 +118,7 @@ def anaysis_fitness_over_population(dataset: dict,
                                           k=k)
         total_average_fitness_test.append(metrics['TestFitness']['Average'])
 
-    average_fitness_test = np.mean(total_average_fitness_test)
-
-    return average_fitness_test
+    return total_average_fitness_test
 
 
 def analysis_optimizers_comparison(dataset: dict,

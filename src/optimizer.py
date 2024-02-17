@@ -178,7 +178,7 @@ class Optimizer:
         Returns:
             - optimizer_names (list): The list of optimizer names.
         """
-        return Optimizer.optimizers_names
+        return Optimizer.optimizer_names
 
     # TODO add algorithms parameters
     @staticmethod

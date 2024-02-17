@@ -3,7 +3,7 @@ from constants import *
 import matplotlib.pyplot as plt
 from data_utils import *
 import time
-from analysis_utils import k_fold_cross_validation, anaysis_fitness_over_population, get_optimizer_parameters, analysis_optimizers_comparison
+from analysis_utils import k_fold_cross_validation, anaysis_fitness_over_population, analysis_optimizers_comparison
 from plots import plot_fitness_over_folds, plot_fitness_over_population_sizes, plot_fitness_all_optimizers
 from optimizer import Optimizer
 import notifications
@@ -139,12 +139,13 @@ def main(*args, **kwargs):
     total_time = time.time() - start_time
 
     if (notify_arg):
-        token, chat_id = notifications.load_credentials('./credentials/credentials.txt')
-        
+        token, chat_id = notifications.load_credentials(
+            './credentials/credentials.txt')
+
         notifications.send_telegram_message(
             token=token,
             chat_id=chat_id,
-            message='### Ejecución Terminada - Tiempo total {} segundos ###'.
+            message='### Execution finished - Total time {} seconds ###'.
             format(round(total_time, 4)))
 
         for opt_name in Optimizer.get_optimizers_names():
