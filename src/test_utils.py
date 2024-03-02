@@ -1,12 +1,21 @@
-from constants import *
-import numpy as np
-from data_utils import *
-from analysis_utils import *
-from plots import *
-import matplotlib.pyplot as plt
 from math import sqrt
 from typing import Optional
+
+import matplotlib.pyplot as plt
+from analysis_utils import k_fold_cross_validation
+from constants import (
+    D2,
+    DATA,
+    DEFAULT_FOLDS,
+    DEFAULT_OPTIMIZER,
+    DEFAULT_TEST_ITERATIONS,
+    LABELS,
+    SAMPLE,
+)
+from data_utils import load_arff_data, scaling_min_max, split_data_to_dict
 from optimizer import Optimizer
+from plots import plot_fitness_over_folds, plot_training_curves
+from sklearn.model_selection import train_test_split
 
 
 def default_parameters(opt: Optional[str] = None,
@@ -27,8 +36,7 @@ def default_parameters(opt: Optional[str] = None,
 
     # Test parameters
     # Load, normalize and split dataset into samples and labels
-    dataset = split_data_to_dict(
-        scaling_min_max(scaling_std_score(load_arff_data(dataset_path))))
+    dataset = split_data_to_dict(scaling_min_max(load_arff_data(dataset_path)))
 
     # Catching optimizer default parameters
     optimizer_parameters = Optimizer.get_default_optimizer_parameters(
@@ -65,7 +73,7 @@ def test_run_optimizer(optimizer: object, dataset: Optional[dict] = None):
 
     # https://stackoverflow.com/questions/11568897/value-of-k-in-k-nearest-neighbor-algorithm
     # Empiric k used in Knn classifier, it must be overridden due to current dataset
-    optimizer.params['target_function_parameters']['n_neighbors'] = int(
+    optimizer.params['target_function_parameters']['classifier_parameters']['n_neighbors'] = int(
         sqrt(x_train.shape[0]))
 
     # Running the optimizer
@@ -125,7 +133,8 @@ def test_cross_validation(optimizer: object,
     fig = plt.figure(figsize=(5, 5))
     ax = fig.add_subplot(1, 1, 1)
     plot_fitness_over_folds(
-        metrics, optimizer.params['iterations'], k, ax,
+        metrics, optimizer.params['iterations'] if 'iterations'
+        in optimizer.params else optimizer.params['generations'], k, ax,
         'Average fitness {}-fold cross validation'.format(k))
 
     fig.suptitle('TEST RUNNING {} ON {}-FOLD CROSS VALIDATION WITH {}'.format(
@@ -138,19 +147,18 @@ def test_cross_validation(optimizer: object,
 
 
 if __name__ == "__main__":
-    optimizer = "BA"
+    optimizer = "GA"
     """
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     plot_s_shaped_transfer_function(axs[0])
     plot_v_shaped_transfer_function(axs[1])
     plt.savefig("./images/transfer_functions.jpg")
     
-    test_run_optimizer(
-        **{
-            key: value
-            for key, value in default_parameters(optimizer, D2).items()
-            if key != "k"
-        })
+    """
+    parameters = default_parameters(optimizer, D2)
+    del parameters['k']
+    test_run_optimizer(**parameters)
     """
 
     test_cross_validation(**default_parameters(optimizer, D2))
+    """

@@ -3,6 +3,7 @@
 D1 = './datasets/spectf-heart.arff'
 D2 = './datasets/ionosphere.arff'
 D3 = './datasets/parkinsons.arff'
+D4 = './datasets/iris.arff'
 
 # ----------------------------------- NAMES ------------------------------------- #
 

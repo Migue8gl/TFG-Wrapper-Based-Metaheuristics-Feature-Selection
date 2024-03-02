@@ -1,9 +1,10 @@
-import matplotlib.pyplot as plt
-import matplotlib
-import scienceplots
-import numpy as np
-from data_utils import *
 from typing import Optional
+
+import matplotlib
+import matplotlib.pyplot as plt
+import numpy as np
+import scienceplots  # noqa: F401
+from data_utils import split_dicts_keys_to_lists
 
 plt.style.use(["science", "ieee"])  # Style of plots
 
@@ -28,7 +29,7 @@ def plot_training_curves(fitness_values: dict,
         _, ax = plt.subplots()
     ax.plot(validation_fitness, label="Training Fitness", color="blue")
     ax.plot(training_fitness, label="Validation Fitness", color="orange")
-    if title == None:
+    if title is None:
         ax.set_title("Training curves")
     else:
         ax.set_title(title)
@@ -66,7 +67,7 @@ def plot_fitness_over_folds(fitness_values: dict,
         label="Validation Fitness",
         color="orange",
     )
-    if title == None:
+    if title is None:
         ax.set_title("Average fitness {}-fold cross validation".format(k))
     else:
         ax.set_title(title)
@@ -107,7 +108,7 @@ def plot_fitness_over_population_sizes(
             label="Fitness",
             color="purple",
             marker="d")
-    if title == None:
+    if title is None:
         ax.set_title("Fitness test value over population sizes")
     else:
         ax.set_title(title)

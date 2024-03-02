@@ -1,12 +1,36 @@
-import numpy as np
-from constants import *
-import matplotlib.pyplot as plt
-from data_utils import *
 import time
-from analysis_utils import k_fold_cross_validation, anaysis_fitness_over_population, analysis_optimizers_comparison
-from plots import plot_fitness_over_folds, plot_fitness_over_population_sizes, plot_fitness_all_optimizers
-from optimizer import Optimizer
+
+import matplotlib.pyplot as plt
 import notifications
+import numpy as np
+from analysis_utils import (
+    analysis_optimizers_comparison,
+    analysis_fitness_over_population,
+    k_fold_cross_validation,
+)
+from constants import (
+    D2,
+    DEFAULT_FOLDS,
+    DEFAULT_ITERATIONS,
+    DEFAULT_LOWER_BOUND,
+    DEFAULT_MAX_ITERATIONS,
+    DEFAULT_NEIGHBORS,
+    DEFAULT_UPPER_BOUND,
+    SAMPLE,
+    SVC_CLASSIFIER,
+)
+from data_utils import (
+    load_arff_data,
+    scaling_min_max,
+    scaling_std_score,
+    split_data_to_dict,
+)
+from optimizer import Optimizer
+from plots import (
+    plot_fitness_all_optimizers,
+    plot_fitness_over_folds,
+    plot_fitness_over_population_sizes,
+)
 
 plt.style.use(['science', 'ieee'])  # Style of plots
 
@@ -17,7 +41,7 @@ def main(*args, **kwargs):
     # Get parameters from the user
     dataset_arg = kwargs.get('-d', D2)  # Chosen dataset
     # Notifications meaning end of training
-    notify_arg = kwargs.get('-n', False)
+    notify_arg = kwargs.get('-n', True)
     k_arg = kwargs.get('-k',
                        DEFAULT_FOLDS)  # Number of folds in cross validation
     scaling_arg = kwargs.get('-s', 3)  # Type of scaling applied to dataset
@@ -38,23 +62,39 @@ def main(*args, **kwargs):
 
     k = k_arg  # F fold cross validation
 
-    # Initial weights are set randomly between 0 and 1
-    weights = np.random.uniform(low=0,
-                                high=1,
-                                size=dataset_dict[SAMPLE].shape[1])
+    # Initial target function's parameters
     target_function_parameters = {
-        'weights': weights,
-        'data': dataset,
-        'alpha': 0.5,
-        'classifier': 'svc',
-        'n_neighbors': DEFAULT_NEIGHBORS,
-        'C': 0.1
+        'weights':
+        np.random.uniform(low=DEFAULT_LOWER_BOUND,
+                          high=DEFAULT_UPPER_BOUND,
+                          size=dataset_dict[SAMPLE].shape[1]),
+        'data':
+        None,
+        'alpha':
+        0.5,
+        'classifier':
+        SVC_CLASSIFIER,
+        'classifier_parameters': {
+            'n_neighbors': DEFAULT_NEIGHBORS,
+            'weights': 'distance',
+            'C': 1,
+            'kernel': 'rbf'
+        }
     }
 
+    total_iterations = len(Optimizer.get_optimizers_names()) * 2
+    current_iteration = 0
+
     for opt in Optimizer.get_optimizers_names():
+        current_iteration += 1
+        progress_percentage = (current_iteration / total_iterations) * 100
+        print(f"Progress: {progress_percentage:.2f}%")
+
         # Optimization function's parameters
         parameters = Optimizer.get_default_optimizer_parameters(
             opt.upper(), dataset_dict[SAMPLE].shape[1])
+        parameters['target_function_parameters'] = target_function_parameters
+
         # Creating optimizer object
         optimizer = Optimizer(opt, parameters)
 
@@ -64,7 +104,7 @@ def main(*args, **kwargs):
                                           k=k)
 
         # Test for optimizer X altering population size with SVC
-        fitness_over_different_populations = anaysis_fitness_over_population(
+        fitness_over_different_populations = analysis_fitness_over_population(
             dataset=dataset_dict, optimizer=optimizer, k=k)
 
         # KNN cross validation for optimizer X alone
@@ -74,7 +114,7 @@ def main(*args, **kwargs):
                                            k=k)
 
         # Test for optimizer X altering population size with KNN
-        fitness_over_different_populations2 = anaysis_fitness_over_population(
+        fitness_over_different_populations2 = analysis_fitness_over_population(
             dataset=dataset_dict, optimizer=optimizer, k=k)
 
         # Print average accuracy over k folds
@@ -125,6 +165,15 @@ def main(*args, **kwargs):
 
         plt.tight_layout()
         plt.savefig('./images/{}'.format(opt))
+
+        # Send progress message to Telegram
+        if (notify_arg):
+            token, chat_id = notifications.load_credentials(
+                './credentials/credentials.txt')
+            notifications.send_telegram_message(
+                token=token,
+                chat_id=chat_id,
+                message=f'Progress: {progress_percentage:.2f}%')
 
     # Comparison of all optimizers
     fitness_from_all_optimizers = analysis_optimizers_comparison(

@@ -1,10 +1,10 @@
+from typing import Optional
+
 import arff
 import numpy as np
-from sklearn.preprocessing import MinMaxScaler
+from constants import LABELS, SAMPLE
 from sklearn.model_selection import train_test_split
-from constants import *
-from sklearn.preprocessing import StandardScaler
-from typing import Optional
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 # ---------------------------------- DATA ------------------------------------ #
 
@@ -133,7 +133,7 @@ def scaling_min_max(data: np.ndarray) -> np.ndarray:
     """
     # Separate the features (x) and labels (y)
     x, y = split_data(data)
- 
+
     scaler = MinMaxScaler()
 
     # Fit the scaler to the features and normalize the data between 0 and 1

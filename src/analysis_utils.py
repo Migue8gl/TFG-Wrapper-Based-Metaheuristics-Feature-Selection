@@ -1,8 +1,9 @@
-from sklearn.model_selection import StratifiedKFold
+from typing import Optional
+
 import numpy as np
-from constants import *
-from data_utils import *
+from constants import DATA, DEFAULT_FOLDS, DEFAULT_ITERATIONS, LABELS, SAMPLE
 from optimizer import Optimizer
+from sklearn.model_selection import StratifiedKFold
 
 # TODO add to plot population sizes and optimizer names
 
@@ -90,9 +91,9 @@ def k_fold_cross_validation(optimizer: object,
     }
 
 
-def anaysis_fitness_over_population(dataset: dict,
-                                    optimizer: object,
-                                    k: int = DEFAULT_FOLDS) -> float:
+def analysis_fitness_over_population(dataset: dict,
+                                     optimizer: object,
+                                     k: int = DEFAULT_FOLDS) -> float:
     """
     Analysis function to study how fitness variates over different population sizes.
 

@@ -10,9 +10,9 @@
 ############################################################################
 
 # Required Libraries
-import numpy as np
 import random
-import os
+
+import numpy as np
 
 ############################################################################
 
@@ -30,11 +30,15 @@ def initial_population(population_size=5,
                        min_values=[-5, -5],
                        max_values=[5, 5],
                        target_function=target_function,
-                       target_function_parameters=None):
+                       target_function_parameters=None,
+                       binary=True):
     population = np.zeros((population_size, len(min_values) + 2))
     for i in range(0, population_size):
         for j in range(0, len(min_values)):
-            population[i, j] = random.choice([0, 1])
+            if binary:
+                population[i, j] = random.choice([0, 1])
+            else:
+                population[i, j] = random.uniform(min_values[j], max_values[j])
         target_function_parameters['weights'] = population[
             i, 0:population.shape[1] - 2]
         fitness = target_function(**target_function_parameters)
@@ -66,24 +70,53 @@ def roulette_wheel(fitness):
     return ix
 
 
+def blend_crossover(parent_1, parent_2, alpha=0.5):
+    child1 = parent_1[:]
+    child2 = parent_2[:]
+
+    for i in range(2):
+        min_val = min(parent_1[i], parent_2[i])
+        max_val = max(parent_1[i], parent_2[i])
+        range_ = max_val - min_val
+        low = min_val - alpha * range_
+        high = max_val + alpha * range_
+
+        # Create offspring
+        child1[:-2] = np.random.uniform(low, high)
+        child2[:-2] = np.random.uniform(low, high)
+
+    return child1, child2
+
+
+def one_point_crossover(parent_1, parent_2):
+    # Randomly choose the crossover point
+    crossover_point = np.random.randint(1, len(parent_1) - 1)
+
+    # Create offspring using one-point crossover
+    child1 = np.concatenate(
+        (parent_1[:crossover_point], parent_2[crossover_point:]))
+    child2 = np.concatenate(
+        (parent_2[:crossover_point], parent_1[crossover_point:]))
+
+    return child1, child2
+
+
 # Function: Breeding
 def breeding(population,
              fitness,
              crossover_rate,
              elite,
+             alpha,
              target_function,
-             target_function_parameters=None):
+             target_function_parameters=None,
+             binary=True):
     offspring = np.copy(population)
-    offspring = offspring[np.argsort(offspring[:, -1])[::-1]]
-
-    if elite > 0:
-        preserve = np.copy(population[population[:, -1].argsort()])
-        offspring[:elite, :] = preserve[:elite, :]
 
     for _ in range(elite, offspring.shape[0], 2):
-        # Sort offspring only once before the loop
-        sorted_offspring_indices = np.argsort(offspring[:, -1])[::-1]
-        worst_individuals = sorted_offspring_indices[-2:]
+        # Get two worst individual
+        sorted_offspring_indices = np.argsort(offspring[:, -1])
+        worst_idx0, worst_idx1 = sorted_offspring_indices[
+            -1], sorted_offspring_indices[-2]
         parent_1_idx, parent_2_idx = roulette_wheel(fitness), roulette_wheel(
             fitness)
 
@@ -96,15 +129,10 @@ def breeding(population,
 
         # Check if crossover should occur
         if np.random.rand() < crossover_rate:
-            # Randomly choose the crossover point
-            crossover_point = np.random.randint(1, len(parent_1) - 1)
-
-            # Create offspring using binary crossover
-            child1 = np.copy(parent_1)
-            child2 = np.copy(parent_2)
-
-            child1[crossover_point:] = parent_2[crossover_point:]
-            child2[crossover_point:] = parent_1[crossover_point:]
+            if binary:
+                child1, child2 = one_point_crossover(parent_1, parent_2)
+            else:
+                child1, child2 = blend_crossover(parent_1, parent_2, alpha)
 
             # Evaluate fitness for the offspring
             target_function_parameters['weights'] = child1[:-2]
@@ -120,7 +148,6 @@ def breeding(population,
             child2[-2] = fitness_values_child2['TrainFitness']
 
             # Check if the child's fitness is better than the worst individuals
-            worst_idx0, worst_idx1 = worst_individuals[0], worst_individuals[1]
             if child1[-1] < offspring[worst_idx0, -1]:
                 offspring[worst_idx0] = child1[:]
 
@@ -132,22 +159,44 @@ def breeding(population,
             offspring[parent_1_idx] = parent_1[:]
             offspring[parent_2_idx] = parent_2[:]
 
+        if elite > 0:
+            offspring = offspring[offspring[:, -1].argsort()]
+            preserve = np.copy(offspring[offspring[:, -1].argsort()])
+            offspring[
+                -elite:, :] = preserve[:
+                                       elite, :]  # The best individuals are keep and the worst are replaced
+
     return offspring
 
 
-# Function: Mutation (Modified for Binary Representation)
+# Function: Mutation
 def mutation(offspring,
+             eta=1,
+             min_values=[-5, -5],
+             max_values=[5, 5],
              mutation_rate=0.1,
              target_function=target_function,
-             target_function_parameters=None):
+             target_function_parameters=None,
+             binary=True):
     for i in range(0, offspring.shape[0]):
-        random_numbers = [
-            random.uniform(0, 1) for _ in range(offspring.shape[1] - 2)
-        ]
-        offspring[i, :-2] = [
-            1 - bit if probability < mutation_rate else bit
-            for bit, probability in zip(offspring[i, :-2], random_numbers)
-        ]
+        p = random.uniform(0, 1)
+        random_idx = random.randint(0, offspring.shape[1] - 3)
+
+        if binary:
+            bit = offspring[i, random_idx]
+            offspring[i, random_idx] = bit if p < mutation_rate else 1 - bit
+        else:
+            rand = np.random.rand()
+            rand_d = np.random.rand()
+            if rand <= 0.5:
+                d_mutation = 2 * (rand_d)
+                d_mutation = d_mutation**(1 / (eta + 1)) - 1
+            elif rand > 0.5:
+                d_mutation = 2 * (1 - rand_d)
+                d_mutation = 1 - d_mutation**(1 / (eta + 1))
+            offspring[i, random_idx] = np.clip(
+                (offspring[i, random_idx] + d_mutation),
+                min_values[random_idx], max_values[random_idx])
 
         target_function_parameters['weights'] = offspring[i, 0:-2]
         fitness_values = target_function(**target_function_parameters)
@@ -164,27 +213,33 @@ def mutation(offspring,
 def genetic_algorithm(population_size=5,
                       mutation_rate=0.1,
                       elite=0,
+                      alpha=0.5,
                       min_values=[-5, -5],
                       max_values=[5, 5],
                       crossover_rate=0.8,
                       generations=50,
+                      eta=1,
                       target_function=target_function,
                       target_function_parameters=None,
-                      verbose=True):
+                      verbose=True,
+                      binary=True):
     count = 0
     fitness_values = []
+
     population = initial_population(population_size, min_values, max_values,
                                     target_function,
-                                    target_function_parameters)
+                                    target_function_parameters, binary)
     fitness = fitness_function(population)
     elite_ind = np.copy(population[population[:, -1].argsort()][0, :])
     while (count <= generations):
-        if (verbose == True):
+        if (verbose):
             print('Generation = ', count, ' f(x) = ', elite_ind[-1])
-        offspring = breeding(population, fitness, crossover_rate, elite,
-                             target_function, target_function_parameters)
-        population = mutation(offspring, mutation_rate, target_function,
-                              target_function_parameters)
+        offspring = breeding(population, fitness, crossover_rate, elite, alpha,
+                             target_function, target_function_parameters,
+                             binary)
+        population = mutation(offspring, eta, min_values, max_values,
+                              mutation_rate, target_function,
+                              target_function_parameters, binary)
         fitness = fitness_function(population)
         value = np.copy(population[population[:, -1].argsort()][0, :])
         if (elite_ind[-1] > value[-1]):

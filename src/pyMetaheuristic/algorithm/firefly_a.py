@@ -61,7 +61,7 @@ def initial_fireflies(swarm_size=3,
     position = np.zeros((swarm_size, len(min_values) + 2))
     for i in range(0, swarm_size):
         for j in range(0, len(min_values)):
-            position[i, j] = random.uniform(min_values[i], max_values[j])
+            position[i, j] = random.uniform(min_values[j], max_values[j])
         target_function_parameters['weights'] = position[i, :-2]
         fitness = target_function(**target_function_parameters)
         position[i, -1] = fitness['ValFitness']
