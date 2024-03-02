@@ -8,7 +8,8 @@ from constants import (
     DEFAULT_UPPER_BOUND,
     LABELS,
     SAMPLE,
-    KNN_CLASSIFIER,
+    SVC_CLASSIFIER,  # noqa: F401
+    KNN_CLASSIFIER,  # noqa: F401
 )
 from pyMetaheuristic.algorithm import (
     ant_colony_optimization,
@@ -26,6 +27,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
+from math import sqrt
 
 
 class Optimizer:
@@ -121,9 +123,11 @@ class Optimizer:
         reduction_error = 1 - reduction_rate
 
         # Compute fitness as a combination of classification and reduction errors
-        fitness_train = alpha * classification_error + (1 - alpha) * reduction_error
+        fitness_train = alpha * classification_error + (
+            1 - alpha) * reduction_error
         classification_error = 1 - classification_rate["ValError"]
-        fitness_val = alpha * classification_error + (1 - alpha) * reduction_error
+        fitness_val = alpha * classification_error + (1 -
+                                                      alpha) * reduction_error
 
         return {"TrainFitness": fitness_train, "ValFitness": fitness_val}
 
@@ -152,9 +156,10 @@ class Optimizer:
         # Giving each characteristic an importance by multiplying the sample and weights
         sample_weighted = np.multiply(sample, weights)
         # Split into train and test data
-        x_train, x_test, y_train, y_test = train_test_split(
-            sample_weighted, labels, test_size=0.2, random_state=42
-        )
+        x_train, x_test, y_train, y_test = train_test_split(sample_weighted,
+                                                            labels,
+                                                            test_size=0.2,
+                                                            random_state=42)
 
         if classifier == "knn":
             classifier = KNeighborsClassifier(
@@ -162,9 +167,8 @@ class Optimizer:
                 weights=classifier_parameters["weights"],
             )
         elif classifier == "svc":
-            classifier = SVC(
-                C=classifier_parameters["C"], kernel=classifier_parameters["kernel"]
-            )
+            classifier = SVC(C=classifier_parameters["C"],
+                             kernel=classifier_parameters["kernel"])
         else:
             print("No valid classifier, using KNN by default")
             classifier = KNeighborsClassifier(
@@ -204,9 +208,8 @@ class Optimizer:
 
     # TODO add algorithms parameters
     @staticmethod
-    def get_default_optimizer_parameters(
-        optimizer: str = None, solution_len: int = 2
-    ) -> dict:
+    def get_default_optimizer_parameters(optimizer: str = None,
+                                         solution_len: int = 2) -> dict:
         """
         Get default parameters for the specified optimizer.
 
@@ -296,7 +299,7 @@ class Optimizer:
                 "mutation_rate": 0.05,
                 "elite": 2,
                 "eta": 1,
-                "alpha": 0.5,
+                "alpha": sqrt(0.3),
                 'binary': True,
             }
         elif optimizer_upper == "ACO":  # TODO Add parameters
@@ -315,12 +318,16 @@ class Optimizer:
         parameters["max_values"] = [DEFAULT_UPPER_BOUND] * (solution_len)
         parameters["target_function"] = Optimizer.fitness
         parameters["target_function_parameters"] = {
-            "weights": np.random.uniform(
-                low=DEFAULT_LOWER_BOUND, high=DEFAULT_UPPER_BOUND, size=solution_len
-            ),
-            "data": None,
-            "alpha": 0.5,
-            "classifier": KNN_CLASSIFIER,
+            "weights":
+            np.random.uniform(low=DEFAULT_LOWER_BOUND,
+                              high=DEFAULT_UPPER_BOUND,
+                              size=solution_len),
+            "data":
+            None,
+            "alpha":
+            0.5,
+            "classifier":
+            KNN_CLASSIFIER,
             "classifier_parameters": {
                 "n_neighbors": DEFAULT_NEIGHBORS,
                 "weights": "distance",

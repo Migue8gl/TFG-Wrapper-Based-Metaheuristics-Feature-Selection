@@ -12,7 +12,7 @@ from constants import (
     LABELS,
     SAMPLE,
 )
-from data_utils import load_arff_data, scaling_min_max, split_data_to_dict
+from data_utils import load_arff_data, scaling_min_max, split_data_to_dict, scaling_std_score # noqa: F401
 from optimizer import Optimizer
 from plots import plot_fitness_over_folds, plot_training_curves
 from sklearn.model_selection import train_test_split
@@ -36,7 +36,7 @@ def default_parameters(opt: Optional[str] = None,
 
     # Test parameters
     # Load, normalize and split dataset into samples and labels
-    dataset = split_data_to_dict(scaling_min_max(load_arff_data(dataset_path)))
+    dataset = split_data_to_dict(scaling_std_score(load_arff_data(dataset_path)))
 
     # Catching optimizer default parameters
     optimizer_parameters = Optimizer.get_default_optimizer_parameters(
@@ -154,11 +154,11 @@ if __name__ == "__main__":
     plot_v_shaped_transfer_function(axs[1])
     plt.savefig("./images/transfer_functions.jpg")
     
-    """
+    
     parameters = default_parameters(optimizer, D2)
     del parameters['k']
     test_run_optimizer(**parameters)
     """
 
     test_cross_validation(**default_parameters(optimizer, D2))
-    """
+    
