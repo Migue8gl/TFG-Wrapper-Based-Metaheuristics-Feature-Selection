@@ -1,3 +1,5 @@
+from math import sqrt
+
 import numpy as np
 from constants import (
     DATA,
@@ -6,10 +8,10 @@ from constants import (
     DEFAULT_NEIGHBORS,
     DEFAULT_POPULATION_SIZE,
     DEFAULT_UPPER_BOUND,
+    KNN_CLASSIFIER,  # noqa: F401
     LABELS,
     SAMPLE,
     SVC_CLASSIFIER,  # noqa: F401
-    KNN_CLASSIFIER,  # noqa: F401
 )
 from pyMetaheuristic.algorithm import (
     ant_colony_optimization,
@@ -27,7 +29,6 @@ from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
-from math import sqrt
 
 
 class Optimizer:
@@ -206,7 +207,6 @@ class Optimizer:
         """
         return Optimizer.optimizer_names
 
-    # TODO add algorithms parameters
     @staticmethod
     def get_default_optimizer_parameters(optimizer: str = None,
                                          solution_len: int = 2) -> dict:
@@ -311,6 +311,8 @@ class Optimizer:
                 "q": 1,
                 "initial_pheromone": 0.1,
                 "evaporation_rate": 0.049,  # Paper based value
+                "binary": False,
+                "std_dev": 0.5,
             }
 
         parameters["verbose"] = True
