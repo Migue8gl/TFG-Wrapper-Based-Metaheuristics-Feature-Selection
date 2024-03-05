@@ -4,7 +4,13 @@ from typing import Optional
 import matplotlib.pyplot as plt
 from analysis_utils import k_fold_cross_validation
 from constants import (
-    D2,
+    D2,  # noqa: F401
+    D1,  # noqa: F401
+    D3,  # noqa: F401
+    D5,  # noqa: F401
+    D6,  # noqa: F401
+    D7,  # noqa: F401
+    D8,  # noqa: F401
     DATA,
     DEFAULT_FOLDS,
     DEFAULT_OPTIMIZER,
@@ -12,7 +18,7 @@ from constants import (
     LABELS,
     SAMPLE,
 )
-from data_utils import load_arff_data, scaling_min_max, split_data_to_dict, scaling_std_score # noqa: F401
+from data_utils import load_data ,scaling_min_max, split_data_to_dict, scaling_std_score # noqa: F401
 from optimizer import Optimizer
 from plots import plot_fitness_over_folds, plot_training_curves
 from sklearn.model_selection import train_test_split
@@ -36,7 +42,7 @@ def default_parameters(opt: Optional[str] = None,
 
     # Test parameters
     # Load, normalize and split dataset into samples and labels
-    dataset = split_data_to_dict(scaling_std_score(load_arff_data(dataset_path)))
+    dataset = split_data_to_dict(scaling_std_score(load_data(dataset_path)))
 
     # Catching optimizer default parameters
     optimizer_parameters = Optimizer.get_default_optimizer_parameters(

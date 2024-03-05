@@ -300,7 +300,7 @@ class Optimizer:
                 "elite": 2,
                 "eta": 1,
                 "alpha": sqrt(0.3),
-                'binary': True,
+                'binary': False,
             }
         elif optimizer_upper == "ACO":  # TODO Add parameters
             parameters = {

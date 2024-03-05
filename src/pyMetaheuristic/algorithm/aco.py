@@ -21,7 +21,7 @@ def initial_ants(colony_size=5, n_features=10, binary=True):
 
 # Function: Initialize Pheromones
 def initial_pheromone_graph(n_features, initial_pheromone, std_dev, binary):
-    if binary:
+    if not binary:
         qk = std_dev * n_features
         w = np.zeros((n_features))
         for i in range(n_features):
@@ -120,10 +120,10 @@ def ant_colony_optimization(n_ants=20,
 
                 # Calculate sigma
                 sigma_s = np.zeros(n_features)
-                for i in range(len(ants)):
-                    for j in range(n_features):
+                for i in range(n_features):
+                    for j in range(len(ants)):
                         sigma_s[i] = np.sqrt(
-                            np.power(ants[i][0][j] - ants[i][0][ix_selected],
+                            np.power(ants[j][0][i] - ants[j][0][ix_selected],
                                      2))
                     sigma[i] = evaporation_rate / (n_features) * sigma_s[i]
             ant_build_subset(ant, n_features, feature_pheromone, alpha, sigma,

@@ -1,3 +1,4 @@
+import csv
 from typing import Optional
 
 import arff
@@ -9,27 +10,40 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 # ---------------------------------- DATA ------------------------------------ #
 
 
-def load_arff_data(file_path: str) -> Optional[np.ndarray]:
+def load_data(file_path: str) -> Optional[np.ndarray]:
     """
-    Loads ARFF data from a file.
+    Loads data from a file, supporting both CSV and ARFF formats.
 
     Parameters:
-        - file_path (str): The path to the ARFF file.
+        - file_path (str): The path to the file.
 
     Returns:
-        - data (numpy.ndarray, None): The loaded ARFF data as a numpy array, or None if an error occurred.
+        - data (numpy.ndarray, None): The loaded data as a numpy array, or None if an error occurred.
     """
     try:
-        with open(file_path, 'r') as arff_file:
-            dataset = arff.load(arff_file)
-            data = np.array(dataset['data'])
+        # Check the file extension
+        if file_path.endswith('.arff'):
+            with open(file_path, 'r') as arff_file:
+                dataset = arff.load(arff_file)
+                data = np.array(dataset['data'])
 
-            # Transform all columns except the last one to float64
-            data[:, :-1] = data[:, :-1].astype(np.float64)
+                # Transform all columns except the last one to float64
+                data[:, :-1] = data[:, :-1].astype(np.float64)
+
+        elif file_path.endswith('.csv'):
+            with open(file_path, 'r') as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter=';')
+                data_list = [row for row in csv_reader]
+                data = np.array(data_list)
+
+        else:
+            print("Unsupported file format. Please provide a .arff or .csv file.")
+            return None
 
         return data
+
     except Exception as e:
-        print(f"An error occurred while loading the ARFF data: {str(e)}")
+        print(f"An error occurred while loading the data: {str(e)}")
         return None
 
 

@@ -4,6 +4,10 @@ D1 = './datasets/spectf-heart.arff'
 D2 = './datasets/ionosphere.arff'
 D3 = './datasets/parkinsons.arff'
 D4 = './datasets/iris.arff'
+D5 = './datasets/qsar_oral_toxicity.csv'
+D6 = './datasets/wine.arff'
+D7 = './datasets/ecoli.arff'
+D8 = './datasets/yeast.arff'
 
 # ----------------------------------- NAMES ------------------------------------- #
 
