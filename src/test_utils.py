@@ -77,11 +77,6 @@ def test_run_optimizer(optimizer: object, dataset: Optional[dict] = None):
     # Creating the problem for the Optimizer
     problem_to_optimize = {SAMPLE: x_train, LABELS: y_train}
 
-    # https://stackoverflow.com/questions/11568897/value-of-k-in-k-nearest-neighbor-algorithm
-    # Empiric k used in Knn classifier, it must be overridden due to current dataset
-    optimizer.params['target_function_parameters']['classifier_parameters']['n_neighbors'] = int(
-        sqrt(x_train.shape[0]))
-
     # Running the optimizer
     best_result, fitness_values = optimizer.optimize(problem_to_optimize)
 
@@ -166,5 +161,5 @@ if __name__ == "__main__":
     test_run_optimizer(**parameters)
     """
 
-    test_cross_validation(**default_parameters(optimizer, D2))
+    test_cross_validation(**default_parameters(optimizer, D1))
     

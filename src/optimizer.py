@@ -311,8 +311,6 @@ class Optimizer:
                 "q": 1,
                 "initial_pheromone": 0.1,
                 "evaporation_rate": 0.049,  # Paper based value
-                "binary": False,
-                "std_dev": 0.5,
             }
 
         parameters["verbose"] = True
@@ -332,7 +330,7 @@ class Optimizer:
             KNN_CLASSIFIER,
             "classifier_parameters": {
                 "n_neighbors": DEFAULT_NEIGHBORS,
-                "weights": "distance",
+                "weights": "uniform",
                 "C": 1,
                 "kernel": "rbf",
             },

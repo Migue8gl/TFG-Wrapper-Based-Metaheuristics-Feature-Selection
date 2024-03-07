@@ -134,7 +134,7 @@ def grasshopper_optimization_algorithm(grasshoppers=5, min_values=[-5, -5], max_
             best_position = np.copy(
                 position[np.argmin(position[:, -1]), :].reshape(1, -1))
         count = count + 1
-        if (verbose == True):
+        if (verbose):
             print('Iteration = ', count,  ' f(x) = ', best_position[0, -1])
         fitness_values.append(
             {'ValFitness': best_position[0, -1], 'TrainFitness': best_position[0, -2]})
