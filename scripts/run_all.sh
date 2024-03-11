@@ -20,7 +20,6 @@ error_dir='results/logs'
 
 # Create the file if it doesn't exist
 if [ ! -d "$error_dir" ]; then
-    # If it doesn't exist, create it
     mkdir -p "$error_dir"
 fi
 

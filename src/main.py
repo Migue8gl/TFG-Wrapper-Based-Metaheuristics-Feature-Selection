@@ -139,7 +139,8 @@ def main(*args, **kwargs):
             chat_id=chat_id,
             image_path='./images/{}_fold_cross_validation_{}.jpg'.format(
                 k, optimizer_arg),
-            caption='-- {}{} --'.format(k, optimizer_arg))
+            caption='-- {}_fold_cross_validation_{}_{} --'.format(
+                k, optimizer_arg, dataset_name))
 
 
 if __name__ == "__main__":
