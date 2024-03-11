@@ -35,8 +35,8 @@ def initial_position(grasshoppers=5, min_values=[-5, -5], max_values=[5, 5], tar
                                                          0:position.shape[1]-2]
         target_function_parameters['weights'] = position[i, :-2]
         fitness = target_function(**target_function_parameters)
-        position[i, -1] = fitness['ValFitness']
-        position[i, -2] = fitness['TrainFitness']
+        position[i, -1] = fitness['Validation']['Fitness']
+        position[i, -2] = fitness['Training']['Fitness']
     return position
 
 ############################################################################
@@ -107,8 +107,8 @@ def update_position(position, best_position, min_values, max_values, C, F, L, ta
         target_function_parameters['weights'] = position[i,
                                                          0:position.shape[1]-2]
         fitness_values = target_function(**target_function_parameters)
-        position[i, -1] = fitness_values['ValFitness']
-        position[i, -2] = fitness_values['TrainFitness']
+        position[i, -1] = fitness_values['Validation']['Fitness']
+        position[i, -2] = fitness_values['Training']['Fitness']
     return position
 
 ############################################################################

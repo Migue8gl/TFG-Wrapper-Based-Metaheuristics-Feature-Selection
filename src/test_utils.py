@@ -1,4 +1,3 @@
-from math import sqrt
 from typing import Optional
 
 import matplotlib.pyplot as plt
@@ -18,7 +17,7 @@ from constants import (
     LABELS,
     SAMPLE,
 )
-from data_utils import load_data ,scaling_min_max, split_data_to_dict, scaling_std_score # noqa: F401
+from data_utils import load_data, scaling_min_max, split_data_to_dict, scaling_std_score  # noqa: F401
 from optimizer import Optimizer
 from plots import plot_fitness_over_folds, plot_training_curves
 from sklearn.model_selection import train_test_split
@@ -122,7 +121,8 @@ def test_cross_validation(optimizer: object,
     # Test cross validation
     metrics = k_fold_cross_validation(dataset=dataset,
                                       optimizer=optimizer,
-                                      k=k)
+                                      k=k,
+                                      verbose=False)
 
     print(
         'Average test fitness over {} Folds for {} optimizer ({}): {}'.format(
@@ -148,7 +148,7 @@ def test_cross_validation(optimizer: object,
 
 
 if __name__ == "__main__":
-    optimizer = "ACO"
+    optimizer = "GOA"
     """
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     plot_s_shaped_transfer_function(axs[0])
@@ -161,5 +161,4 @@ if __name__ == "__main__":
     test_run_optimizer(**parameters)
     """
 
-    test_cross_validation(**default_parameters(optimizer, D1))
-    
+    test_cross_validation(**default_parameters(optimizer, D3))

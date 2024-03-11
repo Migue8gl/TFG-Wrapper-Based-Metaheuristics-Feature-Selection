@@ -74,8 +74,8 @@ def ant_colony_optimization(n_ants=20,
             ant_build_subset(ant, n_features, feature_pheromone, alpha)
             target_function_parameters['weights'] = np.array(ant[0])
             fitness = target_function(**target_function_parameters)
-            ant[1] = fitness['ValFitness']
-            ant[2] = fitness['TrainFitness']
+            ant[1] = fitness['Validation']['Fitness']
+            ant[2] = fitness['Training']['Fitness']
         best_local_ant = min(ants, key=lambda ant: ant[1])
         fitness_values.append({
             'ValFitness': best_ant[1],
@@ -87,7 +87,9 @@ def ant_colony_optimization(n_ants=20,
         feature_pheromone = update_pheromones(best_ant, feature_pheromone,
                                               evaporation_rate, q)
         ants = initial_ants(n_ants)
+
     best_ant[0].append(best_ant[1])
     best_ant[0].append(best_ant[2])
     best_ant = np.array(best_ant[0])
+    
     return best_ant, fitness_values

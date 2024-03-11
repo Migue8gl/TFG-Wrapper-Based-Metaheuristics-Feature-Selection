@@ -33,7 +33,8 @@ def calculate_average_fitness(fitness_each_fold: dict,
 
 def k_fold_cross_validation(optimizer: object,
                             dataset: Optional[dict] = None,
-                            k: int = DEFAULT_FOLDS) -> dict:
+                            k: int = DEFAULT_FOLDS,
+                            verbose: bool = False) -> dict:
     """
     Implementation of k-fold cross-validation.
 
@@ -66,12 +67,13 @@ def k_fold_cross_validation(optimizer: object,
         # Evaluate the model on the test set of the current fold
         optimizer.params['target_function_parameters'][DATA] = sample_test
         optimizer.params['target_function_parameters']['weights'] = result[:-2]
-        test_fitness.append(
-            Optimizer.fitness(**optimizer.params['target_function_parameters'])
-            ['ValFitness'])
+        metrics = Optimizer.fitness(**optimizer.params['target_function_parameters'])
+
+        test_fitness.append(metrics['Validation']['Fitness'])
 
         fold_index += 1
-        print('\n##### Finished fold {} #####\n'.format(fold_index))
+        if verbose:
+            print('\n##### Finished fold {} #####\n'.format(fold_index))
 
     average_fitness_val = calculate_average_fitness(fitness_each_fold,
                                                     'ValFitness')
@@ -81,12 +83,12 @@ def k_fold_cross_validation(optimizer: object,
     std_deviation_test_fitness = np.std(test_fitness)
 
     return {
-        'TrainFitness': average_fitness_train,
-        'ValFitness': average_fitness_val,
+        'AvgTrainFitness': average_fitness_train,
+        'AvgValFitness': average_fitness_val,
         'TestFitness': {
-            'Best': np.max(test_fitness),
-            'Average': np.mean(test_fitness),
-            'StandardDeviation': std_deviation_test_fitness
+            'Best': np.min(test_fitness),
+            'Avg': np.mean(test_fitness),
+            'StdDev': std_deviation_test_fitness,
         }
     }
 
@@ -116,7 +118,8 @@ def analysis_fitness_over_population(dataset: dict,
         optimizer.params[key] = size
         metrics = k_fold_cross_validation(optimizer=optimizer,
                                           dataset=dataset,
-                                          k=k)
+                                          k=k,
+                                          verbose=False)
         total_average_fitness_test.append(metrics['TestFitness']['Average'])
 
     return total_average_fitness_test
@@ -148,7 +151,8 @@ def analysis_optimizers_comparison(dataset: dict,
             metrics = k_fold_cross_validation(dataset=dataset,
                                               optimizer=Optimizer(
                                                   key, **parameters_dict[key]),
-                                              k=k)
+                                              k=k,
+                                              verbose=False)
             fitness_values.append(np.array(metrics['TestFitness']['Average']))
 
         fitness_values = np.array(fitness_values)

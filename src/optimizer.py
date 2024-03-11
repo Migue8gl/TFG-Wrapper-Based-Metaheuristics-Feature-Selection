@@ -130,7 +130,17 @@ class Optimizer:
         fitness_val = alpha * classification_error + (1 -
                                                       alpha) * reduction_error
 
-        return {"TrainFitness": fitness_train, "ValFitness": fitness_val}
+        return {
+            'Training': {
+                'Fitness': fitness_train,
+                'Accuracy': classification_rate['TrainError'],
+            },
+            'Validation': {
+                'Fitness': fitness_val,
+                'Accuracy': classification_rate['ValError']
+            },
+            'Selected Features': len(weights) - reduction_count
+        }
 
     @staticmethod
     def compute_accuracy(
@@ -327,7 +337,7 @@ class Optimizer:
             "alpha":
             0.5,
             "classifier":
-            KNN_CLASSIFIER,
+            SVC_CLASSIFIER,
             "classifier_parameters": {
                 "n_neighbors": DEFAULT_NEIGHBORS,
                 "weights": "uniform",
