@@ -96,7 +96,7 @@ def main(*args, **kwargs):
     # Save the DataFrame to a CSV file
     df.to_csv('./results/{}_{}.csv'.format(dataset_name.group(1),
                                            optimizer_arg),
-              index=False)
+              index=True)
 
     _, axs = plt.subplots(1, 2, figsize=(10, 5))
 

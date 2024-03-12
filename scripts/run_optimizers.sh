@@ -15,7 +15,6 @@ datasets=(
 )
 
 # Define the file to store error messages
-cd ../
 error_dir='results/logs'
 
 # Create the file if it doesn't exist
@@ -34,7 +33,4 @@ for dataset in "${datasets[@]}"; do
         python3 src/main.py -o "$opt" -d "$dataset" >"$log_file" 2>&1 &
     done
 done
-
-# Combine all csv files into one
-python3 scripts/group_csv.py
 

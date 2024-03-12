@@ -8,7 +8,7 @@ directory = 'results/'
 dfs = []
 
 for filename in os.listdir(directory):
-    if filename.endswith(".csv"):
+    if filename.endswith(".csv") and filename != 'analysis_results.csv':
         # Extract dataset name and optimizer name from the filename
         dataset_name, optimizer_name = filename.split('_')[:2]
 
