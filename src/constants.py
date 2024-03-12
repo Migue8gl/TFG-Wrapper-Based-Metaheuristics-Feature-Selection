@@ -7,6 +7,8 @@ D4 = './datasets/iris.arff'
 D5 = './datasets/wine.arff'
 D6 = './datasets/ecoli.arff'
 D7 = './datasets/yeast.arff'
+D8 = './datasets/breast-cancer.arff'
+D9 = './datasets/zoo.arff'
 
 # ----------------------------------- NAMES ------------------------------------- #
 

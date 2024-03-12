@@ -35,3 +35,6 @@ for dataset in "${datasets[@]}"; do
     done
 done
 
+# Combine all csv files into one
+python3 scripts/group_csv.py
+

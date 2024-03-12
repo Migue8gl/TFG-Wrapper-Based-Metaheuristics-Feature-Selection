@@ -9,7 +9,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 # ---------------------------------- DATA ------------------------------------ #
 
-
+# TODO add support for non numerical features -> encoding
 def load_data(file_path: str) -> Optional[np.ndarray]:
     """
     Loads data from a file, supporting both CSV and ARFF formats.
