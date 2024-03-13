@@ -23,7 +23,7 @@ PLOT_TITLE = 'Metaheuristic optimization analysis visualization'
 
 DEFAULT_OPTIMIZER = 'ACO'
 DEFAULT_TEST_ITERATIONS = 50  # Testing purposes, can be changed
-DEFAULT_ITERATIONS = 100  # Analisys iterations for each optimizer
+DEFAULT_ITERATIONS = 4  # Analisys iterations for each optimizer
 DEFAULT_MAX_ITERATIONS = 30  # For analisys comparison between optimizers
 DEFAULT_POPULATION_SIZE = 20  # Vector solution length
 DEFAULT_FOLDS = 5  # Number of folds for k-fold cross validation

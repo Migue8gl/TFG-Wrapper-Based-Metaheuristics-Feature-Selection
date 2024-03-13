@@ -126,7 +126,7 @@ def cuckoo_search(birds=3,
     position = initial_position(birds, min_values, max_values, target_function)
     best_ind = np.copy(position[position[:, -1].argsort()][0, :])
     while (count <= iterations):
-        if (verbose == True):
+        if (verbose):
             print('Iteration = ', count, ' f(x) = ', best_ind[-1])
         for i in range(0, position.shape[0]):
             position = replace_bird(position, alpha_value, lambda_value,

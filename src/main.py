@@ -84,7 +84,7 @@ def main(*args, **kwargs):
         ],
         'avg': [
             metrics_knn['test_fitness']['avg'],
-            metrics_svc['TestFitness']['avg']
+            metrics_svc['test_fitness']['avg']
         ],
         'StdDev': [
             metrics_knn['test_fitness']['std_dev'],

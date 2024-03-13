@@ -6,8 +6,6 @@ from constants import DATA, DEFAULT_FOLDS, DEFAULT_ITERATIONS, LABELS, SAMPLE
 from optimizer import Optimizer
 from sklearn.model_selection import StratifiedKFold
 
-# TODO add to plot population sizes and optimizer names
-
 
 def calculate_average_fitness(fitness_each_fold: dict,
                               fitness_key: str) -> list:
@@ -92,7 +90,7 @@ def k_fold_cross_validation(optimizer: object,
         'test_fitness': {
             'best': np.min(test_fitness),
             'avg': np.mean(test_fitness),
-            'std_vev': std_deviation_test_fitness,
+            'std_dev': std_deviation_test_fitness,
         },
         'execution_time': execution_time
     }
