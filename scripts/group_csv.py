@@ -15,16 +15,16 @@ for filename in os.listdir(directory):
         df = pd.read_csv(os.path.join(directory, filename))
 
         # Add columns for dataset name and optimizer name
-        df['Dataset'] = dataset_name
-        df['Optimizer'] = optimizer_name[:
+        df['dataset'] = dataset_name
+        df['optimizer'] = optimizer_name[:
                                          -4]  # Remove ".csv" extension from optimizer name
 
         dfs.append(df)
-        combined_data = pd.concat(dfs, ignore_index=True)
+        combined_data = pd.concat(dfs)
 
 # Reorder columns
 combined_data = combined_data[[
-    'Dataset', 'Optimizer', 'Best', 'Avg', 'StdDev'
+    'classifier', 'dataset', 'optimizer', 'best', 'avg', 'std_dev'
 ]]
 
 # Write the combined data to a new CSV file

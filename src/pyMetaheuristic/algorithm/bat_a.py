@@ -55,8 +55,8 @@ def initial_position(swarm_size=3,
                                                          0:position.shape[1] -
                                                          2]
         fitness = target_function(**target_function_parameters)
-        position[i, -1] = fitness['ValFitness']
-        position[i, -2] = fitness['TrainFitness']
+        position[i, -1] = fitness['validation']['fitness']
+        position[i, -2] = fitness['training']['fitness']
         rate[i, 0] = int.from_bytes(os.urandom(8), byteorder="big") / (
             (1 << 64) - 1)
         loudness[i, 0] = random.uniform(1, 2)
@@ -105,8 +105,8 @@ def update_position(position,
         target_function_parameters['weights'] = position_temp[
             i, 0:position_temp.shape[1] - 2]
         fitness = target_function(**target_function_parameters)
-        position_temp[i, -1] = fitness['ValFitness']
-        position_temp[i, -2] = fitness['TrainFitness']
+        position_temp[i, -1] = fitness['validation']['fitness']
+        position_temp[i, -2] = fitness['training']['fitness']
 
         rand = int.from_bytes(os.urandom(8), byteorder="big") / ((1 << 64) - 1)
         if (rand > rate[i, 0]):
@@ -123,8 +123,8 @@ def update_position(position,
             target_function_parameters['weights'] = position_temp[
                 i, 0:position_temp.shape[1] - 2]
             fitness = target_function(**target_function_parameters)
-            position_temp[i, -1] = fitness['ValFitness']
-            position_temp[i, -2] = fitness['TrainFitness']
+            position_temp[i, -1] = fitness['validation']['fitness']
+            position_temp[i, -2] = fitness['training']['fitness']
         rand = int.from_bytes(os.urandom(8), byteorder="big") / ((1 << 64) - 1)
         if (rand < position[i, -1]
                 and position_temp[i, -1] <= position[i, -1]):
@@ -133,8 +133,8 @@ def update_position(position,
             target_function_parameters['weights'] = position[
                 i, 0:position.shape[1] - 2]
             fitness = target_function(**target_function_parameters)
-            position[i, -1] = fitness['ValFitness']
-            position[i, -2] = fitness['TrainFitness']
+            position[i, -1] = fitness['validation']['fitness']
+            position[i, -2] = fitness['training']['fitness']
             rate[i, 0] = rate[i, 0] * (1 - math.exp(-gama * count))
             loudness[i, 0] = alpha * loudness[i, -1]
         value = np.copy(position[position[:, -1].argsort()][0, :])
@@ -163,7 +163,7 @@ def bat_algorithm(swarm_size=3,
         target_function_parameters)
     best_ind = np.copy(position[position[:, -1].argsort()][0, :])
     while (count <= iterations):
-        if (verbose == True):
+        if (verbose):
             print('Iteration = ', count, ' f(x) = ', best_ind[-1])
         position, velocity, frequency, rate, loudness, best_ind = update_position(
             position, velocity, frequency, rate, loudness, best_ind, alpha,
@@ -171,7 +171,7 @@ def bat_algorithm(swarm_size=3,
             target_function_parameters, binary)
         count = count + 1
         fitness_values.append({
-            'ValFitness': best_ind[-1],
-            'TrainFitness': best_ind[-2]
+            'val_fitness': best_ind[-1],
+            'train_fitness': best_ind[-2]
         })
     return best_ind, fitness_values

@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/src/main.py", line 155, in <module>
+    main(**kwargs)
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/src/main.py", line 122, in main
+    plt.savefig('./images/{}_fold_cross_validation_{}_{}.jpg'.format(
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/env/lib/python3.10/site-packages/matplotlib/pyplot.py", line 1119, in savefig
+    res = fig.savefig(*args, **kwargs)  # type: ignore[func-returns-value]
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/env/lib/python3.10/site-packages/matplotlib/figure.py", line 3390, in savefig
+    self.canvas.print_figure(fname, **kwargs)
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/env/lib/python3.10/site-packages/matplotlib/backend_bases.py", line 2193, in print_figure
+    result = print_method(
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/env/lib/python3.10/site-packages/matplotlib/backend_bases.py", line 2043, in <lambda>
+    print_method = functools.wraps(meth)(lambda *args, **kwargs: meth(
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/env/lib/python3.10/site-packages/matplotlib/backends/backend_agg.py", line 514, in print_jpg
+    self._print_pil(filename_or_obj, "jpeg", pil_kwargs, metadata)
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/env/lib/python3.10/site-packages/matplotlib/backends/backend_agg.py", line 446, in _print_pil
+    mpl.image.imsave(
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/env/lib/python3.10/site-packages/matplotlib/image.py", line 1656, in imsave
+    image.save(fname, **pil_kwargs)
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/env/lib/python3.10/site-packages/PIL/Image.py", line 2436, in save
+    fp = builtins.open(filename, "w+b")
+FileNotFoundError: [Errno 2] No such file or directory: "./images/5_fold_cross_validation_ACO_<re.Match object; span=(10, 28), match='/spectf-heart.arff'>.jpg"

@@ -35,7 +35,7 @@ def main(*args, **kwargs):
     k_arg = kwargs.get('-k',
                        DEFAULT_FOLDS)  # Number of folds in cross validation
     scaling_arg = kwargs.get('-s', 2)  # Type of scaling applied to dataset
-    optimizer_arg = kwargs.get('-o', DEFAULT_OPTIMIZER).upper()
+    optimizer_arg = kwargs.get('-o', DEFAULT_OPTIMIZER).lower()
     verbose_arg = kwargs.get('-v', False)
 
     # Core functionality
@@ -77,21 +77,24 @@ def main(*args, **kwargs):
     name_pattern = r'/([^/]+)\.arff$'
     dataset_name = re.search(name_pattern, dataset_arg)
     data = {
-        'Best': [
-            metrics_knn['TestFitness']['Best'],
-            metrics_svc['TestFitness']['Best']
+        'classifier': ['knn', 'svc'],
+        'best': [
+            metrics_knn['test_fitness']['best'],
+            metrics_svc['test_fitness']['best']
         ],
-        'Avg':
-        [metrics_knn['TestFitness']['Avg'], metrics_svc['TestFitness']['Avg']],
+        'avg': [
+            metrics_knn['test_fitness']['avg'],
+            metrics_svc['TestFitness']['avg']
+        ],
         'StdDev': [
-            metrics_knn['TestFitness']['StdDev'],
-            metrics_svc['TestFitness']['StdDev']
+            metrics_knn['test_fitness']['std_dev'],
+            metrics_svc['test_fitness']['std_dev']
         ]
     }
-    columns = ['Best', 'Avg', 'StdDev']
-    index = ['KNN', 'SVC']
+    columns = ['classifier', 'best', 'avg', 'std_dev']
 
-    df = pd.DataFrame(data, columns=columns, index=index)
+    df = pd.DataFrame(data, columns=columns)
+    df = df.set_index(['classifier'])
 
     # Save the DataFrame to a CSV file
     df.to_csv('./results/{}_{}.csv'.format(dataset_name.group(1),
@@ -120,7 +123,7 @@ def main(*args, **kwargs):
 
     plt.tight_layout()
     plt.savefig('./images/{}_fold_cross_validation_{}_{}.jpg'.format(
-        k, optimizer_arg, dataset_name))
+        k, optimizer_arg, dataset_name.group(1)))
 
     total_time = time.time() - start_time
 
@@ -137,10 +140,10 @@ def main(*args, **kwargs):
         notifications.send_telegram_image(
             token=token,
             chat_id=chat_id,
-            image_path='./images/{}_fold_cross_validation_{}.jpg'.format(
-                k, optimizer_arg),
+            image_path='./images/{}_fold_cross_validation_{}_{}.jpg'.format(
+                k, optimizer_arg, dataset_name.group(1)),
             caption='-- {}_fold_cross_validation_{}_{} --'.format(
-                k, optimizer_arg, dataset_name))
+                k, optimizer_arg, dataset_name.group(1)))
 
 
 if __name__ == "__main__":

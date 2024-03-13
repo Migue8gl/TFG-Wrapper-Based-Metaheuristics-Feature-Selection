@@ -30,8 +30,8 @@ def initial_position(pack_size=5,
                                                          0:position.shape[1] -
                                                          2]
         fitness = target_function(**target_function_parameters)
-        position[i, -1] = fitness['ValFitness']
-        position[i, -2] = fitness['TrainFitness']
+        position[i, -1] = fitness['validation']['fitness']
+        position[i, -2] = fitness['validation']['fitness']
     return position
 
 
@@ -64,8 +64,8 @@ def alpha_position(dimension=2,
         alpha[0, j] = 0.0
     target_function_parameters['weights'] = alpha[0, 0:alpha.shape[1] - 2]
     fitness = target_function(**target_function_parameters)
-    alpha[0, -1] = fitness['ValFitness']
-    alpha[0, -2] = fitness['TrainFitness']
+    alpha[0, -1] = fitness['validation']['fitness']
+    alpha[0, -2] = fitness['training']['fitness']
     return alpha
 
 
@@ -78,8 +78,8 @@ def beta_position(dimension=2,
         beta[0, j] = 0.0
     target_function_parameters['weights'] = beta[0, 0:beta.shape[1] - 2]
     fitness = target_function(**target_function_parameters)
-    beta[0, -1] = fitness['ValFitness']
-    beta[0, -2] = fitness['TrainFitness']
+    beta[0, -1] = fitness['validation']['fitness']
+    beta[0, -2] = fitness['training']['fitness']
     return beta
 
 
@@ -92,8 +92,8 @@ def delta_position(dimension=2,
         delta[0, j] = 0.0
     target_function_parameters['weights'] = delta[0, 0:delta.shape[1] - 2]
     fitness = target_function(**target_function_parameters)
-    delta[0, -1] = fitness['ValFitness']
-    delta[0, -2] = fitness['TrainFitness']
+    delta[0, -1] = fitness['validation']['fitness']
+    delta[0, -2] = fitness['training']['fitness']
     return delta
 
 
@@ -163,8 +163,8 @@ def update_position(position,
         target_function_parameters['weights'] = updated_position[
             i, 0:updated_position.shape[1] - 2]
         fitness = target_function(**target_function_parameters)
-        updated_position[i, -1] = fitness['ValFitness']
-        updated_position[i, -2] = fitness['TrainFitness']
+        updated_position[i, -1] = fitness['validation']['fitness']
+        updated_position[i, -2] = fitness['training']['fitness']
     return updated_position
 
 
@@ -214,7 +214,7 @@ def grey_wolf_optimizer(pack_size=5,
             binary=binary)
         count += 1
         fitness_values.append({
-            'ValFitness': alpha[0, -1],
-            'TrainFitness': alpha[0, -2]
+            'val_fitness': alpha[0, -1],
+            'train_fitness': alpha[0, -2]
         })
     return alpha.flatten(), fitness_values

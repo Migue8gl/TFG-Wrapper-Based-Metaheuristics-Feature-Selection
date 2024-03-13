@@ -40,16 +40,16 @@ class Optimizer:
 
     # Optimizers dict with all available optimizers
     optimizers = {
-        "GOA": grasshopper_optimization_algorithm,
-        "WOA": whale_optimization_algorithm,
-        "DA": dragonfly_algorithm,
-        "GWO": grey_wolf_optimizer,
-        "ABCO": artificial_bee_colony_optimization,
-        "BA": bat_algorithm,
-        "PSO": particle_swarm_optimization,
-        "FA": firefly_algorithm,
-        "GA": genetic_algorithm,
-        "ACO": ant_colony_optimization,
+        "goa": grasshopper_optimization_algorithm,
+        "woa": whale_optimization_algorithm,
+        "da": dragonfly_algorithm,
+        "gwo": grey_wolf_optimizer,
+        "abco": artificial_bee_colony_optimization,
+        "ba": bat_algorithm,
+        "pso": particle_swarm_optimization,
+        "fa": firefly_algorithm,
+        "ga": genetic_algorithm,
+        "aco": ant_colony_optimization,
     }
 
     # Optimizers names
@@ -64,7 +64,7 @@ class Optimizer:
             - params (dict): The optimization parameters needed.
         """
 
-        self.name = strategy.upper()
+        self.name = strategy.lower()
         if self.name in Optimizer.optimizer_names:
             self.strategy = Optimizer.optimizers[self.name]
         else:
@@ -120,26 +120,26 @@ class Optimizer:
         reduction_rate = reduction_count / len(weights)
 
         # Calculate the error rates in training
-        classification_error = 1 - classification_rate["TrainError"]
+        classification_error = 1 - classification_rate["train_error"]
         reduction_error = 1 - reduction_rate
 
         # Compute fitness as a combination of classification and reduction errors
         fitness_train = alpha * classification_error + (
             1 - alpha) * reduction_error
-        classification_error = 1 - classification_rate["ValError"]
+        classification_error = 1 - classification_rate["val_error"]
         fitness_val = alpha * classification_error + (1 -
                                                       alpha) * reduction_error
 
         return {
-            'Training': {
-                'Fitness': fitness_train,
-                'Accuracy': classification_rate['TrainError'],
+            'training': {
+                'fitness': fitness_train,
+                'accuracy': classification_rate['train_error'],
             },
-            'Validation': {
-                'Fitness': fitness_val,
-                'Accuracy': classification_rate['ValError']
+            'validation': {
+                'fitness': fitness_val,
+                'accuracy': classification_rate['val_error']
             },
-            'Selected Features': len(weights) - reduction_count
+            'selected_features': len(weights) - reduction_count
         }
 
     @staticmethod
@@ -178,7 +178,7 @@ class Optimizer:
                 weights=classifier_parameters["weights"],
             )
         elif classifier == "svc":
-            classifier = SVC(C=classifier_parameters["C"],
+            classifier = SVC(C=classifier_parameters["c"],
                              kernel=classifier_parameters["kernel"])
         else:
             print("No valid classifier, using KNN by default")
@@ -195,7 +195,7 @@ class Optimizer:
         y_pred = classifier.predict(x_test)
         e_out = accuracy_score(y_test, y_pred)
 
-        return {"TrainError": e_in, "ValError": e_out}
+        return {"train_error": e_in, "val_error": e_out}
 
     @staticmethod
     def get_optimizers():
@@ -231,9 +231,9 @@ class Optimizer:
             - parameters (dict): A dictionary containing the default parameters for the specified optimizer.
         """
         parameters = {}
-        optimizer_upper = optimizer.upper()
+        optimizer_lower = optimizer.lower()
 
-        if optimizer_upper == "GOA":
+        if optimizer_lower == "goa":
             parameters = {
                 "grasshoppers": DEFAULT_POPULATION_SIZE,
                 "iterations": DEFAULT_ITERATIONS,
@@ -243,27 +243,27 @@ class Optimizer:
                 "L": 1.5,
                 "binary": "s",
             }
-        elif optimizer_upper == "DA":
+        elif optimizer_lower == "da":
             parameters = {
                 "size": DEFAULT_POPULATION_SIZE,
                 "generations": DEFAULT_ITERATIONS,
                 "binary": "s",
                 "verbose": True,
             }
-        elif optimizer_upper == "GWO":
+        elif optimizer_lower == "gwo":
             parameters = {
                 "pack_size": DEFAULT_POPULATION_SIZE,
                 "iterations": DEFAULT_ITERATIONS,
                 "binary": "s",
             }
-        elif optimizer_upper == "WOA":
+        elif optimizer_lower == "woa":
             parameters = {
                 "hunting_party": DEFAULT_POPULATION_SIZE,
                 "iterations": DEFAULT_ITERATIONS,
                 "spiral_param": 1,
                 "binary": "s",
             }
-        elif optimizer_upper == "ABCO":
+        elif optimizer_lower == "abco":
             parameters = {
                 "food_sources": DEFAULT_POPULATION_SIZE,
                 "iterations": DEFAULT_ITERATIONS,
@@ -272,7 +272,7 @@ class Optimizer:
                 "limit": 3,
                 "binary": "s",
             }
-        elif optimizer_upper == "BA":
+        elif optimizer_lower == "ba":
             parameters = {
                 "swarm_size": DEFAULT_POPULATION_SIZE,
                 "iterations": DEFAULT_ITERATIONS,
@@ -282,7 +282,7 @@ class Optimizer:
                 "fmax": 10,
                 "binary": "s",
             }
-        elif optimizer_upper == "PSO":
+        elif optimizer_lower == "pso":
             parameters = {
                 "swarm_size": DEFAULT_POPULATION_SIZE,
                 "iterations": DEFAULT_ITERATIONS,
@@ -292,7 +292,7 @@ class Optimizer:
                 "c2": 2,
                 "binary": "s",
             }
-        elif optimizer_upper == "FA":
+        elif optimizer_lower == "fa":
             parameters = {
                 "swarm_size": DEFAULT_POPULATION_SIZE,
                 "generations": DEFAULT_ITERATIONS,
@@ -301,7 +301,7 @@ class Optimizer:
                 "gama": 1,
                 "binary": "s",
             }
-        elif optimizer_upper == "GA":
+        elif optimizer_lower == "ga":
             parameters = {
                 "population_size": DEFAULT_POPULATION_SIZE,
                 "generations": DEFAULT_ITERATIONS,
@@ -312,7 +312,7 @@ class Optimizer:
                 "alpha": sqrt(0.3),
                 'binary': False,
             }
-        elif optimizer_upper == "ACO":  # TODO Add parameters
+        elif optimizer_lower == "aco":  # TODO Add parameters
             parameters = {
                 "n_ants": DEFAULT_POPULATION_SIZE,
                 "iterations": DEFAULT_ITERATIONS,
@@ -341,7 +341,7 @@ class Optimizer:
             "classifier_parameters": {
                 "n_neighbors": DEFAULT_NEIGHBORS,
                 "weights": "uniform",
-                "C": 1,
+                "c": 1,
                 "kernel": "rbf",
             },
         }

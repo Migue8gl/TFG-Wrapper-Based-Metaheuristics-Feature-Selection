@@ -3,11 +3,12 @@ from typing import Optional
 
 import arff
 import numpy as np
-from constants import LABELS, SAMPLE
+from constants import LABELS, SAMPLE, DATA
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 # ---------------------------------- DATA ------------------------------------ #
+
 
 # TODO add support for non numerical features -> encoding
 def load_data(file_path: str) -> Optional[np.ndarray]:
@@ -25,7 +26,7 @@ def load_data(file_path: str) -> Optional[np.ndarray]:
         if file_path.endswith('.arff'):
             with open(file_path, 'r') as arff_file:
                 dataset = arff.load(arff_file)
-                data = np.array(dataset['data'])
+                data = np.array(dataset[DATA])
 
                 # Transform all columns except the last one to float64
                 data[:, :-1] = data[:, :-1].astype(np.float64)
@@ -37,7 +38,9 @@ def load_data(file_path: str) -> Optional[np.ndarray]:
                 data = np.array(data_list)
 
         else:
-            print("Unsupported file format. Please provide a .arff or .csv file.")
+            print(
+                "Unsupported file format. Please provide a .arff or .csv file."
+            )
             return None
 
         return data

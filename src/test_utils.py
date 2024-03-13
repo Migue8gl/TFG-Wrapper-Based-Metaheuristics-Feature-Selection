@@ -45,7 +45,7 @@ def default_parameters(opt: Optional[str] = None,
 
     # Catching optimizer default parameters
     optimizer_parameters = Optimizer.get_default_optimizer_parameters(
-        opt.upper() if opt else DEFAULT_OPTIMIZER, dataset[SAMPLE].shape[1])
+        opt.lower() if opt else DEFAULT_OPTIMIZER, dataset[SAMPLE].shape[1])
 
     # Some optimizers have generations instead of iterations
     if "iterations" in optimizer_parameters:
@@ -94,7 +94,7 @@ def test_run_optimizer(optimizer: object, dataset: Optional[dict] = None):
     optimizer.params['target_function_parameters'][
         'weights'] = best_result[:-2]
     test = Optimizer.fitness(
-        **optimizer.params['target_function_parameters'])['ValFitness']
+        **optimizer.params['target_function_parameters'])['val_fitness']
 
     # Printing test results
     print("Test result: {}".format(round(test, 2)))
@@ -128,7 +128,7 @@ def test_cross_validation(optimizer: object,
         'Average test fitness over {} Folds for {} optimizer ({}): {}'.format(
             k, optimizer.name,
             optimizer.params['target_function_parameters']['classifier'],
-            round(metrics['TestFitness']['Average'], 2)))
+            round(metrics['test_fitness']['avg'], 2)))
 
     # Plotting average fitness over k folds in cross validation
     fig = plt.figure(figsize=(5, 5))
@@ -140,7 +140,7 @@ def test_cross_validation(optimizer: object,
 
     fig.suptitle('TEST RUNNING {} ON {}-FOLD CROSS VALIDATION WITH {}'.format(
         optimizer.name, k,
-        optimizer.params['target_function_parameters']['classifier'].upper()),
+        optimizer.params['target_function_parameters']['classifier'].lower()),
                  fontweight='bold',
                  fontsize=16)
     plt.tight_layout()

@@ -28,8 +28,8 @@ def initial_variables(size=5,
             position[i, j] = random.uniform(min_values[j], max_values[j])
         target_function_parameters['weights'] = position[i, :-2]
         fitness = target_function(**target_function_parameters)
-        position[i, -1] = fitness['ValFitness']
-        position[i, -2] = fitness['TrainFitness']
+        position[i, -1] = fitness['validation']['fitness']
+        position[i, -2] = fitness['training']['fitness']
     return position
 
 
@@ -129,8 +129,8 @@ def update_position(a, c, f, e, s, w, r, beta, sigma, enemy_pos, food_pos,
                                         max_values[k])
         target_function_parameters['weights'] = dragonflies[i, :-2]
         fitness = target_function(**target_function_parameters)
-        dragonflies[i, -1] = fitness['ValFitness']
-        dragonflies[i, -2] = fitness['TrainFitness']
+        dragonflies[i, -1] = fitness['validation']['fitness']
+        dragonflies[i, -2] = fitness['training']['fitness']
     food_pos, enemy_pos = update_food_enemy(dragonflies, food_pos, enemy_pos)
     best_dragon = np.copy(food_pos[food_pos[:, -1].argsort()][0, :])
     return enemy_pos, food_pos, dragonflies, deltaflies, best_dragon
@@ -188,8 +188,8 @@ def dragonfly_algorithm(size=3,
             target_function_parameters, binary)
         count += 1
         fitness_values.append({
-            'ValFitness': best_dragon[-1],
-            'TrainFitness': best_dragon[-2]
+            'val_fitness': best_dragon[-1],
+            'train_fitness': best_dragon[-2]
         })
     return best_dragon, fitness_values
 

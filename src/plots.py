@@ -54,16 +54,16 @@ def plot_fitness_over_folds(fitness_values: dict,
         - title (str, optional): The title of the plot. If not provided, a default title will be used.
     """
     iteration_numbers = np.linspace(0, iterations + 1,
-                                    len(fitness_values["AvgValFitness"]))
+                                    len(fitness_values["avg_val_fitness"]))
     if ax is None:
         _, ax = plt.subplots()
     ax.plot(iteration_numbers,
-            fitness_values["AvgTrainFitness"],
+            fitness_values["avg_train_fitness"],
             label="Fitness",
             color="blue")
     ax.plot(
         iteration_numbers,
-        fitness_values["AvgValFitness"],
+        fitness_values["avg_val_fitness"],
         label="Validation Fitness",
         color="orange",
     )
@@ -74,8 +74,8 @@ def plot_fitness_over_folds(fitness_values: dict,
     ax.set_xlabel("Iteration")
     ax.set_ylabel("Fitness Value")
     metrics = "Average: {:.2f}\nStandard Deviation: {:.2f}".format(
-        fitness_values['TestFitness']['Avg'],
-        fitness_values['TestFitness']['StdDev'])
+        fitness_values['test_fitness']['avg'],
+        fitness_values['test_fitness']['std_dev'])
 
     ax.text(0.7,
             0.5,
@@ -84,7 +84,7 @@ def plot_fitness_over_folds(fitness_values: dict,
             bbox=dict(facecolor='white',
                       edgecolor='black',
                       boxstyle='round,pad=0.5'))
-    ax.legend()
+    ax.legend(loc='upper right')
 
 
 def plot_fitness_over_population_sizes(

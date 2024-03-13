@@ -64,8 +64,8 @@ def initial_fireflies(swarm_size=3,
             position[i, j] = random.uniform(min_values[j], max_values[j])
         target_function_parameters['weights'] = position[i, :-2]
         fitness = target_function(**target_function_parameters)
-        position[i, -1] = fitness['ValFitness']
-        position[i, -2] = fitness['TrainFitness']
+        position[i, -1] = fitness['validation']['fitness']
+        position[i, -2] = fitness['training']['fitness']
     return position
 
 
@@ -128,8 +128,8 @@ def update_position(position,
                 max_values[j])
     target_function_parameters['weights'] = position[firefly, :-2]
     fitness = target_function(**target_function_parameters)
-    position[firefly, -1] = fitness['ValFitness']
-    position[firefly, -2] = fitness['TrainFitness']
+    position[firefly, -1] = fitness['validation']['fitness']
+    position[firefly, -2] = fitness['training']['fitness']
 
     return position
 
@@ -159,7 +159,7 @@ def firefly_algorithm(swarm_size=3,
         target_function_parameters=target_function_parameters)
     while (count <= generations):
         best_firefly = np.copy(position[position[:, -1].argsort()][0, :])
-        if (verbose == True):
+        if (verbose):
             print('Generation: ', count, ' f(x) = ', best_firefly[-1])
         for i in range(0, swarm_size):
             for j in range(0, swarm_size):
@@ -183,8 +183,8 @@ def firefly_algorithm(swarm_size=3,
                                                    binary)
         count = count + 1
         fitness_values.append({
-            'ValFitness': best_firefly[-1],
-            'TrainFitness': best_firefly[-2]
+            'val_fitness': best_firefly[-1],
+            'train_fitness': best_firefly[-2]
         })
     best_firefly = np.copy(position[position[:, -1].argsort()][0, :])
     return best_firefly, fitness_values

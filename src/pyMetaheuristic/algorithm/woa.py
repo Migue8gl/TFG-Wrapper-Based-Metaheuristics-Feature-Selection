@@ -31,8 +31,8 @@ def initial_position(hunting_party=5,
                                                          0:position.shape[1] -
                                                          2]
         fitness_values = target_function(**target_function_parameters)
-        position[i, -1] = fitness_values['ValFitness']
-        position[i, -2] = fitness_values['TrainFitness']
+        position[i, -1] = fitness_values['validation']['fitness']
+        position[i, -2] = fitness_values['validation']['fitness']
     return position
 
 
@@ -67,8 +67,8 @@ def leader_position(dimension=2,
         leader[0, j] = random.uniform(min_values[j], max_values[j])
     target_function_parameters['weights'] = leader[0, 0:leader.shape[1] - 2]
     fitness_values = target_function(**target_function_parameters)
-    leader[0, -1] = fitness_values['ValFitness']
-    leader[0, -2] = fitness_values['TrainFitness']
+    leader[0, -1] = fitness_values['validation']['fitness']
+    leader[0, -2] = fitness_values['training']['fitness']
     return leader
 
 
@@ -160,8 +160,8 @@ def update_position(position,
                                                          0:position.shape[1] -
                                                          2]
         fitness_values = target_function(**target_function_parameters)
-        position[i, -1] = fitness_values['ValFitness']
-        position[i, -2] = fitness_values['TrainFitness']
+        position[i, -1] = fitness_values['validation']['fitness']
+        position[i, -2] = fitness_values['training']['fitness']
     return position
 
 
@@ -186,7 +186,7 @@ def whale_optimization_algorithm(hunting_party=5,
         target_function_parameters=target_function_parameters)
     fitness_values = []
     while (count <= iterations):
-        if (verbose == True):
+        if (verbose):
             print('Iteration = ', count, ' f(x) = ', leader[0, -1])
         a_linear_component = 2 - count * (2 / iterations)
         b_linear_component = -1 + count * (-1 / iterations)
@@ -197,7 +197,7 @@ def whale_optimization_algorithm(hunting_party=5,
                                    target_function_parameters, binary)
         count = count + 1
         fitness_values.append({
-            'ValFitness': leader[0, -1],
-            'TrainFitness': leader[0, -2]
+            'val_fitness': leader[0, -1],
+            'train_fitness': leader[0, -2]
         })
     return leader.flatten(), fitness_values

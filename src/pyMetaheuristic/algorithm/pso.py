@@ -65,8 +65,8 @@ def initial_position(swarm_size=3,
             position[i, j] = random.uniform(min_values[j], max_values[j])
         target_function_parameters['weights'] = position[i, :-2]
         fitness = target_function(**target_function_parameters)
-        position[i, -1] = fitness['ValFitness']
-        position[i, -2] = fitness['TrainFitness']
+        position[i, -1] = fitness['validation']['fitness']
+        position[i, -2] = fitness['training']['fitness']
     return position
 
 
@@ -137,8 +137,8 @@ def update_position(position,
                                          min_values[j], max_values[j])
         target_function_parameters['weights'] = position[i, :-2]
         fitness = target_function(**target_function_parameters)
-        position[i, -1] = fitness['ValFitness']
-        position[i, -2] = fitness['TrainFitness']
+        position[i, -1] = fitness['validation']['fitness']
+        position[i, -2] = fitness['training']['fitness']
     return position
 
 
@@ -167,7 +167,7 @@ def particle_swarm_optimization(swarm_size=3,
     best_global = np.copy(position[position[:, -1].argsort()][0, :])
     fitness_values = []
     while (count <= iterations):
-        if (verbose == True):
+        if (verbose):
             print('Iteration = ', count, ' f(x) = ', best_global[-1])
         position = update_position(position, init_velocity, min_values,
                                    max_values, target_function,
@@ -190,8 +190,8 @@ def particle_swarm_optimization(swarm_size=3,
                                         c2=c2)
         count = count + 1
         fitness_values.append({
-            'ValFitness': best_global[-1],
-            'TrainFitness': best_global[-2]
+            'val_fitness': best_global[-1],
+            'train_fitness': best_global[-2]
         })
     return best_global, fitness_values
 

@@ -1,3 +1,4 @@
+import time
 from typing import Optional
 
 import numpy as np
@@ -67,29 +68,33 @@ def k_fold_cross_validation(optimizer: object,
         # Evaluate the model on the test set of the current fold
         optimizer.params['target_function_parameters'][DATA] = sample_test
         optimizer.params['target_function_parameters']['weights'] = result[:-2]
-        metrics = Optimizer.fitness(**optimizer.params['target_function_parameters'])
-
-        test_fitness.append(metrics['Validation']['Fitness'])
+        start_time = time.time()
+        metrics = Optimizer.fitness(
+            **optimizer.params['target_function_parameters'])
+        end_time = time.time()
+        execution_time = end_time - start_time
+        test_fitness.append(metrics['validation']['fitness'])
 
         fold_index += 1
         if verbose:
             print('\n##### Finished fold {} #####\n'.format(fold_index))
 
     average_fitness_val = calculate_average_fitness(fitness_each_fold,
-                                                    'ValFitness')
+                                                    'val_fitness')
     average_fitness_train = calculate_average_fitness(fitness_each_fold,
-                                                      'TrainFitness')
+                                                      'train_fitness')
     # Compute standard deviation of test fitness values
     std_deviation_test_fitness = np.std(test_fitness)
 
     return {
-        'AvgTrainFitness': average_fitness_train,
-        'AvgValFitness': average_fitness_val,
-        'TestFitness': {
-            'Best': np.min(test_fitness),
-            'Avg': np.mean(test_fitness),
-            'StdDev': std_deviation_test_fitness,
-        }
+        'avg_train_fitness': average_fitness_train,
+        'avg_val_fitness': average_fitness_val,
+        'test_fitness': {
+            'best': np.min(test_fitness),
+            'avg': np.mean(test_fitness),
+            'std_vev': std_deviation_test_fitness,
+        },
+        'execution_time': execution_time
     }
 
 
@@ -120,7 +125,7 @@ def analysis_fitness_over_population(dataset: dict,
                                           dataset=dataset,
                                           k=k,
                                           verbose=False)
-        total_average_fitness_test.append(metrics['TestFitness']['Average'])
+        total_average_fitness_test.append(metrics['test_fitness']['avg'])
 
     return total_average_fitness_test
 
@@ -153,7 +158,7 @@ def analysis_optimizers_comparison(dataset: dict,
                                                   key, **parameters_dict[key]),
                                               k=k,
                                               verbose=False)
-            fitness_values.append(np.array(metrics['TestFitness']['Average']))
+            fitness_values.append(np.array(metrics['test_fitness']['avg']))
 
         fitness_values = np.array(fitness_values)
         average_fitness = np.mean(fitness_values, axis=0)

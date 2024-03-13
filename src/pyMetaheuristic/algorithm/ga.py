@@ -42,8 +42,8 @@ def initial_population(population_size=5,
         target_function_parameters['weights'] = population[
             i, 0:population.shape[1] - 2]
         fitness = target_function(**target_function_parameters)
-        population[i, -1] = fitness['ValFitness']
-        population[i, -2] = fitness['TrainFitness']
+        population[i, -1] = fitness['validation']['fitness']
+        population[i, -2] = fitness['training']['fitness']
     return population
 
 
@@ -138,14 +138,14 @@ def breeding(population,
             target_function_parameters['weights'] = child1[:-2]
             fitness_values_child1 = target_function(
                 **target_function_parameters)
-            child1[-1] = fitness_values_child1['ValFitness']
-            child1[-2] = fitness_values_child1['TrainFitness']
+            child1[-1] = fitness_values_child1['validation']['fitness']
+            child1[-2] = fitness_values_child1['training']['fitness']
 
             target_function_parameters['weights'] = child2[:-2]
             fitness_values_child2 = target_function(
                 **target_function_parameters)
-            child2[-1] = fitness_values_child2['ValFitness']
-            child2[-2] = fitness_values_child2['TrainFitness']
+            child2[-1] = fitness_values_child2['validation']['fitness']
+            child2[-2] = fitness_values_child2['training']['fitness']
 
             # Check if the child's fitness is better than the worst individuals
             if child1[-1] < offspring[worst_idx0, -1]:
@@ -200,8 +200,8 @@ def mutation(offspring,
 
         target_function_parameters['weights'] = offspring[i, 0:-2]
         fitness_values = target_function(**target_function_parameters)
-        offspring[i, -1] = fitness_values['ValFitness']
-        offspring[i, -2] = fitness_values['TrainFitness']
+        offspring[i, -1] = fitness_values['validation']['fitness']
+        offspring[i, -2] = fitness_values['training']['fitness']
 
     return offspring
 
@@ -246,8 +246,8 @@ def genetic_algorithm(population_size=5,
             elite_ind = np.copy(value)
         count = count + 1
         fitness_values.append({
-            'ValFitness': elite_ind[-1],
-            'TrainFitness': elite_ind[-2]
+            'val_fitness': elite_ind[-1],
+            'train_fitness': elite_ind[-2]
         })
 
     return elite_ind, fitness_values
