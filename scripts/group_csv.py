@@ -1,4 +1,5 @@
 import os
+
 import pandas as pd
 
 # Directory containing the CSV files
@@ -18,13 +19,19 @@ for filename in os.listdir(directory):
         df['dataset'] = dataset_name
         df['optimizer'] = optimizer_name[:
                                          -4]  # Remove ".csv" extension from optimizer name
-
+        # Round columns to a maximum of 3 decimal places
+        df['best'] = df['best'].round(3)
+        df['avg'] = df['avg'].round(3)
+        df['std_dev'] = df['std_dev'].round(3)
+        df['execution_time'] = df['execution_time'].round(3)
+        
         dfs.append(df)
         combined_data = pd.concat(dfs)
 
 # Reorder columns
 combined_data = combined_data[[
-    'classifier', 'dataset', 'optimizer', 'best', 'avg', 'std_dev'
+    'classifier', 'dataset', 'optimizer', 'best', 'avg', 'std_dev',
+    'execution_time'
 ]]
 
 # Write the combined data to a new CSV file

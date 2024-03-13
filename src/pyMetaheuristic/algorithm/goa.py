@@ -21,23 +21,27 @@ import random
 def target_function():
     return
 
+
 ############################################################################
 
 # Function: Initialize Variables
 
 
-def initial_position(grasshoppers=5, min_values=[-5, -5], max_values=[5, 5], target_function=target_function, target_function_parameters=None):
-    position = np.zeros((grasshoppers, len(min_values)+2))
+def initial_position(grasshoppers=5,
+                     min_values=[-5, -5],
+                     max_values=[5, 5],
+                     target_function=target_function,
+                     target_function_parameters=None):
+    position = np.zeros((grasshoppers, len(min_values) + 2))
     for i in range(0, grasshoppers):
         for j in range(0, len(min_values)):
             position[i, j] = random.uniform(min_values[j], max_values[j])
-        target_function_parameters['weights'] = position[i,
-                                                         0:position.shape[1]-2]
         target_function_parameters['weights'] = position[i, :-2]
         fitness = target_function(**target_function_parameters)
         position[i, -1] = fitness['validation']['fitness']
         position[i, -2] = fitness['training']['fitness']
     return position
+
 
 ############################################################################
 
@@ -52,6 +56,7 @@ def s_shaped_transfer_function(x):
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
+
 ############################################################################
 
 # Transfer functions V-Shaped
@@ -59,11 +64,12 @@ def sigmoid(x):
 
 def v_shaped_transfer_function(x, delta_x):
     threshold = np.random.random()
-    return 1-x if hyperbolic_tan(delta_x) > threshold else x
+    return 1 - x if hyperbolic_tan(delta_x) > threshold else x
 
 
 def hyperbolic_tan(x):
     return np.abs(np.tanh(x))
+
 
 ############################################################################
 
@@ -71,8 +77,9 @@ def hyperbolic_tan(x):
 
 
 def s_function(r, F, L):
-    s = F*np.exp(-r/L) - np.exp(-r)
+    s = F * np.exp(-r / L) - np.exp(-r)
     return s
+
 
 # Function: Distance Matrix
 
@@ -80,64 +87,95 @@ def s_function(r, F, L):
 def build_distance_matrix(position):
     a = position[:, :-2]
     b = a.reshape(np.prod(a.shape[:-1]), 1, a.shape[-1])
-    return np.sqrt(np.einsum('ijk,ijk->ij',  b - a,  b - a)).squeeze()
+    return np.sqrt(np.einsum('ijk,ijk->ij', b - a, b - a)).squeeze()
+
 
 # Function: Update Position
 
 
-def update_position(position, best_position, min_values, max_values, C, F, L, target_function, binary, target_function_parameters):
+def update_position(position, best_position, min_values, max_values, C, F, L,
+                    target_function, binary, target_function_parameters):
     sum_grass = 0
     distance_matrix = build_distance_matrix(position)
-    distance_matrix = 2*(distance_matrix - np.min(distance_matrix)
-                         )/(np.ptp(distance_matrix)+0.00000001) + 1
+    distance_matrix = 2 * (distance_matrix - np.min(distance_matrix)) / (
+        np.ptp(distance_matrix) + 0.00000001) + 1
     np.fill_diagonal(distance_matrix, 0)
     for i in range(0, position.shape[0]):
         for j in range(0, len(min_values)):
             for k in range(0, position.shape[0]):
                 if (k != i):
-                    sum_grass = sum_grass + C * ((max_values[j] - min_values[j])/2) * s_function(
-                        distance_matrix[k, i], F, L) * ((position[k, j] - position[i, j])/distance_matrix[k, i])
+                    sum_grass = sum_grass + C * (
+                        (max_values[j] - min_values[j]) / 2) * s_function(
+                            distance_matrix[k, i], F, L) * (
+                                (position[k, j] - position[i, j]) /
+                                distance_matrix[k, i])
             if binary == 's':
-                position[i, j] = s_shaped_transfer_function(C*sum_grass)
+                position[i, j] = s_shaped_transfer_function(C * sum_grass)
             elif binary == 'v':
-                position[i, j] = v_shaped_transfer_function(C*sum_grass + best_position[0, j], C*sum_grass)
+                position[i, j] = v_shaped_transfer_function(
+                    C * sum_grass + best_position[0, j], C * sum_grass)
             else:
-                position[i, j] = np.clip(
-                    C*sum_grass + best_position[0, j], min_values[j], max_values[j])
+                position[i, j] = np.clip(C * sum_grass + best_position[0, j],
+                                         min_values[j], max_values[j])
         target_function_parameters['weights'] = position[i,
-                                                         0:position.shape[1]-2]
+                                                         0:position.shape[1] -
+                                                         2]
         fitness_values = target_function(**target_function_parameters)
         position[i, -1] = fitness_values['validation']['fitness']
         position[i, -2] = fitness_values['training']['fitness']
     return position
+
 
 ############################################################################
 
 # GOA Function
 
 
-def grasshopper_optimization_algorithm(grasshoppers=5, min_values=[-5, -5], max_values=[5, 5], c_min=0.00004, c_max=1, iterations=1000, F=0.5, L=1.5, target_function=target_function, binary='x', verbose=True, target_function_parameters=None):
+def grasshopper_optimization_algorithm(grasshoppers=5,
+                                       min_values=[-5, -5],
+                                       max_values=[5, 5],
+                                       c_min=0.00004,
+                                       c_max=1,
+                                       iterations=1000,
+                                       F=0.5,
+                                       L=1.5,
+                                       target_function=target_function,
+                                       binary='x',
+                                       verbose=True,
+                                       target_function_parameters=None):
     count = 0
-    position = initial_position(
-        grasshoppers, min_values, max_values, target_function, target_function_parameters)
-    best_position = np.copy(
-        position[np.argmin(position[:, -1]), :].reshape(1, -1))
+    position = initial_position(grasshoppers, min_values, max_values,
+                                target_function, target_function_parameters)
+    best_position = np.copy(position[np.argmin(position[:, -1]), :].reshape(
+        1, -1))
 
     # Lists to store fitness values
     fitness_values = []
 
     while (count <= iterations):
-        C = c_max - count*((c_max - c_min)/iterations)
-        position = update_position(position, best_position, min_values, max_values, C, F, L,
-                                   target_function=target_function, binary=binary, target_function_parameters=target_function_parameters)
+        C = c_max - count * ((c_max - c_min) / iterations)
+        position = update_position(
+            position,
+            best_position,
+            min_values,
+            max_values,
+            C,
+            F,
+            L,
+            target_function=target_function,
+            binary=binary,
+            target_function_parameters=target_function_parameters)
         if (np.amin(position[:, -1]) < best_position[0, -1]):
             best_position = np.copy(
                 position[np.argmin(position[:, -1]), :].reshape(1, -1))
         count = count + 1
         if (verbose):
-            print('Iteration = ', count,  ' f(x) = ', best_position[0, -1])
-        fitness_values.append(
-            {'val_fitness': best_position[0, -1], 'train_fitness': best_position[0, -2]})
+            print('Iteration = ', count, ' f(x) = ', best_position[0, -1])
+        fitness_values.append({
+            'val_fitness': best_position[0, -1],
+            'train_fitness': best_position[0, -2]
+        })
     return best_position.flatten(), fitness_values
+
 
 ############################################################################
