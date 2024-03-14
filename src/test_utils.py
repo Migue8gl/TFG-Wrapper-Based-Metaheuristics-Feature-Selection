@@ -122,7 +122,7 @@ def test_cross_validation(optimizer: object,
     metrics = k_fold_cross_validation(dataset=dataset,
                                       optimizer=optimizer,
                                       k=k,
-                                      verbose=False)
+                                      verbose=True)
 
     print(
         'Average test fitness over {} Folds for {} optimizer ({}): {}'.format(
@@ -148,7 +148,7 @@ def test_cross_validation(optimizer: object,
 
 
 if __name__ == "__main__":
-    optimizer = "GOA"
+    optimizer = 'cs'
     """
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     plot_s_shaped_transfer_function(axs[0])

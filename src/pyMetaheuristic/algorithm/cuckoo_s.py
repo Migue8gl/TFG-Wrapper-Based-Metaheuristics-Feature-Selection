@@ -10,10 +10,9 @@
 ############################################################################
 
 # Required Libraries
-import numpy as np
-import math
 import random
-import os
+
+import numpy as np
 
 ############################################################################
 
@@ -42,9 +41,9 @@ def sigmoid(x):
 # Transfer functions V-Shaped
 
 
-def v_shaped_transfer_function(x, delta_x):
+def v_shaped_transfer_function(x):
     threshold = np.random.random()
-    return 1 - x if hyperbolic_tan(delta_x) > threshold else x
+    return 1 - x if hyperbolic_tan(x) > threshold else x
 
 
 def hyperbolic_tan(x):
@@ -76,15 +75,12 @@ def initial_position(birds=3,
 
 # Function: Levy Distribution
 def levy_flight(mean):
-    x1 = math.sin((mean - 1.0) *
-                  (random.uniform(-0.5 * math.pi, 0.5 * math.pi))) / (math.pow(
-                      math.cos(
-                          (random.uniform(-0.5 * math.pi, 0.5 * math.pi))),
-                      (1.0 / (mean - 1.0))))
-    x2 = math.pow((math.cos(
-        (2.0 - mean) * (random.uniform(-0.5 * math.pi, 0.5 * math.pi))) /
-                   (-math.log(random.uniform(0.0, 1.0)))),
-                  ((2.0 - mean) / (mean - 1.0)))
+    u1 = np.random.uniform(-0.5 * np.pi, 0.5 * np.pi)
+    u2 = np.random.uniform(-0.5 * np.pi, 0.5 * np.pi)
+    v = np.random.uniform(0.0, 1.0)
+    x1 = np.sin((mean - 1.0) * u1) / np.power(np.cos(u1), 1.0 / (mean - 1.0))
+    x2 = np.power(
+        np.cos((2.0 - mean) * u2) / (-np.log(v)), (2.0 - mean) / (mean - 1.0))
     return x1 * x2
 
 
@@ -95,21 +91,29 @@ def replace_bird(position,
                  min_values=[-5, -5],
                  max_values=[5, 5],
                  target_function=target_function,
-                 target_function_parameters=None):
-    random_bird = np.random.randint(position.shape[0], size=1)[0]
-    new_solution = np.zeros((1, position.shape[1]))
-    for j in range(0, position.shape[1] - 2):
-        new_solution[0, j] = np.clip(
-            position[random_bird, j] + alpha_value *
-            levy_flight(lambda_value) * position[random_bird, j] *
-            (int.from_bytes(os.urandom(8), byteorder='big') / ((1 << 64) - 1)),
-            min_values[j], max_values[j])
-    target_function_parameters['weights'] = new_solution[0, :-2]
+                 target_function_parameters=None,
+                 binary='s'):
+    random_bird = np.random.randint(position.shape[0])
+    levy_values = levy_flight(lambda_value)
+    new_solution = np.copy(position[random_bird, :-2])
+    rand_factors = np.random.rand(len(min_values))
+    new_solution = np.clip(
+        new_solution + alpha_value * levy_values * new_solution * rand_factors,
+        min_values, max_values)
+    if binary != 'x':
+        for j in range(0, len(min_values)):
+            if binary == 's':
+                new_solution[j] = s_shaped_transfer_function(new_solution[j])
+            elif binary == 'v':
+                new_solution[j] = v_shaped_transfer_function(new_solution[j])
+    target_function_parameters['weights'] = new_solution[:]
     fitness = target_function(**target_function_parameters)
-    new_solution[0, -1] = fitness['validation']['fitness']
-    new_solution[0, -2] = fitness['training']['fitness']
-    if (position[random_bird, -1] > new_solution[0, -1]):
-        position[random_bird, j] = np.copy(new_solution[0, j])
+    new_solution[-1] = fitness['validation']['fitness']
+    new_solution[-2] = fitness['training']['fitness']
+    if (fitness['validation']['fitness'] < position[random_bird, -1]):
+        position[random_bird, :-2] = new_solution[:]
+        position[random_bird, -1] = fitness['validation']['fitness']
+        position[random_bird, -2] = fitness['training']['fitness']
     return position
 
 
@@ -121,25 +125,18 @@ def update_positions(position,
                      target_function=target_function,
                      target_function_parameters=None):
     updated_position = np.copy(position)
-    abandoned_nests = math.ceil(discovery_rate * updated_position.shape[0]) + 1
-    random_bird_j = np.random.randint(position.shape[0], size=1)[0]
-    random_bird_k = np.random.randint(position.shape[0], size=1)[0]
-    while (random_bird_j == random_bird_k):
-        random_bird_j = np.random.randint(position.shape[0], size=1)[0]
-    nest_list = list(position.argsort()[-(abandoned_nests - 1):][::-1][0])
-    for i in range(0, updated_position.shape[0]):
-        for j in range(0, len(nest_list)):
-            rand = int.from_bytes(os.urandom(8), byteorder='big') / (
-                (1 << 64) - 1)
-            if (i == nest_list[j] and rand > discovery_rate):
-                for k in range(0, updated_position.shape[1] - 2):
-                    rand = int.from_bytes(os.urandom(8), byteorder='big') / (
-                        (1 << 64) - 1)
-                    updated_position[i, k] = np.clip(
-                        updated_position[i, k] + rand *
-                        (updated_position[random_bird_j, k] -
-                         updated_position[random_bird_k, k]), min_values[k],
-                        max_values[k])
+    abandoned_nests = int(np.ceil(discovery_rate * position.shape[0])) + 1
+    fitness_values = position[:, -1]
+    nest_list = np.argsort(fitness_values)[-abandoned_nests:]
+    random_birds = np.random.choice(position.shape[0], size=2, replace=False)
+    bird_j, bird_k = random_birds
+    for i in nest_list:
+        rand = np.random.rand(updated_position.shape[1] - 2)
+        if np.random.rand() > discovery_rate:
+            updated_position[i, :-2] = np.clip(
+                updated_position[i, :-2] + rand *
+                (updated_position[bird_j, :-2] -
+                 updated_position[bird_k, :-2]), min_values, max_values)
         target_function_parameters['weights'] = updated_position[i, :-2]
         fitness = target_function(**target_function_parameters)
         updated_position[i, -1] = fitness['validation']['fitness']
@@ -164,7 +161,8 @@ def cuckoo_search(birds=3,
                   verbose=True):
     count = 0
     fitness_values = []
-    position = initial_position(birds, min_values, max_values, target_function)
+    position = initial_position(birds, min_values, max_values, target_function,
+                                target_function_parameters)
     best_ind = np.copy(position[position[:, -1].argsort()][0, :])
     while (count <= iterations):
         if (verbose):
@@ -175,9 +173,11 @@ def cuckoo_search(birds=3,
         })
         for _ in range(0, position.shape[0]):
             position = replace_bird(position, alpha_value, lambda_value,
-                                    min_values, max_values, target_function)
+                                    min_values, max_values, target_function,
+                                    target_function_parameters, binary)
         position = update_positions(position, discovery_rate, min_values,
-                                    max_values, target_function)
+                                    max_values, target_function,
+                                    target_function_parameters)
         value = np.copy(position[position[:, -1].argsort()][0, :])
         if (best_ind[-1] > value[-1]):
             best_ind = np.copy(position[position[:, -1].argsort()][0, :])

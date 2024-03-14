@@ -14,17 +14,10 @@ from constants import (
     SVC_CLASSIFIER,  # noqa: F401
 )
 from pyMetaheuristic.algorithm import (
-    ant_colony_optimization,
-    artificial_bee_colony_optimization,
-    bat_algorithm,
-    dragonfly_algorithm,
-    firefly_algorithm,
-    genetic_algorithm,
-    grasshopper_optimization_algorithm,
-    grey_wolf_optimizer,
-    particle_swarm_optimization,
-    whale_optimization_algorithm,
-)
+    ant_colony_optimization, artificial_bee_colony_optimization, bat_algorithm,
+    dragonfly_algorithm, firefly_algorithm, genetic_algorithm,
+    grasshopper_optimization_algorithm, grey_wolf_optimizer,
+    particle_swarm_optimization, whale_optimization_algorithm, cuckoo_search)
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
@@ -40,16 +33,17 @@ class Optimizer:
 
     # Optimizers dict with all available optimizers
     optimizers = {
-        "goa": grasshopper_optimization_algorithm,
-        "woa": whale_optimization_algorithm,
-        "da": dragonfly_algorithm,
-        "gwo": grey_wolf_optimizer,
-        "abco": artificial_bee_colony_optimization,
-        "ba": bat_algorithm,
-        "pso": particle_swarm_optimization,
-        "fa": firefly_algorithm,
-        "ga": genetic_algorithm,
-        "aco": ant_colony_optimization,
+        'goa': grasshopper_optimization_algorithm,
+        'woa': whale_optimization_algorithm,
+        'da': dragonfly_algorithm,
+        'gwo': grey_wolf_optimizer,
+        'abco': artificial_bee_colony_optimization,
+        'ba': bat_algorithm,
+        'pso': particle_swarm_optimization,
+        'fa': firefly_algorithm,
+        'ga': genetic_algorithm,
+        'aco': ant_colony_optimization,
+        'cs': cuckoo_search,
     }
 
     # Optimizers names
@@ -321,6 +315,15 @@ class Optimizer:
                 "q": 1,
                 "initial_pheromone": 0.1,
                 "evaporation_rate": 0.049,  # Paper based value
+            }
+        elif optimizer_lower == "cs":  # TODO Add parameters
+            parameters = {
+                "birds": DEFAULT_POPULATION_SIZE,
+                "iterations": DEFAULT_ITERATIONS,
+                "discovery_rate": 0.25,
+                "alpha_value": 1,
+                "lambda_value": 1.5,
+                'binary': 's',
             }
 
         parameters["verbose"] = True
