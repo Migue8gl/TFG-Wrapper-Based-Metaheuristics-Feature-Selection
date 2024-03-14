@@ -108,12 +108,13 @@ def replace_bird(position,
                 new_solution[j] = v_shaped_transfer_function(new_solution[j])
     target_function_parameters['weights'] = new_solution[:]
     fitness = target_function(**target_function_parameters)
-    new_solution[-1] = fitness['validation']['fitness']
-    new_solution[-2] = fitness['training']['fitness']
+
+    new_solution = np.append(new_solution, fitness['training']['fitness'])
+    new_solution = np.append(new_solution, fitness['validation']['fitness'])
     if (fitness['validation']['fitness'] < position[random_bird, -1]):
-        position[random_bird, :-2] = new_solution[:]
-        position[random_bird, -1] = fitness['validation']['fitness']
-        position[random_bird, -2] = fitness['training']['fitness']
+        position[random_bird, :-2] = new_solution[:-2]
+        position[random_bird, -1] = new_solution[-1]
+        position[random_bird, -2] = new_solution[-2]
     return position
 
 
@@ -178,6 +179,7 @@ def cuckoo_search(birds=3,
         position = update_positions(position, discovery_rate, min_values,
                                     max_values, target_function,
                                     target_function_parameters)
+    
         value = np.copy(position[position[:, -1].argsort()][0, :])
         if (best_ind[-1] > value[-1]):
             best_ind = np.copy(position[position[:, -1].argsort()][0, :])

@@ -12,7 +12,6 @@
 # Required Libraries
 import numpy as np
 import random
-import os
 
 ############################################################################
 
@@ -77,40 +76,26 @@ def hyperbolic_tan(x):
 # Function: Fitness Value
 
 
-def fitness_calc(function_value):
-    if (function_value >= 0):
-        fitness_value = 1.0 / (1.0 + function_value)
-    else:
-        fitness_value = 1.0 + abs(function_value)
+# Function: Fitness Value
+def fitness_calc(function_values):
+    fitness_value = np.where(function_values >= 0,
+                             1.0 / (1.0 + function_values),
+                             1.0 + np.abs(function_values))
     return fitness_value
 
 
 # Function: Fitness
-
-
-def fitness_function(searching_in_sources):
-    fitness = np.zeros((searching_in_sources.shape[0], 2))
-
-    fitness[:fitness.shape[0],
-            0] = [fitness_calc(x) for x in searching_in_sources[:, -1]]
-    fit_sum = fitness[:, 0].sum()
-
-    fitness[0, 1] = fitness[0, 0]
-    fitness[1:, 1] = fitness[1:, 1] + fitness[0:-1, 1]
-    fitness[:fitness.shape[0], 1] = fitness[:fitness.shape[0], 1] / fit_sum
+def fitness_function(sources, fitness_calc):
+    fitness_values = fitness_calc(sources[:, -1])
+    cumulative_sum = np.cumsum(fitness_values)
+    normalized_cum_sum = cumulative_sum / cumulative_sum[-1]
+    fitness = np.column_stack((fitness_values, normalized_cum_sum))
     return fitness
 
 
 # Function: Selection
-
-
 def roulette_wheel(fitness):
-    ix = 0
-    random = int.from_bytes(os.urandom(8), byteorder='big') / ((1 << 64) - 1)
-    for i in range(0, fitness.shape[0]):
-        if (random <= fitness[i, 1]):
-            ix = i
-            break
+    ix = np.searchsorted(fitness[:, 1], np.random.rand())
     return ix
 
 
@@ -119,25 +104,31 @@ def roulette_wheel(fitness):
 # Function: Employed Bee
 
 
-def employed_bee(sources,
-                 min_values=[-5, -5],
-                 max_values=[5, 5],
-                 target_function=target_function,
-                 target_function_parameters=None):
+def employed_bee(
+    sources,
+    min_values,
+    max_values,
+    target_function,
+    target_function_parameters,
+):
     searching_in_sources = np.copy(sources)
-    new_solution = np.zeros((1, len(min_values) + 2))
+    dim = len(min_values) + 2
     trial = np.zeros((sources.shape[0], 1))
-    for i in range(0, searching_in_sources.shape[0]):
-        phi = random.uniform(-1, 1)
-        j = np.random.randint(len(min_values), size=1)[0]
-        k = np.random.randint(searching_in_sources.shape[0], size=1)[0]
-        while i == k:
-            k = np.random.randint(searching_in_sources.shape[0], size=1)[0]
+    new_solution = np.zeros((1, dim))
+    phi_values = np.random.uniform(-1, 1, size=sources.shape[0])
+    j_values = np.random.randint(dim-2, size=sources.shape[0])
+    k_values = np.array([
+        np.random.choice([k for k in range(sources.shape[0]) if k != i])
+        for i in range(sources.shape[0])
+    ])
+    for i in range(0, sources.shape[0]):
+        phi = phi_values[i]
+        j = j_values[i]
+        k = k_values[i]
         xij = searching_in_sources[i, j]
         xkj = searching_in_sources[k, j]
         vij = xij + phi * (xij - xkj)
-        new_solution[0, :len(min_values)] = searching_in_sources[
-            i, :len(min_values)]
+        new_solution[0, :-2] = searching_in_sources[i, :-2]
         new_solution[0, j] = np.clip(vij, min_values[j], max_values[j])
         target_function_parameters['weights'] = new_solution[0, :-2]
         fitness_values = target_function(**target_function_parameters)
@@ -150,7 +141,6 @@ def employed_bee(sources,
             searching_in_sources[i, -1] = new_function_value
         else:
             trial[i, 0] = trial[i, 0] + 1
-        new_solution[0, :len(min_values)] = 0.0
     return searching_in_sources, trial
 
 
@@ -165,20 +155,21 @@ def outlooker_bee(searching_in_sources,
                   target_function=target_function,
                   target_function_parameters=None):
     improving_sources = np.copy(searching_in_sources)
-    new_solution = np.zeros((1, len(min_values) + 2))
+    dim = len(min_values) + 2
     trial_update = np.copy(trial)
-    for _ in range(0, improving_sources.shape[0]):
+    new_solution = np.zeros((1, dim))
+    phi_values = np.random.uniform(-1, 1, size=improving_sources.shape[0])
+    j_values = np.random.randint(dim-2, size=improving_sources.shape[0])
+    for repeat in range(0, improving_sources.shape[0]):
         i = roulette_wheel(fitness)
-        phi = random.uniform(-1, 1)
-        j = np.random.randint(len(min_values), size=1)[0]
-        k = np.random.randint(improving_sources.shape[0], size=1)[0]
-        while i == k:
-            k = np.random.randint(improving_sources.shape[0], size=1)[0]
+        phi = phi_values[repeat]
+        j = j_values[repeat]
+        k = np.random.choice(
+            [k for k in range(0, improving_sources.shape[0]) if k != i])
         xij = improving_sources[i, j]
         xkj = improving_sources[k, j]
         vij = xij + phi * (xij - xkj)
-        new_solution[0, :len(min_values)] = improving_sources[
-            i, :len(min_values)]
+        new_solution[0, :-2] = improving_sources[i, :-2]
         new_solution[0, j] = np.clip(vij, min_values[j], max_values[j])
         target_function_parameters['weights'] = new_solution[0, :-2]
         fitness_values = target_function(**target_function_parameters)
@@ -192,8 +183,6 @@ def outlooker_bee(searching_in_sources,
             trial_update[i, 0] = 0
         else:
             trial_update[i, 0] = trial_update[i, 0] + 1
-        new_solution[0, :len(min_values)] = 0.0
-
     return improving_sources, trial_update
 
 
@@ -211,12 +200,15 @@ def scouter_bee(improving_sources,
             for j in range(0, improving_sources.shape[1] - 2):
                 if binary == 's':
                     improving_sources[i, j] = s_shaped_transfer_function(
-                        np.random.normal(0, 1, 1)[0])
+                        np.random.normal(0, 1,
+                                         improving_sources.shape[1] - 1)[0])
                 elif binary == 'v':
                     improving_sources[i, j] = v_shaped_transfer_function(
-                        np.random.normal(0, 1, 1)[0])
+                        np.random.normal(0, 1,
+                                         improving_sources.shape[1] - 1)[0])
                 else:
-                    improving_sources[i, j] = np.random.normal(0, 1, 1)[0]
+                    improving_sources[i, j] = np.random.normal(
+                        0, 1, improving_sources.shape[1] - 1)[0]
             target_function_parameters['weights'] = improving_sources[i, :-2]
             fitness_values = target_function(**target_function_parameters)
             improving_sources[i, -1] = fitness_values['validation']['fitness']
@@ -245,7 +237,7 @@ def artificial_bee_colony_optimization(food_sources=3,
     sources = initial_sources(food_sources, min_values, max_values,
                               target_function, target_function_parameters)
     fitness_values = []
-    fitness = fitness_function(sources)
+    fitness = fitness_function(sources, fitness_calc)
     while (count <= iterations):
         if (count > 0):
             if (verbose):
@@ -255,7 +247,7 @@ def artificial_bee_colony_optimization(food_sources=3,
         for _ in range(0, employed_bees - 1):
             e_bee = employed_bee(e_bee[0], min_values, max_values,
                                  target_function, target_function_parameters)
-        fitness = fitness_function(e_bee[0])
+        fitness = fitness_function(e_bee[0], fitness_calc)
         o_bee = outlooker_bee(e_bee[0], fitness, e_bee[1], min_values,
                               max_values, target_function,
                               target_function_parameters)
@@ -274,7 +266,7 @@ def artificial_bee_colony_optimization(food_sources=3,
             target_function=target_function,
             target_function_parameters=target_function_parameters,
             binary=binary)
-        fitness = fitness_function(sources)
+        fitness = fitness_function(sources, fitness_calc)
         fitness_values.append({
             'val_fitness': best_solution[-1],
             'train_fitness': best_solution[-2]

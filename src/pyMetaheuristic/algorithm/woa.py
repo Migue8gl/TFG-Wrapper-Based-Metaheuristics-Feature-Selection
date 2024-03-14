@@ -6,10 +6,10 @@
 # PEREIRA, V. (2022). GitHub repository: https://github.com/Valdecy/pyMetaheuristic
 
 # Required Libraries
-import numpy as np
 import math
 import random
-import os
+
+import numpy as np
 
 
 # Function
@@ -56,28 +56,11 @@ def hyperbolic_tan(x):
     return np.abs(np.tanh(x))
 
 
-# Function: Initialize Alpha
-def leader_position(dimension=2,
-                    min_values=[-5, -5],
-                    max_values=[5, 5],
-                    target_function=target_function,
-                    target_function_parameters=None):
-    leader = np.zeros((1, dimension + 2))
-    for j in range(0, dimension):
-        leader[0, j] = random.uniform(min_values[j], max_values[j])
-    target_function_parameters['weights'] = leader[0, 0:leader.shape[1] - 2]
-    fitness_values = target_function(**target_function_parameters)
-    leader[0, -1] = fitness_values['validation']['fitness']
-    leader[0, -2] = fitness_values['training']['fitness']
-    return leader
-
-
 # Function: Update Leader by Fitness
 def update_leader(position, leader):
-    for i in range(0, position.shape[0]):
-        if (leader[0, -1] > position[i, -1]):
-            for j in range(0, position.shape[1]):
-                leader[0, j] = position[i, j]
+    best_idx = np.argmin(position[:, -1])
+    if (position[best_idx, -1] < leader[-1]):
+        leader = np.copy(position[best_idx, :])
     return leader
 
 
@@ -93,22 +76,18 @@ def update_position(position,
                     target_function_parameters=None,
                     binary='x'):
     for i in range(0, position.shape[0]):
-        r1_leader = int.from_bytes(os.urandom(8), byteorder='big') / (
-            (1 << 64) - 1)
-        r2_leader = int.from_bytes(os.urandom(8), byteorder='big') / (
-            (1 << 64) - 1)
+        r1_leader = np.random.rand()
+        r2_leader = np.random.rand()
         a_leader = 2 * a_linear_component * r1_leader - a_linear_component
         c_leader = 2 * r2_leader
-        p = int.from_bytes(os.urandom(8), byteorder='big') / ((1 << 64) - 1)
+        p = np.random.rand()
         for j in range(0, len(min_values)):
             if (p < 0.5):
                 if (abs(a_leader) >= 1):
-                    rand = int.from_bytes(os.urandom(8), byteorder='big') / (
-                        (1 << 64) - 1)
-                    rand_leader_index = math.floor(position.shape[0] * rand)
+                    rand_leader_index = np.random.randint(0, position.shape[0])
                     x_rand = position[rand_leader_index, :]
-                    distance_x_rand = abs(c_leader * x_rand[j] -
-                                          position[i, j])
+                    distance_x_rand = np.abs(c_leader * x_rand[j] -
+                                             position[i, j])
                     if binary == 's':
                         position[i, j] = s_shaped_transfer_function(
                             x_rand[j] - a_leader * distance_x_rand)
@@ -120,41 +99,40 @@ def update_position(position,
                             x_rand[j] - a_leader * distance_x_rand,
                             min_values[j], max_values[j])
                 elif (abs(a_leader) < 1):
-                    distance_leader = abs(c_leader * leader[0, j] -
+                    distance_leader = abs(c_leader * leader[j] -
                                           position[i, j])
                     if binary == 's':
                         position[i, j] = s_shaped_transfer_function(
-                            np.clip(leader[0, j] - a_leader * distance_leader,
+                            np.clip(leader[j] - a_leader * distance_leader,
                                     min_values[j], max_values[j]))
                     elif binary == 'v':
                         position[i, j] = v_shaped_transfer_function(
-                            np.clip(leader[0, j] - a_leader * distance_leader,
+                            np.clip(leader[j] - a_leader * distance_leader,
                                     min_values[j], max_values[j]))
                     else:
                         position[i, j] = np.clip(
-                            leader[0, j] - a_leader * distance_leader,
+                            leader[j] - a_leader * distance_leader,
                             min_values[j], max_values[j])
             elif (p >= 0.5):
-                distance_Leader = abs(leader[0, j] - position[i, j])
-                rand = int.from_bytes(os.urandom(8), byteorder='big') / (
-                    (1 << 64) - 1)
+                distance_leader = np.abs(leader[j] - position[i, j])
+                rand = np.random.rand()
                 m_param = (b_linear_component - 1) * rand + 1
                 if binary == 's':
                     position[i, j] = s_shaped_transfer_function(
                         np.clip(
-                            (distance_Leader * math.exp(spiral_param * m_param)
-                             * math.cos(m_param * 2 * math.pi) + leader[0, j]),
+                            (distance_leader * math.exp(spiral_param * m_param)
+                             * math.cos(m_param * 2 * math.pi) + leader[j]),
                             min_values[j], max_values[j]))
                 elif binary == 'v':
                     position[i, j] = v_shaped_transfer_function(
                         np.clip(
-                            (distance_Leader * math.exp(spiral_param * m_param)
-                             * math.cos(m_param * 2 * math.pi) + leader[0, j]),
+                            (distance_leader * math.exp(spiral_param * m_param)
+                             * math.cos(m_param * 2 * math.pi) + leader[j]),
                             min_values[j], max_values[j]))
                 else:
                     position[i, j] = np.clip(
-                        (distance_Leader * math.exp(spiral_param * m_param) *
-                         math.cos(m_param * 2 * math.pi) + leader[0, j]),
+                        (distance_leader * math.exp(spiral_param * m_param) *
+                         math.cos(m_param * 2 * math.pi) + leader[j]),
                         min_values[j], max_values[j])
         target_function_parameters['weights'] = position[i,
                                                          0:position.shape[1] -
@@ -178,16 +156,11 @@ def whale_optimization_algorithm(hunting_party=5,
     count = 0
     position = initial_position(hunting_party, min_values, max_values,
                                 target_function, target_function_parameters)
-    leader = leader_position(
-        dimension=len(min_values),
-        min_values=min_values,
-        max_values=max_values,
-        target_function=target_function,
-        target_function_parameters=target_function_parameters)
+    leader   = np.copy(position[position[:,-1].argsort()][0,:])
     fitness_values = []
     while (count <= iterations):
         if (verbose):
-            print('Iteration = ', count, ' f(x) = ', leader[0, -1])
+            print('Iteration = ', count, ' f(x) = ', leader[-1])
         a_linear_component = 2 - count * (2 / iterations)
         b_linear_component = -1 + count * (-1 / iterations)
         leader = update_leader(position, leader)
@@ -197,7 +170,7 @@ def whale_optimization_algorithm(hunting_party=5,
                                    target_function_parameters, binary)
         count = count + 1
         fitness_values.append({
-            'val_fitness': leader[0, -1],
-            'train_fitness': leader[0, -2]
+            'val_fitness': leader[-1],
+            'train_fitness': leader[-2]
         })
-    return leader.flatten(), fitness_values
+    return leader, fitness_values

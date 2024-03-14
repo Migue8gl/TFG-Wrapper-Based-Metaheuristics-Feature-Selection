@@ -98,7 +98,7 @@ def update_position(position, best_position, min_values, max_values, C, F, L,
     sum_grass = 0
     distance_matrix = build_distance_matrix(position)
     distance_matrix = 2 * (distance_matrix - np.min(distance_matrix)) / (
-        np.ptp(distance_matrix) + 0.00000001) + 1
+        np.ptp(distance_matrix) + 1e-8) + 1
     np.fill_diagonal(distance_matrix, 0)
     for i in range(0, position.shape[0]):
         for j in range(0, len(min_values)):

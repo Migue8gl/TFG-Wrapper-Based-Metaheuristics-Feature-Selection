@@ -6,10 +6,9 @@
 # PEREIRA, V. (2022). GitHub repository: https://github.com/Valdecy/pyMetaheuristic
 
 # Required Libraries
-import numpy as np
 import random
-import math
-import os
+
+import numpy as np
 
 
 # Function
@@ -44,10 +43,6 @@ def initial_position(swarm_size=3,
                      target_function=target_function,
                      target_function_parameters=None):
     position = np.zeros((swarm_size, len(min_values) + 2))
-    velocity = np.zeros((swarm_size, len(min_values)))
-    frequency = np.zeros((swarm_size, 1))
-    rate = np.zeros((swarm_size, 1))
-    loudness = np.zeros((swarm_size, 1))
     for i in range(0, swarm_size):
         for j in range(0, len(min_values)):
             position[i, j] = random.uniform(min_values[j], max_values[j])
@@ -57,10 +52,17 @@ def initial_position(swarm_size=3,
         fitness = target_function(**target_function_parameters)
         position[i, -1] = fitness['validation']['fitness']
         position[i, -2] = fitness['training']['fitness']
-        rate[i, 0] = int.from_bytes(os.urandom(8), byteorder="big") / (
-            (1 << 64) - 1)
-        loudness[i, 0] = random.uniform(1, 2)
-    return position, velocity, frequency, rate, loudness
+
+    return position
+
+
+# Function: Initialize Variables
+def initial_variables(swarm_size, dim):
+    velocity = np.zeros((swarm_size, dim))
+    frequency = np.zeros((swarm_size, 1))
+    rate = np.random.rand(swarm_size, 1)
+    loudness = np.random.uniform(1, 2, (swarm_size, 1))
+    return velocity, frequency, rate, loudness
 
 
 # Function: Update Position
@@ -70,76 +72,62 @@ def update_position(position,
                     rate,
                     loudness,
                     best_ind,
-                    alpha=0.9,
-                    gama=0.9,
-                    fmin=0,
-                    fmax=10,
-                    count=0,
-                    min_values=[-5, -5],
-                    max_values=[5, 5],
+                    alpha,
+                    gama,
+                    fmin,
+                    fmax,
+                    count,
+                    min_values,
+                    max_values,
                     target_function=target_function,
                     target_function_parameters=None,
                     binary='s'):
-    position_temp = np.zeros((position.shape[0], position.shape[1]))
-    for i in range(0, position.shape[0]):
-        beta = int.from_bytes(os.urandom(8), byteorder="big") / ((1 << 64) - 1)
-        frequency[i, 0] = fmin + (fmax - fmin) * beta
-        for j in range(0, len(max_values)):
-            velocity[i, j] = velocity[i, j] + (position[i, j] -
-                                               best_ind[j]) * frequency[i, 0]
-        for k in range(0, len(max_values)):
-            if binary == 's':
-                position_temp[i, k] = s_shaped_transfer_function(velocity[i,
-                                                                          k])
-            elif binary == 'v':
-                position_temp[i, k] = v_shaped_transfer_function(velocity[i,
-                                                                          k])
-            else:
-                position_temp[i, k] = position[i, k] + velocity[i, k]
-            if (position_temp[i, k] > max_values[k]):
-                position_temp[i, k] = max_values[k]
-                velocity[i, k] = 0
-            elif (position_temp[i, k] < min_values[k]):
-                position_temp[i, k] = min_values[k]
-                velocity[i, k] = 0
-        target_function_parameters['weights'] = position_temp[
-            i, 0:position_temp.shape[1] - 2]
-        fitness = target_function(**target_function_parameters)
-        position_temp[i, -1] = fitness['validation']['fitness']
-        position_temp[i, -2] = fitness['training']['fitness']
+    dim = len(min_values)
+    position_ = np.zeros_like(position)
+    beta = np.random.rand(position.shape[0])
+    rand = np.random.rand(position.shape[0])
+    rand_position_update = np.random.rand(position.shape[0])
+    frequency[:, 0] = fmin + (fmax - fmin) * beta
+    velocity = velocity + (position[:, :-2] - best_ind[:-2]) * frequency
 
-        rand = int.from_bytes(os.urandom(8), byteorder="big") / ((1 << 64) - 1)
-        if (rand > rate[i, 0]):
-            for L in range(0, len(max_values)):
-                position_temp[
-                    i,
-                    L] = best_ind[L] + random.uniform(-1, 1) * loudness.mean()
-                if (position_temp[i, L] > max_values[L]):
-                    position_temp[i, L] = max_values[L]
-                    velocity[i, L] = 0
-                elif (position_temp[i, L] < min_values[L]):
-                    position_temp[i, L] = min_values[L]
-                    velocity[i, L] = 0
-            target_function_parameters['weights'] = position_temp[
-                i, 0:position_temp.shape[1] - 2]
+    for i in range(len(position_)):
+        for k in range(len(max_values)):
+            if binary == 's':
+                position_[i, k] = s_shaped_transfer_function(velocity[i, k])
+            elif binary == 'v':
+                position_[i, k] = v_shaped_transfer_function(velocity[i, k])
+            else:
+                position_[i, k] = position[i, k] + velocity[i, k]
+    for i in range(0, position.shape[0]):
+        target_function_parameters['weights'] = position_[
+            i, 0:position_.shape[1] - 2]
+        fitness = target_function(**target_function_parameters)
+        position_[i, -1] = fitness['validation']['fitness']
+        position_[i, -2] = fitness['training']['fitness']
+        if (rand[i] > rate[i, 0]):
+            loudness_mean = loudness.mean()
+            random_shift = np.random.uniform(-1, 1, dim) * loudness_mean
+            position_[i, :-2] = np.clip(best_ind[:-2] + random_shift,
+                                        min_values, max_values)
+            target_function_parameters['weights'] = position_[
+                i, 0:position_.shape[1] - 2]
             fitness = target_function(**target_function_parameters)
-            position_temp[i, -1] = fitness['validation']['fitness']
-            position_temp[i, -2] = fitness['training']['fitness']
-        rand = int.from_bytes(os.urandom(8), byteorder="big") / ((1 << 64) - 1)
-        if (rand < position[i, -1]
-                and position_temp[i, -1] <= position[i, -1]):
-            for m in range(0, len(max_values)):
-                position[i, m] = position_temp[i, m]
-            target_function_parameters['weights'] = position[
-                i, 0:position.shape[1] - 2]
-            fitness = target_function(**target_function_parameters)
-            position[i, -1] = fitness['validation']['fitness']
-            position[i, -2] = fitness['training']['fitness']
-            rate[i, 0] = rate[i, 0] * (1 - math.exp(-gama * count))
-            loudness[i, 0] = alpha * loudness[i, -1]
-        value = np.copy(position[position[:, -1].argsort()][0, :])
-        if (best_ind[-1] > value[-1]):
-            best_ind = np.copy(value)
+            position_[i, -1] = fitness['validation']['fitness']
+            position_[i, -2] = fitness['training']['fitness']
+        else:
+            position_[i, :] = initial_position(1, min_values, max_values,
+                                               target_function, target_function_parameters)[0]
+        if (rand_position_update[i] < loudness[i, 0]
+                and position_[i, -1] <= position[i, -1]):
+            position[i, :] = position_[i, :]
+            rate[i, 0] = np.random.rand() * (1 - np.exp(-gama * count))
+            loudness[i, 0] = loudness[i, 0] * alpha
+    position = np.vstack([position, position_])
+    position = position[position[:, -1].argsort()]
+    position = position[:position_.shape[0], :]
+    best_index = np.argmin(position[:, -1])
+    if (best_ind[-1] > position[best_index, -1]):
+        best_ind = np.copy(position[best_index, :])
     return position, velocity, frequency, rate, loudness, best_ind
 
 
@@ -158,9 +146,10 @@ def bat_algorithm(swarm_size=3,
                   verbose=True):
     count = 0
     fitness_values = []
-    position, velocity, frequency, rate, loudness = initial_position(
-        swarm_size, min_values, max_values, target_function,
-        target_function_parameters)
+    position = initial_position(swarm_size, min_values, max_values,
+                                target_function, target_function_parameters)
+    velocity, frequency, rate, loudness = initial_variables(
+        swarm_size, len(min_values))
     best_ind = np.copy(position[position[:, -1].argsort()][0, :])
     while (count <= iterations):
         if (verbose):
