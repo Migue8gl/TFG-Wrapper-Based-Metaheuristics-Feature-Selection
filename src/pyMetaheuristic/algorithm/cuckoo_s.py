@@ -59,14 +59,16 @@ def initial_position(birds=3,
                      max_values=[5, 5],
                      target_function=target_function,
                      target_function_parameters=None):
-    position = np.zeros((birds, len(min_values) + 2))
+    position = np.zeros((birds, len(min_values) + 4))
     for i in range(0, birds):
         for j in range(0, len(min_values)):
             position[i, j] = random.uniform(min_values[j], max_values[j])
-        target_function_parameters['weights'] = position[i, :-2]
+        target_function_parameters['weights'] = position[i, :-4]
         fitness = target_function(**target_function_parameters)
         position[i, -1] = fitness['validation']['fitness']
         position[i, -2] = fitness['training']['fitness']
+        position[i, -3] = fitness['validation']['accuracy']
+        position[i, -4] = fitness['selected_features']
     return position
 
 
@@ -95,7 +97,7 @@ def replace_bird(position,
                  binary='s'):
     random_bird = np.random.randint(position.shape[0])
     levy_values = levy_flight(lambda_value)
-    new_solution = np.copy(position[random_bird, :-2])
+    new_solution = np.copy(position[random_bird, :-4])
     rand_factors = np.random.rand(len(min_values))
     new_solution = np.clip(
         new_solution + alpha_value * levy_values * new_solution * rand_factors,
@@ -109,12 +111,16 @@ def replace_bird(position,
     target_function_parameters['weights'] = new_solution[:]
     fitness = target_function(**target_function_parameters)
 
+    new_solution = np.append(new_solution, fitness['selected_features'])
+    new_solution = np.append(new_solution, fitness['validation']['accuracy'])
     new_solution = np.append(new_solution, fitness['training']['fitness'])
     new_solution = np.append(new_solution, fitness['validation']['fitness'])
     if (fitness['validation']['fitness'] < position[random_bird, -1]):
-        position[random_bird, :-2] = new_solution[:-2]
+        position[random_bird, :-4] = new_solution[:-4]
         position[random_bird, -1] = new_solution[-1]
         position[random_bird, -2] = new_solution[-2]
+        position[random_bird, -3] = new_solution[-3]
+        position[random_bird, -4] = new_solution[-4]
     return position
 
 
@@ -132,16 +138,18 @@ def update_positions(position,
     random_birds = np.random.choice(position.shape[0], size=2, replace=False)
     bird_j, bird_k = random_birds
     for i in nest_list:
-        rand = np.random.rand(updated_position.shape[1] - 2)
+        rand = np.random.rand(updated_position.shape[1] - 4)
         if np.random.rand() > discovery_rate:
-            updated_position[i, :-2] = np.clip(
-                updated_position[i, :-2] + rand *
-                (updated_position[bird_j, :-2] -
-                 updated_position[bird_k, :-2]), min_values, max_values)
-        target_function_parameters['weights'] = updated_position[i, :-2]
+            updated_position[i, :-4] = np.clip(
+                updated_position[i, :-4] + rand *
+                (updated_position[bird_j, :-4] -
+                 updated_position[bird_k, :-4]), min_values, max_values)
+        target_function_parameters['weights'] = updated_position[i, :-4]
         fitness = target_function(**target_function_parameters)
         updated_position[i, -1] = fitness['validation']['fitness']
         updated_position[i, -2] = fitness['training']['fitness']
+        updated_position[i, -3] = fitness['validation']['accuracy']
+        updated_position[i, -4] = fitness['selected_features']
     return updated_position
 
 
@@ -168,10 +176,6 @@ def cuckoo_search(birds=3,
     while (count <= iterations):
         if (verbose):
             print('Iteration = ', count, ' f(x) = ', best_ind[-1])
-        fitness_values.append({
-            'val_fitness': best_ind[-1],
-            'train_fitness': best_ind[-2]
-        })
         for _ in range(0, position.shape[0]):
             position = replace_bird(position, alpha_value, lambda_value,
                                     min_values, max_values, target_function,
@@ -179,10 +183,16 @@ def cuckoo_search(birds=3,
         position = update_positions(position, discovery_rate, min_values,
                                     max_values, target_function,
                                     target_function_parameters)
-    
+
         value = np.copy(position[position[:, -1].argsort()][0, :])
         if (best_ind[-1] > value[-1]):
             best_ind = np.copy(position[position[:, -1].argsort()][0, :])
+        fitness_values.append({
+            'val_fitness': best_ind[-1],
+            'train_fitness': best_ind[-2],
+            'accuracy': best_ind[-3],
+            'selected_features': best_ind[-4]
+        })
         count = count + 1
     return best_ind, fitness_values
 

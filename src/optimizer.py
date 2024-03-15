@@ -104,6 +104,7 @@ class Optimizer:
             - fitness (dict): The dictionary containing training fitness and validation fitness.
         """
         # Count number of features with zero importance.
+        #weights[weights <= 0.05] = 0  # Set weights less than 0.1 to 0
         reduction_count = np.sum(weights == 0)
         classification_rate = Optimizer.compute_accuracy(
             weights,
@@ -123,7 +124,7 @@ class Optimizer:
         classification_error = 1 - classification_rate["val_error"]
         fitness_val = alpha * classification_error + (1 -
                                                       alpha) * reduction_error
-
+        
         return {
             'training': {
                 'fitness': fitness_train,

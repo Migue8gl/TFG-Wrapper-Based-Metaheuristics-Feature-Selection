@@ -32,14 +32,16 @@ def initial_position(grasshoppers=5,
                      max_values=[5, 5],
                      target_function=target_function,
                      target_function_parameters=None):
-    position = np.zeros((grasshoppers, len(min_values) + 2))
+    position = np.zeros((grasshoppers, len(min_values) + 4))
     for i in range(0, grasshoppers):
         for j in range(0, len(min_values)):
             position[i, j] = random.uniform(min_values[j], max_values[j])
-        target_function_parameters['weights'] = position[i, :-2]
+        target_function_parameters['weights'] = position[i, :-4]
         fitness = target_function(**target_function_parameters)
         position[i, -1] = fitness['validation']['fitness']
         position[i, -2] = fitness['training']['fitness']
+        position[i, -3] = fitness['validation']['accuracy']
+        position[i, -4] = fitness['selected_features']
     return position
 
 
@@ -49,8 +51,8 @@ def initial_position(grasshoppers=5,
 
 
 def s_shaped_transfer_function(x):
-    threshold = np.random.random()
-    return 1 if sigmoid(x) > threshold else 0
+    threshold = np.random.random(x.shape)
+    return np.where(sigmoid(x) > threshold, 1, 0)
 
 
 def sigmoid(x):
@@ -63,8 +65,8 @@ def sigmoid(x):
 
 
 def v_shaped_transfer_function(x, delta_x):
-    threshold = np.random.random()
-    return 1 - x if hyperbolic_tan(delta_x) > threshold else x
+    threshold = np.random.random(x.shape)
+    return np.where(hyperbolic_tan(delta_x) > threshold, 1 - x, x)
 
 
 def hyperbolic_tan(x):
@@ -84,45 +86,46 @@ def s_function(r, F, L):
 # Function: Distance Matrix
 
 
+# Function: Distance Matrix
 def build_distance_matrix(position):
-    a = position[:, :-2]
+    a = position[:, :-4]
     b = a.reshape(np.prod(a.shape[:-1]), 1, a.shape[-1])
     return np.sqrt(np.einsum('ijk,ijk->ij', b - a, b - a)).squeeze()
 
 
 # Function: Update Position
-
-
 def update_position(position, best_position, min_values, max_values, C, F, L,
-                    target_function, binary, target_function_parameters):
-    sum_grass = 0
+                    target_function, target_function_parameters, binary):
+    dim = len(min_values)
     distance_matrix = build_distance_matrix(position)
     distance_matrix = 2 * (distance_matrix - np.min(distance_matrix)) / (
         np.ptp(distance_matrix) + 1e-8) + 1
     np.fill_diagonal(distance_matrix, 0)
-    for i in range(0, position.shape[0]):
-        for j in range(0, len(min_values)):
-            for k in range(0, position.shape[0]):
-                if (k != i):
-                    sum_grass = sum_grass + C * (
-                        (max_values[j] - min_values[j]) / 2) * s_function(
-                            distance_matrix[k, i], F, L) * (
-                                (position[k, j] - position[i, j]) /
-                                distance_matrix[k, i])
-            if binary == 's':
-                position[i, j] = s_shaped_transfer_function(C * sum_grass)
-            elif binary == 'v':
-                position[i, j] = v_shaped_transfer_function(
-                    C * sum_grass + best_position[0, j], C * sum_grass)
-            else:
-                position[i, j] = np.clip(C * sum_grass + best_position[0, j],
-                                         min_values[j], max_values[j])
-        target_function_parameters['weights'] = position[i,
-                                                         0:position.shape[1] -
-                                                         2]
-        fitness_values = target_function(**target_function_parameters)
-        position[i, -1] = fitness_values['validation']['fitness']
-        position[i, -2] = fitness_values['training']['fitness']
+    for j in range(dim):
+        sum_grass = np.zeros(position.shape[0])
+        for i in range(position.shape[0]):
+            s_vals = s_function(distance_matrix[:, i], F, L)
+            denominator = np.where(distance_matrix[:, i] == 0, 1,
+                                   distance_matrix[:, i])
+            sum_grass[i] = np.sum(
+                C * ((max_values[j] - min_values[j]) / 2) * s_vals *
+                ((position[:, j] - position[i, j]) / denominator))
+        if binary == 's':
+            position[:, j] = s_shaped_transfer_function(sum_grass +
+                                                        best_position[j])
+        elif binary == 'v':
+            position[:, j] = v_shaped_transfer_function(
+                sum_grass + best_position[j], C * sum_grass)
+        else:
+            position[:, j] = np.clip(C * sum_grass + best_position[j],
+                                     min_values[j], max_values[j])
+    for i in range(position.shape[0]):
+        target_function_parameters['weights'] = position[i, :-4]
+        fitness = target_function(**target_function_parameters)
+        position[i, -1] = fitness['validation']['fitness']
+        position[i, -2] = fitness['training']['fitness']
+        position[i, -3] = fitness['validation']['accuracy']
+        position[i, -4] = fitness['selected_features']
     return position
 
 
@@ -146,8 +149,7 @@ def grasshopper_optimization_algorithm(grasshoppers=5,
     count = 0
     position = initial_position(grasshoppers, min_values, max_values,
                                 target_function, target_function_parameters)
-    best_position = np.copy(position[np.argmin(position[:, -1]), :].reshape(
-        1, -1))
+    best_position = np.copy(position[np.argmin(position[:, -1]), :])
 
     # Lists to store fitness values
     fitness_values = []
@@ -165,17 +167,18 @@ def grasshopper_optimization_algorithm(grasshoppers=5,
             target_function=target_function,
             binary=binary,
             target_function_parameters=target_function_parameters)
-        if (np.amin(position[:, -1]) < best_position[0, -1]):
-            best_position = np.copy(
-                position[np.argmin(position[:, -1]), :].reshape(1, -1))
+        if (np.amin(position[:, -1]) < best_position[-1]):
+            best_position = np.copy(position[np.argmin(position[:, -1]), :])
         count = count + 1
         if (verbose):
-            print('Iteration = ', count, ' f(x) = ', best_position[0, -1])
+            print('Iteration = ', count, ' f(x) = ', best_position[-1])
         fitness_values.append({
-            'val_fitness': best_position[0, -1],
-            'train_fitness': best_position[0, -2]
+            'val_fitness': best_position[-1],
+            'train_fitness': best_position[-2],
+            'accuracy': best_position[-3],
+            'selected_features': best_position[-4]
         })
-    return best_position.flatten(), fitness_values
+    return best_position, fitness_values
 
 
 ############################################################################

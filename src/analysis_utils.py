@@ -47,6 +47,8 @@ def k_fold_cross_validation(optimizer: object,
     """
     skf = StratifiedKFold(n_splits=k, shuffle=True, random_state=42)
     test_fitness = []
+    test_accuracy = []
+    test_selected_features = []
     fitness_each_fold = {}
     fold_index = 0
 
@@ -65,13 +67,15 @@ def k_fold_cross_validation(optimizer: object,
 
         # Evaluate the model on the test set of the current fold
         optimizer.params['target_function_parameters'][DATA] = sample_test
-        optimizer.params['target_function_parameters']['weights'] = result[:-2]
+        optimizer.params['target_function_parameters']['weights'] = result[:-4]
         start_time = time.time()
         metrics = Optimizer.fitness(
             **optimizer.params['target_function_parameters'])
         end_time = time.time()
         execution_time = end_time - start_time
         test_fitness.append(metrics['validation']['fitness'])
+        test_accuracy.append(metrics['validation']['accuracy'])
+        test_selected_features.append(metrics['selected_features'])
 
         fold_index += 1
         if verbose:
@@ -91,6 +95,8 @@ def k_fold_cross_validation(optimizer: object,
             'best': np.min(test_fitness),
             'avg': np.mean(test_fitness),
             'std_dev': std_deviation_test_fitness,
+            'acc': np.mean(test_accuracy),
+            'n_features': np.mean(test_selected_features)
         },
         'execution_time': execution_time
     }

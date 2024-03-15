@@ -148,7 +148,7 @@ def test_cross_validation(optimizer: object,
 
 
 if __name__ == "__main__":
-    optimizer = 'cs'
+    optimizer = 'goa'
     """
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     plot_s_shaped_transfer_function(axs[0])
@@ -161,4 +161,4 @@ if __name__ == "__main__":
     test_run_optimizer(**parameters)
     """
 
-    test_cross_validation(**default_parameters(optimizer, D3))
+    test_cross_validation(**default_parameters(optimizer, D2))

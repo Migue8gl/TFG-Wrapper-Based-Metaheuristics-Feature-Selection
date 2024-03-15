@@ -6,8 +6,7 @@ import matplotlib.pyplot as plt
 import notifications
 import pandas as pd
 from analysis_utils import (
-    k_fold_cross_validation,
-)
+    k_fold_cross_validation, )
 from constants import (
     D2,
     DEFAULT_FOLDS,
@@ -22,8 +21,7 @@ from data_utils import (
 )
 from optimizer import Optimizer
 from plots import (
-    plot_fitness_over_folds,
-)
+    plot_fitness_over_folds, )
 
 plt.style.use(['science', 'ieee'])  # Style of plots
 
@@ -93,10 +91,21 @@ def main(*args, **kwargs):
             metrics_knn['test_fitness']['std_dev'],
             metrics_svc['test_fitness']['std_dev']
         ],
+        'acc': [
+            metrics_knn['test_fitness']['acc'],
+            metrics_svc['test_fitness']['acc']
+        ],
+        'n_features': [
+            metrics_knn['test_fitness']['n_features'],
+            metrics_svc['test_fitness']['n_features']
+        ],
         'execution_time':
         [metrics_knn['execution_time'], metrics_svc['execution_time']]
     }
-    columns = ['classifier', 'best', 'avg', 'std_dev', 'execution_time']
+    columns = [
+        'classifier', 'best', 'avg', 'std_dev', 'acc', 'n_features',
+        'execution_time'
+    ]
 
     df = pd.DataFrame(data, columns=columns)
     df = df.set_index(['classifier'])
