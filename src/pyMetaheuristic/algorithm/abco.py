@@ -32,14 +32,16 @@ def initial_sources(food_sources=3,
                     max_values=[5, 5],
                     target_function=target_function,
                     target_function_parameters=None):
-    sources = np.zeros((food_sources, len(min_values) + 2))
+    sources = np.zeros((food_sources, len(min_values) + 4))
     for i in range(0, food_sources):
         for j in range(0, len(min_values)):
             sources[i, j] = random.uniform(min_values[j], max_values[j])
-        target_function_parameters['weights'] = sources[i, :-2]
+        target_function_parameters['weights'] = sources[i, :-4]
         fitness_values = target_function(**target_function_parameters)
         sources[i, -1] = fitness_values['validation']['fitness']
         sources[i, -2] = fitness_values['training']['fitness']
+        sources[i, -3] = fitness_values['validation']['accuracy']
+        sources[i, -4] = fitness_values['selected_features']
     return sources
 
 
@@ -48,9 +50,13 @@ def initial_sources(food_sources=3,
 # Transfer functions S-Shaped
 
 
-def s_shaped_transfer_function(x):
-    threshold = np.random.rand()
-    return 1 if sigmoid(x) > threshold else 0
+def s_shaped_transfer_function(x, is_x_vector=False):
+    if is_x_vector:
+        threshold = np.random.random(x.shape)
+        return np.where(sigmoid(x) > threshold, 1, 0)
+    else:
+        threshold = np.random.rand()
+        return 1 if sigmoid(x) > threshold else 0
 
 
 def sigmoid(x):
@@ -62,9 +68,13 @@ def sigmoid(x):
 # Transfer functions V-Shaped
 
 
-def v_shaped_transfer_function(x):
-    threshold = np.random.rand()
-    return 1 - x if hyperbolic_tan(x) > threshold else x
+def v_shaped_transfer_function(x, is_x_vector=False):
+    if is_x_vector:
+        threshold = np.random.random(x.shape)
+        return np.where(hyperbolic_tan(x) > threshold, 1 - x, x)
+    else:
+        threshold = np.random.rand()
+        return 1 - x if hyperbolic_tan(x) > threshold else x
 
 
 def hyperbolic_tan(x):
@@ -112,11 +122,11 @@ def employed_bee(
     target_function_parameters,
 ):
     searching_in_sources = np.copy(sources)
-    dim = len(min_values) + 2
+    dim = len(min_values) + 4
     trial = np.zeros((sources.shape[0], 1))
     new_solution = np.zeros((1, dim))
     phi_values = np.random.uniform(-1, 1, size=sources.shape[0])
-    j_values = np.random.randint(dim-2, size=sources.shape[0])
+    j_values = np.random.randint(dim - 4, size=sources.shape[0])
     k_values = np.array([
         np.random.choice([k for k in range(sources.shape[0]) if k != i])
         for i in range(sources.shape[0])
@@ -128,12 +138,14 @@ def employed_bee(
         xij = searching_in_sources[i, j]
         xkj = searching_in_sources[k, j]
         vij = xij + phi * (xij - xkj)
-        new_solution[0, :-2] = searching_in_sources[i, :-2]
+        new_solution[0, :-4] = searching_in_sources[i, :-4]
         new_solution[0, j] = np.clip(vij, min_values[j], max_values[j])
-        target_function_parameters['weights'] = new_solution[0, :-2]
+        target_function_parameters['weights'] = new_solution[0, :-4]
         fitness_values = target_function(**target_function_parameters)
         new_solution[0, -1] = fitness_values['validation']['fitness']
         new_solution[0, -2] = fitness_values['training']['fitness']
+        new_solution[0, -3] = fitness_values['validation']['accuracy']
+        new_solution[0, -4] = fitness_values['selected_features']
         new_function_value = new_solution[0, -1]
         if (fitness_calc(new_function_value)
                 > fitness_calc(searching_in_sources[i, -1])):
@@ -155,11 +167,11 @@ def outlooker_bee(searching_in_sources,
                   target_function=target_function,
                   target_function_parameters=None):
     improving_sources = np.copy(searching_in_sources)
-    dim = len(min_values) + 2
+    dim = len(min_values) + 4
     trial_update = np.copy(trial)
     new_solution = np.zeros((1, dim))
     phi_values = np.random.uniform(-1, 1, size=improving_sources.shape[0])
-    j_values = np.random.randint(dim-2, size=improving_sources.shape[0])
+    j_values = np.random.randint(dim - 4, size=improving_sources.shape[0])
     for repeat in range(0, improving_sources.shape[0]):
         i = roulette_wheel(fitness)
         phi = phi_values[repeat]
@@ -169,12 +181,14 @@ def outlooker_bee(searching_in_sources,
         xij = improving_sources[i, j]
         xkj = improving_sources[k, j]
         vij = xij + phi * (xij - xkj)
-        new_solution[0, :-2] = improving_sources[i, :-2]
+        new_solution[0, :-4] = improving_sources[i, :-4]
         new_solution[0, j] = np.clip(vij, min_values[j], max_values[j])
-        target_function_parameters['weights'] = new_solution[0, :-2]
+        target_function_parameters['weights'] = new_solution[0, :-4]
         fitness_values = target_function(**target_function_parameters)
         new_solution[0, -1] = fitness_values['validation']['fitness']
         new_solution[0, -2] = fitness_values['training']['fitness']
+        new_solution[0, -3] = fitness_values['validation']['accuracy']
+        new_solution[0, -4] = fitness_values['selected_features']
         new_function_value = new_solution[0, -1]
         if (fitness_calc(new_function_value)
                 > fitness_calc(improving_sources[i, -1])):
@@ -189,30 +203,28 @@ def outlooker_bee(searching_in_sources,
 # Function: Scouter
 
 
-def scouter_bee(improving_sources,
-                trial_update,
-                limit=3,
-                target_function=target_function,
-                target_function_parameters=None,
-                binary='s'):
-    for i in range(0, improving_sources.shape[0]):
-        if (trial_update[i, 0] > limit):
-            for j in range(0, improving_sources.shape[1] - 2):
-                if binary == 's':
-                    improving_sources[i, j] = s_shaped_transfer_function(
-                        np.random.normal(0, 1,
-                                         improving_sources.shape[1] - 1)[0])
-                elif binary == 'v':
-                    improving_sources[i, j] = v_shaped_transfer_function(
-                        np.random.normal(0, 1,
-                                         improving_sources.shape[1] - 1)[0])
-                else:
-                    improving_sources[i, j] = np.random.normal(
-                        0, 1, improving_sources.shape[1] - 1)[0]
-            target_function_parameters['weights'] = improving_sources[i, :-2]
-            fitness_values = target_function(**target_function_parameters)
-            improving_sources[i, -1] = fitness_values['validation']['fitness']
-            improving_sources[i, -2] = fitness_values['training']['fitness']
+# Function: Scouter
+def scouter_bee(improving_sources, trial_update, limit, target_function,
+                target_function_parameters, binary):
+    sources_to_update = np.where(trial_update > limit)[0]
+    for i in sources_to_update:
+        if binary == 's':
+            improving_sources[i, :-4] = s_shaped_transfer_function(
+                np.random.normal(0, 1, improving_sources.shape[1] - 4),
+                is_x_vector=True)
+        elif binary == 'v':
+            improving_sources[i, :-4] = v_shaped_transfer_function(
+                np.random.normal(0, 1, improving_sources.shape[1] - 4),
+                is_x_vector=True)
+        else:
+            improving_sources[i, :-4] = np.random.normal(
+                0, 1, improving_sources.shape[1] - 4)
+        target_function_parameters['weights'] = improving_sources[0, :-4]
+        fitness_values = target_function(**target_function_parameters)
+        improving_sources[i, -1] = fitness_values['validation']['fitness']
+        improving_sources[i, -2] = fitness_values['training']['fitness']
+        improving_sources[i, -3] = fitness_values['validation']['accuracy']
+        improving_sources[i, -4] = fitness_values['selected_features']
     return improving_sources
 
 
@@ -232,48 +244,43 @@ def artificial_bee_colony_optimization(food_sources=3,
                                        verbose=True,
                                        target_function_parameters=None,
                                        binary='s'):
-    count = 0
-    best_value = float('inf')
     sources = initial_sources(food_sources, min_values, max_values,
                               target_function, target_function_parameters)
-    fitness_values = []
     fitness = fitness_function(sources, fitness_calc)
-    while (count <= iterations):
-        if (count > 0):
-            if (verbose):
-                print('Iteration = ', count, ' f(x) = ', best_value)
+    best_bee = sources[np.argmin(sources[:, -1]), :]
+    count = 0
+    fitness_values = []
+    while count <= iterations:
+        if verbose:
+            print('Iteration = ', count, ' f(x) = ', best_bee[-1])
         e_bee = employed_bee(sources, min_values, max_values, target_function,
                              target_function_parameters)
-        for _ in range(0, employed_bees - 1):
+        for _ in range(employed_bees - 1):
             e_bee = employed_bee(e_bee[0], min_values, max_values,
                                  target_function, target_function_parameters)
         fitness = fitness_function(e_bee[0], fitness_calc)
         o_bee = outlooker_bee(e_bee[0], fitness, e_bee[1], min_values,
                               max_values, target_function,
                               target_function_parameters)
-        for _ in range(0, outlookers_bees - 1):
+        for _ in range(outlookers_bees - 1):
             o_bee = outlooker_bee(o_bee[0], fitness, o_bee[1], min_values,
                                   max_values, target_function,
                                   target_function_parameters)
-        value = np.copy(o_bee[0][o_bee[0][:, -1].argsort()][0, :])
-        if (best_value > value[-1]):
-            best_solution = np.copy(value)
-            best_value = np.copy(value[-1])
-        sources = scouter_bee(
-            o_bee[0],
-            o_bee[1],
-            limit=limit,
-            target_function=target_function,
-            target_function_parameters=target_function_parameters,
-            binary=binary)
-        fitness = fitness_function(sources, fitness_calc)
+        current_best_value = np.min(o_bee[0][:, -1])
+        if (best_bee[-1] > current_best_value):
+            best_bee = np.copy(o_bee[0][np.argmin(o_bee[0][:, -1]), :])
         fitness_values.append({
-            'val_fitness': best_solution[-1],
-            'train_fitness': best_solution[-2]
+            'val_fitness': best_bee[-1],
+            'train_fitness': best_bee[-2],
+            'accuracy': best_bee[-3],
+            'selected_features': best_bee[-4]
         })
-        count = count + 1
+        sources = scouter_bee(o_bee[0], o_bee[1], limit, target_function,
+                              target_function_parameters, binary)
+        fitness = fitness_function(sources, fitness_calc)
 
-    return best_solution, fitness_values
+        count += 1
+    return best_bee, fitness_values
 
 
 ############################################################################

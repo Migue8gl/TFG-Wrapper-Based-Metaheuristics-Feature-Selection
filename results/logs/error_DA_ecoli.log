@@ -1,0 +1,14 @@
+/home/migue8gl/Desktop/Universidad/TFG/software/env/lib/python3.10/site-packages/sklearn/model_selection/_split.py:737: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
+Traceback (most recent call last):
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/src/main.py", line 172, in <module>
+    main(**kwargs)
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/src/main.py", line 67, in main
+    metrics_svc = k_fold_cross_validation(dataset=dataset_dict,
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/src/analysis_utils.py", line 75, in k_fold_cross_validation
+    metrics = Optimizer.fitness(
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/src/optimizer.py", line 109, in fitness
+    classification_rate = Optimizer.compute_accuracy(
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/src/optimizer.py", line 163, in compute_accuracy
+    sample_weighted = np.multiply(sample, weights)
+ValueError: operands could not be broadcast together with shapes (68,7) (5,) 

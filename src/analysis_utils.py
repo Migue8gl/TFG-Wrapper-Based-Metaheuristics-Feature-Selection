@@ -51,6 +51,7 @@ def k_fold_cross_validation(optimizer: object,
     test_selected_features = []
     fitness_each_fold = {}
     fold_index = 0
+    execution_time = 0
 
     for train_index, test_index in skf.split(dataset[SAMPLE], dataset[LABELS]):
         x_train, x_test = dataset[SAMPLE][train_index], dataset[SAMPLE][
@@ -62,17 +63,18 @@ def k_fold_cross_validation(optimizer: object,
         sample_test = {SAMPLE: x_test, LABELS: y_test}
 
         # Run optimization algorithm on the current fold
+        start_time = time.time()
         result, fitness_values = optimizer.optimize(sample)
+        execution_time += time.time() - start_time
         fitness_each_fold[fold_index] = fitness_values
 
         # Evaluate the model on the test set of the current fold
         optimizer.params['target_function_parameters'][DATA] = sample_test
         optimizer.params['target_function_parameters']['weights'] = result[:-4]
-        start_time = time.time()
+
         metrics = Optimizer.fitness(
             **optimizer.params['target_function_parameters'])
-        end_time = time.time()
-        execution_time = end_time - start_time
+
         test_fitness.append(metrics['validation']['fitness'])
         test_accuracy.append(metrics['validation']['accuracy'])
         test_selected_features.append(metrics['selected_features'])
@@ -80,6 +82,10 @@ def k_fold_cross_validation(optimizer: object,
         fold_index += 1
         if verbose:
             print('\n##### Finished fold {} #####\n'.format(fold_index))
+            print("Validation Fitness:", metrics['validation']['fitness'])
+            print("Validation Accuracy:", metrics['validation']['accuracy'])
+            print("Selected Features:", metrics['selected_features'])
+            print()
 
     average_fitness_val = calculate_average_fitness(fitness_each_fold,
                                                     'val_fitness')
@@ -87,6 +93,9 @@ def k_fold_cross_validation(optimizer: object,
                                                       'train_fitness')
     # Compute standard deviation of test fitness values
     std_deviation_test_fitness = np.std(test_fitness)
+
+    # Compute mean time
+    execution_time /= k
 
     return {
         'avg_train_fitness': average_fitness_train,

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Optimizers
-optimizers=('GOA' 'ACO')
+optimizers=('FA')
 
 # Datasets
 datasets=(
@@ -33,4 +33,7 @@ for dataset in "${datasets[@]}"; do
         python3 src/main.py -o "$opt" -d "$dataset" >"$log_file" 2>&1 &
     done
 done
+
+# Monitor the process threads
+./scripts/monitor_process_threads.sh &
 

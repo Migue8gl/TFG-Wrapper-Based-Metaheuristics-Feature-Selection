@@ -6,9 +6,9 @@
 # PEREIRA, V. (2022). GitHub repository: https://github.com/Valdecy/pyMetaheuristic
 
 # Required Libraries
-import numpy as np
 import random
-import os
+
+import numpy as np
 
 
 # Function
@@ -22,33 +22,51 @@ def initial_position(pack_size=5,
                      max_values=[5, 5],
                      target_function=target_function,
                      target_function_parameters=None):
-    position = np.zeros((pack_size, len(min_values) + 2))
+    position = np.zeros((pack_size, len(min_values) + 4))
     for i in range(0, pack_size):
         for j in range(0, len(min_values)):
             position[i, j] = random.uniform(min_values[j], max_values[j])
         target_function_parameters['weights'] = position[i,
                                                          0:position.shape[1] -
-                                                         2]
+                                                         4]
         fitness = target_function(**target_function_parameters)
         position[i, -1] = fitness['validation']['fitness']
-        position[i, -2] = fitness['validation']['fitness']
+        position[i, -2] = fitness['training']['fitness']
+        position[i, -3] = fitness['validation']['accuracy']
+        position[i, -4] = fitness['selected_features']
     return position
 
 
+############################################################################
+
 # Transfer functions S-Shaped
-def s_shaped_transfer_function(x):
-    threshold = np.random.random()
-    return 1 if sigmoid(x) > threshold else 0
+
+
+def s_shaped_transfer_function(x, is_x_vector=False):
+    if is_x_vector:
+        threshold = np.random.random(x.shape)
+        return np.where(sigmoid(x) > threshold, 1, 0)
+    else:
+        threshold = np.random.rand()
+        return 1 if sigmoid(x) > threshold else 0
 
 
 def sigmoid(x):
-    return 1 / (1 + np.exp(-10 * (x - 0.5)))
+    return 1 / (1 + np.exp(-x))
 
+
+############################################################################
 
 # Transfer functions V-Shaped
-def v_shaped_transfer_function(x):
-    threshold = np.random.random()
-    return 1 - x if hyperbolic_tan(x) > threshold else x
+
+
+def v_shaped_transfer_function(x, is_x_vector=False):
+    if is_x_vector:
+        threshold = np.random.random(x.shape)
+        return np.where(hyperbolic_tan(x) > threshold, 1 - x, x)
+    else:
+        threshold = np.random.rand()
+        return 1 - x if hyperbolic_tan(x) > threshold else x
 
 
 def hyperbolic_tan(x):
@@ -56,60 +74,56 @@ def hyperbolic_tan(x):
 
 
 # Function: Initialize Alpha
-def alpha_position(dimension=2,
-                   target_function=target_function,
-                   target_function_parameters=None):
-    alpha = np.zeros((1, dimension + 2))
-    for j in range(0, dimension):
-        alpha[0, j] = 0.0
-    target_function_parameters['weights'] = alpha[0, 0:alpha.shape[1] - 2]
+def alpha_position(min_values, max_values, target_function,
+                   target_function_parameters):
+    alpha = np.zeros((1, len(min_values) + 4))
+    target_function_parameters['weights'] = np.clip(
+        alpha[0, 0:alpha.shape[1] - 4], min_values, max_values)
     fitness = target_function(**target_function_parameters)
     alpha[0, -1] = fitness['validation']['fitness']
     alpha[0, -2] = fitness['training']['fitness']
-    return alpha
+    alpha[0, -3] = fitness['validation']['accuracy']
+    alpha[0, -4] = fitness['selected_features']
+
+    return alpha[0, :]
 
 
 # Function: Initialize Beta
-def beta_position(dimension=2,
-                  target_function=target_function,
-                  target_function_parameters=None):
-    beta = np.zeros((1, dimension + 2))
-    for j in range(0, dimension):
-        beta[0, j] = 0.0
-    target_function_parameters['weights'] = beta[0, 0:beta.shape[1] - 2]
+def beta_position(min_values, max_values, target_function,
+                  target_function_parameters):
+    beta = np.zeros((1, len(min_values) + 4))
+    target_function_parameters['weights'] = np.clip(
+        beta[0, 0:beta.shape[1] - 4], min_values, max_values)
     fitness = target_function(**target_function_parameters)
     beta[0, -1] = fitness['validation']['fitness']
     beta[0, -2] = fitness['training']['fitness']
-    return beta
+    beta[0, -3] = fitness['validation']['accuracy']
+    beta[0, -4] = fitness['selected_features']
+
+    return beta[0, :]
 
 
 # Function: Initialize Delta
-def delta_position(dimension=2,
-                   target_function=target_function,
-                   target_function_parameters=None):
-    delta = np.zeros((1, dimension + 2))
-    for j in range(0, dimension):
-        delta[0, j] = 0.0
-    target_function_parameters['weights'] = delta[0, 0:delta.shape[1] - 2]
+def delta_position(min_values, max_values, target_function,
+                   target_function_parameters):
+    delta = np.zeros((1, len(min_values) + 4))
+    target_function_parameters['weights'] = np.clip(
+        delta[0, 0:delta.shape[1] - 4], min_values, max_values)
     fitness = target_function(**target_function_parameters)
     delta[0, -1] = fitness['validation']['fitness']
     delta[0, -2] = fitness['training']['fitness']
-    return delta
+    delta[0, -3] = fitness['validation']['accuracy']
+    delta[0, -4] = fitness['selected_features']
+
+    return delta[0, :]
 
 
-# Function: Update Pack by Fitness
+# Function: Updtade Pack by Fitness
 def update_pack(position, alpha, beta, delta):
-    updated_position = np.copy(position)
-    for i in range(0, position.shape[0]):
-        if updated_position[i, -1] < alpha[0, -1]:
-            alpha[0, :] = np.copy(updated_position[i, :])
-        if updated_position[i, -1] > alpha[0, -1] and updated_position[
-                i, -1] < beta[0, -1]:
-            beta[0, :] = np.copy(updated_position[i, :])
-        if updated_position[i, -1] > alpha[0, -1] and updated_position[
-                i, -1] > beta[0, -1] and updated_position[i, -1] < delta[0,
-                                                                         -1]:
-            delta[0, :] = np.copy(updated_position[i, :])
+    idx = np.argsort(position[:, -1])
+    alpha = position[idx[0], :]
+    beta = position[idx[1], :] if position.shape[0] > 1 else alpha
+    delta = position[idx[2], :] if position.shape[0] > 2 else beta
     return alpha, beta, delta
 
 
@@ -124,47 +138,81 @@ def update_position(position,
                     target_function=target_function,
                     target_function_parameters=None,
                     binary='x'):
+    dim = len(min_values)
+    alpha_position = np.copy(position)
+    beta_position = np.copy(position)
+    delta_position = np.copy(position)
     updated_position = np.copy(position)
-    for i in range(0, updated_position.shape[0]):
-        for j in range(0, len(min_values)):
-            r1_alpha = int.from_bytes(os.urandom(8), byteorder='big') / (
-                (1 << 64) - 1)
-            r2_alpha = int.from_bytes(os.urandom(8), byteorder='big') / (
-                (1 << 64) - 1)
-            a_alpha = 2 * a_linear_component * r1_alpha - a_linear_component
-            c_alpha = 2 * r2_alpha
-            distance_alpha = abs(c_alpha * alpha[0, j] - position[i, j])
-            x1 = alpha[0, j] - a_alpha * distance_alpha
-            r1_beta = int.from_bytes(os.urandom(8), byteorder='big') / (
-                (1 << 64) - 1)
-            r2_beta = int.from_bytes(os.urandom(8), byteorder='big') / (
-                (1 << 64) - 1)
-            a_beta = 2 * a_linear_component * r1_beta - a_linear_component
-            c_beta = 2 * r2_beta
-            distance_beta = abs(c_beta * beta[0, j] - position[i, j])
-            x2 = beta[0, j] - a_beta * distance_beta
-            r1_delta = int.from_bytes(os.urandom(8), byteorder='big') / (
-                (1 << 64) - 1)
-            r2_delta = int.from_bytes(os.urandom(8), byteorder='big') / (
-                (1 << 64) - 1)
-            a_delta = 2 * a_linear_component * r1_delta - a_linear_component
-            c_delta = 2 * r2_delta
-            distance_delta = abs(c_delta * delta[0, j] - position[i, j])
-            x3 = delta[0, j] - a_delta * distance_delta
-            if binary == 's':
-                updated_position[i, j] = s_shaped_transfer_function(
-                    (x1 + x2 + x3) / 3)
-            elif binary == 'v':
-                updated_position[i, j] = v_shaped_transfer_function(
-                    (x1 + x2 + x3) / 3)
-            else:
-                updated_position[i, j] = np.clip(((x1 + x2 + x3) / 3),
-                                                 min_values[j], max_values[j])
-        target_function_parameters['weights'] = updated_position[
-            i, 0:updated_position.shape[1] - 2]
+    r1 = np.random.rand(position.shape[0], dim)
+    r2 = np.random.rand(position.shape[0], dim)
+    a = 2 * a_linear_component * r1 - a_linear_component
+    c = 2 * r2
+    distance_alpha = np.abs(c * alpha[:dim] - position[:, :dim])
+    distance_beta = np.abs(c * beta[:dim] - position[:, :dim])
+    distance_delta = np.abs(c * delta[:dim] - position[:, :dim])
+    x1 = alpha[:dim] - a * distance_alpha
+    x2 = beta[:dim] - a * distance_beta
+    x3 = delta[:dim] - a * distance_delta
+
+    alpha_position[:, :-4] = np.clip(x1, min_values, max_values)
+    beta_position[:, :-4] = np.clip(x2, min_values, max_values)
+    delta_position[:, :-4] = np.clip(x3, min_values, max_values)
+
+    for i in range(alpha_position.shape[0]):
+        target_function_parameters['weights'] = np.clip(
+            alpha_position[i, :-4], min_values, max_values)
+        fitness = target_function(**target_function_parameters)
+        alpha_position[i, -1] = fitness['validation']['fitness']
+        alpha_position[i, -2] = fitness['training']['fitness']
+        alpha_position[i, -3] = fitness['validation']['accuracy']
+        alpha_position[i, -4] = fitness['selected_features']
+
+        target_function_parameters['weights'] = np.clip(
+            beta_position[i, :-4], min_values, max_values)
+        fitness = target_function(**target_function_parameters)
+        beta_position[i, -1] = fitness['validation']['fitness']
+        beta_position[i, -2] = fitness['training']['fitness']
+        beta_position[i, -3] = fitness['validation']['accuracy']
+        beta_position[i, -4] = fitness['selected_features']
+
+        target_function_parameters['weights'] = np.clip(
+            delta_position[i, :-4], min_values, max_values)
+        fitness = target_function(**target_function_parameters)
+        delta_position[i, -1] = fitness['validation']['fitness']
+        delta_position[i, -2] = fitness['training']['fitness']
+        delta_position[i, -3] = fitness['validation']['accuracy']
+        delta_position[i, -4] = fitness['selected_features']
+
+    if binary == 's':
+        updated_position[:, :-4] = s_shaped_transfer_function(
+            (alpha_position[:, :-4] + beta_position[:, :-4] +
+             delta_position[:, :-4]) / 3,
+            is_x_vector=True)
+    elif binary == 'v':
+        updated_position[:, :-4] = v_shaped_transfer_function(
+            (alpha_position[:, :-4] + beta_position[:, :-4] +
+             delta_position[:, :-4]) / 3,
+            is_x_vector=True)
+    else:
+        updated_position[:, :-4] = np.clip(
+            (alpha_position[:, :-4] + beta_position[:, :-4] +
+             delta_position[:, :-4]) / 3, min_values, max_values)
+
+    for i in range(alpha_position.shape[0]):
+        target_function_parameters['weights'] = np.clip(
+            updated_position[i, :-4], min_values, max_values)
         fitness = target_function(**target_function_parameters)
         updated_position[i, -1] = fitness['validation']['fitness']
         updated_position[i, -2] = fitness['training']['fitness']
+        updated_position[i, -3] = fitness['validation']['accuracy']
+        updated_position[i, -4] = fitness['selected_features']
+
+    updated_position = np.vstack([
+        position, updated_position, alpha_position, beta_position,
+        delta_position
+    ])
+    updated_position = updated_position[updated_position[:, -1].argsort()]
+    updated_position = updated_position[:position.shape[0], :]
     return updated_position
 
 
@@ -177,44 +225,31 @@ def grey_wolf_optimizer(pack_size=5,
                         verbose=True,
                         target_function_parameters=None,
                         binary='x'):
+    alpha = alpha_position(min_values, max_values, target_function,
+                           target_function_parameters)
+    beta = beta_position(min_values, max_values, target_function,
+                         target_function_parameters)
+    delta = delta_position(min_values, max_values, target_function,
+                           target_function_parameters)
+    position = initial_position(pack_size, min_values, max_values,
+                                target_function, target_function_parameters)
     count = 0
-    alpha = alpha_position(
-        dimension=len(min_values),
-        target_function=target_function,
-        target_function_parameters=target_function_parameters)
-    beta = beta_position(dimension=len(min_values),
-                         target_function=target_function,
-                         target_function_parameters=target_function_parameters)
-    delta = delta_position(
-        dimension=len(min_values),
-        target_function=target_function,
-        target_function_parameters=target_function_parameters)
-    position = initial_position(
-        pack_size=pack_size,
-        min_values=min_values,
-        max_values=max_values,
-        target_function=target_function,
-        target_function_parameters=target_function_parameters)
     fitness_values = []
-    while count <= iterations:
-        if verbose:
-            print('Iteration = ', count, ' f(x) = ', alpha[0][-1])
+    while (count <= iterations):
+        if (verbose):
+            print('Iteration = ', count, ' f(x) = ', alpha[-1])
         a_linear_component = 2 - count * (2 / iterations)
         alpha, beta, delta = update_pack(position, alpha, beta, delta)
-        position = update_position(
-            position,
-            alpha,
-            beta,
-            delta,
-            a_linear_component=a_linear_component,
-            min_values=min_values,
-            max_values=max_values,
-            target_function=target_function,
-            target_function_parameters=target_function_parameters,
-            binary=binary)
-        count += 1
+        position = update_position(position, alpha, beta, delta,
+                                   a_linear_component, min_values, max_values,
+                                   target_function, target_function_parameters,
+                                   binary)
         fitness_values.append({
-            'val_fitness': alpha[0, -1],
-            'train_fitness': alpha[0, -2]
+            'val_fitness': alpha[-1],
+            'train_fitness': alpha[-2],
+            'accuracy': alpha[-3],
+            'selected_features': alpha[-4]
         })
-    return alpha.flatten(), fitness_values
+
+        count += 1
+    return alpha, fitness_values
