@@ -25,8 +25,8 @@ fi
 source env/bin/activate
 
 # Run main.py for each optimizer
-for dataset in "${datasets[@]}"; do
-    for opt in "${optimizers[@]}"; do
+for opt in "${optimizers[@]}"; do
+    for dataset in "${datasets[@]}"; do
         dataset_name=$(basename "$dataset" | sed 's/\.arff$//')
         log_file="$error_dir/error_${opt}_${dataset_name}.log"
         touch "$log_file"
@@ -34,6 +34,25 @@ for dataset in "${datasets[@]}"; do
     done
 done
 
-# Monitor the process threads
-./scripts/monitor_process_threads.sh &
+# String to search for
+process_name="python3 src/main.py"
+
+# Script to execute when all threads are finished
+python_script="scripts/group_csv.py"
+
+while true; do
+    # Check if there are process threads containing the string
+    if pgrep -f "$process_name" > /dev/null; then
+        :
+    else
+        # Execute the Python script
+        python3 "$python_script"
+        break  # Exit the while loop
+    fi
+
+    # Wait for 1 minute before checking again
+    sleep 60
+done
+
+
 

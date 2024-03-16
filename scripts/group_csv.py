@@ -23,15 +23,17 @@ for filename in os.listdir(directory):
         df['best'] = df['best'].round(3)
         df['avg'] = df['avg'].round(3)
         df['std_dev'] = df['std_dev'].round(3)
+        df['acc'] = df['acc'].round(3)
+        df['n_features'] = df['n_features'].round(3)
         df['execution_time'] = df['execution_time'].round(3)
-        
+
         dfs.append(df)
         combined_data = pd.concat(dfs)
 
 # Reorder columns
 combined_data = combined_data[[
-    'classifier', 'dataset', 'optimizer', 'best', 'avg', 'std_dev',
-    'execution_time'
+    'classifier', 'dataset', 'optimizer', 'best', 'avg', 'std_dev', 'acc',
+    'n_features', 'execution_time'
 ]]
 
 # Write the combined data to a new CSV file
