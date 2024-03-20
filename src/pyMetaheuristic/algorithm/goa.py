@@ -38,10 +38,10 @@ def initial_position(grasshoppers=5,
             position[i, j] = random.uniform(min_values[j], max_values[j])
         target_function_parameters['weights'] = position[i, :-4]
         fitness = target_function(**target_function_parameters)
-        position[i, -1] = fitness['validation']['fitness']
-        position[i, -2] = fitness['training']['fitness']
-        position[i, -3] = fitness['validation']['accuracy']
-        position[i, -4] = fitness['selected_features']
+        position[i, -1] = fitness['fitness']
+        position[i, -2] = fitness['accuracy']
+        position[i, -3] = fitness['selected_features']
+        position[i, -4] = fitness['selected_rate']
     return position
 
 
@@ -122,10 +122,10 @@ def update_position(position, best_position, min_values, max_values, C, F, L,
     for i in range(position.shape[0]):
         target_function_parameters['weights'] = position[i, :-4]
         fitness = target_function(**target_function_parameters)
-        position[i, -1] = fitness['validation']['fitness']
-        position[i, -2] = fitness['training']['fitness']
-        position[i, -3] = fitness['validation']['accuracy']
-        position[i, -4] = fitness['selected_features']
+        position[i, -1] = fitness['fitness']
+        position[i, -2] = fitness['accuracy']
+        position[i, -3] = fitness['selected_features']
+        position[i, -4] = fitness['selected_rate']
     return position
 
 
@@ -173,10 +173,10 @@ def grasshopper_optimization_algorithm(grasshoppers=5,
         if (verbose):
             print('Iteration = ', count, ' f(x) = ', best_position[-1])
         fitness_values.append({
-            'val_fitness': best_position[-1],
-            'train_fitness': best_position[-2],
-            'accuracy': best_position[-3],
-            'selected_features': best_position[-4]
+            'fitness': best_position[-1],
+            'accuracy': best_position[-2],
+            'selected_features': best_position[-3],
+            'selected_rate': best_position[-4]
         })
     return best_position, fitness_values
 

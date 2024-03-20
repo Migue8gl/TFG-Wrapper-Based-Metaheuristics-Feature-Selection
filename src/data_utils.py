@@ -3,9 +3,13 @@ from typing import Optional
 
 import arff
 import numpy as np
-from constants import LABELS, SAMPLE, DATA
+import pandas as pd
+from constants import LABELS, SAMPLE
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import (
+    MinMaxScaler,
+    StandardScaler,
+)
 
 # ---------------------------------- DATA ------------------------------------ #
 
@@ -25,10 +29,17 @@ def load_data(file_path: str) -> Optional[np.ndarray]:
         # Check the file extension
         if file_path.endswith('.arff'):
             with open(file_path, 'r') as arff_file:
-                dataset = arff.load(arff_file)
-                data = np.array(dataset[DATA])
+                dataset = arff.load(arff_file, encode_nominal=True)
+                df = pd.DataFrame(dataset['data'])
+
+                # Convert unknown values to NaN
+                df.replace('?', np.nan, inplace=True)
+
+                for col in df.columns:
+                    df.fillna({col: df[col].mean()}, inplace=True)
 
                 # Transform all columns except the last one to float64
+                data = df.to_numpy()
                 data[:, :-1] = data[:, :-1].astype(np.float64)
 
         elif file_path.endswith('.csv'):

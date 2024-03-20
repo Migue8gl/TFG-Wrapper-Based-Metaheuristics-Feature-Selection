@@ -10,6 +10,9 @@ from constants import (
     D6,  # noqa: F401
     D7,  # noqa: F401
     D8,  # noqa: F401
+    D9,  # noqa: F401
+    D10,  # noqa: F401
+    D11,  # noqa: F401
     DATA,
     DEFAULT_FOLDS,
     DEFAULT_OPTIMIZER,
@@ -41,7 +44,7 @@ def default_parameters(opt: Optional[str] = None,
 
     # Test parameters
     # Load, normalize and split dataset into samples and labels
-    dataset = split_data_to_dict(scaling_std_score(load_data(dataset_path)))
+    dataset = split_data_to_dict(load_data(dataset_path))
 
     # Catching optimizer default parameters
     optimizer_parameters = Optimizer.get_default_optimizer_parameters(
@@ -122,6 +125,7 @@ def test_cross_validation(optimizer: object,
     metrics = k_fold_cross_validation(dataset=dataset,
                                       optimizer=optimizer,
                                       k=k,
+                                      scaler=2,
                                       verbose=True)
 
     print(
@@ -161,4 +165,4 @@ if __name__ == "__main__":
     test_run_optimizer(**parameters)
     """
 
-    test_cross_validation(**default_parameters(optimizer, D2))
+    test_cross_validation(**default_parameters(optimizer, D11))

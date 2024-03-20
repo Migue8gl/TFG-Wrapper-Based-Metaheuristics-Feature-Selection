@@ -4,7 +4,6 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import scienceplots  # noqa: F401
-from data_utils import split_dicts_keys_to_lists
 
 plt.style.use(["science", "ieee"])  # Style of plots
 
@@ -22,13 +21,10 @@ def plot_training_curves(fitness_values: dict,
         - ax (matplotlib.axes.Axes, optional): The axes on which to plot the fitness values.
         - title (str, optional): The title of the plot.
     """
-    validation_fitness, training_fitness = split_dicts_keys_to_lists(
-        fitness_values)
 
     if ax is None:
         _, ax = plt.subplots()
-    ax.plot(validation_fitness, label="Training Fitness", color="blue")
-    ax.plot(training_fitness, label="Validation Fitness", color="orange")
+    ax.plot(fitness_values, label="Training Fitness", color="blue")
     if title is None:
         ax.set_title("Training curves")
     else:
@@ -54,18 +50,14 @@ def plot_fitness_over_folds(fitness_values: dict,
         - title (str, optional): The title of the plot. If not provided, a default title will be used.
     """
     iteration_numbers = np.linspace(0, iterations + 1,
-                                    len(fitness_values["avg_val_fitness"]))
+                                    len(fitness_values["avg_fitness"]))
     if ax is None:
         _, ax = plt.subplots()
-    ax.plot(iteration_numbers,
-            fitness_values["avg_train_fitness"],
-            label="Fitness",
-            color="blue")
     ax.plot(
         iteration_numbers,
-        fitness_values["avg_val_fitness"],
-        label="Validation Fitness",
-        color="orange",
+        fitness_values['avg_fitness'],
+        label="Fitness",
+        color="blue",
     )
     if title is None:
         ax.set_title("Average fitness {}-fold cross validation".format(k))

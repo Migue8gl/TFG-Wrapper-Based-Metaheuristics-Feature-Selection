@@ -94,6 +94,48 @@ def send_telegram_image(token: str,
         return error_message
 
 
+def send_telegram_file(token: str,
+                       chat_id: str,
+                       file_path: str = None,
+                       caption: str = None,
+                       verbose: bool = False) -> Union[dict, str]:
+    """
+    Send a file through Telegram.
+
+    Parameters:
+        - token (str): Your Telegram bot token.
+        - chat_id (str): Your Telegram chat ID.
+        - file_path (str): Path to the file.
+        - caption (str): Caption for the file. Default is None.
+        - verbose (bool): If True, print the JSON response. Default is False.
+
+    Returns:
+        - Union[dict, str]: The JSON response from the Telegram API or an error message as a string.
+    """
+    url = f"https://api.telegram.org/bot{token}/sendDocument"
+    params = {
+        'chat_id': chat_id,
+        'caption': caption
+    } if caption else {
+        'chat_id': chat_id
+    }
+
+    try:
+        with open(file_path, 'rb') as file:
+            files = {'document': file}
+            response = requests.post(url, params=params, files=files)
+            response.raise_for_status()
+            json_response = response.json()
+            if verbose:
+                print(json_response)
+            return json_response
+    except requests.RequestException as e:
+        error_message = {'error': f"Failed to send file: {e}"}
+        if verbose:
+            print(error_message)
+        return error_message
+
+
 if __name__ == "__main__":
     # Load credentials from file
     token, chat_id = load_credentials('./credentials/credentials.txt')

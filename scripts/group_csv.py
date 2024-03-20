@@ -33,7 +33,7 @@ for filename in os.listdir(directory):
 # Reorder columns
 combined_data = combined_data[[
     'classifier', 'dataset', 'optimizer', 'best', 'avg', 'std_dev', 'acc',
-    'n_features', 'execution_time'
+    'n_features', 'selected_rate', 'execution_time'
 ]]
 
 # Write the combined data to a new CSV file

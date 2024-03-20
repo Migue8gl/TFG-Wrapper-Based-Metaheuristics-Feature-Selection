@@ -65,10 +65,10 @@ def initial_fireflies(swarm_size=3,
             position[i, j] = random.uniform(min_values[j], max_values[j])
         target_function_parameters['weights'] = position[i, :-4]
         fitness = target_function(**target_function_parameters)
-        position[i, -1] = fitness['validation']['fitness']
-        position[i, -2] = fitness['training']['fitness']
-        position[i, -3] = fitness['validation']['accuracy']
-        position[i, -4] = fitness['selected_features']
+        position[i, -1] = fitness['fitness']
+        position[i, -2] = fitness['accuracy']
+        position[i, -3] = fitness['selected_features']
+        position[i, -4] = fitness['selected_rate']
     return position
 
 
@@ -128,10 +128,10 @@ def update_position(position, alpha_0, beta_0, gama, min_values, max_values,
                             alpha_0 * epson, min_values, max_values)
                     target_function_parameters['weights'] = position[i, :-4]
                     fitness = target_function(**target_function_parameters)
-                    position[i, -1] = fitness['validation']['fitness']
-                    position[i, -2] = fitness['training']['fitness']
-                    position[i, -3] = fitness['validation']['accuracy']
-                    position[i, -4] = fitness['selected_features']
+                    position[i, -1] = fitness['fitness']
+                    position[i, -2] = fitness['accuracy']
+                    position[i, -3] = fitness['selected_features']
+                    position[i, -4] = fitness['selected_rate']
     all_positions = np.vstack([position, position_])
     all_positions = all_positions[np.argsort(all_positions[:, -1])]
     position = all_positions[:position_.shape[0], :]
@@ -166,10 +166,10 @@ def firefly_algorithm(swarm_size=25,
                                    target_function_parameters, binary)
         best_firefly = np.copy(position[position[:, -1].argsort()][0, :])
         fitness_values.append({
-            'val_fitness': best_firefly[-1],
-            'train_fitness': best_firefly[-2],
-            'accuracy': best_firefly[-3],
-            'selected_features': best_firefly[-4]
+            'fitness': best_firefly[-1],
+            'accuracy': best_firefly[-2],
+            'selected_features': best_firefly[-3],
+            'selected_rate': best_firefly[-4]
         })
         count += 1
     return best_firefly, fitness_values

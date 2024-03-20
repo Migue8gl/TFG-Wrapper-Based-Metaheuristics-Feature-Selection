@@ -15,8 +15,6 @@ from constants import (
 )
 from data_utils import (
     load_data,
-    scaling_min_max,
-    scaling_std_score,
     split_data_to_dict,
 )
 from optimizer import Optimizer
@@ -31,7 +29,7 @@ def main(*args, **kwargs):
 
     # Get parameters from the user
     dataset_arg = kwargs.get('-d', D2)  # Chosen dataset
-    # Notifications meaning end of training
+    # Notifications
     notify_arg = kwargs.get('-n', True)
     k_arg = kwargs.get('-k',
                        DEFAULT_FOLDS)  # Number of folds in cross validation
@@ -41,23 +39,15 @@ def main(*args, **kwargs):
 
     # Core functionality
     dataset = load_data(dataset_arg)
-    if scaling_arg == 1:
-        norm_dataset = scaling_min_max(dataset)
-    elif scaling_arg == 2:
-        norm_dataset = scaling_std_score(dataset)
-    elif scaling_arg == 3:
-        norm_dataset = scaling_min_max(scaling_std_score(dataset))
-    else:
-        norm_dataset = dataset
 
     # Split the data into dict form
-    dataset_dict = split_data_to_dict(norm_dataset)
+    dataset_dict = split_data_to_dict(dataset)
 
     k = k_arg  # F fold cross validation
 
     # Optimization function's parameters
     parameters = Optimizer.get_default_optimizer_parameters(
-        optimizer_arg.upper(), dataset_dict[SAMPLE].shape[1])
+        optimizer_arg.lower(), dataset_dict[SAMPLE].shape[1])
 
     # Creating optimizer object
     optimizer = Optimizer(optimizer_arg, parameters)
@@ -67,12 +57,14 @@ def main(*args, **kwargs):
     metrics_svc = k_fold_cross_validation(dataset=dataset_dict,
                                           optimizer=optimizer,
                                           k=k,
+                                          scaler=scaling_arg,
                                           verbose=verbose_arg)
 
     optimizer.params['target_function_parameters']['classifier'] = 'knn'
     metrics_knn = k_fold_cross_validation(dataset=dataset_dict,
                                           optimizer=optimizer,
                                           k=k,
+                                          scaler=scaling_arg,
                                           verbose=verbose_arg)
 
     name_pattern = r'/([^/]+)\.arff$'
@@ -99,12 +91,22 @@ def main(*args, **kwargs):
             metrics_knn['test_fitness']['n_features'],
             metrics_svc['test_fitness']['n_features']
         ],
+        'selected_rate': [
+            metrics_knn['test_fitness']['selected_rate'],
+            metrics_svc['test_fitness']['selected_rate']
+        ],
         'execution_time':
         [metrics_knn['execution_time'], metrics_svc['execution_time']]
     }
     columns = [
-        'classifier', 'best', 'avg', 'std_dev', 'acc', 'n_features',
-        'execution_time'
+        'classifier',
+        'best',
+        'avg',
+        'std_dev',
+        'acc',
+        'n_features',
+        'selected_rate',
+        'execution_time',
     ]
 
     df = pd.DataFrame(data, columns=columns)

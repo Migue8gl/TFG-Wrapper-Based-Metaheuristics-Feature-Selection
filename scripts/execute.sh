@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Optimizers
-optimizers=('FA')
+optimizers=('GOA' 'CS' 'GWO' 'FA')
 
 # Datasets
 datasets=(
@@ -11,7 +11,10 @@ datasets=(
     './datasets/iris.arff'
     './datasets/wine.arff'
     './datasets/ecoli.arff'
-    './datasets/yeast.arff'
+    './datasets/breast-cancer.arff'
+    './datasets/zoo.arff'
+    './datasets/dermatology.arff'
+    './datasets/sonar.arff'
 )
 
 # Define the file to store error messages
@@ -34,25 +37,7 @@ for opt in "${optimizers[@]}"; do
     done
 done
 
-# String to search for
-process_name="python3 src/main.py"
-
-# Script to execute when all threads are finished
-python_script="scripts/group_csv.py"
-
-while true; do
-    # Check if there are process threads containing the string
-    if pgrep -f "$process_name" > /dev/null; then
-        :
-    else
-        # Execute the Python script
-        python3 "$python_script"
-        break  # Exit the while loop
-    fi
-
-    # Wait for 1 minute before checking again
-    sleep 60
-done
+python3 scripts/monitor_threads.py -n True &
 
 
 

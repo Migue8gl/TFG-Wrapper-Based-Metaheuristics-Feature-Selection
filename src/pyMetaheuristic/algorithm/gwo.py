@@ -30,10 +30,10 @@ def initial_position(pack_size=5,
                                                          0:position.shape[1] -
                                                          4]
         fitness = target_function(**target_function_parameters)
-        position[i, -1] = fitness['validation']['fitness']
-        position[i, -2] = fitness['training']['fitness']
-        position[i, -3] = fitness['validation']['accuracy']
-        position[i, -4] = fitness['selected_features']
+        position[i, -1] = fitness['fitness']
+        position[i, -2] = fitness['accuracy']
+        position[i, -3] = fitness['selected_features']
+        position[i, -4] = fitness['selected_rate']
     return position
 
 
@@ -80,10 +80,10 @@ def alpha_position(min_values, max_values, target_function,
     target_function_parameters['weights'] = np.clip(
         alpha[0, 0:alpha.shape[1] - 4], min_values, max_values)
     fitness = target_function(**target_function_parameters)
-    alpha[0, -1] = fitness['validation']['fitness']
-    alpha[0, -2] = fitness['training']['fitness']
-    alpha[0, -3] = fitness['validation']['accuracy']
-    alpha[0, -4] = fitness['selected_features']
+    alpha[0, -1] = fitness['fitness']
+    alpha[0, -2] = fitness['accuracy']
+    alpha[0, -3] = fitness['selected_features']
+    alpha[0, -4] = fitness['selected_rate']
 
     return alpha[0, :]
 
@@ -95,10 +95,10 @@ def beta_position(min_values, max_values, target_function,
     target_function_parameters['weights'] = np.clip(
         beta[0, 0:beta.shape[1] - 4], min_values, max_values)
     fitness = target_function(**target_function_parameters)
-    beta[0, -1] = fitness['validation']['fitness']
-    beta[0, -2] = fitness['training']['fitness']
-    beta[0, -3] = fitness['validation']['accuracy']
-    beta[0, -4] = fitness['selected_features']
+    beta[0, -1] = fitness['fitness']
+    beta[0, -2] = fitness['accuracy']
+    beta[0, -3] = fitness['selected_features']
+    beta[0, -4] = fitness['selected_rate']
 
     return beta[0, :]
 
@@ -110,10 +110,10 @@ def delta_position(min_values, max_values, target_function,
     target_function_parameters['weights'] = np.clip(
         delta[0, 0:delta.shape[1] - 4], min_values, max_values)
     fitness = target_function(**target_function_parameters)
-    delta[0, -1] = fitness['validation']['fitness']
-    delta[0, -2] = fitness['training']['fitness']
-    delta[0, -3] = fitness['validation']['accuracy']
-    delta[0, -4] = fitness['selected_features']
+    delta[0, -1] = fitness['fitness']
+    delta[0, -2] = fitness['accuracy']
+    delta[0, -3] = fitness['selected_features']
+    delta[0, -4] = fitness['selected_rate']
 
     return delta[0, :]
 
@@ -162,26 +162,26 @@ def update_position(position,
         target_function_parameters['weights'] = np.clip(
             alpha_position[i, :-4], min_values, max_values)
         fitness = target_function(**target_function_parameters)
-        alpha_position[i, -1] = fitness['validation']['fitness']
-        alpha_position[i, -2] = fitness['training']['fitness']
-        alpha_position[i, -3] = fitness['validation']['accuracy']
-        alpha_position[i, -4] = fitness['selected_features']
+        alpha_position[i, -1] = fitness['fitness']
+        alpha_position[i, -2] = fitness['accuracy']
+        alpha_position[i, -3] = fitness['selected_features']
+        alpha_position[i, -4] = fitness['selected_rate']
 
         target_function_parameters['weights'] = np.clip(
             beta_position[i, :-4], min_values, max_values)
         fitness = target_function(**target_function_parameters)
-        beta_position[i, -1] = fitness['validation']['fitness']
-        beta_position[i, -2] = fitness['training']['fitness']
-        beta_position[i, -3] = fitness['validation']['accuracy']
-        beta_position[i, -4] = fitness['selected_features']
+        beta_position[i, -1] = fitness['fitness']
+        beta_position[i, -2] = fitness['accuracy']
+        beta_position[i, -3] = fitness['selected_features']
+        beta_position[i, -4] = fitness['selected_rate']
 
         target_function_parameters['weights'] = np.clip(
             delta_position[i, :-4], min_values, max_values)
         fitness = target_function(**target_function_parameters)
-        delta_position[i, -1] = fitness['validation']['fitness']
-        delta_position[i, -2] = fitness['training']['fitness']
-        delta_position[i, -3] = fitness['validation']['accuracy']
-        delta_position[i, -4] = fitness['selected_features']
+        delta_position[i, -1] = fitness['fitness']
+        delta_position[i, -2] = fitness['accuracy']
+        delta_position[i, -3] = fitness['selected_features']
+        delta_position[i, -4] = fitness['selected_rate']
 
     if binary == 's':
         updated_position[:, :-4] = s_shaped_transfer_function(
@@ -202,10 +202,10 @@ def update_position(position,
         target_function_parameters['weights'] = np.clip(
             updated_position[i, :-4], min_values, max_values)
         fitness = target_function(**target_function_parameters)
-        updated_position[i, -1] = fitness['validation']['fitness']
-        updated_position[i, -2] = fitness['training']['fitness']
-        updated_position[i, -3] = fitness['validation']['accuracy']
-        updated_position[i, -4] = fitness['selected_features']
+        updated_position[i, -1] = fitness['fitness']
+        updated_position[i, -2] = fitness['accuracy']
+        updated_position[i, -3] = fitness['selected_features']
+        updated_position[i, -4] = fitness['selected_rate']
 
     updated_position = np.vstack([
         position, updated_position, alpha_position, beta_position,
@@ -245,10 +245,10 @@ def grey_wolf_optimizer(pack_size=5,
                                    target_function, target_function_parameters,
                                    binary)
         fitness_values.append({
-            'val_fitness': alpha[-1],
-            'train_fitness': alpha[-2],
-            'accuracy': alpha[-3],
-            'selected_features': alpha[-4]
+            'fitness': alpha[-1],
+            'accuracy': alpha[-2],
+            'selected_features': alpha[-3],
+            'selected_rate': alpha[-4]
         })
 
         count += 1

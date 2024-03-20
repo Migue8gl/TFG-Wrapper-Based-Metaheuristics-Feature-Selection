@@ -2,6 +2,7 @@ from math import sqrt
 
 import numpy as np
 from constants import (
+    ALPHA,
     DATA,
     DEFAULT_ITERATIONS,
     DEFAULT_LOWER_BOUND,
@@ -87,7 +88,7 @@ class Optimizer:
         weights: np.ndarray,
         data: dict,
         classifier_parameters: dict,
-        alpha: float = 0.5,
+        alpha: float = 0.99,
         classifier: str = "knn",
     ) -> dict:
         """
@@ -104,37 +105,26 @@ class Optimizer:
             - fitness (dict): The dictionary containing training fitness and validation fitness.
         """
         # Count number of features with zero importance.
-        #weights[weights <= 0.05] = 0  # Set weights less than 0.1 to 0
-        reduction_count = np.sum(weights == 0)
+        weights[weights <= 0.05] = 0  # Set weights less than 0.1 to 0
+        selection_count = np.sum(weights != 0)
         classification_rate = Optimizer.compute_accuracy(
             weights,
             data=data,
             classifier=classifier,
             classifier_parameters=classifier_parameters,
         )
-        reduction_rate = reduction_count / len(weights)
-
-        # Calculate the error rates in training
-        classification_error = 1 - classification_rate["train_error"]
-        reduction_error = 1 - reduction_rate
+        selection_rate = selection_count / len(weights)
 
         # Compute fitness as a combination of classification and reduction errors
-        fitness_train = alpha * classification_error + (
-            1 - alpha) * reduction_error
-        classification_error = 1 - classification_rate["val_error"]
-        fitness_val = alpha * classification_error + (1 -
-                                                      alpha) * reduction_error
-        
+        classification_error = 1 - classification_rate
+        fitness = alpha * classification_error + (1 -
+                                                      alpha) * selection_rate
+
         return {
-            'training': {
-                'fitness': fitness_train,
-                'accuracy': classification_rate['train_error'],
-            },
-            'validation': {
-                'fitness': fitness_val,
-                'accuracy': classification_rate['val_error']
-            },
-            'selected_features': len(weights) - reduction_count
+            'fitness': fitness,
+            'accuracy': classification_rate,
+            'selected_features': selection_count,
+            'selected_rate': selection_rate
         }
 
     @staticmethod
@@ -176,7 +166,6 @@ class Optimizer:
             classifier = SVC(C=classifier_parameters["c"],
                              kernel=classifier_parameters["kernel"])
         else:
-            print("No valid classifier, using KNN by default")
             classifier = KNeighborsClassifier(
                 n_neighbors=classifier_parameters["n_neighbors"],
                 weights=classifier_parameters["weights"],
@@ -184,13 +173,10 @@ class Optimizer:
 
         # Train the classifier
         classifier.fit(x_train, y_train)
-        y_pred = classifier.predict(x_train)
-        e_in = accuracy_score(y_train, y_pred)
-
         y_pred = classifier.predict(x_test)
-        e_out = accuracy_score(y_test, y_pred)
+        accuracy = accuracy_score(y_test, y_pred)
 
-        return {"train_error": e_in, "val_error": e_out}
+        return accuracy
 
     @staticmethod
     def get_optimizers():
@@ -305,7 +291,7 @@ class Optimizer:
                 "elite": 2,
                 "eta": 1,
                 "alpha": sqrt(0.3),
-                'binary': False,
+                'binary': True,
             }
         elif optimizer_lower == "aco":  # TODO Add parameters
             parameters = {
@@ -339,7 +325,7 @@ class Optimizer:
             "data":
             None,
             "alpha":
-            0.5,
+            ALPHA,
             "classifier":
             SVC_CLASSIFIER,
             "classifier_parameters": {
