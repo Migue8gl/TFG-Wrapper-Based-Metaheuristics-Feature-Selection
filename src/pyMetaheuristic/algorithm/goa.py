@@ -111,11 +111,10 @@ def update_position(position, best_position, min_values, max_values, C, F, L,
                 C * ((max_values[j] - min_values[j]) / 2) * s_vals *
                 ((position[:, j] - position[i, j]) / denominator))
         if binary == 's':
-            position[:, j] = s_shaped_transfer_function(sum_grass +
-                                                        best_position[j])
+            position[:, j] = s_shaped_transfer_function(C * sum_grass)
         elif binary == 'v':
             position[:, j] = v_shaped_transfer_function(
-                sum_grass + best_position[j], C * sum_grass)
+                C * sum_grass + best_position[j], C * sum_grass)
         else:
             position[:, j] = np.clip(C * sum_grass + best_position[j],
                                      min_values[j], max_values[j])

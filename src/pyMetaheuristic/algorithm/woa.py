@@ -23,16 +23,18 @@ def initial_position(hunting_party=5,
                      max_values=[5, 5],
                      target_function=target_function,
                      target_function_parameters=None):
-    position = np.zeros((hunting_party, len(min_values) + 2))
+    position = np.zeros((hunting_party, len(min_values) + 4))
     for i in range(0, hunting_party):
         for j in range(0, len(min_values)):
             position[i, j] = random.uniform(min_values[j], max_values[j])
         target_function_parameters['weights'] = position[i,
                                                          0:position.shape[1] -
-                                                         2]
+                                                         4]
         fitness_values = target_function(**target_function_parameters)
-        position[i, -1] = fitness_values['validation']['fitness']
-        position[i, -2] = fitness_values['validation']['fitness']
+        position[i, -1] = fitness_values['fitness']
+        position[i, -2] = fitness_values['accuracy']
+        position[i, -3] = fitness_values['selected_features']
+        position[i, -4] = fitness_values['selected_rate']
     return position
 
 
@@ -136,10 +138,12 @@ def update_position(position,
                         min_values[j], max_values[j])
         target_function_parameters['weights'] = position[i,
                                                          0:position.shape[1] -
-                                                         2]
+                                                         4]
         fitness_values = target_function(**target_function_parameters)
-        position[i, -1] = fitness_values['validation']['fitness']
-        position[i, -2] = fitness_values['training']['fitness']
+        position[i, -1] = fitness_values['fitness']
+        position[i, -2] = fitness_values['accuracy']
+        position[i, -3] = fitness_values['selected_features']
+        position[i, -4] = fitness_values['selected_rate']
     return position
 
 
@@ -170,7 +174,9 @@ def whale_optimization_algorithm(hunting_party=5,
                                    target_function_parameters, binary)
         count = count + 1
         fitness_values.append({
-            'val_fitness': leader[-1],
-            'train_fitness': leader[-2]
+            'fitness': leader[-1],
+            'accuracy': leader[-2],
+            'selected_features': leader[-3],
+            'selected_rate': leader[-4]
         })
     return leader, fitness_values

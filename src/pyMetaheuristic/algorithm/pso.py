@@ -10,9 +10,9 @@
 ############################################################################
 
 # Required Libraries
-import numpy as np
 import random
-import os
+
+import numpy as np
 
 ############################################################################
 
@@ -28,25 +28,35 @@ def target_function():
 # Transfer functions S-Shaped
 
 
-def s_shaped_transfer_function(x):
-    threshold = np.random.rand()
-    return 1 if sigmoid(x) > threshold else 0
+def s_shaped_transfer_function(x, is_x_vector=False):
+    if is_x_vector:
+        threshold = np.random.random(x.shape)
+        return np.where(sigmoid(x) > threshold, 1, 0)
+    else:
+        threshold = np.random.rand()
+        return 1 if sigmoid(x) > threshold else 0
 
 
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 
-# Transfer functions S-Shaped
+############################################################################
+
+# Transfer functions V-Shaped
 
 
-def v_shaped_transfer_function(x, delta_x):
-    threshold = np.random.rand()
-    return 1 - x if hyperbolic(delta_x) > threshold else x
+def v_shaped_transfer_function(x, delta_x, is_x_vector=False):
+    if is_x_vector:
+        threshold = np.random.random(x.shape)
+        return np.where(hyperbolic_tan(delta_x) > threshold, 1 - x, x)
+    else:
+        threshold = np.random.rand()
+        return 1 - x if hyperbolic_tan(delta_x) > threshold else x
 
 
-def hyperbolic(x):
-    return np.abs(x / np.sqrt(x**2 + 1))
+def hyperbolic_tan(x):
+    return np.abs(np.tanh(x))
 
 
 ############################################################################
@@ -59,14 +69,16 @@ def initial_position(swarm_size=3,
                      max_values=[5, 5],
                      target_function=target_function,
                      target_function_parameters=None):
-    position = np.zeros((swarm_size, len(min_values) + 2))
+    position = np.zeros((swarm_size, len(min_values) + 4))
     for i in range(0, swarm_size):
         for j in range(0, len(min_values)):
             position[i, j] = random.uniform(min_values[j], max_values[j])
-        target_function_parameters['weights'] = position[i, :-2]
+        target_function_parameters['weights'] = position[i, :-4]
         fitness = target_function(**target_function_parameters)
-        position[i, -1] = fitness['validation']['fitness']
-        position[i, -2] = fitness['training']['fitness']
+        position[i, -1] = fitness['fitness']
+        position[i, -2] = fitness['accuracy']
+        position[i, -3] = fitness['selected_features']
+        position[i, -4] = fitness['selected_rate']
     return position
 
 
@@ -75,70 +87,58 @@ def initial_position(swarm_size=3,
 # Function: Initialize Velocity
 
 
-def initial_velocity(position, min_values=[-5, -5], max_values=[5, 5]):
-    init_velocity = np.zeros((position.shape[0], len(min_values)))
-    for i in range(0, init_velocity.shape[0]):
-        for j in range(0, init_velocity.shape[1]):
-            init_velocity[i, j] = random.uniform(min_values[j], max_values[j])
-    return init_velocity
+# Function: Initialize Velocity
+def initial_velocity(position, min_values, max_values):
+    min_values = np.array(min_values)
+    max_values = np.array(max_values)
+    return np.random.uniform(min_values, max_values,
+                             (position.shape[0], len(min_values)))
 
 
 # Function: Individual Best
-
-
 def individual_best_matrix(position, i_b_matrix):
-    for i in range(0, position.shape[0]):
-        if (i_b_matrix[i, -1] > position[i, -1]):
-            for j in range(0, position.shape[1]):
-                i_b_matrix[i, j] = position[i, j]
+    better_fitness_mask = position[:, -1] < i_b_matrix[:, -1]
+    i_b_matrix[better_fitness_mask] = position[better_fitness_mask]
     return i_b_matrix
 
 
 # Function: Velocity
-
-
-def velocity_vector(position,
-                    init_velocity,
-                    i_b_matrix,
-                    best_global,
-                    w=0.5,
-                    c1=2,
-                    c2=2):
-    r1 = int.from_bytes(os.urandom(8), byteorder='big') / ((1 << 64) - 1)
-    r2 = int.from_bytes(os.urandom(8), byteorder='big') / ((1 << 64) - 1)
-    velocity = np.zeros((position.shape[0], init_velocity.shape[1]))
-    for i in range(0, init_velocity.shape[0]):
-        for j in range(0, init_velocity.shape[1]):
-            velocity[i, j] = w*init_velocity[i, j] + c1*r1 * \
-                (i_b_matrix[i, j] - position[i, j]) + \
-                c2*r2*(best_global[j] - position[i, j])
+def velocity_vector(position, init_velocity, i_b_matrix, best_global, w, c1,
+                    c2):
+    r1 = np.random.rand(position.shape[0], position.shape[1] - 4)
+    r2 = np.random.rand(position.shape[0], position.shape[1] - 4)
+    velocity = w * init_velocity + c1 * r1 * (
+        i_b_matrix[:, :-4] - position[:, :-4]) + c2 * r2 * (best_global[:-4] -
+                                                            position[:, :-4])
     return velocity
 
 
 # Function: Updtade Position
-
-
 def update_position(position,
                     velocity,
-                    min_values=[-5, -5],
-                    max_values=[5, 5],
-                    target_function=target_function,
+                    min_values,
+                    max_values,
+                    target_function,
                     target_function_parameters=None,
                     binary='s'):
+    if binary == 's':
+        position[:, :-4] = s_shaped_transfer_function(velocity,
+                                                      is_x_vector=True)
+    elif binary == 'v':
+        position[:, :-4] = v_shaped_transfer_function(position[:, :-4],
+                                                      velocity,
+                                                      is_x_vector=True)
+    else:
+        position[:, :-4] = np.clip((position[:, :-4] + velocity), min_values,
+                                   max_values)
+
     for i in range(0, position.shape[0]):
-        for j in range(0, position.shape[1] - 2):
-            if binary == 's':
-                position[i, j] = s_shaped_transfer_function(velocity[i, j])
-            elif binary == 'v':
-                position[i, j] = v_shaped_transfer_function(
-                    position[i, j], velocity[i, j])
-            else:
-                position[i, j] = np.clip((position[i, j] + velocity[i, j]),
-                                         min_values[j], max_values[j])
-        target_function_parameters['weights'] = position[i, :-2]
+        target_function_parameters['weights'] = position[i, :-4]
         fitness = target_function(**target_function_parameters)
-        position[i, -1] = fitness['validation']['fitness']
-        position[i, -2] = fitness['training']['fitness']
+        position[i, -1] = fitness['fitness']
+        position[i, -2] = fitness['accuracy']
+        position[i, -3] = fitness['selected_features']
+        position[i, -4] = fitness['selected_rate']
     return position
 
 
@@ -190,8 +190,10 @@ def particle_swarm_optimization(swarm_size=3,
                                         c2=c2)
         count = count + 1
         fitness_values.append({
-            'val_fitness': best_global[-1],
-            'train_fitness': best_global[-2]
+            'fitness': best_global[-1],
+            'accuracy': best_global[-2],
+            'selected_features': best_global[-3],
+            'selected_rate': best_global[-4]
         })
     return best_global, fitness_values
 
