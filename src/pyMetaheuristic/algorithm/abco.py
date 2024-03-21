@@ -38,10 +38,10 @@ def initial_sources(food_sources=3,
             sources[i, j] = random.uniform(min_values[j], max_values[j])
         target_function_parameters['weights'] = sources[i, :-4]
         fitness_values = target_function(**target_function_parameters)
-        sources[i, -1] = fitness_values['validation']['fitness']
-        sources[i, -2] = fitness_values['training']['fitness']
-        sources[i, -3] = fitness_values['validation']['accuracy']
-        sources[i, -4] = fitness_values['selected_features']
+        sources[i, -1] = fitness_values['fitness']
+        sources[i, -2] = fitness_values['accuracy']
+        sources[i, -3] = fitness_values['selected_features']
+        sources[i, -4] = fitness_values['selected_rate']
     return sources
 
 
@@ -142,10 +142,10 @@ def employed_bee(
         new_solution[0, j] = np.clip(vij, min_values[j], max_values[j])
         target_function_parameters['weights'] = new_solution[0, :-4]
         fitness_values = target_function(**target_function_parameters)
-        new_solution[0, -1] = fitness_values['validation']['fitness']
-        new_solution[0, -2] = fitness_values['training']['fitness']
-        new_solution[0, -3] = fitness_values['validation']['accuracy']
-        new_solution[0, -4] = fitness_values['selected_features']
+        new_solution[0, -1] = fitness_values['fitness']
+        new_solution[0, -2] = fitness_values['accuracy']
+        new_solution[0, -3] = fitness_values['selected_features']
+        new_solution[0, -4] = fitness_values['selected_rate']
         new_function_value = new_solution[0, -1]
         if (fitness_calc(new_function_value)
                 > fitness_calc(searching_in_sources[i, -1])):
@@ -185,10 +185,10 @@ def outlooker_bee(searching_in_sources,
         new_solution[0, j] = np.clip(vij, min_values[j], max_values[j])
         target_function_parameters['weights'] = new_solution[0, :-4]
         fitness_values = target_function(**target_function_parameters)
-        new_solution[0, -1] = fitness_values['validation']['fitness']
-        new_solution[0, -2] = fitness_values['training']['fitness']
-        new_solution[0, -3] = fitness_values['validation']['accuracy']
-        new_solution[0, -4] = fitness_values['selected_features']
+        new_solution[0, -1] = fitness_values['fitness']
+        new_solution[0, -2] = fitness_values['accuracy']
+        new_solution[0, -3] = fitness_values['selected_features']
+        new_solution[0, -4] = fitness_values['selected_rate']
         new_function_value = new_solution[0, -1]
         if (fitness_calc(new_function_value)
                 > fitness_calc(improving_sources[i, -1])):
@@ -219,12 +219,12 @@ def scouter_bee(improving_sources, trial_update, limit, target_function,
         else:
             improving_sources[i, :-4] = np.random.normal(
                 0, 1, improving_sources.shape[1] - 4)
-        target_function_parameters['weights'] = improving_sources[0, :-4]
+        target_function_parameters['weights'] = improving_sources[i, :-4]
         fitness_values = target_function(**target_function_parameters)
-        improving_sources[i, -1] = fitness_values['validation']['fitness']
-        improving_sources[i, -2] = fitness_values['training']['fitness']
-        improving_sources[i, -3] = fitness_values['validation']['accuracy']
-        improving_sources[i, -4] = fitness_values['selected_features']
+        improving_sources[i, -1] = fitness_values['fitness']
+        improving_sources[i, -2] = fitness_values['accuracy']
+        improving_sources[i, -3] = fitness_values['selected_features']
+        improving_sources[i, -4] = fitness_values['selected_rate']
     return improving_sources
 
 
@@ -270,10 +270,10 @@ def artificial_bee_colony_optimization(food_sources=3,
         if (best_bee[-1] > current_best_value):
             best_bee = np.copy(o_bee[0][np.argmin(o_bee[0][:, -1]), :])
         fitness_values.append({
-            'val_fitness': best_bee[-1],
-            'train_fitness': best_bee[-2],
-            'accuracy': best_bee[-3],
-            'selected_features': best_bee[-4]
+            'fitness': best_bee[-1],
+            'accuracy': best_bee[-2],
+            'selected_features': best_bee[-3],
+            'selected_rate': best_bee[-4]
         })
         sources = scouter_bee(o_bee[0], o_bee[1], limit, target_function,
                               target_function_parameters, binary)
