@@ -34,48 +34,40 @@ def plot_training_curves(fitness_values: dict,
     ax.legend()
 
 
-def plot_fitness_over_folds(fitness_values: dict,
-                            iterations: int,
-                            k: int,
-                            ax: Optional[matplotlib.axes.Axes] = None,
-                            title: str = None):
+def plot_metric_over_folds(metric_values: dict,
+                           metric_name: str,
+                           iterations: int,
+                           k: int,
+                           color: str,
+                           ax: Optional[plt.Axes] = None,
+                           title: Optional[str] = None):
     """
-    Generate a plot of fitness values over folds.
+    Generate a plot of a specific metric values over folds.
 
     Parameters:
-        - fitness_values (dict): A dictionary containing fitness values for training and validation.
+        - metric_values (dict): A dictionary containing metric values for k-fold cross validation.
+        - metric_name (str): The name of the metric to plot.
         - iterations (int): The number of iterations.
         - k (int): The number of folds.
+        - color (str): The color of the plotted line.
         - ax (matplotlib.axes.Axes, optional): The axes to plot on. If not provided, a new figure and axes will be created.
         - title (str, optional): The title of the plot. If not provided, a default title will be used.
     """
-    iteration_numbers = np.linspace(0, iterations + 1,
-                                    len(fitness_values["avg_fitness"]))
+    iteration_numbers = np.linspace(0, iterations + 1, len(metric_values[metric_name]))
     if ax is None:
         _, ax = plt.subplots()
     ax.plot(
         iteration_numbers,
-        fitness_values['avg_fitness'],
-        label="Fitness",
-        color="blue",
+        metric_values[metric_name],
+        label=metric_name,
+        color=color,
     )
     if title is None:
-        ax.set_title("Average fitness {}-fold cross validation".format(k))
+        ax.set_title("{} over {}-fold cross validation".format(metric_name, k))
     else:
         ax.set_title(title)
-    ax.set_xlabel("Iteration")
-    ax.set_ylabel("Fitness Value")
-    metrics = "Average: {:.2f}\nStandard Deviation: {:.2f}".format(
-        fitness_values['test_fitness']['avg'],
-        fitness_values['test_fitness']['std_dev'])
-
-    ax.text(0.7,
-            0.5,
-            metrics,
-            transform=ax.transAxes,
-            bbox=dict(facecolor='white',
-                      edgecolor='black',
-                      boxstyle='round,pad=0.5'))
+    ax.set_xlabel("iteration")
+    ax.set_ylabel(metric_name)
     ax.legend(loc='upper right')
 
 

@@ -12,27 +12,26 @@ from sklearn.preprocessing import (
 )
 
 
-def calculate_average_fitness(fitness_each_fold: dict,
-                              fitness_key: str) -> list:
+def calculate_average_metric(metrics_each_fold: dict, key: str) -> list:
     """
-    Calculate the average fitness values from a dictionary of fitness values for each fold.
+    Calculate the average metric values from a dictionary of metrics values for each fold.
 
     Parameters:
-        - fitness_each_fold (dict): Dictionary of fitness values for each fold.
-        - fitness_key (str): Key specifying the fitness values to extract ('ValFitness' or 'TrainFitness').
+        - metrics_each_fold (dict): Dictionary of metrics values for each fold.
+        - key (str): Key specifying the values to extract.
 
     Returns:
         - average_fitness_values (list): An array of average fitness values across all folds.
     """
     # Transpose fitness values to have each list represent values for a specific index
-    transposed_fitness = np.array([[item[fitness_key] for item in sublist]
-                                   for sublist in fitness_each_fold.values()
+    transposed_fitness = np.array([[item[key] for item in sublist]
+                                   for sublist in metrics_each_fold.values()
                                    ]).T
 
     # Calculate mean of each index across all lists
-    average_fitness_values = np.mean(transposed_fitness, axis=1)
+    average_metrics_values = np.mean(transposed_fitness, axis=1)
 
-    return average_fitness_values
+    return average_metrics_values
 
 
 def k_fold_cross_validation(optimizer: object,
@@ -58,7 +57,7 @@ def k_fold_cross_validation(optimizer: object,
     test_accuracy = []
     test_selected_features = []
     test_selected_rate = []
-    fitness_each_fold = {}
+    metrics_each_fold = {}
     fold_index = 0
     execution_time = 0
 
@@ -91,9 +90,9 @@ def k_fold_cross_validation(optimizer: object,
 
         # Run optimization algorithm on the current fold
         start_time = time.time()
-        result, fitness_values = optimizer.optimize(sample)
+        result, metrics_values = optimizer.optimize(sample)
         execution_time += time.time() - start_time
-        fitness_each_fold[fold_index] = fitness_values
+        metrics_each_fold[fold_index] = metrics_values
 
         # Evaluate the model on the test set of the current fold
         optimizer.params['target_function_parameters'][DATA] = sample_test
@@ -116,7 +115,8 @@ def k_fold_cross_validation(optimizer: object,
             print("Selected Rate:", metrics['selected_rate'])
             print()
 
-    average_fitness = calculate_average_fitness(fitness_each_fold, 'fitness')
+    average_fitness = calculate_average_metric(metrics_each_fold, 'fitness')
+    average_selected_features = calculate_average_metric(metrics_each_fold, 'selected_features')
 
     # Compute standard deviation of test fitness values
     std_deviation_test_fitness = np.std(test_fitness)
@@ -126,6 +126,7 @@ def k_fold_cross_validation(optimizer: object,
 
     return {
         'avg_fitness': average_fitness,
+        'avg_selected_features': average_selected_features,
         'test_fitness': {
             'best': np.min(test_fitness),
             'avg': np.mean(test_fitness),

@@ -32,7 +32,7 @@ def initial_population(population_size=5,
                        target_function=target_function,
                        target_function_parameters=None,
                        binary=True):
-    population = np.zeros((population_size, len(min_values) + 2))
+    population = np.zeros((population_size, len(min_values) + 4))
     for i in range(0, population_size):
         for j in range(0, len(min_values)):
             if binary:
@@ -40,10 +40,12 @@ def initial_population(population_size=5,
             else:
                 population[i, j] = random.uniform(min_values[j], max_values[j])
         target_function_parameters['weights'] = population[
-            i, 0:population.shape[1] - 2]
+            i, 0:population.shape[1] - 4]
         fitness = target_function(**target_function_parameters)
-        population[i, -1] = fitness['validation']['fitness']
-        population[i, -2] = fitness['training']['fitness']
+        population[i, -1] = fitness['fitness']
+        population[i, -2] = fitness['accuracy']
+        population[i, -3] = fitness['selected_features']
+        population[i, -4] = fitness['selected_rate']
     return population
 
 
@@ -82,8 +84,8 @@ def blend_crossover(parent_1, parent_2, alpha=0.5):
         high = max_val + alpha * range_
 
         # Create offspring
-        child1[:-2] = np.random.uniform(low, high)
-        child2[:-2] = np.random.uniform(low, high)
+        child1[:-4] = np.random.uniform(low, high)
+        child2[:-4] = np.random.uniform(low, high)
 
     return child1, child2
 
@@ -135,17 +137,21 @@ def breeding(population,
                 child1, child2 = blend_crossover(parent_1, parent_2, alpha)
 
             # Evaluate fitness for the offspring
-            target_function_parameters['weights'] = child1[:-2]
+            target_function_parameters['weights'] = child1[:-4]
             fitness_values_child1 = target_function(
                 **target_function_parameters)
-            child1[-1] = fitness_values_child1['validation']['fitness']
-            child1[-2] = fitness_values_child1['training']['fitness']
+            child1[-1] = fitness_values_child1['fitness']
+            child1[-2] = fitness_values_child1['accuracy']
+            child1[-3] = fitness_values_child1['selected_features']
+            child1[-4] = fitness_values_child1['selected_rate']
 
-            target_function_parameters['weights'] = child2[:-2]
+            target_function_parameters['weights'] = child2[:-4]
             fitness_values_child2 = target_function(
                 **target_function_parameters)
-            child2[-1] = fitness_values_child2['validation']['fitness']
-            child2[-2] = fitness_values_child2['training']['fitness']
+            child2[-1] = fitness_values_child2['fitness']
+            child2[-2] = fitness_values_child2['accuracy']
+            child2[-3] = fitness_values_child2['selected_features']
+            child2[-4] = fitness_values_child2['selected_rate']
 
             # Check if the child's fitness is better than the worst individuals
             if child1[-1] < offspring[worst_idx0, -1]:
@@ -198,10 +204,12 @@ def mutation(offspring,
                 (offspring[i, random_idx] + d_mutation),
                 min_values[random_idx], max_values[random_idx])
 
-        target_function_parameters['weights'] = offspring[i, 0:-2]
+        target_function_parameters['weights'] = offspring[i, 0:-4]
         fitness_values = target_function(**target_function_parameters)
-        offspring[i, -1] = fitness_values['validation']['fitness']
-        offspring[i, -2] = fitness_values['training']['fitness']
+        offspring[i, -1] = fitness_values['fitness']
+        offspring[i, -2] = fitness_values['accuracy']
+        offspring[i, -3] = fitness_values['selected_features']
+        offspring[i, -4] = fitness_values['selected_rate']
 
     return offspring
 
@@ -246,8 +254,10 @@ def genetic_algorithm(population_size=5,
             elite_ind = np.copy(value)
         count = count + 1
         fitness_values.append({
-            'val_fitness': elite_ind[-1],
-            'train_fitness': elite_ind[-2]
+            'fitness': elite_ind[-1],
+            'accuracy': elite_ind[-2],
+            'selected_features': elite_ind[-3],
+            'selected_rate': elite_ind[-4]
         })
 
     return elite_ind, fitness_values

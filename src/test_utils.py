@@ -22,7 +22,7 @@ from constants import (
 )
 from data_utils import load_data, scaling_min_max, split_data_to_dict, scaling_std_score  # noqa: F401
 from optimizer import Optimizer
-from plots import plot_fitness_over_folds, plot_training_curves
+from plots import plot_metrics_over_folds, plot_training_curves
 from sklearn.model_selection import train_test_split
 
 
@@ -137,7 +137,7 @@ def test_cross_validation(optimizer: object,
     # Plotting average fitness over k folds in cross validation
     fig = plt.figure(figsize=(5, 5))
     ax = fig.add_subplot(1, 1, 1)
-    plot_fitness_over_folds(
+    plot_metrics_over_folds(
         metrics, optimizer.params['iterations'] if 'iterations'
         in optimizer.params else optimizer.params['generations'], k, ax,
         'Average fitness {}-fold cross validation'.format(k))

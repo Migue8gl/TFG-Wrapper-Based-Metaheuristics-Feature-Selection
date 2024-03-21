@@ -11,6 +11,7 @@ D8 = './datasets/breast-cancer.arff'
 D9 = './datasets/zoo.arff'
 D10 = './datasets/dermatology.arff'
 D11 = './datasets/sonar.arff'
+D11 = './datasets/diabetes.arff'
 
 # ----------------------------------- NAMES ------------------------------------- #
 

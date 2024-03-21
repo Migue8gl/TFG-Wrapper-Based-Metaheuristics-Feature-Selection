@@ -19,7 +19,7 @@ from data_utils import (
 )
 from optimizer import Optimizer
 from plots import (
-    plot_fitness_over_folds, )
+    plot_metric_over_folds, )
 
 plt.style.use(['science', 'ieee'])  # Style of plots
 
@@ -121,24 +121,55 @@ def main(*args, **kwargs):
 
     # First set of plots
     second_key = list(parameters.keys())[1]
-    plot_fitness_over_folds(
+
+    plot_metric_over_folds(
         metrics_svc,
+        'avg_fitness',
         parameters[second_key],
         k,
+        'blue',
         ax=axs[0],
         title='Average fitness {}-fold cross validation running {} (SVC)'.
         format(k, optimizer_arg))
 
-    plot_fitness_over_folds(
-        metrics_knn,
+    plot_metric_over_folds(
+        metrics_svc,
+        'avg_fitness',
         parameters[second_key],
         k,
+        'blue',
         ax=axs[1],
         title='Average fitness {}-fold cross validation running {} (KNN)'.
         format(k, optimizer_arg))
+    
+    plt.tight_layout()
+    plt.savefig('./images/fitness_{}_fold_cross_validation_{}_{}.jpg'.format(
+        k, optimizer_arg, dataset_name.group(1)))
+    
+    _, axs = plt.subplots(1, 2, figsize=(10, 5))
+    
+    plot_metric_over_folds(
+        metrics_svc,
+        'avg_selected_features',
+        parameters[second_key],
+        k,
+        'orange',
+        ax=axs[0],
+        title='Average selected features {}-fold cross validation running {} (SVC)'.
+        format(k, optimizer_arg))
+
+    plot_metric_over_folds(
+        metrics_svc,
+        'avg_selected_features',
+        parameters[second_key],
+        k,
+        'orange',
+        ax=axs[1],
+        title='Average selected features {}-fold cross validation running {} (KNN)'.
+        format(k, optimizer_arg))
 
     plt.tight_layout()
-    plt.savefig('./images/{}_fold_cross_validation_{}_{}.jpg'.format(
+    plt.savefig('./images/n_features_{}_fold_cross_validation_{}_{}.jpg'.format(
         k, optimizer_arg, dataset_name.group(1)))
 
     total_time = time.time() - start_time
@@ -156,9 +187,17 @@ def main(*args, **kwargs):
         notifications.send_telegram_image(
             token=token,
             chat_id=chat_id,
-            image_path='./images/{}_fold_cross_validation_{}_{}.jpg'.format(
+            image_path='./images/fitness_{}_fold_cross_validation_{}_{}.jpg'.format(
                 k, optimizer_arg, dataset_name.group(1)),
-            caption='-- {}_fold_cross_validation_{}_{} --'.format(
+            caption='-- fitness_{}_fold_cross_validation_{}_{} --'.format(
+                k, optimizer_arg, dataset_name.group(1)))
+        
+        notifications.send_telegram_image(
+            token=token,
+            chat_id=chat_id,
+            image_path='./images/n_features{}_fold_cross_validation_{}_{}.jpg'.format(
+                k, optimizer_arg, dataset_name.group(1)),
+            caption='-- n_features_{}_fold_cross_validation_{}_{} --'.format(
                 k, optimizer_arg, dataset_name.group(1)))
 
 
