@@ -195,7 +195,7 @@ def main(*args, **kwargs):
         notifications.send_telegram_image(
             token=token,
             chat_id=chat_id,
-            image_path='./images/n_features{}_fold_cross_validation_{}_{}.jpg'.format(
+            image_path='./images/n_features_{}_fold_cross_validation_{}_{}.jpg'.format(
                 k, optimizer_arg, dataset_name.group(1)),
             caption='-- n_features_{}_fold_cross_validation_{}_{} --'.format(
                 k, optimizer_arg, dataset_name.group(1)))
