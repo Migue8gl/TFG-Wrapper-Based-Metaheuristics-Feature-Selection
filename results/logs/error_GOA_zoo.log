@@ -1,0 +1,10 @@
+An error occurred while loading the data: Bad @ATTRIBUTE type, at line 89.
+Traceback (most recent call last):
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/src/main.py", line 238, in <module>
+    main(**kwargs)
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/src/main.py", line 48, in main
+    dataset_dict = split_data_to_dict(dataset)
+  File "/home/migue8gl/Desktop/Universidad/TFG/software/src/data_utils.py", line 74, in split_data_to_dict
+    np.random.shuffle(dataset)
+  File "numpy/random/mtrand.pyx", line 4589, in numpy.random.mtrand.RandomState.shuffle
+TypeError: object of type 'NoneType' has no len()

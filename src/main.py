@@ -217,6 +217,14 @@ def main(*args, **kwargs):
             caption='-- n_features_{}_fold_cross_validation_{}_{} --'.format(
                 k, optimizer_arg, dataset_name))
 
+        notifications.send_telegram_file(
+            token=token,
+            chat_id=chat_id,
+            file_path=RESULTS_DIR + dataset_name +
+            '/{}_{}.csv'.format(dataset_name, optimizer_arg),
+            caption='-- {} in {} results -- '.format(optimizer_arg, dataset_name),
+            verbose=False)
+
 
 if __name__ == "__main__":
     args = sys.argv[1:]  # Skip the script name

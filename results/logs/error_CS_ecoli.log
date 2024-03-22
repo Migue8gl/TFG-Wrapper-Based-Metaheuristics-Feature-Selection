@@ -1,0 +1,2 @@
+/home/migue8gl/Desktop/Universidad/TFG/software/env/lib/python3.10/site-packages/sklearn/model_selection/_split.py:737: UserWarning: The least populated class in y has only 2 members, which is less than n_splits=5.
+  warnings.warn(
