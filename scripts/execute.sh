@@ -26,6 +26,7 @@ if [ ! -d "$error_dir" ]; then
 fi
 
 source env/bin/activate
+./scripts/clean.sh -v False
 
 # Run main.py for each optimizer
 for opt in "${optimizers[@]}"; do

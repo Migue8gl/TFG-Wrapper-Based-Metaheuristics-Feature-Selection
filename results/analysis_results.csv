@@ -1,7 +1,0 @@
-classifier,dataset,optimizer,best,avg,std_dev,acc,n_features,selected_rate,execution_time
-knn,ionosphere,goa,0.136,0.2,0.055,0.802,12.8,0.376,0.236
-svc,ionosphere,goa,0.004,0.075,0.089,0.929,14.8,0.435,0.328
-knn,ionosphere,cs,0.075,0.255,0.105,0.747,14.8,0.435,0.231
-svc,ionosphere,cs,0.005,0.147,0.179,0.857,20.6,0.606,0.359
-knn,spectf-heart,cs,0.077,0.274,0.113,0.729,22.4,0.509,0.257
-svc,spectf-heart,cs,0.145,0.216,0.078,0.786,18.6,0.423,0.44

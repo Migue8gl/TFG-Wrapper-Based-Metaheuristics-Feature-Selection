@@ -34,7 +34,7 @@ def main(*args, **kwargs):
     # Get parameters from the user
     dataset_arg = kwargs.get('-d', D2)  # Chosen dataset
     # Notifications
-    notify_arg = kwargs.get('-n', True)
+    notify_arg = kwargs.get('-n', False)
     k_arg = kwargs.get('-k',
                        DEFAULT_FOLDS)  # Number of folds in cross validation
     scaling_arg = kwargs.get('-s', 2)  # Type of scaling applied to dataset
