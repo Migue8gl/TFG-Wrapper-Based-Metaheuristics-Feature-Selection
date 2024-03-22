@@ -76,7 +76,7 @@ def main(*args, **kwargs):
     # Create directory to store dataset metrics images
     if not os.path.isdir(IMG_DIR + dataset_name):
         os.makedirs(IMG_DIR + dataset_name)
-    # Create directory to store dataset metrics images
+    # Create directory to store dataset metrics retults
     if not os.path.isdir(RESULTS_DIR + dataset_name):
         os.makedirs(RESULTS_DIR + dataset_name)
 

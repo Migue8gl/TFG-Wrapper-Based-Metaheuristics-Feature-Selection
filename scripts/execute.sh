@@ -24,21 +24,30 @@ source env/bin/activate
 error_dir='results/logs'
 
 # Create the file if it doesn't exist
-if [ ! -d "$error_dir" ]; then
-    mkdir -p "$error_dir"
+mkdir -p "$error_dir"
+
+# List of valid false values
+TRUE_VALUES=("True" "true" "TRUE" "t" "T" "1")
+
+# Check if the -v flag is set to false
+if [ "$1" == "-n" ]; then
+    for val in "${FALSE_VALUES[@]}"; do
+        if [ "$2" == "$val" ]; then
+            monitor_threads="python3 scripts/monitor_threads.py &"
+        else
+            monitor_threads=""
+        fi
+        break
+    done
 fi
 
-# Run main.py for each optimizer
 for opt in "${optimizers[@]}"; do
     for dataset in "${datasets[@]}"; do
         dataset_name=$(basename "$dataset" | sed 's/\.arff$//')
         log_file="$error_dir/error_${opt}_${dataset_name}.log"
         touch "$log_file"
-        python3 src/main.py -o "$opt" -d "$dataset" >"$log_file" 2>&1 &
+        python3 src/main.py -o "$opt" -d "$dataset" ${1+"$@"} >"$log_file" 2>&1 &
     done
 done
 
-python3 scripts/monitor_threads.py -n True &
-
-
-
+eval "$monitor_threads"
