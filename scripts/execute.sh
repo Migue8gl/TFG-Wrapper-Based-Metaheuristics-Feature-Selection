@@ -17,6 +17,9 @@ datasets=(
     './datasets/sonar.arff'
 )
 
+source env/bin/activate
+./scripts/clean.sh -v False
+
 # Define the file to store error messages
 error_dir='results/logs'
 
@@ -24,9 +27,6 @@ error_dir='results/logs'
 if [ ! -d "$error_dir" ]; then
     mkdir -p "$error_dir"
 fi
-
-source env/bin/activate
-./scripts/clean.sh -v False
 
 # Run main.py for each optimizer
 for opt in "${optimizers[@]}"; do
