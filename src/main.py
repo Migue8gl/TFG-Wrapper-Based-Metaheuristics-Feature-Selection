@@ -1,3 +1,4 @@
+import os
 import re
 import sys
 import time
@@ -8,9 +9,12 @@ import pandas as pd
 from analysis_utils import (
     k_fold_cross_validation, )
 from constants import (
+    CREDENTIALS_DIR,
     D2,
     DEFAULT_FOLDS,
     DEFAULT_OPTIMIZER,
+    IMG_DIR,
+    RESULTS_DIR,
     SAMPLE,
 )
 from data_utils import (
@@ -68,7 +72,14 @@ def main(*args, **kwargs):
                                           verbose=verbose_arg)
 
     name_pattern = r'/([^/]+)\.arff$'
-    dataset_name = re.search(name_pattern, dataset_arg)
+    dataset_name = re.search(name_pattern, dataset_arg).group(1)
+    # Create directory to store dataset metrics images
+    if not os.path.isdir(IMG_DIR + dataset_name):
+        os.makedirs(IMG_DIR + dataset_name)
+    # Create directory to store dataset metrics images
+    if not os.path.isdir(RESULTS_DIR + dataset_name):
+        os.makedirs(RESULTS_DIR + dataset_name)
+
     data = {
         'classifier': ['knn', 'svc'],
         'best': [
@@ -113,8 +124,8 @@ def main(*args, **kwargs):
     df = df.set_index(['classifier'])
 
     # Save the DataFrame to a CSV file
-    df.to_csv('./results/{}_{}.csv'.format(dataset_name.group(1),
-                                           optimizer_arg),
+    df.to_csv(RESULTS_DIR + dataset_name +
+              '/{}_{}.csv'.format(dataset_name, optimizer_arg),
               index=True)
 
     _, axs = plt.subplots(1, 2, figsize=(10, 5))
@@ -141,13 +152,14 @@ def main(*args, **kwargs):
         ax=axs[1],
         title='Average fitness {}-fold cross validation running {} (KNN)'.
         format(k, optimizer_arg))
-    
+
     plt.tight_layout()
-    plt.savefig('./images/fitness_{}_fold_cross_validation_{}_{}.jpg'.format(
-        k, optimizer_arg, dataset_name.group(1)))
-    
+    plt.savefig(IMG_DIR + dataset_name +
+                '/fitness_{}_fold_cross_validation_{}_{}.jpg'.format(
+                    k, optimizer_arg, dataset_name))
+
     _, axs = plt.subplots(1, 2, figsize=(10, 5))
-    
+
     plot_metric_over_folds(
         metrics_svc,
         'avg_selected_features',
@@ -155,7 +167,8 @@ def main(*args, **kwargs):
         k,
         'orange',
         ax=axs[0],
-        title='Average selected features {}-fold cross validation running {} (SVC)'.
+        title=
+        'Average selected features {}-fold cross validation running {} (SVC)'.
         format(k, optimizer_arg))
 
     plot_metric_over_folds(
@@ -165,18 +178,20 @@ def main(*args, **kwargs):
         k,
         'orange',
         ax=axs[1],
-        title='Average selected features {}-fold cross validation running {} (KNN)'.
+        title=
+        'Average selected features {}-fold cross validation running {} (KNN)'.
         format(k, optimizer_arg))
 
     plt.tight_layout()
-    plt.savefig('./images/n_features_{}_fold_cross_validation_{}_{}.jpg'.format(
-        k, optimizer_arg, dataset_name.group(1)))
+    plt.savefig(IMG_DIR + dataset_name +
+                '/n_features_{}_fold_cross_validation_{}_{}.jpg'.format(
+                    k, optimizer_arg, dataset_name))
 
     total_time = time.time() - start_time
 
     if (notify_arg):
-        token, chat_id = notifications.load_credentials(
-            './credentials/credentials.txt')
+        token, chat_id = notifications.load_credentials(CREDENTIALS_DIR +
+                                                        'credentials.txt')
 
         notifications.send_telegram_message(
             token=token,
@@ -187,18 +202,20 @@ def main(*args, **kwargs):
         notifications.send_telegram_image(
             token=token,
             chat_id=chat_id,
-            image_path='./images/fitness_{}_fold_cross_validation_{}_{}.jpg'.format(
-                k, optimizer_arg, dataset_name.group(1)),
+            image_path=IMG_DIR + dataset_name +
+            '/fitness_{}_fold_cross_validation_{}_{}.jpg'.format(
+                k, optimizer_arg, dataset_name),
             caption='-- fitness_{}_fold_cross_validation_{}_{} --'.format(
-                k, optimizer_arg, dataset_name.group(1)))
-        
+                k, optimizer_arg, dataset_name))
+
         notifications.send_telegram_image(
             token=token,
             chat_id=chat_id,
-            image_path='./images/n_features_{}_fold_cross_validation_{}_{}.jpg'.format(
-                k, optimizer_arg, dataset_name.group(1)),
+            image_path=IMG_DIR + dataset_name +
+            '/n_features_{}_fold_cross_validation_{}_{}.jpg'.format(
+                k, optimizer_arg, dataset_name),
             caption='-- n_features_{}_fold_cross_validation_{}_{} --'.format(
-                k, optimizer_arg, dataset_name.group(1)))
+                k, optimizer_arg, dataset_name))
 
 
 if __name__ == "__main__":

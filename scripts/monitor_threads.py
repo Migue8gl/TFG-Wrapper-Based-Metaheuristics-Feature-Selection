@@ -1,15 +1,14 @@
+import os
 import subprocess
+import sys
 import time
 
-import sys
-import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-sys.path.insert(0,
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from src import notifications
+from src import constants, notifications
 
 del sys.path[0]
+
 
 def check_processes(process_name):
     try:
@@ -39,13 +38,13 @@ def main(*args, **kwargs):
 
     if notify_arg:
         token, chat_id = notifications.load_credentials(
-            './credentials/credentials.txt')
-        notifications.send_telegram_file(
-            token=token,
-            chat_id=chat_id,
-            file_path='./results/analysis_results.csv',
-            caption='Results',
-            verbose=False)
+            constants.CREDENTIALS_DIR + 'credentials.txt')
+        notifications.send_telegram_file(token=token,
+                                         chat_id=chat_id,
+                                         file_path=constants.RESULTS_DIR +
+                                         'analysis_results.csv',
+                                         caption='Results',
+                                         verbose=False)
 
 
 if __name__ == "__main__":
