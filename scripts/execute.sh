@@ -29,17 +29,22 @@ mkdir -p "$error_dir"
 # List of valid false values
 TRUE_VALUES=("True" "true" "TRUE" "t" "T" "1")
 
-# Check if the -v flag is set to false
+# Flag to track whether monitoring is required
+monitor_required=false
+
+# List of valid false values
+TRUE_VALUES=("True" "true" "TRUE" "t" "T" "1")
+
+# Check if the -n flag is set to True
 if [ "$1" == "-n" ]; then
-    for val in "${FALSE_VALUES[@]}"; do
+    for val in "${TRUE_VALUES[@]}"; do
         if [ "$2" == "$val" ]; then
-            monitor_threads="python3 scripts/monitor_threads.py &"
-        else
-            monitor_threads=""
+            monitor_required=true
+            break
         fi
-        break
     done
 fi
+
 
 for opt in "${optimizers[@]}"; do
     for dataset in "${datasets[@]}"; do
@@ -50,4 +55,7 @@ for opt in "${optimizers[@]}"; do
     done
 done
 
-eval "$monitor_threads"
+# Execute monitor_threads.py if monitoring is required
+if [ "$monitor_required" = true ]; then
+    python3 scripts/monitor_threads.py &
+fi
