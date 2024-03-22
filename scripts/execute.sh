@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Optimizers
-optimizers=('GOA' 'CS' 'GWO' 'FA')
+optimizers=('GOA' 'CS' 'GWO' 'FA' 'GA' 'WOA' 'ABCO' 'DA' 'ACO' 'PSO' 'BA')
 
 # Datasets
 datasets=(
@@ -25,9 +25,6 @@ error_dir='results/logs'
 
 # Create the file if it doesn't exist
 mkdir -p "$error_dir"
-
-# List of valid false values
-TRUE_VALUES=("True" "true" "TRUE" "t" "T" "1")
 
 # Flag to track whether monitoring is required
 monitor_required=false

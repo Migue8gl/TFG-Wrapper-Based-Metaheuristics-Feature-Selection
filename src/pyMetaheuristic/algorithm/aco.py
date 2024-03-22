@@ -9,7 +9,7 @@ def target_function():
 
 # Function: Initialize Ants
 def initial_ants(colony_size=5):
-    return [[[], 1, 1] for _ in range(colony_size)]
+    return [[[], 1, 0, 1, 1] for _ in range(colony_size)]
 
 
 # Function: Initialize Pheromones
@@ -17,8 +17,9 @@ def initial_pheromone_graph(n_features, initial_pheromone):
     pheromone = np.zeros((n_features, n_features))
     for i in range(n_features):
         for j in range(n_features):
-                pheromone[i, j] = initial_pheromone
+            pheromone[i, j] = initial_pheromone
     return pheromone
+
 
 # Function: Ant Build Subset
 def ant_build_subset(ant, n_features, feature_pheromone, alpha):
@@ -74,13 +75,19 @@ def ant_colony_optimization(n_ants=20,
             ant_build_subset(ant, n_features, feature_pheromone, alpha)
             target_function_parameters['weights'] = np.array(ant[0])
             fitness = target_function(**target_function_parameters)
-            ant[1] = fitness['validation']['fitness']
-            ant[2] = fitness['training']['fitness']
+            ant[1] = fitness['fitness']
+            ant[2] = fitness['accuracy']
+            ant[3] = fitness['selected_features']
+            ant[4] = fitness['selected_rate']
+
         best_local_ant = min(ants, key=lambda ant: ant[1])
-        fitness_values.append({
-            'val_fitness': best_ant[1],
-            'train_fitness': best_ant[2]
-        })
+        if count != 0:
+            fitness_values.append({
+                'fitness': best_ant[1],
+                'accuracy': best_ant[2],
+                'selected_features': best_ant[3],
+                'selected_rate': best_ant[4]
+            })
         if best_local_ant[1] < best_ant[1]:
             best_ant = best_local_ant
 
@@ -90,6 +97,8 @@ def ant_colony_optimization(n_ants=20,
 
     best_ant[0].append(best_ant[1])
     best_ant[0].append(best_ant[2])
+    best_ant[0].append(best_ant[3])
+    best_ant[0].append(best_ant[4])
     best_ant = np.array(best_ant[0])
-    
+
     return best_ant, fitness_values

@@ -6,8 +6,9 @@
 # PEREIRA, V. (2022). GitHub repository: https://github.com/Valdecy/pyMetaheuristic
 
 # Required Libraries
-import numpy as np
 import random
+
+import numpy as np
 from scipy.special import gamma
 
 
@@ -22,14 +23,16 @@ def initial_variables(size=5,
                       max_values=[5, 5],
                       target_function=target_function,
                       target_function_parameters=None):
-    position = np.zeros((size, len(min_values) + 2))
+    position = np.zeros((size, len(min_values) + 4))
     for i in range(0, size):
         for j in range(0, len(min_values)):
             position[i, j] = random.uniform(min_values[j], max_values[j])
-        target_function_parameters['weights'] = position[i, :-2]
+        target_function_parameters['weights'] = position[i, :-4]
         fitness = target_function(**target_function_parameters)
-        position[i, -1] = fitness['validation']['fitness']
-        position[i, -2] = fitness['training']['fitness']
+        position[i, -1] = fitness['fitness']
+        position[i, -2] = fitness['accuracy']
+        position[i, -3] = fitness['selected_features']
+        position[i, -4] = fitness['selected_rate']
     return position
 
 
@@ -84,21 +87,21 @@ def update_position(a, c, f, e, s, w, r, beta, sigma, enemy_pos, food_pos,
     for i in range(dragonflies.shape[0]):
         neighbours_delta, neighbours_dragon = [], []
         for j in range(dragonflies.shape[0]):
-            dist = euclidean_distance(dragonflies[i, :-2], dragonflies[j, :-2])
+            dist = euclidean_distance(dragonflies[i, :-4], dragonflies[j, :-4])
             if (dist > 0).all() and (dist <= r).all():
-                neighbours_delta.append(deltaflies[j, :-2])
-                neighbours_dragon.append(dragonflies[j, :-2])
+                neighbours_delta.append(deltaflies[j, :-4])
+                neighbours_dragon.append(dragonflies[j, :-4])
         A = np.mean(neighbours_delta,
-                    axis=0) if neighbours_delta else deltaflies[i, :-2]
+                    axis=0) if neighbours_delta else deltaflies[i, :-4]
         C = np.mean(neighbours_dragon, axis=0) - dragonflies[
-            i, :-2] if neighbours_dragon else np.zeros(len(min_values))
-        S = -np.sum(neighbours_dragon - dragonflies[i, :-2],
+            i, :-4] if neighbours_dragon else np.zeros(len(min_values))
+        S = -np.sum(neighbours_dragon - dragonflies[i, :-4],
                     axis=0) if neighbours_dragon else np.zeros(len(min_values))
-        dist_f = euclidean_distance(dragonflies[i, :-2], food_pos[0, :-2])
-        dist_e = euclidean_distance(dragonflies[i, :-2], enemy_pos[0, :-2])
-        F = food_pos[0, :-2] - dragonflies[i, :-2] if (
+        dist_f = euclidean_distance(dragonflies[i, :-4], food_pos[0, :-4])
+        dist_e = euclidean_distance(dragonflies[i, :-4], enemy_pos[0, :-4])
+        F = food_pos[0, :-4] - dragonflies[i, :-4] if (
             dist_f <= r).all() else np.zeros(len(min_values))
-        E = enemy_pos[0, :-2] if (dist_e <= r).all() else np.zeros(
+        E = enemy_pos[0, :-4] if (dist_e <= r).all() else np.zeros(
             len(min_values))
         for k in range(len(min_values)):
             if (dist_f > r).all():
@@ -107,8 +110,8 @@ def update_position(a, c, f, e, s, w, r, beta, sigma, enemy_pos, food_pos,
                                k] = w * deltaflies[i, k] + np.random.rand() * (
                                    a * A[k] + c * C[k] + s * S[k])
                 else:
-                    dragonflies[i, :-2] = dragonflies[i, :-2] + levy_flight(
-                        len(min_values), beta, sigma) * dragonflies[i, :-2]
+                    dragonflies[i, :-4] = dragonflies[i, :-4] + levy_flight(
+                        len(min_values), beta, sigma) * dragonflies[i, :-4]
                     deltaflies[i, k] = np.clip(deltaflies[i, k], min_values[k],
                                                max_values[k])
                     break
@@ -127,10 +130,12 @@ def update_position(a, c, f, e, s, w, r, beta, sigma, enemy_pos, food_pos,
                 dragonflies[i, k] = dragonflies[i, k] + deltaflies[i, k]
             dragonflies[i, k] = np.clip(dragonflies[i, k], min_values[k],
                                         max_values[k])
-        target_function_parameters['weights'] = dragonflies[i, :-2]
+        target_function_parameters['weights'] = dragonflies[i, :-4]
         fitness = target_function(**target_function_parameters)
-        dragonflies[i, -1] = fitness['validation']['fitness']
-        dragonflies[i, -2] = fitness['training']['fitness']
+        dragonflies[i, -1] = fitness['fitness']
+        dragonflies[i, -2] = fitness['accuracy']
+        dragonflies[i, -3] = fitness['selected_features']
+        dragonflies[i, -4] = fitness['selected_rate']
     food_pos, enemy_pos = update_food_enemy(dragonflies, food_pos, enemy_pos)
     best_dragon = np.copy(food_pos[food_pos[:, -1].argsort()][0, :])
     return enemy_pos, food_pos, dragonflies, deltaflies, best_dragon
@@ -188,8 +193,10 @@ def dragonfly_algorithm(size=3,
             target_function_parameters, binary)
         count += 1
         fitness_values.append({
-            'val_fitness': best_dragon[-1],
-            'train_fitness': best_dragon[-2]
+            'fitness': best_dragon[-1],
+            'accuracy': best_dragon[-2],
+            'selected_features': best_dragon[-3],
+            'selected_rate': best_dragon[-4]
         })
     return best_dragon, fitness_values
 

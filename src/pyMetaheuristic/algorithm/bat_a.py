@@ -17,19 +17,33 @@ def target_function():
 
 
 # Transfer functions S-Shaped
-def s_shaped_transfer_function(x):
-    threshold = np.random.random()
-    return 1 if sigmoid(x) > threshold else 0
+
+
+def s_shaped_transfer_function(x, is_x_vector=False):
+    if is_x_vector:
+        threshold = np.random.random(x.shape)
+        return np.where(sigmoid(x) > threshold, 1, 0)
+    else:
+        threshold = np.random.rand()
+        return 1 if sigmoid(x) > threshold else 0
 
 
 def sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 
+############################################################################
+
 # Transfer functions V-Shaped
-def v_shaped_transfer_function(x):
-    threshold = np.random.random()
-    return 1 - x if hyperbolic_tan(x) > threshold else x
+
+
+def v_shaped_transfer_function(x, is_x_vector=False):
+    if is_x_vector:
+        threshold = np.random.random(x.shape)
+        return np.where(hyperbolic_tan(x) > threshold, 1 - x, x)
+    else:
+        threshold = np.random.rand()
+        return 1 - x if hyperbolic_tan(x) > threshold else x
 
 
 def hyperbolic_tan(x):
@@ -42,16 +56,18 @@ def initial_position(swarm_size=3,
                      max_values=[5, 5],
                      target_function=target_function,
                      target_function_parameters=None):
-    position = np.zeros((swarm_size, len(min_values) + 2))
+    position = np.zeros((swarm_size, len(min_values) + 4))
     for i in range(0, swarm_size):
         for j in range(0, len(min_values)):
             position[i, j] = random.uniform(min_values[j], max_values[j])
         target_function_parameters['weights'] = position[i,
                                                          0:position.shape[1] -
-                                                         2]
+                                                         4]
         fitness = target_function(**target_function_parameters)
-        position[i, -1] = fitness['validation']['fitness']
-        position[i, -2] = fitness['training']['fitness']
+        position[i, -1] = fitness['fitness']
+        position[i, -2] = fitness['accuracy']
+        position[i, -3] = fitness['selected_features']
+        position[i, -4] = fitness['selected_rate']
 
     return position
 
@@ -84,39 +100,46 @@ def update_position(position,
                     binary='s'):
     dim = len(min_values)
     position_ = np.zeros_like(position)
+    position_[:, -4:] = 1
     beta = np.random.rand(position.shape[0])
     rand = np.random.rand(position.shape[0])
     rand_position_update = np.random.rand(position.shape[0])
     frequency[:, 0] = fmin + (fmax - fmin) * beta
-    velocity = velocity + (position[:, :-2] - best_ind[:-2]) * frequency
+    velocity = velocity + (position[:, :-4] - best_ind[:-4]) * frequency
 
-    for i in range(len(position_)):
-        for k in range(len(max_values)):
-            if binary == 's':
-                position_[i, k] = s_shaped_transfer_function(velocity[i, k])
-            elif binary == 'v':
-                position_[i, k] = v_shaped_transfer_function(velocity[i, k])
-            else:
-                position_[i, k] = position[i, k] + velocity[i, k]
+    if binary == 's':
+        position_[:, :-4] = s_shaped_transfer_function(velocity[:, :],
+                                                       is_x_vector=True)
+    elif binary == 'v':
+        position_[:, :-4] = v_shaped_transfer_function(velocity[:, :],
+                                                       is_x_vector=True)
+    else:
+        position_[:, :-4] = np.clip(position[:, :-4] + velocity, min_values,
+                                    max_values)
     for i in range(0, position.shape[0]):
         target_function_parameters['weights'] = position_[
-            i, 0:position_.shape[1] - 2]
+            i, 0:position_.shape[1] - 4]
         fitness = target_function(**target_function_parameters)
-        position_[i, -1] = fitness['validation']['fitness']
-        position_[i, -2] = fitness['training']['fitness']
+        position_[i, -1] = fitness['fitness']
+        position_[i, -2] = fitness['accuracy']
+        position_[i, -3] = fitness['selected_features']
+        position_[i, -4] = fitness['selected_rate']
         if (rand[i] > rate[i, 0]):
             loudness_mean = loudness.mean()
             random_shift = np.random.uniform(-1, 1, dim) * loudness_mean
-            position_[i, :-2] = np.clip(best_ind[:-2] + random_shift,
+            position_[i, :-4] = np.clip(best_ind[:-4] + random_shift,
                                         min_values, max_values)
             target_function_parameters['weights'] = position_[
-                i, 0:position_.shape[1] - 2]
+                i, 0:position_.shape[1] - 4]
             fitness = target_function(**target_function_parameters)
-            position_[i, -1] = fitness['validation']['fitness']
-            position_[i, -2] = fitness['training']['fitness']
+            position_[i, -1] = fitness['fitness']
+            position_[i, -2] = fitness['accuracy']
+            position_[i, -3] = fitness['selected_features']
+            position_[i, -4] = fitness['selected_rate']
         else:
             position_[i, :] = initial_position(1, min_values, max_values,
-                                               target_function, target_function_parameters)[0]
+                                               target_function,
+                                               target_function_parameters)[0]
         if (rand_position_update[i] < loudness[i, 0]
                 and position_[i, -1] <= position[i, -1]):
             position[i, :] = position_[i, :]
@@ -160,7 +183,9 @@ def bat_algorithm(swarm_size=3,
             target_function_parameters, binary)
         count = count + 1
         fitness_values.append({
-            'val_fitness': best_ind[-1],
-            'train_fitness': best_ind[-2]
+            'fitness': best_ind[-1],
+            'accuracy': best_ind[-2],
+            'selected_features': best_ind[-3],
+            'selected_rate': best_ind[-4]
         })
     return best_ind, fitness_values
