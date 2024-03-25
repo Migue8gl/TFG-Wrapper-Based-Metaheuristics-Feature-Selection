@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Optimizers
-optimizers=('GOA' 'CS' 'GWO' 'FA' 'GA' 'WOA' 'ABCO' 'DA' 'ACO' 'PSO' 'BA')
+optimizers=('GWO' 'GOA' 'FA' 'CS' 'GA' 'WOA' 'ABCO' 'DA' 'ACO' 'PSO' 'BA')
 
 # Datasets
 datasets=(

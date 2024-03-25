@@ -15,10 +15,19 @@ from constants import (
     SVC_CLASSIFIER,  # noqa: F401
 )
 from pyMetaheuristic.algorithm import (
-    ant_colony_optimization, artificial_bee_colony_optimization, bat_algorithm,
-    dragonfly_algorithm, firefly_algorithm, genetic_algorithm,
-    grasshopper_optimization_algorithm, grey_wolf_optimizer,
-    particle_swarm_optimization, whale_optimization_algorithm, cuckoo_search)
+    ant_colony_optimization,
+    artificial_bee_colony_optimization,
+    bat_algorithm,
+    cuckoo_search,
+    differential_evolution,
+    dragonfly_algorithm,
+    firefly_algorithm,
+    genetic_algorithm,
+    grasshopper_optimization_algorithm,
+    grey_wolf_optimizer,
+    particle_swarm_optimization,
+    whale_optimization_algorithm,
+)
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
@@ -45,6 +54,7 @@ class Optimizer:
         'ga': genetic_algorithm,
         'aco': ant_colony_optimization,
         'cs': cuckoo_search,
+        'de': differential_evolution
     }
 
     # Optimizers names
@@ -117,8 +127,7 @@ class Optimizer:
 
         # Compute fitness as a combination of classification and reduction errors
         classification_error = 1 - classification_rate
-        fitness = alpha * classification_error + (1 -
-                                                      alpha) * selection_rate
+        fitness = alpha * classification_error + (1 - alpha) * selection_rate
 
         return {
             'fitness': fitness,
@@ -303,7 +312,7 @@ class Optimizer:
                 "initial_pheromone": 0.1,
                 "evaporation_rate": 0.049,  # Paper based value
             }
-        elif optimizer_lower == "cs":  # TODO Add parameters
+        elif optimizer_lower == "cs":
             parameters = {
                 "birds": DEFAULT_POPULATION_SIZE,
                 "iterations": DEFAULT_ITERATIONS,
@@ -311,6 +320,13 @@ class Optimizer:
                 "alpha_value": 1,
                 "lambda_value": 1.5,
                 'binary': 's',
+            }
+        elif optimizer_lower == "de":  # TODO Add parameters
+            parameters = {
+                "n": DEFAULT_POPULATION_SIZE,
+                "iterations": DEFAULT_ITERATIONS,
+                "F": 0.9,
+                "Cr": 0.2,
             }
 
         parameters["verbose"] = True

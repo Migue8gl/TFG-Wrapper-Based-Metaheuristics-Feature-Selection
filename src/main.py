@@ -37,7 +37,7 @@ def main(*args, **kwargs):
     notify_arg = kwargs.get('-n', False)
     k_arg = kwargs.get('-k',
                        DEFAULT_FOLDS)  # Number of folds in cross validation
-    scaling_arg = kwargs.get('-s', 2)  # Type of scaling applied to dataset
+    scaling_arg = kwargs.get('-s', 1)  # Type of scaling applied to dataset
     optimizer_arg = kwargs.get('-o', DEFAULT_OPTIMIZER).lower()
     verbose_arg = kwargs.get('-v', False)
 

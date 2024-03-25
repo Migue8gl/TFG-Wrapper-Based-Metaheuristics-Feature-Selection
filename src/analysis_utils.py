@@ -72,7 +72,7 @@ def k_fold_cross_validation(optimizer: object,
             scaler.fit(x_train)
             x_train = scaler.transform(x_train)
             x_test = scaler.transform(x_test)
-            train = np.concatena((x_train, y_train.reshape(-1, 1)), axis=1)
+            train = np.concatenate((x_train, y_train.reshape(-1, 1)), axis=1)
             test = np.concatenate((x_test, y_test.reshape(-1, 1)), axis=1)
         elif scaler == 2:
             scaler = StandardScaler()
