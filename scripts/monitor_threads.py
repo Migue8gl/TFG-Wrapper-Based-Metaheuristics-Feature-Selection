@@ -37,10 +37,17 @@ def main():
 
     token, chat_id = notifications.load_credentials(constants.CREDENTIALS_DIR +
                                                     'credentials.txt')
+    # Check if the directory exists
+    if os.path.exists(os.path.join(constants.RESULTS_DIR, 'real')):
+        result_path = os.path.join(constants.RESULTS_DIR, 'real',
+                                   'analysis_results.csv')
+    else:
+        # If the directory doesn't exist, choose the binary option
+        result_path = os.path.join(constants.RESULTS_DIR, 'binary',
+                                   'analysis_results.csv')
     notifications.send_telegram_file(token=token,
                                      chat_id=chat_id,
-                                     file_path=constants.RESULTS_DIR +
-                                     'analysis_results.csv',
+                                     file_path=result_path,
                                      caption='Results',
                                      verbose=False)
 

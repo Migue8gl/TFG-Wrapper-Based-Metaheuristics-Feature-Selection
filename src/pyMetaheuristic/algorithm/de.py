@@ -98,7 +98,6 @@ def differential_evolution(n=3,
             vi = velocity(position, best_global, i, k1, k2, F, min_values,
                           max_values, Cr, target_function,
                           target_function_parameters)
-            print(best_global)
             if (vi[-1] <= position[i, -1]):
                 for j in range(0, position.shape[1]):
                     position[i, j] = vi[j]

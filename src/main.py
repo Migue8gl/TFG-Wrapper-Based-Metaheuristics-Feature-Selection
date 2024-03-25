@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 import notifications
 import pandas as pd
 from analysis_utils import (
-    k_fold_cross_validation, )
+    k_fold_cross_validation,
+)
 from constants import (
     CREDENTIALS_DIR,
     D2,
@@ -23,7 +24,8 @@ from data_utils import (
 )
 from optimizer import Optimizer
 from plots import (
-    plot_metric_over_folds, )
+    plot_metric_over_folds,
+)
 
 plt.style.use(['science', 'ieee'])  # Style of plots
 
@@ -40,6 +42,9 @@ def main(*args, **kwargs):
     scaling_arg = kwargs.get('-s', 1)  # Type of scaling applied to dataset
     optimizer_arg = kwargs.get('-o', DEFAULT_OPTIMIZER).lower()
     verbose_arg = kwargs.get('-v', False)
+    binary_arg = kwargs.get(
+        '-b',
+        's')  # Use optimizer with binary encoding using transfer functions
 
     # Core functionality
     dataset = load_data(dataset_arg)
@@ -57,6 +62,16 @@ def main(*args, **kwargs):
     optimizer = Optimizer(optimizer_arg, parameters)
     optimizer.params['verbose'] = verbose_arg
 
+    if 'binary' in optimizer.params.keys():
+        if optimizer.name == 'ga' and binary_arg != 'r':
+            optimizer.params['binary'] = True
+        elif optimizer.name == 'ga':
+            optimizer.params['binary'] = False
+        else:
+            optimizer.params['binary'] = binary_arg
+
+    encoding = 'binary' if ('binary' in optimizer.params
+                            and optimizer.params['binary'] != 'r') else 'real'
     # SVC Cross validation
     metrics_svc = k_fold_cross_validation(dataset=dataset_dict,
                                           optimizer=optimizer,
@@ -74,11 +89,15 @@ def main(*args, **kwargs):
     name_pattern = r'/([^/]+)\.arff$'
     dataset_name = re.search(name_pattern, dataset_arg).group(1)
     # Create directory to store dataset metrics images
-    if not os.path.isdir(IMG_DIR + dataset_name):
-        os.makedirs(IMG_DIR + dataset_name)
+    img_directory_path = os.path.join(IMG_DIR, dataset_name)
+    if not os.path.isdir(img_directory_path):
+        os.makedirs(img_directory_path)
+
     # Create directory to store dataset metrics retults
-    if not os.path.isdir(RESULTS_DIR + dataset_name):
-        os.makedirs(RESULTS_DIR + dataset_name)
+    result_path = os.path.join(RESULTS_DIR, encoding, dataset_name)
+
+    if not os.path.isdir(result_path):
+        os.makedirs(result_path)
 
     data = {
         'classifier': ['knn', 'svc'],
@@ -124,8 +143,7 @@ def main(*args, **kwargs):
     df = df.set_index(['classifier'])
 
     # Save the DataFrame to a CSV file
-    df.to_csv(RESULTS_DIR + dataset_name +
-              '/{}_{}.csv'.format(dataset_name, optimizer_arg),
+    df.to_csv(result_path + '/{}_{}.csv'.format(dataset_name, optimizer_arg),
               index=True)
 
     _, axs = plt.subplots(1, 2, figsize=(10, 5))
@@ -155,8 +173,8 @@ def main(*args, **kwargs):
 
     plt.tight_layout()
     plt.savefig(IMG_DIR + dataset_name +
-                '/fitness_{}_fold_cross_validation_{}_{}.jpg'.format(
-                    k, optimizer_arg, dataset_name))
+                '/fitness_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
+                    k, optimizer_arg, encoding, dataset_name))
 
     _, axs = plt.subplots(1, 2, figsize=(10, 5))
 
@@ -184,8 +202,8 @@ def main(*args, **kwargs):
 
     plt.tight_layout()
     plt.savefig(IMG_DIR + dataset_name +
-                '/n_features_{}_fold_cross_validation_{}_{}.jpg'.format(
-                    k, optimizer_arg, dataset_name))
+                '/n_features_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
+                    k, optimizer_arg, encoding, dataset_name))
 
     total_time = time.time() - start_time
 
@@ -203,26 +221,27 @@ def main(*args, **kwargs):
             token=token,
             chat_id=chat_id,
             image_path=IMG_DIR + dataset_name +
-            '/fitness_{}_fold_cross_validation_{}_{}.jpg'.format(
-                k, optimizer_arg, dataset_name),
-            caption='-- fitness_{}_fold_cross_validation_{}_{} --'.format(
-                k, optimizer_arg, dataset_name))
+            '/fitness_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
+                k, optimizer_arg, encoding, dataset_name),
+            caption='-- fitness_{}_fold_cross_validation_{}_{}_{} --'.format(
+                k, optimizer_arg, encoding, dataset_name))
 
         notifications.send_telegram_image(
             token=token,
             chat_id=chat_id,
             image_path=IMG_DIR + dataset_name +
-            '/n_features_{}_fold_cross_validation_{}_{}.jpg'.format(
-                k, optimizer_arg, dataset_name),
-            caption='-- n_features_{}_fold_cross_validation_{}_{} --'.format(
-                k, optimizer_arg, dataset_name))
+            '/n_features_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
+                k, optimizer_arg, encoding, dataset_name),
+            caption='-- n_features_{}_fold_cross_validation_{}_{}_{} --'.
+            format(k, optimizer_arg, encoding, dataset_name))
 
         notifications.send_telegram_file(
             token=token,
             chat_id=chat_id,
-            file_path=RESULTS_DIR + dataset_name +
+            file_path=RESULTS_DIR + '/' + encoding + '/' + dataset_name +
             '/{}_{}.csv'.format(dataset_name, optimizer_arg),
-            caption='-- {} in {} results -- '.format(optimizer_arg, dataset_name),
+            caption='-- {} {} in {} results -- '.format(
+                encoding, optimizer_arg, dataset_name),
             verbose=False)
 
 

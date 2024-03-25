@@ -102,7 +102,7 @@ def replace_bird(position,
     new_solution = np.clip(
         new_solution + alpha_value * levy_values * new_solution * rand_factors,
         min_values, max_values)
-    if binary != 'x':
+    if binary != 'r':
         for j in range(0, len(min_values)):
             if binary == 's':
                 new_solution[j] = s_shaped_transfer_function(new_solution[j])

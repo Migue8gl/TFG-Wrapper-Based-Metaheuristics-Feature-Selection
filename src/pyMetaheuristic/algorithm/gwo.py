@@ -137,7 +137,7 @@ def update_position(position,
                     max_values=[5, 5],
                     target_function=target_function,
                     target_function_parameters=None,
-                    binary='x'):
+                    binary='r'):
     dim = len(min_values)
     alpha_position = np.copy(position)
     beta_position = np.copy(position)
@@ -224,7 +224,7 @@ def grey_wolf_optimizer(pack_size=5,
                         target_function=target_function,
                         verbose=True,
                         target_function_parameters=None,
-                        binary='x'):
+                        binary='r'):
     alpha = alpha_position(min_values, max_values, target_function,
                            target_function_parameters)
     beta = beta_position(min_values, max_values, target_function,

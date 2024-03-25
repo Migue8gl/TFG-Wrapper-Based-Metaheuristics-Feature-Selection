@@ -76,7 +76,7 @@ def update_position(position,
                     max_values=[5, 5],
                     target_function=target_function,
                     target_function_parameters=None,
-                    binary='x'):
+                    binary='r'):
     for i in range(0, position.shape[0]):
         r1_leader = np.random.rand()
         r2_leader = np.random.rand()
@@ -156,7 +156,7 @@ def whale_optimization_algorithm(hunting_party=5,
                                  target_function=target_function,
                                  verbose=True,
                                  target_function_parameters=None,
-                                 binary='x'):
+                                 binary='r'):
     count = 0
     position = initial_position(hunting_party, min_values, max_values,
                                 target_function, target_function_parameters)

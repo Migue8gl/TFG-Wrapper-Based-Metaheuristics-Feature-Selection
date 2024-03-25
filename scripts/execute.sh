@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Optimizers
-optimizers=('GWO' 'GOA' 'FA' 'CS' 'GA' 'WOA' 'ABCO' 'DA' 'ACO' 'PSO' 'BA')
+optimizers=('GWO' 'GOA' 'FA' 'CS' 'GA' 'WOA' 'ABCO' 'DA' 'ACO' 'PSO' 'BA' 'DE')
 
 # Datasets
 datasets=(
@@ -15,6 +15,7 @@ datasets=(
     './datasets/zoo.arff'
     './datasets/dermatology.arff'
     './datasets/sonar.arff'
+    './datasets/yeast.arff'
 )
 
 source env/bin/activate
@@ -49,8 +50,16 @@ for opt in "${optimizers[@]}"; do
         log_file="$error_dir/error_${opt}_${dataset_name}.log"
         touch "$log_file"
         python3 src/main.py -o "$opt" -d "$dataset" ${1+"$@"} >"$log_file" 2>&1 &
+
+        if [[ "$opt" != "aco" ]]; then
+            log_file="$error_dir/error_${opt}_real_${dataset_name}.log"
+            touch "$log_file"
+            python3 src/main.py -o "$opt" -b 'r' -d "$dataset" ${1+"$@"} >"$log_file" 2>&1 &
+        fi
     done
 done
+
+
 
 # Execute monitor_threads.py if monitoring is required
 if [ "$monitor_required" = true ]; then
