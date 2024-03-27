@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Define the directories
-RESULTS_DIR="./results/"
-IMAGES_DIR="./images/"
+RESULTS_DIR="results/"
+IMAGES_DIR="images/"
 VERBOSE=true
 
 # List of valid false values
