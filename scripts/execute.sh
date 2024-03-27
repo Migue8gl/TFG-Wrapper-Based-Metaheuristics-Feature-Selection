@@ -8,17 +8,17 @@ optimizers=('GWO' 'GOA' 'FA' 'CS' 'GA' 'WOA' 'ABCO' 'DA' 'ACO' 'PSO' 'BA' 'DE')
 
 # Datasets
 datasets=(
-    './datasets/spectf-heart.arff'
-    './datasets/ionosphere.arff'
-    './datasets/parkinsons.arff'
-    './datasets/iris.arff'
-    './datasets/wine.arff'
-    './datasets/ecoli.arff'
-    './datasets/breast-cancer.arff'
-    #'./datasets/zoo.arff'
-    './datasets/dermatology.arff'
-    './datasets/sonar.arff'
-    './datasets/yeast.arff'
+    'datasets/spectf-heart.arff'
+    'datasets/ionosphere.arff'
+    'datasets/parkinsons.arff'
+    'datasets/iris.arff'
+    'datasets/wine.arff'
+    'datasets/ecoli.arff'
+    'datasets/breast-cancer.arff'
+    #'datasets/zoo.arff'
+    'datasets/dermatology.arff'
+    'datasets/sonar.arff'
+    'datasets/yeast.arff'
 )
 
 source env/bin/activate
