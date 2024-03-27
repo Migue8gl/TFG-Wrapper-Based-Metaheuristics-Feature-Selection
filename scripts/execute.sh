@@ -5,7 +5,7 @@
 #SBATCH ---array=0-263
 
 # Optimizers
-optimizers=('GWO' 'GOA' 'FA' 'CS' 'GA' 'WOA' 'ABCO' 'DA' 'ACO' 'PSO' 'BA' 'DE')
+optimizers=('GWO' 'GOA' 'FA' 'CS')
 
 # Datasets
 datasets=(
