@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#SBATCH -J wrapper_methods_fs
+#SBATCH -p muylarga
+#SBATCH ---array=0-263
+
 # Optimizers
 optimizers=('GWO' 'GOA' 'FA' 'CS' 'GA' 'WOA' 'ABCO' 'DA' 'ACO' 'PSO' 'BA' 'DE')
 
