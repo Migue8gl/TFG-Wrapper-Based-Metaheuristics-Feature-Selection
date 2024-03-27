@@ -3,9 +3,9 @@ from typing import Optional
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-import scienceplots  # noqa: F401
+#import scienceplots  # noqa: F401
 
-plt.style.use(["science", "ieee"])  # Style of plots
+#plt.style.use(["science", "ieee"])  # Style of plots
 
 # ---------------------------- PLOTTING FUNCTIONS ------------------------------ #
 
