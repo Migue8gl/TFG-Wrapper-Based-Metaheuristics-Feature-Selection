@@ -30,6 +30,7 @@ def load_data(file_path: str) -> Optional[np.ndarray]:
         if file_path.endswith('.arff'):
             with open(file_path, 'r') as arff_file:
                 dataset = arff.load(arff_file, encode_nominal=True)
+                print(dataset)
                 df = pd.DataFrame(dataset['data'])
 
                 # Convert unknown values to NaN

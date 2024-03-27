@@ -5,7 +5,7 @@
 #SBATCH ---array=0-263
 
 # Optimizers
-optimizers=('GWO' 'GOA' 'FA' 'CS')
+optimizers=('GWO' 'GOA' 'FA' 'CS' 'GA' 'WOA' 'ABCO' 'DA' 'ACO' 'PSO' 'BA' 'DE')
 
 # Datasets
 datasets=(
@@ -16,7 +16,7 @@ datasets=(
     './datasets/wine.arff'
     './datasets/ecoli.arff'
     './datasets/breast-cancer.arff'
-    './datasets/zoo.arff'
+    #'./datasets/zoo.arff'
     './datasets/dermatology.arff'
     './datasets/sonar.arff'
     './datasets/yeast.arff'
