@@ -39,17 +39,22 @@ def main():
                                                     'credentials.txt')
     # Check if the directory exists
     if os.path.exists(os.path.join(constants.RESULTS_DIR, 'real')):
-        result_path = os.path.join(constants.RESULTS_DIR, 'real',
-                                   'analysis_results.csv')
-    else:
+        result_path_bin = os.path.join(constants.RESULTS_DIR, 'real',
+                                       'analysis_results.csv')
+        notifications.send_telegram_file(token=token,
+                                         chat_id=chat_id,
+                                         file_path=result_path_bin,
+                                         caption='-- Results binary --',
+                                         verbose=False)
+    if os.path.exists(os.path.join(constants.RESULTS_DIR, 'real')):
         # If the directory doesn't exist, choose the binary option
-        result_path = os.path.join(constants.RESULTS_DIR, 'binary',
-                                   'analysis_results.csv')
-    notifications.send_telegram_file(token=token,
-                                     chat_id=chat_id,
-                                     file_path=result_path,
-                                     caption='Results',
-                                     verbose=False)
+        result_path_real = os.path.join(constants.RESULTS_DIR, 'binary',
+                                        'analysis_results.csv')
+        notifications.send_telegram_file(token=token,
+                                         chat_id=chat_id,
+                                         file_path=result_path_real,
+                                         caption='-- Results real --',
+                                         verbose=False)
 
 
 if __name__ == "__main__":

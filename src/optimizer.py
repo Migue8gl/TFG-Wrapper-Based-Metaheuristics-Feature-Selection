@@ -327,6 +327,7 @@ class Optimizer:
                 "iterations": DEFAULT_ITERATIONS,
                 "F": 0.9,
                 "Cr": 0.2,
+                'binary': 's',
             }
 
         parameters["verbose"] = True
