@@ -1,0 +1,54 @@
+\documentclass[a4paper,11pt]{book}
+\input{config/config}
+
+% % Temporarly
+% \usepackage{fancyhdr}
+% \pagestyle{fancyplain}
+% \fancyhead{}
+% \lfoot{\scriptsize\LaTeX}
+% \cfoot{\hyperlink{listoftodos}{ToDoList} || \hyperlink{tableofcontents}{TableOfContents}}
+% \rfoot{\small\thepage}
+
+\begin{document}
+\input{portada/portada}
+\input{prefacios/prefacio}
+\frontmatter
+\mainmatter
+
+\tableofcontents
+\listoffigures
+\listoftables
+\setlength{\parskip}{5pt}
+
+\input{capitulos/01_Introduccion}
+%
+%\input{capitulos/02_Fundamentos_Teoricos}
+% %
+%\input{capitulos/03_Estado_del_arte}
+% %
+%\input{capitulos/04_Materiales_y_Distorsiones}
+% %
+%\input{capitulos/05_Implementacion_y_Experimentos}
+%
+%\input{capitulos/06_Implementacion}
+%
+%\input{capitulos/07_Pruebas}
+%
+%\input{capitulos/06_Conclusiones}
+%
+%
+\nocite{*}
+% \bibliography{bibliografia/bibliografia}\addcontentsline{toc}{chapter}{Bibliografía}
+% \bibliographystyle{unsrturl}
+\newpage
+\chapter{Bibliografía}
+\printbibliography[heading=none, category=cited]
+
+\thispagestyle{empty}
+%%\input{apendices/paper/paper}
+%\input{glosario/entradas_glosario}
+% \addcontentsline{toc}{chapter}{Glosario}
+% \printglossary
+%\chapter*{}
+%\thispagestyle{empty}
+\end{document}

@@ -1,0 +1,83 @@
+\chapter{Introducción}
+\section{Definición del problema}
+El problema de la selección de características se define como el proceso de
+seleccionar un subconjunto de características relevantes. Una característica es
+una propiedad individual medible de un fenómeno concreto. Este problema es
+considerado un problema \textbf{NP duro}. La reducción de dimensionalidad, y con
+ello de características, se suele utilizar ya que muchas de las características
+dentro de un conjunto de datos pueden no llegar a ser relevantes para solucionar
+ciertos problemas, ya sea por que no aporta información, porque puede ser
+agrupada junto a otras tantas en una sola propiedad, etc.\\[6pt]
+
+Es un preprocesamiento necesario por varias razones:
+\begin{enumerate}
+    \item Simplificación del modelo: La presencia de características
+          irrelevantes puede complicar innecesariamente la interpretación y el
+          rendimiento de los modelos de aprendizaje automático. La selección de un
+          subconjunto relevante de características puede simplificar el modelo
+          resultante, haciéndolo más comprensible y fácilmente interpretable.
+
+    \item Mejora de la eficiencia computacional: La reducción de la
+          dimensionalidad puede conducir a un ahorro significativo en términos de
+          tiempo y recursos computacionales necesarios para el entrenamiento y la
+          evaluación de modelos. Al eliminar características irrelevantes, se reduce
+          la complejidad del problema y se acelera el proceso de aprendizaje.
+
+    \item Evita la maldición de la dimensionalidad: Cuando la dimensionalidad
+          se incrementa en un problema, el volumen del espacio también lo hace, y esto ocurre
+          tan rápido que  hace que los datos disponibles se vuelvan dispersos. De forma que para
+          obtener un resultado seguro/fiable, la cantidad de datos necesitados debe verse
+          incrementada de manera exponencial con la dimensionalidad~\cite{udacity2015curse}. A menor dimensionalidad
+          (características en el conjunto de datos) menos datos harán falta para obtener un buen
+          modelo.
+\end{enumerate}
+
+\subsection{Motivación}
+El reciente interés del problema de la selección de características en el ámbito de las
+metaheurísticas en los últimos años es más que evidente. Puede comprobarse como en los
+últimos años hay una tendencia en la publicación de artículos presentando nuevos métodos
+metaheurísticos, mejores con respecto a los clásicos o incluso comparativas y análisis entre
+distintos algoritmos.\\[6pt]
+
+Esta crecimiento viene acompañado, sin embargo, de comparaciones que distan de ser objetivas
+por varios motivos. Entre varios artículos se comparan algoritmos del mismo tipo con
+soluciones y resultados muy variables entre sí a pesar de mismas configuraciones a la hora
+de experimentar, artículos sin código referenciado, de forma que sea más fácil interpretar
+los resultados o duplicarlos, y algoritmos novedosos presentados por su autor o autores que
+superanmal resto en alguna métrica concreta sin llegar a la rigurosidad adecuada.\\[6pt]
+
+Por ello, la motivación principal de este trabajo es la de proveer información no sesgada y
+todo lo objetiva posible por medio de un análisis comparativo entre los
+algoritmos optimizatorios metaheurísticos más populares y más citados junto con los
+algoritmos más robustos y clásicos en el campo de la optimización pseudo estocástica.
+
+\subsection{Objetivos}
+\textbf{Objetivo General:}
+
+Realizar una comparación exhaustiva y objetiva de diversas metaheurísticas utilizadas en la
+selección de características, con el propósito de proporcionar una visión integral y
+evaluativa sobre su eficacia y aplicabilidad en diferentes contextos de análisis de
+datos.\\[6pt]
+\textbf{Objetivos Específicos:}
+
+\begin{enumerate}
+    \item Evaluar el desempeño de las metaheurísticas más relevantes en el ámbito de la
+          selección de características, analizando métricas clave como precisión, estabilidad de
+          las soluciones y eficiencia computacional. Se emplearán conjuntos de datos de referencia
+          y metodologías de validación cruzada para garantizar la robustez de los resultados.
+
+    \item Investigar la transferibilidad de las técnicas diseñadas para dominios continuos y
+          binarios en el contexto de la selección de características. Se analizará si las
+          metaheurísticas efectivas en un dominio son igualmente eficaces cuando se aplican a
+          otro, identificando posibles ventajas y limitaciones de cada enfoque.
+
+    \item Identificar las fortalezas y debilidades de cada metaheurística según el tipo de
+          representación de las características. Se realizará un análisis detallado del
+          comportamiento de las técnicas en problemas de selección de características con
+          diferentes tipos de datos, destacando su rendimiento relativo y sus áreas de aplicación
+          más adecuadas.
+
+    \item Proporcionar recomendaciones prácticas basadas en los resultados obtenidos, con el
+          objetivo de orientar a practicantes y académicos en la selección y aplicación de
+          metaheurísticas en problemas reales de selección de características.
+\end{enumerate}

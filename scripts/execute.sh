@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SBATCH -J wrapper_methods_fs
+#SBATCH -J mhfs
 #SBATCH -p muylarga
 
 # Optimizers
