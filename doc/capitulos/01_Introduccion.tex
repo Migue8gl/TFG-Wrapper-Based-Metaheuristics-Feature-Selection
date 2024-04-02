@@ -1,36 +1,67 @@
 \chapter{Introducción}
 \section{Definición del problema}
 El problema de la selección de características se define como el proceso de
-seleccionar un subconjunto de características relevantes. Una característica es
+seleccionar un subconjunto de características relevantes~\cite{miao_survey_2016}. Una característica es
 una propiedad individual medible de un fenómeno concreto. Este problema es
 considerado un problema \textbf{NP duro}. La reducción de dimensionalidad, y con
-ello de características, se suele utilizar ya que muchas de las características
+ello de características, suele ser necesario a la hora de crear un modelo predictivo por medio
+del aprendizaje automático ya que muchas de las características
 dentro de un conjunto de datos pueden no llegar a ser relevantes para solucionar
-ciertos problemas, ya sea por que no aporta información, porque puede ser
-agrupada junto a otras tantas en una sola propiedad, etc.\\[6pt]
-
-Es un preprocesamiento necesario por varias razones:
+aquellos problemas que se intentan solucionar, ya sea por que no aporta información,
+porque puede ser agrupada junto a otras tantas en una sola propiedad o incluso porque hay ruido
+en los datos, lo cual es inevitable~\cite{Mostafa2012}.\\[6pt]
+Gracias a la reducción de características es posible mejorar tanto la capacidad de generalización
+como la precisión del modelo predictivo gracias a la reducción de \textit{ruido}.\\[6pt]
+Siendo $f$ la función objetivo a predecir, $H^n$ el conjunto de hipótesis o conjunto de modelos
+de dimensión $n$ posibles, $h^*(x)$ el mejor modelo aprendido y $x$ una variable de entrada. El ruido conocido
+como ruido estocástico es aquel que atiende a una variación aleatoria que
+puede surgir de diversos factores, como mediciones imprecisas de señales o la falta de
+precisión en sensores. Por otro lado, el ruido determinista está directamente
+relacionado con la complejidad de un modelo. Su presencia aumenta la probabilidad de
+sobreajuste. El ruido determinista puede explicarse como la parte de la función $f$ que el conjunto
+de hipótesis $H^n$ no puede capturar, es decir, $f(x) - h^*(x)$. Este tipo de ruido se
+considera así porque la función (modelo) no es lo suficientemente compleja como para comprender
+esa parte. Este ruido depende de $H^n$ y permanece constante para un valor dado de $x$~\cite{Mostafa2012}.\\[6pt]
+La reducción de características ayuda a manejar ambos tipos de ruido~\cite{miao_survey_2016,Mostafa2012} al simplificar el
+modelo, lo que puede reducir el impacto del ruido estocástico y disminuir la complejidad del
+modelo, lo que a su vez puede ayudar a mitigar el ruido determinista al mejorar la capacidad
+del modelo para capturar las características relevantes y descartar las irrelevantes.
+Esto puede conducir a una mejor capacidad de generalización y a una reducción del sobreajuste.\\[6pt]
+Además de la simplificación del modelo, que conduce a una reducción del ruido, la
+selección de características es un preprocesamiento necesario por varias razones:
 \begin{enumerate}
-    \item Simplificación del modelo: La presencia de características
-          irrelevantes puede complicar innecesariamente la interpretación y el
-          rendimiento de los modelos de aprendizaje automático. La selección de un
-          subconjunto relevante de características puede simplificar el modelo
-          resultante, haciéndolo más comprensible y fácilmente interpretable.
+      \item Interpretabilidad: La presencia de características
+            irrelevantes puede complicar innecesariamente la interpretación y el
+            rendimiento de los modelos de aprendizaje automático~\cite{miao_survey_2016}. La selección de un
+            subconjunto relevante de características puede simplificar el modelo
+            resultante, haciéndolo más comprensible y fácilmente interpretable.
 
-    \item Mejora de la eficiencia computacional: La reducción de la
-          dimensionalidad puede conducir a un ahorro significativo en términos de
-          tiempo y recursos computacionales necesarios para el entrenamiento y la
-          evaluación de modelos. Al eliminar características irrelevantes, se reduce
-          la complejidad del problema y se acelera el proceso de aprendizaje.
+      \item Mejora de la eficiencia computacional: La reducción de la
+            dimensionalidad puede conducir a un ahorro significativo en términos de
+            tiempo y recursos computacionales necesarios para el entrenamiento y la
+            evaluación de modelos. Al eliminar características irrelevantes, se reduce
+            la complejidad del problema y se acelera el proceso de aprendizaje.
 
-    \item Evita la maldición de la dimensionalidad: Cuando la dimensionalidad
-          se incrementa en un problema, el volumen del espacio también lo hace, y esto ocurre
-          tan rápido que  hace que los datos disponibles se vuelvan dispersos. De forma que para
-          obtener un resultado seguro/fiable, la cantidad de datos necesitados debe verse
-          incrementada de manera exponencial con la dimensionalidad~\cite{udacity2015curse}. A menor dimensionalidad
-          (características en el conjunto de datos) menos datos harán falta para obtener un buen
-          modelo.
+      \item Evita la maldición de la dimensionalidad: Cuando la dimensionalidad
+            se incrementa en un problema, el volumen del espacio también lo hace, y esto ocurre
+            tan rápido que  hace que los datos disponibles se vuelvan dispersos. De forma que para
+            obtener un resultado seguro/fiable, la cantidad de datos necesitados debe verse
+            incrementada de manera exponencial con la dimensionalidad~\cite{udacity2015curse}. A menor dimensionalidad
+            (características en el conjunto de datos) menos datos harán falta para obtener un buen
+            modelo.
 \end{enumerate}
+En este trabajo, se lleva a cabo una investigación y análisis comparativo entre varios métodos
+de la familia \textbf{wrapper} o métodos de envoltura. Existen multitud de estrategias~\cite{miao_survey_2016}
+que intentan dar solución a este problema. Los métodos de búsqueda más famosos son los de filtrado
+(\textbf{filter}), los cuáles seleccionan las características más discriminativas según la naturaleza de los datos~\cite{miao_survey_2016}.
+Por lo general, estos métodos realizan la selección de características antes de las tareas de clasificación y
+agrupamiento. Ejemplos de algoritmos de filtrado son \textit{relieF}~\cite{kira_practical_1992} o F-statistic~\cite{ding_minimum_2005}.\\[6pt]
+Los métodos \textbf{wrapper}, en cambio, utilizan el algoritmo de aprendizaje usado postprocesamiento
+para evaluar las características y seleccionar así las más útiles~\cite{miao_survey_2016}.\\[6pt]
+Los algoritmos clasificatorios de aprendizaje utilizados en este trabajo son \textit{SVM}~\cite{cortes_support-vector_1995}
+y \textit{kNN}~\cite{fix_discriminatory_1989,cover_nearest_1967}, siendo las máquinas de vectores de
+soporte un método robusto y eficiente y los vecinos más cercanos un método simple, interpretable
+y muy eficaz. Se analizará el resultado entre ambos clasificadores entre otros muchos análisis comparativos.
 
 \subsection{Motivación}
 El reciente interés del problema de la selección de características en el ámbito de las
@@ -61,23 +92,27 @@ datos.\\[6pt]
 \textbf{Objetivos Específicos:}
 
 \begin{enumerate}
-    \item Evaluar el desempeño de las metaheurísticas más relevantes en el ámbito de la
-          selección de características, analizando métricas clave como precisión, estabilidad de
-          las soluciones y eficiencia computacional. Se emplearán conjuntos de datos de referencia
-          y metodologías de validación cruzada para garantizar la robustez de los resultados.
+      \item Evaluar el desempeño de las metaheurísticas más relevantes en el ámbito de la
+            selección de características, analizando métricas clave como precisión, estabilidad de
+            las soluciones y eficiencia computacional. Se emplearán conjuntos de datos de referencia
+            y metodologías de validación cruzada para garantizar la robustez de los resultados.
 
-    \item Investigar la transferibilidad de las técnicas diseñadas para dominios continuos y
-          binarios en el contexto de la selección de características. Se analizará si las
-          metaheurísticas efectivas en un dominio son igualmente eficaces cuando se aplican a
-          otro, identificando posibles ventajas y limitaciones de cada enfoque.
+      \item Investigar la transferibilidad de las técnicas diseñadas para dominios continuos y
+            binarios en el contexto de la selección de características. Se analizará si las
+            metaheurísticas efectivas en un dominio son igualmente eficaces cuando se aplican a
+            otro, identificando posibles ventajas y limitaciones de cada enfoque.
 
-    \item Identificar las fortalezas y debilidades de cada metaheurística según el tipo de
-          representación de las características. Se realizará un análisis detallado del
-          comportamiento de las técnicas en problemas de selección de características con
-          diferentes tipos de datos, destacando su rendimiento relativo y sus áreas de aplicación
-          más adecuadas.
+      \item Identificar las fortalezas y debilidades de cada metaheurística según el tipo de
+            representación de las características. Se realizará un análisis detallado del
+            comportamiento de las técnicas en problemas de selección de características con
+            diferentes tipos de datos, destacando su rendimiento relativo y sus áreas de aplicación
+            más adecuadas.
 
-    \item Proporcionar recomendaciones prácticas basadas en los resultados obtenidos, con el
-          objetivo de orientar a practicantes y académicos en la selección y aplicación de
-          metaheurísticas en problemas reales de selección de características.
+      \item Proporcionar recomendaciones prácticas basadas en los resultados obtenidos, con el
+            objetivo de orientar a practicantes y académicos en la selección y aplicación de
+            metaheurísticas en problemas reales de selección de características.
+
+      \item Evaluar los resultados de las metaheurísticas en problemas de selección de característica
+            usando distintos como algoritmos de aprendizaje los métodos \textit{kNN} y \textit{SVM}. Se realizará
+            una comparativa a nivel de eficiencia en tiempo, estabilidad y calidad de los resultados.
 \end{enumerate}

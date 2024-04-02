@@ -22,7 +22,7 @@ from constants import (
 )
 from data_utils import load_data, scaling_min_max, split_data_to_dict, scaling_std_score  # noqa: F401
 from optimizer import Optimizer
-from plots import plot_metrics_over_folds, plot_training_curves
+from plots import plot_metric_over_folds, plot_training_curves
 from sklearn.model_selection import train_test_split
 
 
@@ -135,12 +135,18 @@ def test_cross_validation(optimizer: object,
             round(metrics['test_fitness']['avg'], 2)))
 
     # Plotting average fitness over k folds in cross validation
-    fig = plt.figure(figsize=(5, 5))
+    fig = plt.figure(figsize=(10, 5))
     ax = fig.add_subplot(1, 1, 1)
-    plot_metrics_over_folds(
-        metrics, optimizer.params['iterations'] if 'iterations'
-        in optimizer.params else optimizer.params['generations'], k, ax,
-        'Average fitness {}-fold cross validation'.format(k))
+    plot_metric_over_folds(
+        metrics,
+        'avg_fitness',
+        optimizer.params['iterations'] if 'iterations' in optimizer.params else
+        optimizer.params['generations'],
+        k,
+        'blue',
+        ax=ax,
+        title='Average fitness {}-fold cross validation running {} (SVC)'.
+        format(k, optimizer.name))
 
     fig.suptitle('TEST RUNNING {} ON {}-FOLD CROSS VALIDATION WITH {}'.format(
         optimizer.name, k,
@@ -157,7 +163,7 @@ if __name__ == "__main__":
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     plot_s_shaped_transfer_function(axs[0])
     plot_v_shaped_transfer_function(axs[1])
-    plt.savefig("./images/transfer_functions.jpg")
+    plt.savefig("images/transfer_functions.jpg")
     
     
     parameters = default_parameters(optimizer, D2)
@@ -165,4 +171,4 @@ if __name__ == "__main__":
     test_run_optimizer(**parameters)
     """
 
-    test_cross_validation(**default_parameters(optimizer, D11))
+    test_cross_validation(**default_parameters(optimizer, D10))
