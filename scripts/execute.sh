@@ -15,7 +15,7 @@ datasets=(
     'datasets/wine.arff'
     'datasets/ecoli.arff'
     'datasets/breast-cancer.arff'
-    #'datasets/zoo.arff'
+    'datasets/zoo.arff'
     'datasets/dermatology.arff'
     'datasets/sonar.arff'
     'datasets/yeast.arff'

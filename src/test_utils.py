@@ -171,4 +171,4 @@ if __name__ == "__main__":
     test_run_optimizer(**parameters)
     """
 
-    test_cross_validation(**default_parameters(optimizer, D10))
+    test_cross_validation(**default_parameters(optimizer, D9))
