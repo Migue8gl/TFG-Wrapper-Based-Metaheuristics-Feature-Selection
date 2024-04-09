@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#SBATCH -J mhfs
+#SBATCH -p muylarga
+
 # Optimizers
 optimizers=('GWO' 'GOA' 'FA' 'CS' 'GA' 'WOA' 'ABCO' 'DA' 'ACO' 'PSO' 'BA' 'DE')
 
