@@ -105,7 +105,7 @@ def update_position(position,
     rand = np.random.rand(position.shape[0])
     rand_position_update = np.random.rand(position.shape[0])
     frequency[:, 0] = fmin + (fmax - fmin) * beta
-    velocity = velocity + (position[:, :-4] - best_ind[:-4]) * frequency
+    velocity = np.clip(velocity + (position[:, :-4] - best_ind[:-4]) * frequency, min_values[0], max_values[0])
 
     if binary == 's':
         position_[:, :-4] = s_shaped_transfer_function(velocity[:, :],
