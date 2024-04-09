@@ -1,17 +1,17 @@
-# ---------------------------------- DATASETS ------------------------------------ #
+# ---------------------------------- data ------------------------------------ #
 
-D1 = 'datasets/spectf-heart.arff'
-D2 = 'datasets/ionosphere.arff'
-D3 = 'datasets/parkinsons.arff'
-D4 = 'datasets/iris.arff'
-D5 = 'datasets/wine.arff'
-D6 = 'datasets/ecoli.arff'
-D7 = 'datasets/yeast.arff'
-D8 = 'datasets/breast-cancer.arff'
-D9 = 'datasets/zoo.arff'
-D10 = 'datasets/dermatology.arff'
-D11 = 'datasets/sonar.arff'
-D11 = 'datasets/diabetes.arff'
+D1 = 'data/spectf-heart.arff'
+D2 = 'data/ionosphere.arff'
+D3 = 'data/parkinsons.arff'
+D4 = 'data/iris.arff'
+D5 = 'data/wine.arff'
+D6 = 'data/ecoli.arff'
+D7 = 'data/yeast.arff'
+D8 = 'data/breast-cancer.arff'
+D9 = 'data/zoo.arff'
+D10 = 'data/dermatology.arff'
+D11 = 'data/sonar.arff'
+D11 = 'data/diabetes.arff'
 
 # ----------------------------------- NAMES ------------------------------------- #
 
@@ -24,9 +24,9 @@ PLOT_TITLE = 'Metaheuristic optimization analysis visualization'
 
 # -------------------------------- DIRECTORIES ---------------------------------- #
 
-IMG_DIR = 'images/'
+IMG_DIR = 'img/'
 RESULTS_DIR = 'results/'
-CREDENTIALS_DIR = 'credentials/'
+CREDENTIALS_DIR = 'creds/'
 
 # ---------------------------------- DEFAULT ------------------------------------ #
 

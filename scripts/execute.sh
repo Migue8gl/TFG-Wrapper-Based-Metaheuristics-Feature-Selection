@@ -6,19 +6,19 @@
 # Optimizers
 optimizers=('GWO' 'GOA' 'FA' 'CS' 'GA' 'WOA' 'ABCO' 'DA' 'ACO' 'PSO' 'BA' 'DE')
 
-# Datasets
-datasets=(
-    'datasets/spectf-heart.arff'
-    'datasets/ionosphere.arff'
-    'datasets/parkinsons.arff'
-    'datasets/iris.arff'
-    'datasets/wine.arff'
-    'datasets/ecoli.arff'
-    'datasets/breast-cancer.arff'
-    'datasets/zoo.arff'
-    'datasets/dermatology.arff'
-    'datasets/sonar.arff'
-    'datasets/yeast.arff'
+# data
+data=(
+    'data/spectf-heart.arff'
+    'data/ionosphere.arff'
+    'data/parkinsons.arff'
+    'data/iris.arff'
+    'data/wine.arff'
+    'data/ecoli.arff'
+    'data/breast-cancer.arff'
+    'data/zoo.arff'
+    'data/dermatology.arff'
+    'data/sonar.arff'
+    'data/yeast.arff'
 )
 
 source env/bin/activate
@@ -48,7 +48,7 @@ fi
 
 
 for opt in "${optimizers[@]}"; do
-    for dataset in "${datasets[@]}"; do
+    for dataset in "${data[@]}"; do
         dataset_name=$(basename "$dataset" | sed 's/\.arff$//')
         log_file="$error_dir/error_${opt}_${dataset_name}.log"
         touch "$log_file"
