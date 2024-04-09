@@ -186,7 +186,7 @@ def mutation(offspring,
              binary=True):
     for i in range(0, offspring.shape[0]):
         p = random.uniform(0, 1)
-        random_idx = random.randint(0, offspring.shape[1] - 4)
+        random_idx = random.randint(0, offspring.shape[1] - 5)
 
         if binary:
             bit = offspring[i, random_idx]
