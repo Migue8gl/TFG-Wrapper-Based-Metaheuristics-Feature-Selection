@@ -162,7 +162,7 @@ def main(*args, **kwargs):
         format(k, optimizer_arg))
 
     plot_metric_over_folds(
-        metrics_svc,
+        metrics_knn,
         'avg_fitness',
         parameters[second_key],
         k,
