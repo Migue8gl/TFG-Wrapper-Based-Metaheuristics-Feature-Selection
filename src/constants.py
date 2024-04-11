@@ -12,6 +12,7 @@ D9 = 'data/zoo.arff'
 D10 = 'data/dermatology.arff'
 D11 = 'data/sonar.arff'
 D11 = 'data/diabetes.arff'
+D12 = 'data/wdbc.arff'
 
 # ----------------------------------- NAMES ------------------------------------- #
 

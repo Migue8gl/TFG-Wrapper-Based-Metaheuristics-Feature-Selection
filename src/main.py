@@ -7,8 +7,7 @@ import matplotlib.pyplot as plt
 import notifications
 import pandas as pd
 from analysis_utils import (
-    k_fold_cross_validation,
-)
+    k_fold_cross_validation, )
 from constants import (
     CREDENTIALS_DIR,
     D2,
@@ -24,8 +23,7 @@ from data_utils import (
 )
 from optimizer import Optimizer
 from plots import (
-    plot_metric_over_folds,
-)
+    plot_metric_over_folds, )
 
 #plt.style.use(['science', 'ieee'])  # Style of plots
 
@@ -71,7 +69,7 @@ def main(*args, **kwargs):
             optimizer.params['binary'] = binary_arg
 
     encoding = 'real' if ('binary' in optimizer.params
-                            and optimizer.params['binary'] == 'r') else 'binary'
+                          and optimizer.params['binary'] == 'r') else 'binary'
     # SVC Cross validation
     metrics_svc = k_fold_cross_validation(dataset=dataset_dict,
                                           optimizer=optimizer,
@@ -146,8 +144,6 @@ def main(*args, **kwargs):
     df.to_csv(result_path + '/{}_{}.csv'.format(dataset_name, optimizer_arg),
               index=True)
 
-    _, axs = plt.subplots(1, 2, figsize=(10, 5))
-
     # First set of plots
     second_key = list(parameters.keys())[1]
 
@@ -157,9 +153,14 @@ def main(*args, **kwargs):
         parameters[second_key],
         k,
         'blue',
-        ax=axs[0],
+        ax=None,
         title='Average fitness {}-fold cross validation running {} (SVC)'.
         format(k, optimizer_arg))
+
+    plt.tight_layout()
+    plt.savefig(IMG_DIR + dataset_name +
+                '/{}_fitness_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
+                    'SVC', k, optimizer_arg, encoding, dataset_name))
 
     plot_metric_over_folds(
         metrics_knn,
@@ -167,16 +168,14 @@ def main(*args, **kwargs):
         parameters[second_key],
         k,
         'blue',
-        ax=axs[1],
+        ax=None,
         title='Average fitness {}-fold cross validation running {} (KNN)'.
         format(k, optimizer_arg))
 
     plt.tight_layout()
     plt.savefig(IMG_DIR + dataset_name +
-                '/fitness_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
-                    k, optimizer_arg, encoding, dataset_name))
-
-    _, axs = plt.subplots(1, 2, figsize=(10, 5))
+                '/{}_fitness_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
+                    'KNN', k, optimizer_arg, encoding, dataset_name))
 
     plot_metric_over_folds(
         metrics_svc,
@@ -184,26 +183,31 @@ def main(*args, **kwargs):
         parameters[second_key],
         k,
         'orange',
-        ax=axs[0],
+        ax=None,
         title=
         'Average selected features {}-fold cross validation running {} (SVC)'.
         format(k, optimizer_arg))
 
+    plt.tight_layout()
+    plt.savefig(IMG_DIR + dataset_name +
+                '/{}_n_features_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
+                    'SVC', k, optimizer_arg, encoding, dataset_name))
+
     plot_metric_over_folds(
         metrics_svc,
         'avg_selected_features',
         parameters[second_key],
         k,
         'orange',
-        ax=axs[1],
+        ax=None,
         title=
         'Average selected features {}-fold cross validation running {} (KNN)'.
         format(k, optimizer_arg))
 
     plt.tight_layout()
     plt.savefig(IMG_DIR + dataset_name +
-                '/n_features_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
-                    k, optimizer_arg, encoding, dataset_name))
+                '/{}_n_features_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
+                    'KNN', k, optimizer_arg, encoding, dataset_name))
 
     total_time = time.time() - start_time
 
@@ -221,18 +225,36 @@ def main(*args, **kwargs):
             token=token,
             chat_id=chat_id,
             image_path=IMG_DIR + dataset_name +
-            '/fitness_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
-                k, optimizer_arg, encoding, dataset_name),
-            caption='-- fitness_{}_fold_cross_validation_{}_{}_{} --'.format(
-                k, optimizer_arg, encoding, dataset_name))
+            '/{}_fitness_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
+                'SVC', k, optimizer_arg, encoding, dataset_name),
+            caption='-- SVC fitness_{}_fold_cross_validation_{}_{}_{} --'.
+            format(k, optimizer_arg, encoding, dataset_name))
 
         notifications.send_telegram_image(
             token=token,
             chat_id=chat_id,
             image_path=IMG_DIR + dataset_name +
-            '/n_features_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
-                k, optimizer_arg, encoding, dataset_name),
-            caption='-- n_features_{}_fold_cross_validation_{}_{}_{} --'.
+            '/{}_n_features_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
+                'SVC', k, optimizer_arg, encoding, dataset_name),
+            caption='-- SVC n_features_{}_fold_cross_validation_{}_{}_{} --'.
+            format(k, optimizer_arg, encoding, dataset_name))
+
+        notifications.send_telegram_image(
+            token=token,
+            chat_id=chat_id,
+            image_path=IMG_DIR + dataset_name +
+            '/{}_fitness_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
+                'KNN', k, optimizer_arg, encoding, dataset_name),
+            caption='-- KNN fitness_{}_fold_cross_validation_{}_{}_{} --'.
+            format(k, optimizer_arg, encoding, dataset_name))
+
+        notifications.send_telegram_image(
+            token=token,
+            chat_id=chat_id,
+            image_path=IMG_DIR + dataset_name +
+            '/{}_n_features_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
+                'KNN', k, optimizer_arg, encoding, dataset_name),
+            caption='-- KNN n_features_{}_fold_cross_validation_{}_{}_{} --'.
             format(k, optimizer_arg, encoding, dataset_name))
 
         notifications.send_telegram_file(
