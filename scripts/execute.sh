@@ -16,6 +16,7 @@ data=(
     'data/dermatology.arff'
     'data/sonar.arff'
     'data/yeast.arff'
+    'data/wdbc.arff'
 )
 
 source env/bin/activate

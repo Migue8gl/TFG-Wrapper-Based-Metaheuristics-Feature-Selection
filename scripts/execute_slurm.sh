@@ -5,17 +5,18 @@ optimizers=('GWO' 'GOA' 'FA' 'CS' 'GA' 'WOA' 'ABCO' 'DA' 'ACO' 'PSO' 'BA' 'DE')
 
 # Datasets
 datasets=(
-    'datasets/spectf-heart.arff'
-    'datasets/ionosphere.arff'
-    'datasets/parkinsons.arff'
-    'datasets/iris.arff'
-    'datasets/wine.arff'
-    'datasets/ecoli.arff'
-    'datasets/breast-cancer.arff'
-    'datasets/zoo.arff'
-    'datasets/dermatology.arff'
-    'datasets/sonar.arff'
-    'datasets/yeast.arff'
+    'data/spectf-heart.arff'
+    'data/ionosphere.arff'
+    'data/parkinsons.arff'
+    'data/iris.arff'
+    'data/wine.arff'
+    'data/ecoli.arff'
+    'data/breast-cancer.arff'
+    'data/zoo.arff'
+    'data/dermatology.arff'
+    'data/sonar.arff'
+    'data/yeast.arff'
+    'data/wdbc.arff'
 )
 
 # Source the virtual environment
