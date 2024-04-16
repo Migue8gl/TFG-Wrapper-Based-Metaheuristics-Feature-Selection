@@ -3,9 +3,9 @@ from typing import Optional
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-#import scienceplots  # noqa: F401
+import scienceplots  # noqa: F401
 
-#plt.style.use(["science", "ieee"])  # Style of plots
+plt.style.use(["science", "ieee"])  # Style of plots
 
 # ---------------------------- PLOTTING FUNCTIONS ------------------------------ #
 
@@ -53,7 +53,8 @@ def plot_metric_over_folds(metric_values: dict,
         - ax (matplotlib.axes.Axes, optional): The axes to plot on. If not provided, a new figure and axes will be created.
         - title (str, optional): The title of the plot. If not provided, a default title will be used.
     """
-    iteration_numbers = np.linspace(0, iterations + 1, len(metric_values[metric_name]))
+    iteration_numbers = np.linspace(0, iterations + 1,
+                                    len(metric_values[metric_name]))
     if ax is None:
         _, ax = plt.subplots()
     ax.plot(
@@ -174,3 +175,79 @@ def plot_v_shaped_transfer_function(ax: Optional[matplotlib.axes.Axes] = None,
     else:
         ax.set_title(title)
     ax.legend()
+
+
+def plot_grouped_boxplots(data,
+                          x='dataset',
+                          y='avg',
+                          filter=None,
+                          title='Boxplot',
+                          xlabel='Dataset',
+                          ylabel='Average'):
+    """
+    Plot grouped boxplots for the given data.
+
+    Parameters:
+        - data (pd.DataFrame): DataFrame containing the data to be plotted.
+        - x (str): Name of the column grouping the data.
+        - y (str): Name of the column containing average values.
+        - filter (str): Name of the column to filter the data on.
+        - title (str): Title of the plot.
+        - xlabel (str): Label for the x-axis.
+        - ylabel (str): Label for the y-axis.
+    """
+    # Filter data:
+    if filter is not None:
+        filtered_data = data[data[filter['col']] == filter['val']]
+    else:
+        filtered_data = data
+
+    # Group the data by dataset
+    grouped_data = filtered_data.groupby(x)
+
+    # Sort the groups by average value
+    grouped_data = sorted(grouped_data, key=lambda x: x[1][y].mean())
+
+    # Prepare data for plotting
+    data_to_plot = [data[y].values for _, data in grouped_data]
+
+    # Create a single figure
+    fig = plt.figure(figsize=(12, 8))
+
+    # Plot all boxplots together
+    bp = plt.boxplot(data_to_plot,
+                     patch_artist=True,
+                     showmeans=True,
+                     meanprops=dict(marker='o',
+                                    markeredgecolor='black',
+                                    markerfacecolor='white'))
+    
+    # Plot mean as a line
+    m1 = [data[y].mean() for _, data in grouped_data]
+    st1 = [data[y].std() for _, data in grouped_data]
+    # Set title and labels
+    plt.title(title)
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+
+    # Set x-axis labels
+    plt.xticks(range(1,
+                     len(grouped_data) + 1),
+               [dataset for dataset, _ in grouped_data],
+               rotation=45)
+
+    # Annotate each median line
+    for i, line in enumerate(bp['medians']):
+        x, y = line.get_xydata()[1]
+        plt.annotate(f'$\\mu={m1[i]:.2f}$' + f'\n$\\sigma={st1[i]:.2f}$',
+                     xy=(x, y),
+                     xytext=(16, 5),
+                     textcoords='offset points',
+                     ha='center',
+                     va='bottom',
+                     fontsize=6.5)
+
+    # Show grid
+    plt.grid(True)
+    plt.tight_layout()
+    return fig

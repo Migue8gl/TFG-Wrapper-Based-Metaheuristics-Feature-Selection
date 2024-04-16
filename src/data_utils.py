@@ -47,7 +47,6 @@ def load_data(file_path: str) -> Optional[np.ndarray]:
                 csv_reader = csv.reader(csv_file, delimiter=';')
                 data_list = [row for row in csv_reader]
                 data = np.array(data_list)
-
         else:
             print(
                 "Unsupported file format. Please provide a .arff or .csv file."
