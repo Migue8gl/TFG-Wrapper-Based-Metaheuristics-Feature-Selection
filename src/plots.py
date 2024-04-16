@@ -191,14 +191,16 @@ def plot_grouped_boxplots(data,
         - data (pd.DataFrame): DataFrame containing the data to be plotted.
         - x (str): Name of the column grouping the data.
         - y (str): Name of the column containing average values.
-        - filter (str): Name of the column to filter the data on.
+        - filter (dict): Name of the column to filter the data on.
         - title (str): Title of the plot.
         - xlabel (str): Label for the x-axis.
         - ylabel (str): Label for the y-axis.
     """
     # Filter data:
     if filter is not None:
-        filtered_data = data[data[filter['col']] == filter['val']]
+        filtered_data = data.copy()  # Make a copy of the original data
+        for col, val in filter.items():
+            filtered_data = filtered_data[filtered_data[col] == val]
     else:
         filtered_data = data
 

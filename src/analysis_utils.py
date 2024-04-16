@@ -128,6 +128,7 @@ def k_fold_cross_validation(optimizer: object,
         'avg_fitness': average_fitness,
         'avg_selected_features': average_selected_features,
         'test_fitness': {
+            'all_fitness': test_fitness,
             'best': np.min(test_fitness),
             'avg': np.mean(test_fitness),
             'std_dev': std_deviation_test_fitness,

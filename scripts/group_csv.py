@@ -17,6 +17,7 @@ def process_csv_file(file_path):
     df['optimizer'] = optimizer_name[:
                                      -4]  # Remove ".csv" extension from optimizer name
     return df.round({
+        'all_fitness': 3,
         'best': 3,
         'avg': 3,
         'std_dev': 3,
@@ -40,8 +41,8 @@ def generate_analysis_results(encoding):
                     dfs.append(process_csv_file(file_path))
 
     combined_data = pd.concat(dfs)[[
-        'classifier', 'dataset', 'optimizer', 'best', 'avg', 'std_dev', 'acc',
-        'n_features', 'selected_rate', 'execution_time'
+        'classifier', 'dataset', 'optimizer', 'all_fitness', 'best', 'avg',
+        'std_dev', 'acc', 'n_features', 'selected_rate', 'execution_time'
     ]]
 
     combined_data.to_csv(os.path.join(encoding_dir, 'analysis_results.csv'),
