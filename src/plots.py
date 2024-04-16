@@ -218,9 +218,9 @@ def plot_grouped_boxplots(data,
     bp = plt.boxplot(data_to_plot,
                      patch_artist=True,
                      showmeans=True,
-                     meanprops=dict(marker='o',
-                                    markeredgecolor='black',
-                                    markerfacecolor='white'))
+                     meanprops=dict(marker='^',
+                                    markeredgecolor='green',
+                                    markerfacecolor='green'))
     
     # Plot mean as a line
     m1 = [data[y].mean() for _, data in grouped_data]

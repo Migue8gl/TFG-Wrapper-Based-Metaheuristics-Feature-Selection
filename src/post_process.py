@@ -20,6 +20,17 @@ def main():
                     f'{encoding}/optimizer_boxplot_fitness_{encoding[0]}.png')
         plt.close(fig)
 
+        fig = plot_grouped_boxplots(
+            df_analysis_b if encoding == 'binary' else df_analysis_r,
+            x='optimizer',
+            y='execution_time',
+            title=f'Boxplot Grouped by Optimizer - {encoding}',
+            ylabel='Average Fitness')
+        plt.savefig(
+            RESULTS_DIR +
+            f'{encoding}/optimizer_boxplot_execution_time_{encoding[0]}.png')
+        plt.close(fig)
+
         for dataset_name in df_analysis_b['dataset'].unique():
             fig = plot_grouped_boxplots(
                 df_analysis_b if encoding == 'binary' else df_analysis_r,
@@ -35,7 +46,21 @@ def main():
                         'optimizer_boxplot_fitness_{}.png'.format(encoding[0]))
             plt.close(fig)
 
-           
+            fig = plot_grouped_boxplots(
+                df_analysis_b if encoding == 'binary' else df_analysis_r,
+                x='optimizer',
+                y='execution_time',
+                filter={
+                    'col': 'dataset',
+                    'val': dataset_name
+                },
+                title='Boxplot Grouped by Optimizer - {} - {}'.format(
+                    encoding, dataset_name),
+                ylabel='Average Execution Time')
+            plt.savefig(
+                RESULTS_DIR + f'{encoding}/{dataset_name}/' +
+                'optimizer_boxplot_execution_time_{}.png'.format(encoding[0]))
+            plt.close(fig)
 
 
 if __name__ == '__main__':
