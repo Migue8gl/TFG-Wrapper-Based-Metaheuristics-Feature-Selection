@@ -68,8 +68,10 @@ def main(*args, **kwargs):
         else:
             optimizer.params['binary'] = binary_arg
 
-    encoding = 'real' if ('binary' in optimizer.params
-                          and optimizer.params['binary'] == 'r') else 'binary'
+    encoding = 'real' if ('binary' in optimizer.params and
+                          (optimizer.params['binary'] == 'r'
+                           or not optimizer.params['binary'])) else 'binary'
+    
     # SVC Cross validation
     metrics_svc = k_fold_cross_validation(dataset=dataset_dict,
                                           optimizer=optimizer,

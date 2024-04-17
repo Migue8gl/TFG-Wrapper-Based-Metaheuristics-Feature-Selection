@@ -2,7 +2,7 @@
 
 # Define the directories
 RESULTS_DIR="results/"
-IMAGES_DIR="images/"
+IMAGES_DIR="img/"
 VERBOSE=true
 
 # List of valid false values

@@ -3,6 +3,8 @@ from typing import Optional
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
+from ast import literal_eval
+
 import scienceplots  # noqa: F401
 
 plt.style.use(["science", "ieee"])  # Style of plots
@@ -176,7 +178,7 @@ def plot_v_shaped_transfer_function(ax: Optional[matplotlib.axes.Axes] = None,
         ax.set_title(title)
     ax.legend()
 
-from ast import literal_eval
+
 def plot_grouped_boxplots(data,
                           x='dataset',
                           y='all_fitness',
@@ -208,10 +210,13 @@ def plot_grouped_boxplots(data,
     grouped_data = filtered_data.groupby(x)
 
     # Sort the groups by average value
-    grouped_data = sorted(grouped_data, key=lambda x: np.mean(literal_eval(x[1][y].values[0])))
+    grouped_data = sorted(
+        grouped_data, key=lambda x: np.mean(literal_eval(x[1][y].values[0])))
 
     # Prepare data for plotting
-    data_to_plot = [literal_eval(data[y].values[0]) for _, data in grouped_data]
+    data_to_plot = [
+        literal_eval(data[y].values[0]) for _, data in grouped_data
+    ]
 
     # Create a single figure
     fig = plt.figure(figsize=(12, 8))
