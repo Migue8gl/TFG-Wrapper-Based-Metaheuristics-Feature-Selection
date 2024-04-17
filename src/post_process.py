@@ -30,7 +30,7 @@ def main():
                 plt.savefig(
                     f'{RESULTS_DIR}{encoding}/{dataset_name}/optimizer_boxplot_fitness_{classifier}_{encoding[0]}.png'
                 )
-            plt.close(fig_fitness)
+                plt.close(fig_fitness)
 
 
 if __name__ == '__main__':

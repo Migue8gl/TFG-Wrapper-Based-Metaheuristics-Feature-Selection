@@ -176,7 +176,7 @@ def plot_v_shaped_transfer_function(ax: Optional[matplotlib.axes.Axes] = None,
         ax.set_title(title)
     ax.legend()
 
-
+from ast import literal_eval
 def plot_grouped_boxplots(data,
                           x='dataset',
                           y='all_fitness',
@@ -190,7 +190,7 @@ def plot_grouped_boxplots(data,
     Parameters:
         - data (pd.DataFrame): DataFrame containing the data to be plotted.
         - x (str): Name of the column grouping the data.
-        - y (str): Name of the column containing average values.
+        - y (str): Name of the column containing values.
         - filter (dict): Name of the column to filter the data on.
         - title (str): Title of the plot.
         - xlabel (str): Label for the x-axis.
@@ -208,10 +208,10 @@ def plot_grouped_boxplots(data,
     grouped_data = filtered_data.groupby(x)
 
     # Sort the groups by average value
-    grouped_data = sorted(grouped_data, key=lambda x: x[1][y].mean())
+    grouped_data = sorted(grouped_data, key=lambda x: np.mean(literal_eval(x[1][y].values[0])))
 
     # Prepare data for plotting
-    data_to_plot = [data[y].values for _, data in grouped_data]
+    data_to_plot = [literal_eval(data[y].values[0]) for _, data in grouped_data]
 
     # Create a single figure
     fig = plt.figure(figsize=(12, 8))
@@ -223,10 +223,10 @@ def plot_grouped_boxplots(data,
                      meanprops=dict(marker='^',
                                     markeredgecolor='green',
                                     markerfacecolor='green'))
-    
+
     # Plot mean as a line
-    m1 = [data[y].mean() for _, data in grouped_data]
-    st1 = [data[y].std() for _, data in grouped_data]
+    m1 = [np.mean(literal_eval(data[y].values[0])) for _, data in grouped_data]
+    st1 = [np.std(literal_eval(data[y].values[0])) for _, data in grouped_data]
     # Set title and labels
     plt.title(title)
     plt.xlabel(xlabel)
