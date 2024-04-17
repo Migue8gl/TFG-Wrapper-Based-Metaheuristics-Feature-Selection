@@ -99,13 +99,13 @@ def main(*args, **kwargs):
 
     data = {
         'classifier': ['knn', 'svc'],
-        'best': [
-            metrics_knn['test_fitness']['best'],
-            metrics_svc['test_fitness']['best']
-        ],
         'all_fitness': [
             metrics_knn['test_fitness']['all_fitness'],
             metrics_svc['test_fitness']['all_fitness']
+        ],
+        'best': [
+            metrics_knn['test_fitness']['best'],
+            metrics_svc['test_fitness']['best']
         ],
         'avg': [
             metrics_knn['test_fitness']['avg'],
@@ -132,7 +132,7 @@ def main(*args, **kwargs):
     }
     columns = [
         'classifier',
-        'all_fitness'
+        'all_fitness',
         'best',
         'avg',
         'std_dev',
