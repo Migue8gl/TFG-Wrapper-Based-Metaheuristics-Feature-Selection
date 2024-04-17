@@ -96,7 +96,8 @@ def build_distance_matrix(position):
 # Function: Update Position
 def update_position(position, best_position, min_values, max_values, C, F, L,
                     target_function, target_function_parameters, binary):
-    dim = len(min_values)
+    dim = len(min_values) - 4
+    size = position.shape[0] - 1
     distance_matrix = build_distance_matrix(position)
     distance_matrix = 2 * (distance_matrix - np.min(distance_matrix)) / (
         np.ptp(distance_matrix) + 1e-8) + 1
@@ -120,6 +121,24 @@ def update_position(position, best_position, min_values, max_values, C, F, L,
                                      min_values[j], max_values[j])
     for i in range(position.shape[0]):
         target_function_parameters['weights'] = position[i, :-4]
+        unique_rows, counts = np.unique(np.round(position[:, :-4], 4),
+                                        axis=0,
+                                        return_counts=True)
+        max_count = np.max(counts)
+        if (max_count / position.shape[0] >= 0.8):
+            majority_row = unique_rows[np.argmax(counts)]
+            different_rows = position[
+                ~np.all(np.round(position[:, :-4], 4) == majority_row, axis=1)]
+            num_new_rows = position.shape[0] - different_rows.shape[0]
+            new_rows = initial_position(num_new_rows, min_values, max_values,
+                                        target_function,
+                                        target_function_parameters)
+            if (different_rows.shape[0] > 0):
+                position = np.vstack((different_rows, new_rows))
+            else:
+                position = new_rows
+            position = position[:size, :]
+            position = np.vstack((best_position, position))
         fitness = target_function(**target_function_parameters)
         position[i, -1] = fitness['fitness']
         position[i, -2] = fitness['accuracy']

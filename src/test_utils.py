@@ -107,7 +107,7 @@ def test_run_optimizer(optimizer: object, dataset: Optional[dict] = None):
                          title="Training curve on {} optimizer".format(
                              optimizer.name))
 
-    plt.savefig("./images/test_optimizer_training.jpg")
+    plt.savefig("./img/test_optimizer_training.jpg")
 
 
 def test_cross_validation(optimizer: object,
@@ -154,7 +154,7 @@ def test_cross_validation(optimizer: object,
                  fontweight='bold',
                  fontsize=16)
     plt.tight_layout()
-    plt.savefig('./images/test_k_cross_validation.jpg')
+    plt.savefig('./img/test_k_cross_validation.jpg')
 
 
 if __name__ == "__main__":
@@ -163,7 +163,7 @@ if __name__ == "__main__":
     fig, axs = plt.subplots(1, 2, figsize=(10, 5))
     plot_s_shaped_transfer_function(axs[0])
     plot_v_shaped_transfer_function(axs[1])
-    plt.savefig("images/transfer_functions.jpg")
+    plt.savefig("img/transfer_functions.jpg")
     
     
     parameters = default_parameters(optimizer, D2)
@@ -171,4 +171,4 @@ if __name__ == "__main__":
     test_run_optimizer(**parameters)
     """
 
-    test_cross_validation(**default_parameters(optimizer, D9))
+    test_cross_validation(**default_parameters(optimizer, D2))
