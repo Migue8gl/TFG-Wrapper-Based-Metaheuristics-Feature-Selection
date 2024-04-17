@@ -179,7 +179,7 @@ def plot_v_shaped_transfer_function(ax: Optional[matplotlib.axes.Axes] = None,
 
 def plot_grouped_boxplots(data,
                           x='dataset',
-                          y='avg',
+                          y='all_fitness',
                           filter=None,
                           title='Boxplot',
                           xlabel='Dataset',

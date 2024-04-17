@@ -143,14 +143,14 @@ Las fases del ciclo de vida son:
             \end{itemize}
             De cada una de ellas se investigará su inspiración, funcionamiento, implementación y versiones binarias, normalmente asociadas al problema de selección de características.
       \item \textbf{Implementación del software}: Una vez claros los requisitos programáticos quedan establecidos, se implementará el software base. Esto incluye código en Python para la generación de gráficas, manejo de datasets en formato \textit{arff}, codificación de los algoritmos metaheurísticos en versión binaria, implementación de función objetivo (\textit{fitness}) y parametrización del programa para distintas pruebas.
-      \item \textbf{Pruebas y refactorizado}: En esta etapa se llevarán a cabo pruebas exhaustivas para verificar la robustez y eficacia de los diferentes algoritmos implementados. Además, se considerará la refactorización del código si es necesario, con el fin de mejorar su estructura, claridad y mantenibilidad. 
+      \item \textbf{Pruebas y refactorizado}: En esta etapa se llevarán a cabo pruebas exhaustivas para verificar la robustez y eficacia de los diferentes algoritmos implementados. Además, se considerará la refactorización del código si es necesario, con el fin de mejorar su estructura, claridad y mantenibilidad.
       \item \textbf{Análisis de resultados}: En esta fase se recopilarán datos de la ejecución de los algoritmos en sus diferentes versiones, así como entre ellos, utilizando los conjuntos de datos seleccionados para el proyecto. Esta recopilación de métricas permitirá una evaluación del rendimiento y la eficacia de cada algoritmo en comparación con los demás, así como su comportamiento en diferentes conjuntos de datos.
       \item \textbf{Documentación}: En esta etapa final se generará una documentación del proyecto que incluirá de forma general la descripción del problema, los objetivos, planificación, implementación, resultados y pruebas.
 \end{itemize}
 
 \begin{figure}[H]
       \begin{center}
-      \includegraphics[width=1.2\textwidth]{imagenes/gantt-init.png}
+            \includegraphics[width=1.2\textwidth]{imagenes/gantt-init.png}
       \end{center}
       \caption{Diagrama de Gantt inicial}
 \end{figure}
@@ -160,28 +160,61 @@ La planificación final del proyecto se ha modificado significativamente debido 
 
 \begin{figure}[H]
       \begin{center}
-      \includegraphics[width=1.2\textwidth]{imagenes/gantt-init.png}
+            \includegraphics[width=1.2\textwidth]{imagenes/gantt-init.png}
       \end{center}
       \caption{Diagrama de Gantt final}
 \end{figure}
 
 El coste estimado del proyecto se divide en varios subcostes:
 \begin{itemize}
-      \item \textbf{Sueldo}: Teniendo en cuenta que el sueldo medio en España para un científico de datos es de $39.000$€~\cite{payscale_barcelona} al año y que el proyecto consta de un solo trabajador, se puede estimar un salario de $18.75$€/hora. 
-      \item \textbf{Ordenador portátil}: El estudiante consta con un portátil HP HP Pavilion Laptop 14-ec0xxx como herramienta principal de trabajo, con un precio de $1000$€. Ha sido usado durante unos $8$ meses aproximadamente, una media de $10$ horas por semana (hay que tener en cuenta fines de semana, días de descanso, festivos, inconvenientes, etc.) Si se tiene en cuenta que la vida media de un portátil es de aproximadamente $4$ años~\cite{woidasky_use_2021}
-      \item \textbf{Transporte} Para calcular el costo estimado del transporte, primero necesitamos determinar cuántos kilómetros se recorre el estudiante semanalmente y luego multiplicarlo por el costo por kilómetro en términos de gasolina.
+      \item \textbf{Sueldo}: Considerando un precio de proyecto que deba cubrir gastos y compensar, se estima un salario por investigador de $52.000$€ al año, es decir, $25$€/hora. Al durar el proyecto aproximadamente $8$ meses, el salario final total es de $34.000$€.
+      \item \textbf{Ordenador portátil}: El estudiante consta con un portátil HP HP Pavilion Laptop 14-ec0xxx como herramienta principal de trabajo, con un precio de $1000$€. Ha sido usado durante unos $8$ meses aproximadamente. Si se tiene en cuenta que la vida media de un portátil es de aproximadamente $4-5$ años~\cite{woidasky_use_2021} entonces el costo del ordenador sería de $133.3$€.
+      \item \textbf{Servidor} Para la experimentación del proyecto se ha hecho uso de un servidor para ejecutar las distintas pruebas de los algoritmos. Se estima el precio por mes y total dada una estimación de los servicios de \textit{Google Cloud - Compute Engine}\\[6pt]
+            \begin{table}[H]
+                  \centering
+                  \begin{tabular}{|c|c|c|c|}
+                        \hline
+                        \textbf{Name}                            & \textbf{Quantity} & \textbf{Region} & \textbf{Service ID} \\
+                        \hline
+                        Compute optimized Core running in London & 150.0             & europe-west2    & 6F81-5844-456A      \\
+                        Compute optimized Ram running in London  & 600.0             & europe-west2    & 6F81-5844-456A      \\
+                        Storage PD Capacity in London            & 0.2               & europe-west2    & 6F81-5844-456A      \\
+                        \hline
+                  \end{tabular}
+                  \caption{Costos servidor Google Cloud - Part 1}
+                  \label{tab:server_costs_part1}
+            \end{table}
+            \begin{table}[H]
+                  \centering
+                  \begin{tabular}{|c|c|}
+                        \hline
+                        \textbf{SKU}   & \textbf{Total Price (USD)} \\
+                        \hline
+                        271A-7F2A-C5C5 & 6.56775                    \\
+                        0BD6-E233-D705 & 3.5202                     \\
+                        BF1A-6647-009D & 0.0096                     \\
+                        \hline
+                        Total Price:   & 10.09755                   \\
+                        \hline
+                  \end{tabular}
+                  \caption{Costos servidor Google Cloud - Part 2}
+                  \label{tab:server_costs_part2}
+            \end{table}
+            En la primera tabla, se detallan tres servicios distintos implementados en la región de Londres. Cada servicio se identifica por su nombre, cantidad (indicando la cantidad de recursos utilizados), región de implementación y un identificador único del servicio. Lo importante es que se ha calculado un servicio con $30$ vCPUs para paralelizar los trabajos.\\[6pt]
 
-      Dado que el estudiante recorre $4.2$ km ida y vuelta $5$ días a la semana, se puede calcular la distancia total semanal:
-      
-      \[ 4.2 \, \text{km} \times 2 \, \times 5 \, \text{días/semana} = 42 \, \text{km/semana} \]
-      
-      Suponiendo que el vehículo en cuestión hace 15 km por litro de gasolina. Entonces:
-      
-      \[ \frac{42 \, \text{km/semana}}{15 \, \text{km/litro}} = 2.8 \, \text{litros/semana} \]
-      
-      Finalmente, se multiplica esto por el precio actual de la gasolina para obtener el costo semanal de transporte:
-      
-      \[ 2.8 \, \text{litros/semana} \times 1.7 \, \text{€/litro} = 4.76 \, \text{€/semana} \]
-      
-      Entonces, el costo estimado del transporte semanal es de aproximadamente $4.76$€.
+            La segunda tabla complementa la primera proporcionando detalles adicionales sobre los servicios en términos de SKU (Stock Keeping Unit, una identificación única para un producto) y el precio total en dólares estadounidenses asociado con cada uno de ellos. El total, hecho el cambio de divisa a euros, es de $9.48$€ al mes, es decir, $75.84$€ en total (calculado para 8 meses).
 \end{itemize}
+Dado este desglose, se calcula el coste final del proyecto:
+\begin{table}[h]
+      \centering
+      \begin{tabular}{|l|r|}
+            \hline
+            \textbf{Item}                    & \textbf{Costo (€)} \\ \hline
+            Salario                          & 34.000             \\
+            Ordenador portátil               & 133.3              \\
+            Servidor CPU - GC Compute Engine & 75.84              \\
+            \textbf{Total}                   & \textbf{34.209,14}  \\ \hline
+      \end{tabular}
+      \caption{Costo estimado del proyecto}
+      \label{tab:proyect_budget}
+\end{table}
