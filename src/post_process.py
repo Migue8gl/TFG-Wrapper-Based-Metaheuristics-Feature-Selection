@@ -11,6 +11,21 @@ def main():
 
     classifiers = [SVC_CLASSIFIER, KNN_CLASSIFIER]
 
+    optimizer_color = {
+        'gwo': 'darkred',
+        'goa': 'darkgreen',
+        'fa': 'navy',
+        'cs': 'darkorange',
+        'ga': 'indigo',
+        'woa': 'darkcyan',
+        'abco': 'darkmagenta',
+        'da': 'olive',
+        'aco': 'deeppink',
+        'pso': 'limegreen',
+        'ba': 'dodgerblue',
+        'de': 'saddlebrown'
+    }
+
     for encoding in ['binary', 'real']:
         df_encoding = df_analysis_b if encoding == 'binary' else df_analysis_r
         for dataset_name in df_encoding['dataset'].unique():
@@ -23,6 +38,7 @@ def main():
                 fig_fitness = plot_grouped_boxplots(
                     df_encoding,
                     x='optimizer',
+                    x_color=optimizer_color,
                     filter=filter_dict,
                     title=
                     f'Boxplot Grouped by Optimizer - {encoding} - {classifier} - {dataset_name}',

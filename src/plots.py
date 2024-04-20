@@ -181,6 +181,7 @@ def plot_v_shaped_transfer_function(ax: Optional[matplotlib.axes.Axes] = None,
 
 def plot_grouped_boxplots(data,
                           x='dataset',
+                          x_color=None,
                           y='all_fitness',
                           filter=None,
                           title='Boxplot',
@@ -192,6 +193,7 @@ def plot_grouped_boxplots(data,
     Parameters:
         - data (pd.DataFrame): DataFrame containing the data to be plotted.
         - x (str): Name of the column grouping the data.
+        - x_color (dict): Color associated with each value in the x column.
         - y (str): Name of the column containing values.
         - filter (dict): Name of the column to filter the data on.
         - title (str): Title of the plot.
@@ -213,6 +215,9 @@ def plot_grouped_boxplots(data,
     grouped_data = sorted(
         grouped_data, key=lambda x: np.mean(literal_eval(x[1][y].values[0])))
 
+    # Get the keys of the x column
+    x_keys = [group[0] for group in grouped_data]
+
     # Prepare data for plotting
     data_to_plot = [
         literal_eval(data[y].values[0]) for _, data in grouped_data
@@ -226,8 +231,15 @@ def plot_grouped_boxplots(data,
                      patch_artist=True,
                      showmeans=True,
                      meanprops=dict(marker='^',
-                                    markeredgecolor='green',
-                                    markerfacecolor='green'))
+                                    color='gold',
+                                    markeredgecolor='darkgoldenrod',
+                                    markerfacecolor='gold',
+                                    markersize=10),
+                     medianprops=dict(color='red', markersize=15))
+
+    # Assign colors to boxplots
+    for col, box in zip(x_keys, bp['boxes']):
+        box.set(color=x_color[col])
 
     # Plot mean as a line
     m1 = [np.mean(literal_eval(data[y].values[0])) for _, data in grouped_data]
