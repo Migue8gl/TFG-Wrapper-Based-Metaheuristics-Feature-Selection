@@ -1,9 +1,0 @@
-            Estimate summary
-            Upfront cost,Monthly cost,Total 12 months cost,Currency
-            0,15.82,189.84,USD
-            ,,* Includes upfront cost
-
-            Detailed Estimate
-            Group hierarchy,Region,Description,Service,Upfront,Monthly,First 12 months total,Currency,Status,Configuration summary
-            My Estimate,Europe (Spain),,Amazon EC2 ,0,15.82,189.84,USD,,"Tenancy (Dedicated Instances), Operating system (Linux), Workload (Consistent, Number of instances: 30), Advance EC2 instance (c6g.medium), Pricing strategy (On-Demand Utilization: 5 Hours/Month), Enable monitoring (disabled), DT Inbound: Not selected (0 TB per month), DT Outbound: Not selected (0 TB per month), DT Intra-Region: (0 TB per month)"
-            

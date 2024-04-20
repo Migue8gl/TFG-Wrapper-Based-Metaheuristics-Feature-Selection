@@ -31,7 +31,7 @@ Se conocen como punto de óptimo global (mínimo o máximo) la solución (o vect
 
 \begin{figure}[H]
     \begin{center}
-        \includegraphics[width=1.2\textwidth]{imagenes/min-max_points.png}
+        \includegraphics[width=1\textwidth]{imagenes/min-max_points.png}
     \end{center}
     \caption[Puntos globales y locales]{En esta figura extraida de \cite{inbook} puede observarse de manera intuitiva la diferencia entre punto global y puntos locales. El máximo global es el valor más alto para $f(x)$ en el espacio, mientras que un máximo global solo representa el valor más alto dentro de un ``vecindario"}
 \end{figure}
@@ -47,3 +47,70 @@ En cambio el objetivo está en un máximo local en el punto $x^*$ si:
         & \text{dentro de un vecindario de } x^*\text{~\cite{inbook}}
     \end{split}
 \end{equation}
+
+\section{Teoría de la computación}
+La teoría de la computación es un campo que estudia los fundamentos matemáticos y los límites de la computación. En esencia, se ocupa de preguntas fundamentales sobre qué se puede y qué no se puede computar, cómo se pueden resolver problemas de manera eficiente y qué tan difíciles son ciertos problemas en términos de recursos computacionales.\\[6pt]
+Suele usarse la máquina de Turing, como modelo abstracto de computadora, para las demostraciones realizadas, creando un marco sencillo en el que entender cómo se ejecutan los algoritmos y cómo se resuelven estos.
+\subsection{Máquina de Turing}
+Una máquina de Turing, cuyo nombre proviene de su creador Alan Turing, es un modelo de computación matemático que es capaz de ejecutar algoritmos mediante el control de una serie de símbolos en la tira de una cinta y de acuerdo a una serie de reglas establecidas~\cite{stone1972}.\\[6pt]
+Es capaz de general un modelo abstracto mediante el cual representar todo de algoritmos que resuelvan problemas computables.
+
+\subsection{Grupos de complejidad P y NP}\label{complexity}
+Se puede definir un lenguaje como una serie de cadenas dentro de un alfabeto, siendo este último un conjunto finito de símbolos~\cite{johnjeffery_automata}. \\[6pt]
+Dada esta definición se dice que un lenguaje que es \textit{reconocible}, es decir, que una máquina de Turing puede determinar si una cadena pertenece al lenguaje o no, en un tiempo ``polinómico determinista" son conocidos como problema de la clase $P$. Que un problema sea resoluble en tiempo polinómico determinista en una máquina de Turing, significa que para cada estado solo existe una posible acción y que su tiempo de resolución puede expresarse como una función polinómica~\cite{johnjeffery_automata}. \\[6pt]
+En contraposición, un problema de la clase $NP$ no es resoluble en tiempo polinómico determinista, sino en tiempo polinómico no determinista. Esto es, que puede resolverse expresando el tiempo como una función polinómica, pero con la diferencia de que el no determinismo implica que para pasar de un estado a otro es posible considerar múltiples acciones.\\[6pt]
+La diferencia entre los problemas de las clases $P$ y $NP$ es fundamental en la teoría de la complejidad computacional. Mientras que los problemas de la clase $P$ son eficientemente solucionables, los problemas de la clase $NP$ pueden ser verificados en tiempo polinómico, pero su resolución en tiempo polinómico no está demostrada y tiende a ser exponencial.\\[6pt]
+
+\subsection{NP-Hard}
+Un problema de decisión $H$ se considera $NP$-Hard o duro si, para cada problema $L$ en $NP$, hay una reducción de muchos a uno de tiempo polinómico de $L$ a $H$~\cite{leeuwen_algorithms_1998,johnjeffery_automata}. Esto significa que cualquier problema en $NP$ puede ser transformado en $H$ en tiempo polinómico, lo que sugiere que $H$ es al menos tan difícil como cualquier problema en $NP$.
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=0.6\textwidth]{imagenes/np_subsets.png}
+    \end{center}
+    \caption[Relación entre clases de complejidad]{En esta figura se puede ver la relación de pertenencia entre clases de complejidad. Puede observarse que $NP$-Hard no es un subconjunto de $NP$. Una solución para un problema $NP$-Hard podría transformarse mediante reducción y solucionar un problema $NP$, pero no siempre es así al revés.}
+\end{figure}
+
+\section{Selección de características}
+La selección de características es un ejemplo de problema $NP$-Hard y uno de los problemas más importantes en el mundo de la inteligencia artificial, más concretamente en el \textbf{machine learning} o aprendizaje automático.\\[6pt]
+
+\subsection{Necesidad y motivo}
+El aprendizaje automático se basa en los datos como fuente de aprendizaje. Es indispensable tener un buen conjunto de datos para poder obtener un modelo robusto y preciso. Por norma general o como se diría en inglés \textit{``as a rule of thumb''}, a más grande el conjunto de datos, mayor calidad del modelo. De hecho hay una correlación inmediata con esta sentencia.
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\textwidth]{imagenes/learning_from_data_vc.png}
+    \end{center}
+    \caption[Correlación entre error del modelo y N]{Esta figura extraída de \cite{Mostafa2012} visualiza la relación directa entre calidad del modelo (menos error esperado) y número de datos que se le proporciona al algoritmo de aprendizaje.}
+    \label{fig:learning_from_data_vc}
+\end{figure}
+
+Es inmediato pensar que a mayor cantidad de datos, mejor calidad del modelo, y así es. Sin embargo, tambíen existe una ``normal general'' que relaciona la complejidad del modelo y su capacidad de generalización. Es cierto que un modelo muy complejo (muchos parámetros) es capaz de ajustar mejor funciones más complejas, pero dentro de un conjunto con una serie de modelos suficientemente complejos, suele ser mejor idea elegir el más simple. Hay una serie clara de ventajas para ello:
+\begin{enumerate}
+    \item Menor  sensibilidad al sobreajuste.
+    \item Mayor interpretabilidad del modelo y sus resultados.
+    \item Mayor eficiencia y por tanto menor tiempo de ejecución y menor peso en memoria.
+\end{enumerate}
+
+De hecho, como puede observarse en la figura \ref{fig:learning_from_data_vc}, el modelo más complejo tiene un error esperado mucho mayor que el simple. El $E_{out}$ o error fuera de la muestra (error de generalización) es mucho más abrupto, es decir, generaliza peor.\\[6pt]
+Por supuesto, con suficientes datos, con un $N$ (número de puntos) suficientemente grande, la tendencia del error es a la baja~\cite{Mostafa2012, shalev2014understanding}. Ocurre, sin embargo, que la recolección, limpieza y transformación de datos es una tarea compleja, por ello es mejor ceñirse, de nuevo, a el modelo más pequeño que obtenga una solución con suficiente calidad.\\[6pt]
+
+\subsection{Concepto}
+El funcionamiento y motivo es explicado ya en la definición del problema en \ref{def_problem}. Por evitar redundancias se procede a explicar el concepto de manera abreviada y puntualizando en los apartados más importantes.\\[6pt]
+La selección de características es una conocida y necesaria técnica de pre-procesamiento de datos para la construcción de un modelo de aprendizaje. Su función es escoger un subconjunto óptimo de características dentro del conjunto inicial, de forma que la complejidad del modelo se reduzca.\\[6pt]
+Este problema es del tipo $NP$-Hard, como ya se ha mencionado previamente en \ref{def_problem} y explicado en \ref{complexity}.
+La selección de características ayuda a una serie de factores como son la interpretabilidad, mejora de la eficiencia temporal y espacial del modelo y sobre todo con la \textbf{maldición de la dimensionalidad}~\cite{venkat2018curse, bellman1957dynamic}.
+
+\subsection{Maldición de la dimensionalidad}
+El término fue acuñado por Bellman en $1961$~\cite{bellman1961adaptive}. Este fenómeno ocurre cuando la dimensionalidad de los datos es muy grande. En un espacio de características de alta dimensión, es común que los datos estén muy dispersos, lo que significa que hay muy pocos datos en comparación con la cantidad posible de características. Esto dificulta que los modelos representen correctamente todo el espacio de características~\cite{peng_interpreting_2024}.\\[6pt]
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\textwidth]{imagenes/curse-dimen-example.png}
+    \end{center}
+    \caption[Tendencia de incremento de dimensionalidad en varios espacios de características]{Esta figura extraída de \cite{peng_interpreting_2024} muestra la tendencia en la densidad a medida que se incrementa la dimensionalidad del espacio. En $(a)$ se muestra la densidad con diez puntos de datos en un espacio $1D$, en $(b)$ se muestra la tendencia al incrementar las dimensiones.}
+\end{figure}
+
+Además, en espacios de alta dimensión, la medición de distancias puede volverse inválida. Esto se debe a que las distancias entre puntos de datos diferentes tienden a converger a un mismo valor a medida que aumenta la dimensionalidad. Esto significa que las medidas de distancia ya no son tan útiles para medir la similitud entre datos~\cite{peng_interpreting_2024, venkat2018curse}. En el trabajo de Beyer y compañeros~\cite{beyer99nn} se observó como esto ocurría y por tanto un escaneo lineal (recorrer los puntos uno a uno) resultaba en altas dimensiones más práctico que otras técnicas complejas.
+
+\section{Metaheurísticas}

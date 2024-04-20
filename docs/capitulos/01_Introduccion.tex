@@ -1,9 +1,9 @@
 \chapter{Introducción}
-\section{Definición del problema}
+\section{Definición del problema}\label{def_problem}
 El problema de la selección de características se define como el proceso de
 seleccionar un subconjunto de características relevantes~\cite{miao_survey_2016}. Una característica es
 una propiedad individual medible de un fenómeno concreto. Este problema es
-considerado un problema \textbf{NP duro}. La reducción de dimensionalidad, y con
+considerado un problema \textbf{NP duro}~\cite{leeuwen_algorithms_1998,johnjeffery_automata}. La reducción de dimensionalidad, y con
 ello de características, suele ser necesario a la hora de crear un modelo predictivo por medio
 del aprendizaje automático ya que muchas de las características
 dentro de un conjunto de datos pueden no llegar a ser relevantes para solucionar
@@ -42,7 +42,7 @@ selección de características es un preprocesamiento necesario por varias razon
             evaluación de modelos. Al eliminar características irrelevantes, se reduce
             la complejidad del problema y se acelera el proceso de aprendizaje.
 
-      \item Evita la maldición de la dimensionalidad: Cuando la dimensionalidad
+      \item Evita la maldición de la dimensionalidad~\cite{venkat2018curse, bellman1957dynamic}: Cuando la dimensionalidad
             se incrementa en un problema, el volumen del espacio también lo hace, y esto ocurre
             tan rápido que  hace que los datos disponibles se vuelvan dispersos. De forma que para
             obtener un resultado seguro/fiable, la cantidad de datos necesitados debe verse
@@ -150,7 +150,7 @@ Las fases del ciclo de vida son:
 
 \begin{figure}[H]
       \begin{center}
-            \includegraphics[width=1.2\textwidth]{imagenes/gantt-init.png}
+            \includegraphics[width=1\textwidth]{imagenes/gantt-init.png}
       \end{center}
       \caption{Diagrama de Gantt inicial}
 \end{figure}
@@ -160,7 +160,7 @@ La planificación final del proyecto se ha modificado significativamente debido 
 
 \begin{figure}[H]
       \begin{center}
-            \includegraphics[width=1.2\textwidth]{imagenes/gantt-init.png}
+            \includegraphics[width=1\textwidth]{imagenes/gantt-init.png}
       \end{center}
       \caption{Diagrama de Gantt final}
 \end{figure}
@@ -169,41 +169,41 @@ El coste estimado del proyecto se divide en varios subcostes:
 \begin{itemize}
       \item \textbf{Sueldo}: Considerando un precio de proyecto que deba cubrir gastos y compensar, se estima un salario por investigador de $52.000$€ al año, es decir, $25$€/hora. Al durar el proyecto aproximadamente $8$ meses, el salario final total es de $34.000$€.
       \item \textbf{Ordenador portátil}: El estudiante consta con un portátil HP HP Pavilion Laptop 14-ec0xxx como herramienta principal de trabajo, con un precio de $1000$€. Ha sido usado durante unos $8$ meses aproximadamente. Si se tiene en cuenta que la vida media de un portátil es de aproximadamente $4-5$ años~\cite{woidasky_use_2021} entonces el costo del ordenador sería de $133.3$€.
-      \item \textbf{Servidor} Para la experimentación del proyecto se ha hecho uso de un servidor para ejecutar las distintas pruebas de los algoritmos. Se estima el precio por mes y total dada una estimación de los servicios de \textit{Google Cloud - Compute Engine}\\[6pt]
-            \begin{table}[H]
-                  \centering
-                  \begin{tabular}{|c|c|c|c|}
-                        \hline
-                        \textbf{Name}                            & \textbf{Quantity} & \textbf{Region} & \textbf{Service ID} \\
-                        \hline
-                        Compute optimized Core running in London & 150.0             & europe-west2    & 6F81-5844-456A      \\
-                        Compute optimized Ram running in London  & 600.0             & europe-west2    & 6F81-5844-456A      \\
-                        Storage PD Capacity in London            & 0.2               & europe-west2    & 6F81-5844-456A      \\
-                        \hline
-                  \end{tabular}
-                  \caption{Costos servidor Google Cloud - Part 1}
-                  \label{tab:server_costs_part1}
-            \end{table}
-            \begin{table}[H]
-                  \centering
-                  \begin{tabular}{|c|c|}
-                        \hline
-                        \textbf{SKU}   & \textbf{Total Price (USD)} \\
-                        \hline
-                        271A-7F2A-C5C5 & 6.56775                    \\
-                        0BD6-E233-D705 & 3.5202                     \\
-                        BF1A-6647-009D & 0.0096                     \\
-                        \hline
-                        Total Price:   & 10.09755                   \\
-                        \hline
-                  \end{tabular}
-                  \caption{Costos servidor Google Cloud - Part 2}
-                  \label{tab:server_costs_part2}
-            \end{table}
-            En la primera tabla, se detallan tres servicios distintos implementados en la región de Londres. Cada servicio se identifica por su nombre, cantidad (indicando la cantidad de recursos utilizados), región de implementación y un identificador único del servicio. Lo importante es que se ha calculado un servicio con $30$ vCPUs para paralelizar los trabajos.\\[6pt]
-
-            La segunda tabla complementa la primera proporcionando detalles adicionales sobre los servicios en términos de SKU (Stock Keeping Unit, una identificación única para un producto) y el precio total en dólares estadounidenses asociado con cada uno de ellos. El total, hecho el cambio de divisa a euros, es de $9.48$€ al mes, es decir, $75.84$€ en total (calculado para 8 meses).
+      \item \textbf{Servidor} Para la experimentación del proyecto se ha hecho uso de un servidor para ejecutar las distintas pruebas de los algoritmos. Se estima el precio por mes y total dada una estimación de los servicios de \textit{Google Cloud - Compute Engine}.
 \end{itemize}
+\begin{table}[H]
+      \centering
+      \begin{tabular}{|c|c|c|c|}
+            \hline
+            \textbf{Name}                            & \textbf{Quantity} & \textbf{Region} & \textbf{Service ID} \\
+            \hline
+            Compute optimized Core running in London & 150.0             & europe-west2    & 6F81-5844-456A      \\
+            Compute optimized Ram running in London  & 600.0             & europe-west2    & 6F81-5844-456A      \\
+            Storage PD Capacity in London            & 0.2               & europe-west2    & 6F81-5844-456A      \\
+            \hline
+      \end{tabular}
+      \caption{Costos servidor Google Cloud - Part 1}
+      \label{tab:server_costs_part1}
+\end{table}
+\begin{table}[H]
+      \centering
+      \begin{tabular}{|c|c|}
+            \hline
+            \textbf{SKU}   & \textbf{Total Price (USD)} \\
+            \hline
+            271A-7F2A-C5C5 & 6.56775                    \\
+            0BD6-E233-D705 & 3.5202                     \\
+            BF1A-6647-009D & 0.0096                     \\
+            \hline
+            Total Price:   & 10.09755                   \\
+            \hline
+      \end{tabular}
+      \caption{Costos servidor Google Cloud - Part 2}
+      \label{tab:server_costs_part2}
+\end{table}
+En la primera tabla, se detallan tres servicios distintos implementados en la región de Londres. Cada servicio se identifica por su nombre, cantidad (indicando la cantidad de recursos utilizados), región de implementación y un identificador único del servicio. Lo importante es que se ha calculado un servicio con $30$ vCPUs para paralelizar los trabajos.\\[6pt]
+
+La segunda tabla complementa la primera proporcionando detalles adicionales sobre los servicios en términos de SKU (Stock Keeping Unit, una identificación única para un producto) y el precio total en dólares estadounidenses asociado con cada uno de ellos. El total, hecho el cambio de divisa a euros, es de $9.48$€ al mes, es decir, $75.84$€ en total (calculado para 8 meses).
 Dado este desglose, se calcula el coste final del proyecto:
 \begin{table}[h]
       \centering
@@ -213,7 +213,7 @@ Dado este desglose, se calcula el coste final del proyecto:
             Salario                          & 34.000             \\
             Ordenador portátil               & 133.3              \\
             Servidor CPU - GC Compute Engine & 75.84              \\
-            \textbf{Total}                   & \textbf{34.209,14}  \\ \hline
+            \textbf{Total}                   & \textbf{34.209,14} \\ \hline
       \end{tabular}
       \caption{Costo estimado del proyecto}
       \label{tab:proyect_budget}
