@@ -211,10 +211,6 @@ def plot_grouped_boxplots(data,
     # Group the data by dataset
     grouped_data = filtered_data.groupby(x)
 
-    # Sort the groups by average value
-    grouped_data = sorted(
-        grouped_data, key=lambda x: np.mean(literal_eval(x[1][y].values[0])))
-
     # Get the keys of the x column
     x_keys = [group[0] for group in grouped_data]
 
@@ -270,3 +266,35 @@ def plot_grouped_boxplots(data,
     plt.grid(True)
     plt.tight_layout()
     return fig
+
+
+def plot_rankings(ranking, title, optimizer_color):
+    """
+    Plots rankings as a bar chart with a different color for each x value.
+
+    Parameters:
+        ranking (pandas.DataFrame): Rankings as a DataFrame.
+        title (str): Title of the plot.
+        optimizer_color (dict): Dictionary with optimizer:color pairs.
+    """
+    plt.figure(figsize=(10, 8))  # Adjust the figure size if needed
+
+    x_values = ranking['optimizer'].values
+    y_values = ranking['avg'].values
+    unique_x_values = np.unique(x_values)
+
+    for i, x_value in enumerate(unique_x_values):
+        indices = np.where(x_values == x_value)[0]
+        color = optimizer_color.get(
+            x_value, 'gray')  # Default to gray if color not found
+        plt.bar(x_values[indices],
+                y_values[indices],
+                color=color,
+                label=x_value)
+
+    plt.title(title)
+    plt.xlabel('Optimizer')
+    plt.ylabel('Average Score')
+    plt.xticks(rotation=45,
+               ha='right')  # Rotate x-axis labels for better readability
+    plt.tight_layout()
