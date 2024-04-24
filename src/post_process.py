@@ -80,20 +80,37 @@ def main():
         'aco': 'deeppink',
         'pso': 'limegreen',
         'ba': 'dodgerblue',
-        'de': 'saddlebrown'
+        'de': 'saddlebrown',
+        'dummy': 'black'
     }
 
-    #plot_all_optimizers(df_analysis_b, df_analysis_r,optimizer_color)
+    #plot_all_optimizers(df_analysis_b, df_analysis_r, optimizer_color)
 
     make_rankings_for_optimizers(df_analysis_b, df_analysis_r)
 
     real_ranking = pd.read_csv(RESULTS_DIR + 'real/rankings.csv')
     binary_ranking = pd.read_csv(RESULTS_DIR + 'binary/rankings.csv')
 
+    real_ranking_svc = pd.read_csv(RESULTS_DIR + 'real/rankings_svc.csv')
+    binary_ranking_svc = pd.read_csv(RESULTS_DIR + 'binary/rankings_svc.csv')
+
+    real_ranking_knn = pd.read_csv(RESULTS_DIR + 'real/rankings_knn.csv')
+    binary_ranking_knn = pd.read_csv(RESULTS_DIR + 'binary/rankings_knn.csv')
+
     plot_rankings(real_ranking, 'Real ranking', optimizer_color)
     plt.savefig(RESULTS_DIR + 'real/real_rankings.png')
     plot_rankings(binary_ranking, 'Binary ranking', optimizer_color)
     plt.savefig(RESULTS_DIR + 'binary/binary_rankings.png')
+
+    plot_rankings(real_ranking_svc, 'Real ranking - svc', optimizer_color)
+    plt.savefig(RESULTS_DIR + 'real/real_rankings_svc.png')
+    plot_rankings(binary_ranking_svc, 'Binary ranking - svc', optimizer_color)
+    plt.savefig(RESULTS_DIR + 'binary/binary_rankings_svc.png')
+
+    plot_rankings(real_ranking_knn, 'Real ranking - knn', optimizer_color)
+    plt.savefig(RESULTS_DIR + 'real/real_rankings_knn.png')
+    plot_rankings(binary_ranking_knn, 'Binary ranking - knn', optimizer_color)
+    plt.savefig(RESULTS_DIR + 'binary/binary_rankings_knn.png')
 
 
 if __name__ == '__main__':

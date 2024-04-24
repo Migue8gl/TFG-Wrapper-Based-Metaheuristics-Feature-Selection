@@ -31,7 +31,7 @@ CREDENTIALS_DIR = 'creds/'
 
 # ---------------------------------- DEFAULT ------------------------------------ #
 
-ALPHA = 0.99
+ALPHA = 0.9
 DEFAULT_OPTIMIZER = 'ACO'
 DEFAULT_TEST_ITERATIONS = 50  # Testing purposes, can be changed
 DEFAULT_ITERATIONS = 200  # Analisys iterations for each optimizer
