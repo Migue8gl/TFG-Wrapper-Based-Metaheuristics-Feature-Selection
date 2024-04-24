@@ -84,7 +84,7 @@ def main():
         'dummy': 'black'
     }
 
-    #plot_all_optimizers(df_analysis_b, df_analysis_r, optimizer_color)
+    plot_all_optimizers(df_analysis_b, df_analysis_r, optimizer_color)
 
     make_rankings_for_optimizers(df_analysis_b, df_analysis_r)
 
