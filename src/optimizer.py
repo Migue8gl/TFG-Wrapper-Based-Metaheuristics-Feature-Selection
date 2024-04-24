@@ -27,6 +27,7 @@ from pyMetaheuristic.algorithm import (
     grey_wolf_optimizer,
     particle_swarm_optimization,
     whale_optimization_algorithm,
+    dummy_optimizer,
 )
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
@@ -54,7 +55,8 @@ class Optimizer:
         'ga': genetic_algorithm,
         'aco': ant_colony_optimization,
         'cs': cuckoo_search,
-        'de': differential_evolution
+        'de': differential_evolution,
+        'dummy': dummy_optimizer
     }
 
     # Optimizers names
@@ -327,6 +329,12 @@ class Optimizer:
                 "iterations": DEFAULT_ITERATIONS,
                 "F": 0.9,
                 "Cr": 0.2,
+                'binary': 's',
+            }
+        elif optimizer_lower == "dummy":  # TODO Add parameters
+            parameters = {
+                "swarm_size": DEFAULT_POPULATION_SIZE,
+                "iterations": DEFAULT_ITERATIONS,
                 'binary': 's',
             }
 

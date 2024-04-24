@@ -281,16 +281,11 @@ def plot_rankings(ranking, title, optimizer_color):
 
     x_values = ranking['optimizer'].values
     y_values = ranking['avg'].values
-    unique_x_values = np.unique(x_values)
 
-    for i, x_value in enumerate(unique_x_values):
-        indices = np.where(x_values == x_value)[0]
-        color = optimizer_color.get(
-            x_value, 'gray')  # Default to gray if color not found
-        plt.bar(x_values[indices],
-                y_values[indices],
-                color=color,
-                label=x_value)
+
+    for x, y in sorted(zip(x_values, y_values), key=lambda x: x[1]):
+        color = optimizer_color[x]
+        plt.bar(x, y, color=color, label=x)
 
     plt.title(title)
     plt.xlabel('Optimizer')

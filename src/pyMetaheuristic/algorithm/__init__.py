@@ -38,3 +38,4 @@ from .sos import symbiotic_organisms_search
 from .spbo import student_psychology_based_optimization
 from .tlbo import teaching_learning_based_optimization
 from .woa import whale_optimization_algorithm
+from .dummy import dummy_optimizer

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Optimizers
-optimizers=('GWO' 'GOA' 'FA' 'CS' 'GA' 'WOA' 'ABCO' 'DA' 'ACO' 'PSO' 'BA' 'DE')
+optimizers=('GWO' 'GOA' 'FA' 'CS' 'GA' 'WOA' 'ABCO' 'DA' 'ACO' 'PSO' 'BA' 'DE' 'DUMMY')
 
 # data
 data=(
