@@ -18,6 +18,7 @@ data=(
     'data/yeast.arff'
     'data/wdbc.arff'
     'data/spambase-460.arff'
+    'data/waveform5000.arff'
 )
 
 source env/bin/activate
