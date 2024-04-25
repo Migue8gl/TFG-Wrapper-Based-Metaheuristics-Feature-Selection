@@ -3,8 +3,8 @@ from typing import Optional
 
 import numpy as np
 from constants import DATA, DEFAULT_FOLDS, DEFAULT_ITERATIONS, LABELS, SAMPLE
-from optimizer import Optimizer
 from data_utils import split_data_to_dict
+from optimizer import Optimizer
 from sklearn.model_selection import StratifiedKFold
 from sklearn.preprocessing import (
     MinMaxScaler,

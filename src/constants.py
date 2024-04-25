@@ -41,3 +41,18 @@ DEFAULT_FOLDS = 5  # Number of folds for k-fold cross validation
 DEFAULT_NEIGHBORS = 5  # Number of neighbors for KNN
 DEFAULT_LOWER_BOUND = 0  # Min value for features in solution
 DEFAULT_UPPER_BOUND = 1  # Max value for features in solution
+OPTIMIZER_COLOR = {
+    'gwo': 'darkred',
+    'goa': 'darkgreen',
+    'fa': 'navy',
+    'cs': 'darkorange',
+    'ga': 'indigo',
+    'woa': 'darkcyan',
+    'abco': 'darkmagenta',
+    'da': 'olive',
+    'aco': 'deeppink',
+    'pso': 'limegreen',
+    'ba': 'dodgerblue',
+    'de': 'saddlebrown',
+    'dummy': 'black'
+}

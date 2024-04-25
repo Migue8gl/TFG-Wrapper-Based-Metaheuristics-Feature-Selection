@@ -1,11 +1,12 @@
+from ast import literal_eval
 from typing import Optional
 
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-from ast import literal_eval
-
+import pandas as pd
 import scienceplots  # noqa: F401
+from constants import OPTIMIZER_COLOR
 
 plt.style.use(["science", "ieee"])  # Style of plots
 
@@ -78,7 +79,7 @@ def plot_fitness_over_population_sizes(
         fitness_values: list,
         population_sizes: list,
         ax: Optional[matplotlib.axes.Axes] = None,
-        title: str = None):
+        title: Optional[str] = None):
     """
     Plots the fitness values over different population sizes.
 
@@ -107,7 +108,7 @@ def plot_fitness_over_population_sizes(
 def plot_fitness_all_optimizers(optimizers_fitness: dict,
                                 iterations: list,
                                 ax: Optional[matplotlib.axes.Axes] = None,
-                                title: str = None):
+                                title: Optional[str] = None):
     """
     Plots the fitness values of multiple optimizers over a specified number of iterations.
 
@@ -134,7 +135,7 @@ def plot_fitness_all_optimizers(optimizers_fitness: dict,
 
 
 def plot_s_shaped_transfer_function(ax: Optional[matplotlib.axes.Axes] = None,
-                                    title: str = None):
+                                    title: Optional[str] = None):
     """
     Plots the s-shape transfer function.
 
@@ -157,7 +158,7 @@ def plot_s_shaped_transfer_function(ax: Optional[matplotlib.axes.Axes] = None,
 
 
 def plot_v_shaped_transfer_function(ax: Optional[matplotlib.axes.Axes] = None,
-                                    title: str = None):
+                                    title: Optional[str] = None):
     """
     Plots the s-shape transfer function.
 
@@ -179,14 +180,14 @@ def plot_v_shaped_transfer_function(ax: Optional[matplotlib.axes.Axes] = None,
     ax.legend()
 
 
-def plot_grouped_boxplots(data,
-                          x='dataset',
-                          x_color=None,
-                          y='all_fitness',
-                          filter=None,
-                          title='Boxplot',
-                          xlabel='Dataset',
-                          ylabel='Average'):
+def plot_grouped_boxplots(data: pd.DataFrame,
+                          x: str = 'dataset',
+                          x_color: dict = OPTIMIZER_COLOR,
+                          y: str = 'all_fitness',
+                          filter: Optional[dict] = None,
+                          title: str = 'Boxplot',
+                          xlabel: str = 'Dataset',
+                          ylabel: str = 'Average') -> matplotlib.figure.Figure:
     """
     Plot grouped boxplots for the given data.
 
@@ -199,6 +200,9 @@ def plot_grouped_boxplots(data,
         - title (str): Title of the plot.
         - xlabel (str): Label for the x-axis.
         - ylabel (str): Label for the y-axis.
+
+    Returns:
+        - fig (matplotlib.figure.Figure): The created figure.
     """
     # Filter data:
     if filter is not None:
@@ -268,19 +272,20 @@ def plot_grouped_boxplots(data,
     return fig
 
 
-def plot_rankings(ranking, title, optimizer_color):
+def plot_rankings(ranking: pd.DataFrame,
+                  title: str = 'Ranking',
+                  optimizer_color: dict = OPTIMIZER_COLOR):
     """
     Plots rankings as a bar chart with a different color for each optimizer.
 
     Parameters:
-        ranking (pandas.DataFrame): Rankings as a DataFrame.
-        title (str): Title of the plot.
-        optimizer_color (dict): Dictionary with optimizer:color pairs.
+        - ranking (pandas.DataFrame): Rankings as a DataFrame.
+        - title (str): Title of the plot.
+        - optimizer_color (dict): Dictionary with optimizer:color pairs.
     """
     plt.figure(figsize=(10, 8))  # Adjust the figure size if needed
 
-    x_values = ranking.columns.tolist()[
-        1:]  # Get optimizer names 
+    x_values = ranking.columns.tolist()[1:]  # Get optimizer names
     y_values = ranking.iloc[-1, 1:].values  # Get mean rankings
 
     for x, y in sorted(zip(x_values, y_values), key=lambda x: x[1]):

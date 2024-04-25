@@ -7,7 +7,8 @@ import matplotlib.pyplot as plt
 import notifications
 import pandas as pd
 from analysis_utils import (
-    k_fold_cross_validation, )
+    k_fold_cross_validation,
+)
 from constants import (
     CREDENTIALS_DIR,
     D2,
@@ -23,7 +24,8 @@ from data_utils import (
 )
 from optimizer import Optimizer
 from plots import (
-    plot_metric_over_folds, )
+    plot_metric_over_folds,
+)
 
 #plt.style.use(['science', 'ieee'])  # Style of plots
 

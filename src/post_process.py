@@ -1,10 +1,18 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-from constants import RESULTS_DIR, KNN_CLASSIFIER, SVC_CLASSIFIER, IMG_DIR
+from constants import (
+    IMG_DIR,
+    KNN_CLASSIFIER,
+    OPTIMIZER_COLOR,
+    RESULTS_DIR,
+    SVC_CLASSIFIER,
+)
 from plots import plot_grouped_boxplots, plot_rankings
 
 
-def plot_all_optimizers(df_analysis_b, df_analysis_r, optimizer_color):
+def plot_all_optimizers(df_analysis_b: pd.DataFrame,
+                        df_analysis_r: pd.DataFrame,
+                        optimizer_color: dict = OPTIMIZER_COLOR):
     """
     Plots boxplots for all optimizers for a given dataset and classifier.
 
@@ -15,7 +23,8 @@ def plot_all_optimizers(df_analysis_b, df_analysis_r, optimizer_color):
         - optimizer_color (dict): Dictionary with optimizer:color pairs.
     """
 
-    def _plot_optimizers(df_encoding, encoding, dataset_name, classifier):
+    def _plot_optimizers(df_encoding: pd.DataFrame, encoding: str,
+                         dataset_name: str, classifier: str):
         filter_dict = {'dataset': dataset_name, 'classifier': classifier}
 
         fig_fitness = plot_grouped_boxplots(
@@ -40,7 +49,15 @@ def plot_all_optimizers(df_analysis_b, df_analysis_r, optimizer_color):
                                  classifier)
 
 
-def make_rankings_for_optimizers(df_analysis_b, df_analysis_r):
+def make_rankings_for_optimizers(df_analysis_b: pd.DataFrame,
+                                 df_analysis_r: pd.DataFrame):
+    """
+    Makes rankings for all optimizers in all datasets. Generates images with rankings and csv containing rankings.
+
+    Parameters:
+        - df_analysis_b (pandas.DataFrame): Dataframe with binary analysis results.
+        - df_analysis_r (pandas.DataFrame): Dataframe with real analysis results.
+    """
     real_df = df_analysis_r.copy()
     binary_df = df_analysis_b.copy()
     classifiers = ['knn', 'svc']
@@ -105,22 +122,6 @@ def main():
     df_analysis_b = pd.read_csv(RESULTS_DIR + 'binary/analysis_results.csv')
     df_analysis_r = pd.read_csv(RESULTS_DIR + 'real/analysis_results.csv')
 
-    optimizer_color = {
-        'gwo': 'darkred',
-        'goa': 'darkgreen',
-        'fa': 'navy',
-        'cs': 'darkorange',
-        'ga': 'indigo',
-        'woa': 'darkcyan',
-        'abco': 'darkmagenta',
-        'da': 'olive',
-        'aco': 'deeppink',
-        'pso': 'limegreen',
-        'ba': 'dodgerblue',
-        'de': 'saddlebrown',
-        'dummy': 'black'
-    }
-
     make_rankings_for_optimizers(df_analysis_b, df_analysis_r)
 
     real_ranking_svc_avg = pd.read_csv(RESULTS_DIR +
@@ -144,37 +145,33 @@ def main():
         RESULTS_DIR + 'binary/rankings_knn_selected_rate.csv')
 
     # Plot rankings for avg
-    plot_rankings(real_ranking_svc_avg, 'Real ranking - svc (avg)',
-                  optimizer_color)
+    plot_rankings(real_ranking_svc_avg, 'Real ranking - svc (avg)')
     plt.savefig(IMG_DIR + 'real/real_rankings_svc_avg.png')
 
-    plot_rankings(binary_ranking_svc_avg, 'Binary ranking - svc (avg)',
-                  optimizer_color)
+    plot_rankings(binary_ranking_svc_avg, 'Binary ranking - svc (avg)')
     plt.savefig(IMG_DIR + 'binary/binary_rankings_svc_avg.png')
 
-    plot_rankings(real_ranking_knn_avg, 'Real ranking - knn (avg)',
-                  optimizer_color)
+    plot_rankings(real_ranking_knn_avg, 'Real ranking - knn (avg)')
     plt.savefig(IMG_DIR + 'real/real_rankings_knn_avg.png')
 
-    plot_rankings(binary_ranking_knn_avg, 'Binary ranking - knn (avg)',
-                  optimizer_color)
+    plot_rankings(binary_ranking_knn_avg, 'Binary ranking - knn (avg)')
     plt.savefig(IMG_DIR + 'binary/binary_rankings_knn_avg.png')
 
     # Plot rankings for selected_rate
     plot_rankings(real_ranking_svc_selected_rate,
-                  'Real ranking - svc (selected_rate)', optimizer_color)
+                  'Real ranking - svc (selected_rate)')
     plt.savefig(IMG_DIR + 'real/real_rankings_svc_selected_rate.png')
 
     plot_rankings(binary_ranking_svc_selected_rate,
-                  'Binary ranking - svc (selected_rate)', optimizer_color)
+                  'Binary ranking - svc (selected_rate)')
     plt.savefig(IMG_DIR + 'binary/binary_rankings_svc_selected_rate.png')
 
     plot_rankings(real_ranking_knn_selected_rate,
-                  'Real ranking - knn (selected_rate)', optimizer_color)
+                  'Real ranking - knn (selected_rate)')
     plt.savefig(IMG_DIR + 'real/real_rankings_knn_selected_rate.png')
 
     plot_rankings(binary_ranking_knn_selected_rate,
-                  'Binary ranking - knn (selected_rate)', optimizer_color)
+                  'Binary ranking - knn (selected_rate)')
     plt.savefig(IMG_DIR + 'binary/binary_rankings_knn_selected_rate.png')
 
 

@@ -21,13 +21,13 @@ from pyMetaheuristic.algorithm import (
     cuckoo_search,
     differential_evolution,
     dragonfly_algorithm,
+    dummy_optimizer,
     firefly_algorithm,
     genetic_algorithm,
     grasshopper_optimization_algorithm,
     grey_wolf_optimizer,
     particle_swarm_optimization,
     whale_optimization_algorithm,
-    dummy_optimizer,
 )
 from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
