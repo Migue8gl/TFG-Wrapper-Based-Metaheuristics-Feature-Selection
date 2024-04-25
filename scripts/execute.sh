@@ -17,6 +17,7 @@ data=(
     'data/sonar.arff'
     'data/yeast.arff'
     'data/wdbc.arff'
+    'data/spambase-460.arff'
 )
 
 source env/bin/activate

@@ -13,6 +13,7 @@ D10 = 'data/dermatology.arff'
 D11 = 'data/sonar.arff'
 D11 = 'data/diabetes.arff'
 D12 = 'data/wdbc.arff'
+D13 = 'data/spambase-460.arff'
 
 # ----------------------------------- NAMES ------------------------------------- #
 
