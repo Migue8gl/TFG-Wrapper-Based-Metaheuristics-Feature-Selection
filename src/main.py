@@ -71,7 +71,7 @@ def main(*args, **kwargs):
     encoding = 'real' if ('binary' in optimizer.params and
                           (optimizer.params['binary'] == 'r'
                            or not optimizer.params['binary'])) else 'binary'
-    
+
     # SVC Cross validation
     metrics_svc = k_fold_cross_validation(dataset=dataset_dict,
                                           optimizer=optimizer,
@@ -89,7 +89,7 @@ def main(*args, **kwargs):
     name_pattern = r'/([^/]+)\.arff$'
     dataset_name = re.search(name_pattern, dataset_arg).group(1)
     # Create directory to store dataset metrics images
-    img_directory_path = os.path.join(IMG_DIR, dataset_name)
+    img_directory_path = os.path.join(IMG_DIR, encoding, dataset_name)
     if not os.path.isdir(img_directory_path):
         os.makedirs(img_directory_path)
 
@@ -165,9 +165,10 @@ def main(*args, **kwargs):
         format(k, optimizer_arg))
 
     plt.tight_layout()
-    plt.savefig(IMG_DIR + dataset_name +
-                '/{}_fitness_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
-                    'SVC', k, optimizer_arg, encoding, dataset_name))
+    plt.savefig(
+        os.path.join(IMG_DIR, encoding, dataset_name) +
+        '/{}_fitness_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
+            'SVC', k, optimizer_arg, encoding, dataset_name))
 
     plot_metric_over_folds(
         metrics_knn,
@@ -180,9 +181,10 @@ def main(*args, **kwargs):
         format(k, optimizer_arg))
 
     plt.tight_layout()
-    plt.savefig(IMG_DIR + dataset_name +
-                '/{}_fitness_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
-                    'KNN', k, optimizer_arg, encoding, dataset_name))
+    plt.savefig(
+        os.path.join(IMG_DIR, encoding, dataset_name) +
+        '/{}_fitness_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
+            'KNN', k, optimizer_arg, encoding, dataset_name))
 
     plot_metric_over_folds(
         metrics_svc,
@@ -196,9 +198,10 @@ def main(*args, **kwargs):
         format(k, optimizer_arg))
 
     plt.tight_layout()
-    plt.savefig(IMG_DIR + dataset_name +
-                '/{}_n_features_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
-                    'SVC', k, optimizer_arg, encoding, dataset_name))
+    plt.savefig(
+        os.path.join(IMG_DIR, encoding, dataset_name) +
+        '/{}_n_features_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
+            'SVC', k, optimizer_arg, encoding, dataset_name))
 
     plot_metric_over_folds(
         metrics_svc,
@@ -212,9 +215,10 @@ def main(*args, **kwargs):
         format(k, optimizer_arg))
 
     plt.tight_layout()
-    plt.savefig(IMG_DIR + dataset_name +
-                '/{}_n_features_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
-                    'KNN', k, optimizer_arg, encoding, dataset_name))
+    plt.savefig(
+        os.path.join(IMG_DIR, encoding, dataset_name) +
+        '/{}_n_features_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
+            'KNN', k, optimizer_arg, encoding, dataset_name))
 
     total_time = time.time() - start_time
 
@@ -231,7 +235,7 @@ def main(*args, **kwargs):
         notifications.send_telegram_image(
             token=token,
             chat_id=chat_id,
-            image_path=IMG_DIR + dataset_name +
+            image_path=os.path.join(IMG_DIR, encoding, dataset_name) +
             '/{}_fitness_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
                 'SVC', k, optimizer_arg, encoding, dataset_name),
             caption='-- SVC fitness_{}_fold_cross_validation_{}_{}_{} --'.
@@ -240,7 +244,7 @@ def main(*args, **kwargs):
         notifications.send_telegram_image(
             token=token,
             chat_id=chat_id,
-            image_path=IMG_DIR + dataset_name +
+            image_path=os.path.join(IMG_DIR, encoding, dataset_name) +
             '/{}_n_features_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
                 'SVC', k, optimizer_arg, encoding, dataset_name),
             caption='-- SVC n_features_{}_fold_cross_validation_{}_{}_{} --'.
@@ -249,7 +253,7 @@ def main(*args, **kwargs):
         notifications.send_telegram_image(
             token=token,
             chat_id=chat_id,
-            image_path=IMG_DIR + dataset_name +
+            image_path=os.path.join(IMG_DIR, encoding, dataset_name) +
             '/{}_fitness_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
                 'KNN', k, optimizer_arg, encoding, dataset_name),
             caption='-- KNN fitness_{}_fold_cross_validation_{}_{}_{} --'.
@@ -258,7 +262,7 @@ def main(*args, **kwargs):
         notifications.send_telegram_image(
             token=token,
             chat_id=chat_id,
-            image_path=IMG_DIR + dataset_name +
+            image_path=os.path.join(IMG_DIR, encoding, dataset_name) +
             '/{}_n_features_{}_fold_cross_validation_{}_{}_{}.jpg'.format(
                 'KNN', k, optimizer_arg, encoding, dataset_name),
             caption='-- KNN n_features_{}_fold_cross_validation_{}_{}_{} --'.

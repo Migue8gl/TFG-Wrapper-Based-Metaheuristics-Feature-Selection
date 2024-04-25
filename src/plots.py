@@ -270,7 +270,7 @@ def plot_grouped_boxplots(data,
 
 def plot_rankings(ranking, title, optimizer_color):
     """
-    Plots rankings as a bar chart with a different color for each x value.
+    Plots rankings as a bar chart with a different color for each optimizer.
 
     Parameters:
         ranking (pandas.DataFrame): Rankings as a DataFrame.
@@ -279,17 +279,19 @@ def plot_rankings(ranking, title, optimizer_color):
     """
     plt.figure(figsize=(10, 8))  # Adjust the figure size if needed
 
-    x_values = ranking['optimizer'].values
-    y_values = ranking['avg'].values
-
+    x_values = ranking.columns.tolist()[
+        1:]  # Get optimizer names 
+    y_values = ranking.iloc[-1, 1:].values  # Get mean rankings
 
     for x, y in sorted(zip(x_values, y_values), key=lambda x: x[1]):
         color = optimizer_color[x]
-        plt.bar(x, y, color=color, label=x)
+        plt.bar(x, y, color=color,
+                label=f'{x}: {y:.2f}')  # Show ranking with two decimals
 
     plt.title(title)
     plt.xlabel('Optimizer')
-    plt.ylabel('Average Score')
+    plt.ylabel('Mean Ranking')
+    plt.legend()  # Show legend with optimizer names and their rankings
     plt.xticks(rotation=45,
                ha='right')  # Rotate x-axis labels for better readability
     plt.tight_layout()

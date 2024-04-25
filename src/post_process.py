@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import pandas as pd
-from constants import RESULTS_DIR, KNN_CLASSIFIER, SVC_CLASSIFIER
+from constants import RESULTS_DIR, KNN_CLASSIFIER, SVC_CLASSIFIER, IMG_DIR
 from plots import plot_grouped_boxplots, plot_rankings
 
 
@@ -43,25 +43,62 @@ def plot_all_optimizers(df_analysis_b, df_analysis_r, optimizer_color):
 def make_rankings_for_optimizers(df_analysis_b, df_analysis_r):
     real_df = df_analysis_r.copy()
     binary_df = df_analysis_b.copy()
-    classifiers = [KNN_CLASSIFIER, SVC_CLASSIFIER]
+    classifiers = ['knn', 'svc']
 
     for clf in classifiers:
-        ranking_r = real_df[real_df['classifier'] == clf].groupby(
-            'optimizer')['avg'].mean().sort_values(ascending=True)
-        ranking_b = binary_df[binary_df['classifier'] == clf].groupby(
-            'optimizer')['avg'].mean().sort_values(ascending=True)
+        binary_df_clf = binary_df[binary_df['classifier'] == clf].copy()
+        real_df_clf = real_df[real_df['classifier'] == clf].copy()
 
-        ranking_r.to_csv(RESULTS_DIR + 'real/rankings_{}.csv'.format(clf),
-                         index=True)
-        ranking_b.to_csv(RESULTS_DIR + 'binary/rankings_{}.csv'.format(clf),
-                         index=True)
+        # Rank based on avg column
+        binary_df_clf['rank_avg'] = binary_df_clf.groupby(
+            'dataset')['avg'].rank(method='average')
+        real_df_clf['rank_avg'] = real_df_clf.groupby('dataset')['avg'].rank(
+            method='average')
 
-    ranking_b = binary_df.groupby('optimizer')['avg'].mean().sort_values(
-        ascending=True)
-    ranking_r = real_df.groupby('optimizer')['avg'].mean().sort_values(
-        ascending=True)
-    ranking_b.to_csv(RESULTS_DIR + 'binary/rankings.csv', index=True)
-    ranking_r.to_csv(RESULTS_DIR + 'real/rankings.csv', index=True)
+        # Rank based on selected_rate column
+        binary_df_clf['rank_selected_rate'] = binary_df_clf.groupby(
+            'dataset')['selected_rate'].rank(method='average')
+        real_df_clf['rank_selected_rate'] = real_df_clf.groupby(
+            'dataset')['selected_rate'].rank(method='average')
+
+        # Pivot tables for avg
+        pivot_binary_avg = binary_df_clf.pivot_table(index='dataset',
+                                                     columns='optimizer',
+                                                     values='rank_avg')
+        pivot_real_avg = real_df_clf.pivot_table(index='dataset',
+                                                 columns='optimizer',
+                                                 values='rank_avg')
+        # Pivot tables for selected_rate
+        pivot_binary_selected_rate = binary_df_clf.pivot_table(
+            index='dataset', columns='optimizer', values='rank_selected_rate')
+        pivot_real_selected_rate = real_df_clf.pivot_table(
+            index='dataset', columns='optimizer', values='rank_selected_rate')
+
+        # Calculate column mean for avg
+        binary_mean_avg = pivot_binary_avg.mean().round(2)
+        real_mean_avg = pivot_real_avg.mean().round(2)
+
+        # Calculate column mean for selected_rate
+        binary_mean_selected_rate = pivot_binary_selected_rate.mean().round(2)
+        real_mean_selected_rate = pivot_real_selected_rate.mean().round(2)
+
+        # Add mean row to the pivot tables for avg
+        pivot_binary_avg.loc['Mean'] = binary_mean_avg
+        pivot_real_avg.loc['Mean'] = real_mean_avg
+
+        # Add mean row to the pivot tables for selected_rate
+        pivot_binary_selected_rate.loc['Mean'] = binary_mean_selected_rate
+        pivot_real_selected_rate.loc['Mean'] = real_mean_selected_rate
+
+        # Save to CSV for avg
+        pivot_binary_avg.to_csv(f'{RESULTS_DIR}binary/rankings_{clf}_avg.csv')
+        pivot_real_avg.to_csv(f'{RESULTS_DIR}real/rankings_{clf}_avg.csv')
+
+        # Save to CSV for selected_rate
+        pivot_binary_selected_rate.to_csv(
+            f'{RESULTS_DIR}binary/rankings_{clf}_selected_rate.csv')
+        pivot_real_selected_rate.to_csv(
+            f'{RESULTS_DIR}real/rankings_{clf}_selected_rate.csv')
 
 
 def main():
@@ -84,33 +121,61 @@ def main():
         'dummy': 'black'
     }
 
-    plot_all_optimizers(df_analysis_b, df_analysis_r, optimizer_color)
-
     make_rankings_for_optimizers(df_analysis_b, df_analysis_r)
 
-    real_ranking = pd.read_csv(RESULTS_DIR + 'real/rankings.csv')
-    binary_ranking = pd.read_csv(RESULTS_DIR + 'binary/rankings.csv')
+    real_ranking_svc_avg = pd.read_csv(RESULTS_DIR +
+                                       'real/rankings_svc_avg.csv')
+    binary_ranking_svc_avg = pd.read_csv(RESULTS_DIR +
+                                         'binary/rankings_svc_avg.csv')
 
-    real_ranking_svc = pd.read_csv(RESULTS_DIR + 'real/rankings_svc.csv')
-    binary_ranking_svc = pd.read_csv(RESULTS_DIR + 'binary/rankings_svc.csv')
+    real_ranking_knn_avg = pd.read_csv(RESULTS_DIR +
+                                       'real/rankings_knn_avg.csv')
+    binary_ranking_knn_avg = pd.read_csv(RESULTS_DIR +
+                                         'binary/rankings_knn_avg.csv')
 
-    real_ranking_knn = pd.read_csv(RESULTS_DIR + 'real/rankings_knn.csv')
-    binary_ranking_knn = pd.read_csv(RESULTS_DIR + 'binary/rankings_knn.csv')
+    real_ranking_svc_selected_rate = pd.read_csv(
+        RESULTS_DIR + 'real/rankings_svc_selected_rate.csv')
+    binary_ranking_svc_selected_rate = pd.read_csv(
+        RESULTS_DIR + 'binary/rankings_svc_selected_rate.csv')
 
-    plot_rankings(real_ranking, 'Real ranking', optimizer_color)
-    plt.savefig(RESULTS_DIR + 'real/real_rankings.png')
-    plot_rankings(binary_ranking, 'Binary ranking', optimizer_color)
-    plt.savefig(RESULTS_DIR + 'binary/binary_rankings.png')
+    real_ranking_knn_selected_rate = pd.read_csv(
+        RESULTS_DIR + 'real/rankings_knn_selected_rate.csv')
+    binary_ranking_knn_selected_rate = pd.read_csv(
+        RESULTS_DIR + 'binary/rankings_knn_selected_rate.csv')
 
-    plot_rankings(real_ranking_svc, 'Real ranking - svc', optimizer_color)
-    plt.savefig(RESULTS_DIR + 'real/real_rankings_svc.png')
-    plot_rankings(binary_ranking_svc, 'Binary ranking - svc', optimizer_color)
-    plt.savefig(RESULTS_DIR + 'binary/binary_rankings_svc.png')
+    # Plot rankings for avg
+    plot_rankings(real_ranking_svc_avg, 'Real ranking - svc (avg)',
+                  optimizer_color)
+    plt.savefig(IMG_DIR + 'real/real_rankings_svc_avg.png')
 
-    plot_rankings(real_ranking_knn, 'Real ranking - knn', optimizer_color)
-    plt.savefig(RESULTS_DIR + 'real/real_rankings_knn.png')
-    plot_rankings(binary_ranking_knn, 'Binary ranking - knn', optimizer_color)
-    plt.savefig(RESULTS_DIR + 'binary/binary_rankings_knn.png')
+    plot_rankings(binary_ranking_svc_avg, 'Binary ranking - svc (avg)',
+                  optimizer_color)
+    plt.savefig(IMG_DIR + 'binary/binary_rankings_svc_avg.png')
+
+    plot_rankings(real_ranking_knn_avg, 'Real ranking - knn (avg)',
+                  optimizer_color)
+    plt.savefig(IMG_DIR + 'real/real_rankings_knn_avg.png')
+
+    plot_rankings(binary_ranking_knn_avg, 'Binary ranking - knn (avg)',
+                  optimizer_color)
+    plt.savefig(IMG_DIR + 'binary/binary_rankings_knn_avg.png')
+
+    # Plot rankings for selected_rate
+    plot_rankings(real_ranking_svc_selected_rate,
+                  'Real ranking - svc (selected_rate)', optimizer_color)
+    plt.savefig(IMG_DIR + 'real/real_rankings_svc_selected_rate.png')
+
+    plot_rankings(binary_ranking_svc_selected_rate,
+                  'Binary ranking - svc (selected_rate)', optimizer_color)
+    plt.savefig(IMG_DIR + 'binary/binary_rankings_svc_selected_rate.png')
+
+    plot_rankings(real_ranking_knn_selected_rate,
+                  'Real ranking - knn (selected_rate)', optimizer_color)
+    plt.savefig(IMG_DIR + 'real/real_rankings_knn_selected_rate.png')
+
+    plot_rankings(binary_ranking_knn_selected_rate,
+                  'Binary ranking - knn (selected_rate)', optimizer_color)
+    plt.savefig(IMG_DIR + 'binary/binary_rankings_knn_selected_rate.png')
 
 
 if __name__ == '__main__':
