@@ -122,6 +122,8 @@ def main():
     df_analysis_b = pd.read_csv(RESULTS_DIR + 'binary/analysis_results.csv')
     df_analysis_r = pd.read_csv(RESULTS_DIR + 'real/analysis_results.csv')
 
+    plot_all_optimizers(df_analysis_b, df_analysis_r)
+
     make_rankings_for_optimizers(df_analysis_b, df_analysis_r)
 
     real_ranking_svc_avg = pd.read_csv(RESULTS_DIR +
@@ -146,33 +148,33 @@ def main():
 
     # Plot rankings for avg
     plot_rankings(real_ranking_svc_avg, 'Real ranking - svc (avg)')
-    plt.savefig(IMG_DIR + 'real/real_rankings_svc_avg.png')
+    plt.savefig(IMG_DIR + 'real/rankings_svc_avg.png')
 
     plot_rankings(binary_ranking_svc_avg, 'Binary ranking - svc (avg)')
-    plt.savefig(IMG_DIR + 'binary/binary_rankings_svc_avg.png')
+    plt.savefig(IMG_DIR + 'binary/rankings_svc_avg.png')
 
     plot_rankings(real_ranking_knn_avg, 'Real ranking - knn (avg)')
-    plt.savefig(IMG_DIR + 'real/real_rankings_knn_avg.png')
+    plt.savefig(IMG_DIR + 'real/rankings_knn_avg.png')
 
     plot_rankings(binary_ranking_knn_avg, 'Binary ranking - knn (avg)')
-    plt.savefig(IMG_DIR + 'binary/binary_rankings_knn_avg.png')
+    plt.savefig(IMG_DIR + 'binary/rankings_knn_avg.png')
 
     # Plot rankings for selected_rate
     plot_rankings(real_ranking_svc_selected_rate,
                   'Real ranking - svc (selected_rate)')
-    plt.savefig(IMG_DIR + 'real/real_rankings_svc_selected_rate.png')
+    plt.savefig(IMG_DIR + 'real/rankings_svc_selected_rate.png')
 
     plot_rankings(binary_ranking_svc_selected_rate,
                   'Binary ranking - svc (selected_rate)')
-    plt.savefig(IMG_DIR + 'binary/binary_rankings_svc_selected_rate.png')
+    plt.savefig(IMG_DIR + 'binary/rankings_svc_selected_rate.png')
 
     plot_rankings(real_ranking_knn_selected_rate,
                   'Real ranking - knn (selected_rate)')
-    plt.savefig(IMG_DIR + 'real/real_rankings_knn_selected_rate.png')
+    plt.savefig(IMG_DIR + 'real/rankings_knn_selected_rate.png')
 
     plot_rankings(binary_ranking_knn_selected_rate,
                   'Binary ranking - knn (selected_rate)')
-    plt.savefig(IMG_DIR + 'binary/binary_rankings_knn_selected_rate.png')
+    plt.savefig(IMG_DIR + 'binary/rankings_knn_selected_rate.png')
 
 
 if __name__ == '__main__':
