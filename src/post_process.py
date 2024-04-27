@@ -1,3 +1,5 @@
+import os
+
 import matplotlib.pyplot as plt
 import pandas as pd
 from constants import (
@@ -122,7 +124,23 @@ def main():
     df_analysis_b = pd.read_csv(RESULTS_DIR + 'binary/analysis_results.csv')
     df_analysis_r = pd.read_csv(RESULTS_DIR + 'real/analysis_results.csv')
 
-    plot_all_optimizers(df_analysis_b, df_analysis_r)
+    # Create directory to store dataset metrics images
+    img_directory_path = os.path.join(IMG_DIR, 'real')
+    if not os.path.isdir(img_directory_path):
+        os.makedirs(img_directory_path)
+    img_directory_path = os.path.join(IMG_DIR, 'binary')
+    if not os.path.isdir(img_directory_path):
+        os.makedirs(img_directory_path)
+
+    # Create directory to store dataset metrics retults
+    result_path = os.path.join(RESULTS_DIR, 'real')
+    if not os.path.isdir(result_path):
+        os.makedirs(result_path)
+    result_path = os.path.join(RESULTS_DIR, 'binary')
+    if not os.path.isdir(result_path):
+        os.makedirs(result_path)
+
+    #plot_all_optimizers(df_analysis_b, df_analysis_r)
 
     make_rankings_for_optimizers(df_analysis_b, df_analysis_r)
 
