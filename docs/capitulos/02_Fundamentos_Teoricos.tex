@@ -161,4 +161,18 @@ Cuando los datos solo vienen en forma de entrada y no se tiene ninguna salida (n
 
 \subsection{SVM}
 Las máquinas de vectores de soportes o \textit{SVM} fueron introducidas por primera vez en~\cite{cortes_support-vector_1995}. En este documento será uno de los algoritmos de clasificación usados en la función \textit{fitness} para cuantificar la calidad de los pesos aprendidos por los algoritmos optimizadores.\\[6pt]
-Las máquinas de vectores de soporte 
+Las máquinas de vectores de soporte son algoritmos cuya principal característica se basa en la creación de un hiperplano o conjunto de hiperplanos en un espacio $n$-dimensional~\cite{scikit-learn-svm,}. Este hiperplano o hiperplanos es elegido de manera que maximice el margen entre los puntos de datos de todas las clases a predecir. El margen es la distancia entre el hiperplano y los puntos de datos más cercanos de cada clase, estos puntos se denominan vectores de soporte. De esta manera se consigue minimizar el error de generalización~\cite{hastie2009elements}.\\[6pt]
+La idea más intuitiva es, que al haber más espacio entre los puntos de distintas clases, hay más posibilidad de que los puntos no vistos, los puntos a predecir, caigan en zonas correctas.
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=0.5\textwidth]{imagenes/svm-margin.png}
+    \end{center}
+    \caption[Margen en SVM]{Figura extraída de \cite{hastie2009elements} en la que se muestra de forma gráfica en un espacio $2$-dimensional el margen óptimo de separación de dos clases.}
+\end{figure}
+
+\subsection{K-nearest neighbors}
+El algoritmo de $k$ vecinos más cercanos fue presentado en \cite{fix_discriminatory_1989} por Evelyn Fix y Joseph Hodges, y más tarde ampliado en \cite{cover_nearest_1967} por Thomas Cover.\\[6pt]
+Puede ser utilizado para regresión o clasificación, pero su uso suele darse más en este último problema. Este algoritmo ofrece una premisa sencilla, la clase de un punto $p$ dependerá de cuál sea la clase mayoritaria dentro del subconjunto de $k$ vecinos más cercanos~\cite{10.1007/978-3-540-39964-3_62}.\\[6pt]
+Valores mayores de $k$ incrementan la varianza, pero decrementan el sesgo (equilibrio sesgo-varianza~\cite{Mostafa2012}). De forma inversa, a menor $k$ mayor sesgo y menor varianza.\\[6pt]
+Otra forma de verlo es que si $k=1$ (el valor mínimo), el modelo entrenado será muy complejo, pues cada punto puede variar de clase por mínimo que sea el cambia en su entorno. Es un modelo que tiende a sobreajustar. Con $k=n$ el modelo es lo más simple posible, al tener en cuenta absolutamente todos los puntos, la clasificación será siempre la de la clase más repetida.

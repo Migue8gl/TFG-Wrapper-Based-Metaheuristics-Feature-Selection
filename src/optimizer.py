@@ -1,4 +1,5 @@
 from math import sqrt
+from typing import Optional
 
 import numpy as np
 from constants import (
@@ -100,8 +101,8 @@ class Optimizer:
         weights: np.ndarray,
         data: dict,
         classifier_parameters: dict,
-        alpha: float = 0.99,
-        classifier: str = "knn",
+        alpha: Optional[float] = 0.99,
+        classifier: Optional[str] = "knn",
     ) -> dict:
         """
         Functionality to compute the accuracy using KNN or SVC classifier
@@ -143,7 +144,7 @@ class Optimizer:
         weights: np.ndarray,
         data: dict,
         classifier_parameters: dict,
-        classifier: str = "knn",
+        classifier: Optional[str] = "knn",
     ) -> dict:
         """
         Functionality to compute the accuracy using KNN or SVC classifier
@@ -171,8 +172,7 @@ class Optimizer:
         if classifier == "knn":
             classifier = KNeighborsClassifier(
                 n_neighbors=classifier_parameters["n_neighbors"],
-                weights=classifier_parameters["weights"],
-            )
+                weights=classifier_parameters["weights"])
         elif classifier == "svc":
             classifier = SVC(C=classifier_parameters["c"],
                              kernel=classifier_parameters["kernel"])
