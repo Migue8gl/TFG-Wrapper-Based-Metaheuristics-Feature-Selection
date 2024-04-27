@@ -1,5 +1,6 @@
 import os
 import sys
+from typing import Optional
 
 import matplotlib.pyplot as plt
 from pybliometrics.scopus import ScopusSearch
@@ -11,7 +12,17 @@ from src import constants
 del sys.path[0]
 
 
-def articles_in_date(year, query):
+def articles_in_date(year: int, query: str) -> int:
+    """
+    Retrieves the number of articles for a given year and query.
+
+    Parameters:
+        - year (int): The year to search for.
+        - query (str): The search query.
+
+    Returns:
+        - data (int): The number of articles found.
+    """
     search_query = f'TITLE-ABS-KEY({query}) AND PUBYEAR = {year}'
     search = ScopusSearch(search_query, verbose=True, download=False)
     data = search.get_results_size()
@@ -22,7 +33,19 @@ def articles_in_date(year, query):
     return data
 
 
-def plot_article_count(start_year, end_year, query):
+def plot_article_count(start_year: int,
+                       end_year: int,
+                       query: str,
+                       img_name: Optional[str] = 'scopus_chart.png'):
+    """
+    Plots the number of articles over the specified years.
+
+    Parameters:
+        - start_year (int): The starting year.
+        - end_year (int): The ending year.
+        - query (str): The search query.
+        - img_name (str, optional): The name of the image file to save. Defaults to 'scopus_chart.png'.
+    """
     years = range(start_year, end_year + 1)
     counts = [articles_in_date(year, query) for year in years]
 
@@ -35,11 +58,17 @@ def plot_article_count(start_year, end_year, query):
     plt.ylabel("Number of Articles")
     plt.grid(True)
     plt.tight_layout()
-    plt.savefig(constants.IMG_DIR + 'scopus_chart.png')
+    plt.savefig(constants.IMG_DIR + img_name)
 
 
 if __name__ == "__main__":
     start_year = 2010
     end_year = 2023
     query = "feature AND selection"
-    plot_article_count(start_year, end_year, query)
+    img_name = "scopus_chart.png"
+
+    plot_article_count(start_year, end_year, query, img_name)
+
+    query = "feature AND selection AND metaheuristics"
+    img_name = "scopus_chart2.png"
+    plot_article_count(start_year, end_year, query, img_name)
