@@ -5,7 +5,7 @@ La selección de características es un problema cuya popularidad ha ido en aume
     \begin{center}
         \includegraphics[width=1\textwidth]{imagenes/scopus_chart.png}
     \end{center}
-    \caption[Popularidad de feature selection sobre los años]{En esta figura se muestra el número de artículos publicados relacionados con la selección de características. Se ha usado el buscador Scopus.}
+    \caption[Popularidad de feature selection sobre los años]{En esta figura se muestra el número de artículos publicados relacionados con la selección de características. Se ha usado el buscador Scopus para estos resultados.}
     \label{fig:pop_fs}
 \end{figure}
 
@@ -15,10 +15,10 @@ También se puede observar una tendencia  prácticamente igual en la popularidad
     \begin{center}
         \includegraphics[width=1\textwidth]{imagenes/scopus_chart2.png}
     \end{center}
-    \caption[Popularidad de feature selection + metaheuristics sobre los años]{De igual forma que en la figura \ref{fig:pop_fs} las mateheuristicas han ido muy ligadas a la resolución de este problema. Se ha usado el buscador Scopus.}
+    \caption[Popularidad de feature selection + metaheuristics sobre los años]{De igual forma que en la figura \ref{fig:pop_fs} las mateheuristicas han ido muy ligadas a la resolución de este problema. Se ha usado el buscador Scopus para estos resultados.}
 \end{figure}
 
-Y es que las metaheurísticas son algoritmos muy convenientes en la resolución de este tipo de problemas. Algoritmos analíticos no son válidos cuando el conjunto de datos tiene un número de características muy elevado debido a una cantidad de combinaciones simplemente inabordable en términos computacionales. Debido a ello, se suelen utilizar algoritmos más rápidos cuya solución no es óptima globalmente hablando, pero si suficientemente buena.\\[6pt]
+Y es que las metaheurísticas son algoritmos muy convenientes en la resolución de este tipo de problemas. Algoritmos analíticos no son válidos cuando el conjunto de datos tiene un número de características muy elevado debido a una cantidad de combinaciones simplemente inabordable en términos computacionales. Debido a ello, se suelen utilizar algoritmos más rápidos cuya solución no es óptima en términos globales, pero si suficientemente buena.\\[6pt]
 Muchos algoritmos metaheurísticos han sido propuestos a lo largo de los años. Se han escogido los más destacables en cuanto a resultados y más mencionados entre todos ellos, dando una selección de algoritmos metaheurísticos modernos de, en principio, muy alta calidad. No solo son seleccionados algoritos modernos, sino que también se han escogido una serie de algoritmos más ``clásicos'', pero cuya aplicación es más extendida y con resultados que, de forma empírica, han demostrado ser más que buenos a lo largo de décadas de uso.
 
 \begin{table}[H]
@@ -59,7 +59,7 @@ Muchos algoritmos metaheurísticos han sido propuestos a lo largo de los años. 
 \subsection{Introducción}
 Los algoritmos genéticos están inspirados en la selección natural y se utilizan tanto en problemas de optimización con restricciones como sin ellas. Es una metaheurística que modifica una población de soluciones individuales de manera repetida, seleccionando soluciones ``padre'' que dan lugar a la siguiente generación de soluciones en la siguiente iteración del algoritmo. En su forma más básica, un algoritmo genético opera sobre una población de soluciones potenciales a un problema dado. Cada solución potencial, a menudo llamada individuo o cromosoma, está representada como una cadena de símbolos, que puede ser binaria, numérica o simbólica~\cite{10.5555/522098}.
 
-\subsection{Representación y Proceso}
+\subsection{Representación y Operadores}
 Las soluciones o \textbf{fenotipos} están compuestas por una serie de propiedades, características, cromosomas o \textbf{genotipos}, que pueden ser mutados y alterados. La representación más común es la binaria, pero otras codificaciones son posibles.
 
 El proceso típico incluye~\cite{mathew2012genetic}:
@@ -83,7 +83,10 @@ El algoritmo termina cuando se alcanza cierta tolerancia de error o número máx
 
 \subsubsection{Selección}
 La selección se puede llevar a cabo con varios métodos, uno de los más utilizados en selección por torneo.\\[6pt]
-En la selección por torneo, los individuos compiten entre sí en grupos pequeños. Cada grupo (torneo) tiene varios competidores (individuos). El competidor con la mejor aptitud (\textbf{fitness}) dentro del grupo gana y se selecciona para reproducirse. Este proceso se repite hasta que se completa el \textit{pool} de apareamiento con los ganadores de los torneos~\cite{miller_genetic_nodate}.
+En la selección por torneo, los individuos compiten entre sí en grupos pequeños. Cada grupo (torneo) tiene varios competidores (individuos). El competidor con la mejor aptitud (\textbf{fitness}) dentro del grupo tiene más probabilidad de ganar. Los ganadores son seleccionados para ``reproducirse''. Este proceso se repite hasta que se completa el \textit{pool} de apareamiento con los ganadores de los torneos~\cite{miller_genetic_nodate}. La probabilidad de cada individuo en base a su \textbf{fitness} se calcula de la siguiente manera:
+\begin{equation}
+    P(\text{parent}_i) = \frac{\text{fitness}(\text{parent}i)}{\sum_{j=1}^{N} \text{fitness}(\text{parent}_j)}
+\end{equation}
 
 \subsubsection{Cruce}
 Existen múltiples tipos de crossover o cruces. Se describen los dos usados en este proyecto (uno para la versión binaria del algoritmo y otra para la real):
@@ -115,16 +118,14 @@ El elitismo garantiza que las soluciones de alta calidad sobrevivan en las gener
 \subsection{Introducción}
 El algoritmo de colonia de hormigas o \textbf{ACO} es una técnica probabilística que trata de resolver problemas computacionales que pueden ser reducidos a la búsqueda de caminos óptimos a través de grafos. Se basa en el comportamiento de las hormigas reales y su comunicación vía feromonas. Las hormigas vagan por el mundo en búsqueda de comida de forma aleatoria. Cuando estas encuentran comida, dejan trazas de feromonas en su camino, de esta forma, si otras hormigas encuentran ese rastro, se hace más probable que recorran ese camino y dejen de vagar de forma aleatoria. Sin embargo, las trazas de feromonas se evaporan con el tiempo, perdiendo su fuerza de atracción sobre otras hormigas. De esta forma, si el camino es muy largo, la hormiga tardará mucho en recorrerlo y la traza de feromonas tendrá más tiempo a evaporarse. De manera análoga, a más corto es el camino, más rápido se recorre y más densidad de feromonas acumula~\cite{kashef_advanced_2015}.
 
-\subsection*{Representación}
+\subsection{Representación y Operadores}
 Para poder adaptar el algoritmo ACO a un problema es necesario reducir ese problema a la búsqueda del camino más corto dentro de un grafo ponderado.
-
-\subsection*{ACO Feature Selection}
 Cada característica del problema original se representa como un nodo $n$. Los caminos que conectan a los nodos ($e$) representan la elección del subconjunto de características. El camino deberá ser lo más corto posible maximizando a su vez el \textbf{accuracy}~\cite{kashef_advanced_2015}.
 
-\subsubsection*{Regla de transición probabilística}
-\[
+\subsubsection{Regla de transición probabilística}
+\begin{equation}
     P_{ij}^k(t)=\begin{cases} \frac{\tau_{ij}^{\alpha}\eta_{ij}^{\beta}}{\sum_l\tau_{il}^{\alpha}\eta_{il}^{\beta}} & \text{Si $l$ y $k$ son nodos admisibles} \\ 0 & \text{De lo contrario} \end{cases}
-\]
+\end{equation}
 Donde:
 \begin{itemize}
     \item $P_{ij}^k(t)$ denota la probabilidad de transición de un nodo de $i$ a $j$ en la $k$-hormiga (agente) en el instante de tiempo $t$.
@@ -132,10 +133,11 @@ Donde:
     \item $\beta$ y $\alpha$ son dos parámetros que controlan la importancia relativa del valor de la feromona vs la información de la heurística.
 \end{itemize}
 
+\subsubsection{Evaporación de feromona}
 Después de que todas las hormigas hayan terminado su camino, la evaporación de feromonas comienza. El contenido de feromonas del camino $(i,j)$ en el instante $t+1$ es:
-\[
+\begin{equation}
     \tau_{ij}(\text{new})=(1-p)\tau_{ij}(t)+\sum_{k=1}^m\Delta\tau_{ij}^k(t)+\Delta\tau_{ij}^g(t)
-\]
+\end{equation}
 Donde:
 \begin{itemize}
     \item $\Delta\tau_{ij}^k=\begin{cases}\frac{Q}{F^k}&\hspace{6mm}\text{Si la hormiga k pasa por la arista (i,j) en }T^k\\0 &\hspace{6mm}\text{De lo contrario}\end{cases}$
@@ -144,9 +146,38 @@ Donde:
     \item $\Delta\tau_{ij}^k$ y $\Delta\tau_{ij}^g$ son respectivamente, la cantidad de feromonas colocadas en la arista $(i,j)$ por la hormiga $k$ y la cantidad de feromonas depositadas por la mejor hormiga $g$ en el instante $t$ sobre la arista $(i,j)$.
     \item $Q$ es una constante y $F^k$ es el valor de coste de la solución encontrada por la hormiga $k$ en el tour $T^k$, es decir, $F^k$ es el \textit{fitness} de la hormiga $k$.
 \end{itemize}
-Se utiliza el sistema \textit{max-min}, solo la mejor hormiga puede depositar feromona.
-
-\subsubsection*{bACO}
-Este algoritmo usaba la estrategia \textit{max-min}, permitiendo solo a la mejor hormiga depositar feromona y limitando el valor de esta entre un valor mínimo y uno máximo~\cite{kashef_advanced_2015}.
+Se utiliza el sistema \textit{max-min}, solo la mejor hormiga puede depositar feromona.\\[6pt]
+En el algoritmo original, no había heurística de deseabilidad o visibilidad ($\eta$), solo información en términos de feromona~\cite{dorigo_ant_1999}.
 
 \section{Optimización por enjambre de partículas}
+\subsection{Introducción}
+El algoritmo conocido como optimización por enjambre de partículas o en inglés \textit{particle swarm optimization} fue concebido en 1995 por James Kennedy y Russel Eberhart~\cite{kennedy_particle_1995}. En este algoritmo, un conjunto de soluciones candidatas, llamadas partículas, se mueven en un espacio de búsqueda multidimensional. Cada partícula ajusta su posición de acuerdo con su experiencia personal y la experiencia del grupo.
+
+\subsection{Representación y Operadores}
+Las soluciones son descritas como individuos dentro de un enjambre (conjunto total de posibles soluciones) que tienen una posición y una velocidad en todo momento. La posición de estos invididuos representa la solución en sí.
+
+\subsection{Velocidad}
+\begin{equation}
+    v_{i}(t+1) = v_{i}(t) + c_1 \cdot \text{rand}() \cdot (pbest_{i} - x_{i}(t))+ c_2 \cdot \text{rand}() \cdot (gbest - x_{i}(t))
+\end{equation}
+
+Donde:
+\begin{itemize}
+    \item $v_{i}(t+1)$ es la velocidad de la partícula $i$ en la siguiente iteración.
+    \item $v_{i}(t)$ es la velocidad de la partícula $i$ en la iteración actual.
+    \item $c_1$ y $c_2$ son factores de aceleración que controlan la influencia de las mejores posiciones.
+    \item $\text{rand}()$ es un número aleatorio en el rango [0, 1].
+    \item $pbest_{i}$ es la mejor posición histórica de la partícula $i$.
+    \item $x_{i}(t)$ es la posición actual de la partícula $i$ en la iteración $t$.
+    \item $gbest$ es la mejor posición global del grupo.
+\end{itemize}
+
+\subsection{Posición}
+
+\begin{equation}
+    x_{i}(t+1) = x_{i}(t) + v_{i}(t+1)
+\end{equation}
+
+Estas ecuaciones se utilizan para guiar el movimiento de las partículas a través del espacio de búsqueda hacia las mejores soluciones, adaptándose tanto a la mejor solución encontrada por la propia partícula ($pbest$) como a la mejor solución encontrada por cualquier partícula en el enjambre ($gbest$)~\cite{kennedy_particle_1995}. Con el tiempo, las partículas tienden a converger hacia las mejores soluciones conocidas.
+
+\section{Evolución diferencial}
