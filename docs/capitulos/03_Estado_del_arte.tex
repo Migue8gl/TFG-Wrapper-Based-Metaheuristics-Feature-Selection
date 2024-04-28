@@ -151,7 +151,7 @@ En el algoritmo original, no había heurística de deseabilidad o visibilidad ($
 
 \section{Optimización por enjambre de partículas}
 \subsection{Introducción}
-El algoritmo conocido como optimización por enjambre de partículas o en inglés \textit{particle swarm optimization} fue concebido en 1995 por James Kennedy y Russel Eberhart~\cite{kennedy_particle_1995}. En este algoritmo, un conjunto de soluciones candidatas, llamadas partículas, se mueven en un espacio de búsqueda multidimensional. Cada partícula ajusta su posición de acuerdo con su experiencia personal y la experiencia del grupo.
+El algoritmo conocido como optimización por enjambre de partículas o en inglés \textit{particle swarm optimization} fue concebido en $1995$ por James Kennedy y Russel Eberhart~\cite{kennedy_particle_1995}. En este algoritmo, un conjunto de soluciones candidatas, llamadas partículas, se mueven en un espacio de búsqueda multidimensional. Cada partícula ajusta su posición de acuerdo con su experiencia personal y la experiencia del grupo.
 
 \subsection{Representación y Operadores}
 Las soluciones son descritas como individuos dentro de un enjambre (conjunto total de posibles soluciones) que tienen una posición y una velocidad en todo momento. La posición de estos invididuos representa la solución en sí.
@@ -181,3 +181,67 @@ Donde:
 Estas ecuaciones se utilizan para guiar el movimiento de las partículas a través del espacio de búsqueda hacia las mejores soluciones, adaptándose tanto a la mejor solución encontrada por la propia partícula ($pbest$) como a la mejor solución encontrada por cualquier partícula en el enjambre ($gbest$)~\cite{kennedy_particle_1995}. Con el tiempo, las partículas tienden a converger hacia las mejores soluciones conocidas.
 
 \section{Evolución diferencial}
+La evolución diferencial surgió como un algoritmo de optimización para problemas no diferenciables y no lineales, con pocas variables de control, robusto, paralelizable y muy eficaz. El algoritmo de evolución diferencial o \textit{differential evolution} en inglés fue diseñado para resolver problemas continuos, a diferencia del propósito original de su ``hermano gemelo'' el algoritmo genético, cuya finalidad inicial era resolver problemas binarios. Este algoritmo fue presentado en $1996$ por Storn y Price en \cite{storn_differential_1997}.\\[6pt]
+En la evolución diferencial, la diferencia de vectores es un concepto clave que se utiliza en el operador de mutación. Esta se calcula restando dos vectores de la población. Gracias a esta operación puede calcularse la distancia entre vectores y esto conlleva una serie de ventajas~\cite{storn_differential_1997}:
+\begin{itemize}
+    \item Las posiciones de los individuos proporcionan información ya que si los individuos están bien distribuidos (y si la población es lo suficientemente grande), la población inicial será una buena representación de todo el espacio de búsqueda.
+    \item Las distancias entre estos individuos serán inversamente proporcionales al tamaño de la población.
+    \item A medida que avanza la búsqueda y los individuos comienzan a converger hacia un óptimo local, las distancias entre los individuos comenzarán a disminuir.
+\end{itemize}
+
+\subsection{Representación y Operadores}
+La representación suele ser la misma que en otros algoritmos metaheurísticos. Una matriz de $N\times M$, donde $N$ es el número de filas o número de invididuos en la población y $M$ es el número de características del problema. DE fue diseñado para optimizar un problema continuo, por lo que la población debería ser un conjunto de números reales.
+
+\subsubsection{Mutación}
+La operación de mutación produce un vector, conocido como vector de prueba o en inglés \textit{trial vector}. Para ello se hace uso de un vector objetivo y una diferencia de vectores ponderada. La mutación elige a un padre $x_{i}$, generando un vector de prueba $u_{i}$ sigueindo lo siguientes pasos:
+\begin{enumerate}
+    \item Se selecciona un vector objetivo $x_{i_1}$ tal que $i\neq i_1$.
+    \item Se selecciona aleatoriamente dos individuos $x_{i_2}$ y $x_{i_3}$ de la población tal que $i\neq i_1\neq i_2\neq i_3$ y $i_2,i_3$ sean seleccionados con una probabilidad uniforme. Es necesario que todos los individuos tengan la misma probabilidad de selección.
+\end{enumerate}
+Finalmente, se calcula el vector de prueba:
+\begin{equation}
+    u_i = x_{i_1}+\beta\dot(x_{i_2}-x_{i3})
+\end{equation}
+Donde $\beta$ es un factor de escalado que controla la amplificación de la variación diferencial (mutación más diversa/grande)~\cite{storn_differential_1997}.
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\textwidth]{imagenes/de-mutation.png}
+    \end{center}
+    \caption[Mutación en DE]{Esta figura ha sido seleccionada de una clase dada por Jaco van Niekerk. Muestra de manera gráfica en un espacio bidimensional como funciona el operador de mutación y cómo se crea el ``trial vector''.}
+\end{figure}
+
+Una ventaja que tiene el uso de diferencias de vectores en la mutación, es que si todos lo individuos tienen la misma probabilidad de selección, la media de la distribución será cero. Con ello se consigue mantener la deriva genética lo más pequeña posible. La deriva genética es un proceso estocástico en el que la frecuencia de alelos (forma alternativa de un gen) en una población cambia aleatoriamente con el tiempo debido a evento aleatorios. Esto puede llevar a cambios en la composición genética de la población a lo largo de las generaciones, especialmente en poblaciones pequeñas. Por tanto, una media distinta de cero daría pie a sesgos en la deriva genética~\cite{genetic-drift}.
+
+\subsubsection{Cruce}
+El cruce implementa una recombinación del vector de prueba $u_i$ y el vector padre $x_i$ para producir un vector hijo $x^\prime_i$.
+\begin{equation}
+    x^\prime_{ij}=\begin{cases} u_{ij} & \text{Si $j\in \mathcal{J}$} \\ x_{ij} & \text{De lo contrario} \end{cases}
+\end{equation}
+Donde $\mathcal{J}$ es un conjunto de puntos de perturbación. Estos índices pueden ser calculados de muchas formas, por ejemplo, de manera aleatoria.
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\textwidth]{imagenes/de-crossover.png}
+    \end{center}
+    \caption[Mutación en DE]{Esta figura ha sido seleccionada de una clase dada por Jaco van Niekerk. Muestra de manera gráfica en un espacio bidimensional como funciona el operador de cruce al recombinar los genes/características de los vectores padre y ``trial''.}
+\end{figure}
+
+\subsubsection{Selección}
+Si el vector hijo, al evaluarlo, tiene un valor \textbf{fitness} mejor que el vector padre, entonces se sustituye el vector $x_i$ por el vector $x^\prime_i$. De otra forma, el vector padre continuará en la población para la siguiente generación~\cite{storn_differential_1997}.
+
+\section{Optimización por enjambre de abejas artificial}
+\subsection{Introducción}
+El algoritmo del enjambre de abejas artificial es un algoritmo estocástico evolutivo, al igual que los ya mencionados anteriormente, que se basa en el comportamientos de los enjambres de abejas para la optimización de problemas. El modelo usado en este algoritmo depende de tres factores, las fuentes de alimento, las abejas buscadores empleadas y las abejas buscadoras desempleadas (hay dos tipos)~\cite{karaboga_idea_nodate}.
+
+\subsection{Representación y Operadores}
+La representación en este algoritmo es exactamente igual que en el resto de algoritmos evolutivos, vectores que representan soluciones y que están formado por una serie de elementos, tantos de ellos como características tenga el problema. En cuanto a los operadores del algoritmo, exiten los siguientes:
+\begin{enumerate}
+    \item \textbf{Abejas Empleadas (Employed Bees)}: Estas abejas están asociadas con fuentes de alimento específicas y son responsables de explotar estas fuentes. Llevan información sobre la fuente de alimento, incluyendo la distancia, la dirección y la rentabilidad, y comparten esta información dentro de la colmena, influyendo en las decisiones de otras abejas.
+
+    \item \textbf{Abejas Observadoras (Onlooker Bees)}: Estas abejas esperan dentro de la colmena y toman decisiones sobre a qué fuentes de alimento dirigirse basándose en la información proporcionada por las abejas empleadas. Seleccionan las fuentes de alimento según la probabilidad que está directamente relacionada con la rentabilidad de las fuentes.
+
+    \item \textbf{Abejas Exploradoras (Scout Bees)}: Son abejas que buscan nuevas fuentes de alimento sin información previa. Su rol es crucial para la exploración y el descubrimiento de nuevas fuentes de alimento. Cuando una fuente se agota o no mejora después de cierto número de intentos (determinado por un parámetro de control llamado "límite"), una abeja empleada puede convertirse en exploradora.
+\end{enumerate}
+
+Estos operadores trabajan en un ciclo repetitivo donde las abejas empleadas primero van a las fuentes de alimento y actualizan la información sobre su rentabilidad. Luego, las abejas observadoras seleccionan fuentes de alimento basadas en esta información actualizada y las abejas exploradoras buscan nuevas fuentes~\cite{karaboga_idea_nodate}. Este proceso se repite hasta cumplir con los criterios de terminación del algoritmo.
