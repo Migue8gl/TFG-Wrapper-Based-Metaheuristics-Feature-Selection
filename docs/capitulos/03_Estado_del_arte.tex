@@ -19,7 +19,7 @@ También se puede observar una tendencia  prácticamente igual en la popularidad
 \end{figure}
 
 Y es que las metaheurísticas son algoritmos muy convenientes en la resolución de este tipo de problemas. Algoritmos analíticos no son válidos cuando el conjunto de datos tiene un número de características muy elevado debido a una cantidad de combinaciones simplemente inabordable en términos computacionales. Debido a ello, se suelen utilizar algoritmos más rápidos cuya solución no es óptima en términos globales, pero si suficientemente buena.\\[6pt]
-Muchos algoritmos metaheurísticos han sido propuestos a lo largo de los años. Se han escogido los más destacables en cuanto a resultados y más mencionados entre todos ellos, dando una selección de algoritmos metaheurísticos modernos de, en principio, muy alta calidad. No solo son seleccionados algoritos modernos, sino que también se han escogido una serie de algoritmos más ``clásicos'', pero cuya aplicación es más extendida y con resultados que, de forma empírica, han demostrado ser más que buenos a lo largo de décadas de uso.
+Muchos algoritmos metaheurísticos han sido propuestos a lo largo de los años. Se han escogido los más destacables en cuanto a resultados y más mencionados entre todos ellos, dando una selección de algoritmos metaheurísticos modernos de, en principio, muy alta calidad. No solo son seleccionados algoritmos modernos, sino que también se han escogido una serie de algoritmos más ``clásicos'', pero cuya aplicación es más extendida y con resultados que, de forma empírica, han demostrado ser más que buenos a lo largo de décadas de uso.
 
 \begin{table}[H]
     \parbox{.45\linewidth}{
@@ -54,12 +54,12 @@ Muchos algoritmos metaheurísticos han sido propuestos a lo largo de los años. 
         \caption{Algoritmos clásicos}
     }
 \end{table}
-
+Para aclarar ciertas cuestiones referentes a las soluciones en este tipo de algoritmos estocásticos de tipo evolutivo, si no se especifica un tipo de representación se da por hecho que las soluciones se representan como vectores en un espacio $n$-dimensional. Un conjunto de individuos/vectores dan como resultado una población. La población es una matriz de $N\times M$, donde $N$ es el número de filas o número de individuos en la población y $M$ es el número de características del problema ($M$ dimensiones). Algunos algoritmos admiten codificación binario y otros continua, ese tipo de cuestiones si serán especificadas.
 \section{Algoritmos genéticos}
 \subsection{Introducción}
 Los algoritmos genéticos están inspirados en la selección natural y se utilizan tanto en problemas de optimización con restricciones como sin ellas. Es una metaheurística que modifica una población de soluciones individuales de manera repetida, seleccionando soluciones ``padre'' que dan lugar a la siguiente generación de soluciones en la siguiente iteración del algoritmo. En su forma más básica, un algoritmo genético opera sobre una población de soluciones potenciales a un problema dado. Cada solución potencial, a menudo llamada individuo o cromosoma, está representada como una cadena de símbolos, que puede ser binaria, numérica o simbólica~\cite{10.5555/522098}.
 
-\subsection{Representación y Operadores}
+\subsection{Funcionamiento y Operadores}
 Las soluciones o \textbf{fenotipos} están compuestas por una serie de propiedades, características, cromosomas o \textbf{genotipos}, que pueden ser mutados y alterados. La representación más común es la binaria, pero otras codificaciones son posibles.
 
 El proceso típico incluye~\cite{mathew2012genetic}:
@@ -118,8 +118,8 @@ El elitismo garantiza que las soluciones de alta calidad sobrevivan en las gener
 \subsection{Introducción}
 El algoritmo de colonia de hormigas o \textbf{ACO} es una técnica probabilística que trata de resolver problemas computacionales que pueden ser reducidos a la búsqueda de caminos óptimos a través de grafos. Se basa en el comportamiento de las hormigas reales y su comunicación vía feromonas. Las hormigas vagan por el mundo en búsqueda de comida de forma aleatoria. Cuando estas encuentran comida, dejan trazas de feromonas en su camino, de esta forma, si otras hormigas encuentran ese rastro, se hace más probable que recorran ese camino y dejen de vagar de forma aleatoria. Sin embargo, las trazas de feromonas se evaporan con el tiempo, perdiendo su fuerza de atracción sobre otras hormigas. De esta forma, si el camino es muy largo, la hormiga tardará mucho en recorrerlo y la traza de feromonas tendrá más tiempo a evaporarse. De manera análoga, a más corto es el camino, más rápido se recorre y más densidad de feromonas acumula~\cite{kashef_advanced_2015}.
 
-\subsection{Representación y Operadores}
-Para poder adaptar el algoritmo ACO a un problema es necesario reducir ese problema a la búsqueda del camino más corto dentro de un grafo ponderado.
+\subsection{Funcionamiento y Operadores}
+Para poder adaptar el algoritmo ACO a un problema es necesario reducir ese problema a la búsqueda del camino más corto dentro de un grafo ponderado. De esta forma, la \textbf{representación} en este tipo de algoritmo debe ser la de un grafo.
 Cada característica del problema original se representa como un nodo $n$. Los caminos que conectan a los nodos ($e$) representan la elección del subconjunto de características. El camino deberá ser lo más corto posible maximizando a su vez el \textbf{accuracy}~\cite{kashef_advanced_2015}.
 
 \subsubsection{Regla de transición probabilística}
@@ -153,10 +153,10 @@ En el algoritmo original, no había heurística de deseabilidad o visibilidad ($
 \subsection{Introducción}
 El algoritmo conocido como optimización por enjambre de partículas o en inglés \textit{particle swarm optimization} fue concebido en $1995$ por James Kennedy y Russel Eberhart~\cite{kennedy_particle_1995}. En este algoritmo, un conjunto de soluciones candidatas, llamadas partículas, se mueven en un espacio de búsqueda multidimensional. Cada partícula ajusta su posición de acuerdo con su experiencia personal y la experiencia del grupo.
 
-\subsection{Representación y Operadores}
-Las soluciones son descritas como individuos dentro de un enjambre (conjunto total de posibles soluciones) que tienen una posición y una velocidad en todo momento. La posición de estos invididuos representa la solución en sí.
+\subsection{Funcionamiento y Operadores}
+Las soluciones son descritas como individuos dentro de un enjambre (conjunto total de posibles soluciones) que tienen una posición y una velocidad en todo momento. La posición de estos individuos representa la solución en sí.
 
-\subsection{Velocidad}
+\subsubsection{Velocidad}
 \begin{equation}
     v_{i}(t+1) = v_{i}(t) + c_1 \cdot \text{rand}() \cdot (pbest_{i} - x_{i}(t))+ c_2 \cdot \text{rand}() \cdot (gbest - x_{i}(t))
 \end{equation}
@@ -172,7 +172,7 @@ Donde:
     \item $gbest$ es la mejor posición global del grupo.
 \end{itemize}
 
-\subsection{Posición}
+\subsubsection{Posición}
 
 \begin{equation}
     x_{i}(t+1) = x_{i}(t) + v_{i}(t+1)
@@ -189,11 +189,11 @@ En la evolución diferencial, la diferencia de vectores es un concepto clave que
     \item A medida que avanza la búsqueda y los individuos comienzan a converger hacia un óptimo local, las distancias entre los individuos comenzarán a disminuir.
 \end{itemize}
 
-\subsection{Representación y Operadores}
-La representación suele ser la misma que en otros algoritmos metaheurísticos. Una matriz de $N\times M$, donde $N$ es el número de filas o número de invididuos en la población y $M$ es el número de características del problema. DE fue diseñado para optimizar un problema continuo, por lo que la población debería ser un conjunto de números reales.
+\subsection{Funcionamiento y Operadores}
+La representación suele ser la misma que en otros algoritmos metaheurísticos. DE fue diseñado para optimizar un problema continuo, por lo que la población debería ser un conjunto de números reales.
 
 \subsubsection{Mutación}
-La operación de mutación produce un vector, conocido como vector de prueba o en inglés \textit{trial vector}. Para ello se hace uso de un vector objetivo y una diferencia de vectores ponderada. La mutación elige a un padre $x_{i}$, generando un vector de prueba $u_{i}$ sigueindo lo siguientes pasos:
+La operación de mutación produce un vector, conocido como vector de prueba o en inglés \textit{trial vector}. Para ello se hace uso de un vector objetivo y una diferencia de vectores ponderada. La mutación elige a un padre $x_{i}$, generando un vector de prueba $u_{i}$ siguiendo lo siguientes pasos:
 \begin{enumerate}
     \item Se selecciona un vector objetivo $x_{i_1}$ tal que $i\neq i_1$.
     \item Se selecciona aleatoriamente dos individuos $x_{i_2}$ y $x_{i_3}$ de la población tal que $i\neq i_1\neq i_2\neq i_3$ y $i_2,i_3$ sean seleccionados con una probabilidad uniforme. Es necesario que todos los individuos tengan la misma probabilidad de selección.
@@ -224,18 +224,18 @@ Donde $\mathcal{J}$ es un conjunto de puntos de perturbación. Estos índices pu
     \begin{center}
         \includegraphics[width=1\textwidth]{imagenes/de-crossover.png}
     \end{center}
-    \caption[Mutación en DE]{Esta figura ha sido seleccionada de una clase dada por Jaco van Niekerk. Muestra de manera gráfica en un espacio bidimensional como funciona el operador de cruce al recombinar los genes/características de los vectores padre y ``trial''.}
+    \caption[Crossover en DE]{Esta figura ha sido seleccionada de una clase dada por Jaco van Niekerk. Muestra de manera gráfica en un espacio bidimensional como funciona el operador de cruce al recombinar los genes/características de los vectores padre y ``trial''.}
 \end{figure}
 
 \subsubsection{Selección}
 Si el vector hijo, al evaluarlo, tiene un valor \textbf{fitness} mejor que el vector padre, entonces se sustituye el vector $x_i$ por el vector $x^\prime_i$. De otra forma, el vector padre continuará en la población para la siguiente generación~\cite{storn_differential_1997}.
 
-\section{Optimización por enjambre de abejas artificial}
+\section{Optimización por colonia de abejas artificial}
 \subsection{Introducción}
 El algoritmo del enjambre de abejas artificial es un algoritmo estocástico evolutivo, al igual que los ya mencionados anteriormente, que se basa en el comportamientos de los enjambres de abejas para la optimización de problemas. El modelo usado en este algoritmo depende de tres factores, las fuentes de alimento, las abejas buscadores empleadas y las abejas buscadoras desempleadas (hay dos tipos)~\cite{karaboga_idea_nodate}.
 
-\subsection{Representación y Operadores}
-La representación en este algoritmo es exactamente igual que en el resto de algoritmos evolutivos, vectores que representan soluciones y que están formado por una serie de elementos, tantos de ellos como características tenga el problema. En cuanto a los operadores del algoritmo, exiten los siguientes:
+\subsection{Funcionamiento y Operadores}
+Los operadores del algoritmo son los siguientes:
 \begin{enumerate}
     \item \textbf{Abejas Empleadas (Employed Bees)}: Estas abejas están asociadas con fuentes de alimento específicas y son responsables de explotar estas fuentes. Llevan información sobre la fuente de alimento, incluyendo la distancia, la dirección y la rentabilidad, y comparten esta información dentro de la colmena, influyendo en las decisiones de otras abejas.
 

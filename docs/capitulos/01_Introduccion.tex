@@ -18,7 +18,7 @@ como ruido estocástico es aquel que atiende a una variación aleatoria que
 puede surgir de diversos factores, como mediciones imprecisas de señales o la falta de
 precisión en sensores. Por otro lado, el ruido determinista está directamente
 relacionado con la complejidad de un modelo. Su presencia aumenta la probabilidad de
-sobreajuste. El ruido determinista puede explicarse como la parte de la función $f$ que el conjunto
+sobre-ajuste. El ruido determinista puede explicarse como la parte de la función $f$ que el conjunto
 de hipótesis $H^n$ no puede capturar, es decir, $f(x) - h^*(x)$. Este tipo de ruido se
 considera así porque la función (modelo) no es lo suficientemente compleja como para comprender
 esa parte. Este ruido depende de $H^n$ y permanece constante para un valor dado de $x$~\cite{Mostafa2012}.\\[6pt]
@@ -26,7 +26,7 @@ La reducción de características ayuda a manejar ambos tipos de ruido~\cite{mia
 modelo, lo que puede reducir el impacto del ruido estocástico y disminuir la complejidad del
 modelo, lo que a su vez puede ayudar a mitigar el ruido determinista al mejorar la capacidad
 del modelo para capturar las características relevantes y descartar las irrelevantes.
-Esto puede conducir a una mejor capacidad de generalización y a una reducción del sobreajuste.\\[6pt]
+Esto puede conducir a una mejor capacidad de generalización y a una reducción del sobre-ajuste.\\[6pt]
 Además de la simplificación del modelo, que conduce a una reducción del ruido, la
 selección de características es un preprocesamiento necesario por varias razones:
 \begin{enumerate}
@@ -56,7 +56,7 @@ que intentan dar solución a este problema. Los métodos de búsqueda más famos
 (\textbf{filter}), los cuáles seleccionan las características más discriminativas según la naturaleza de los datos~\cite{miao_survey_2016}.
 Por lo general, estos métodos realizan la selección de características antes de las tareas de clasificación y
 agrupamiento. Ejemplos de algoritmos de filtrado son \textit{relieF}~\cite{kira_practical_1992} o F-statistic~\cite{ding_minimum_2005}.\\[6pt]
-Los métodos \textbf{wrapper}, en cambio, utilizan el algoritmo de aprendizaje usado postprocesamiento
+Los métodos \textbf{wrapper}, en cambio, utilizan el algoritmo de aprendizaje usado post-procesamiento
 para evaluar las características y seleccionar así las más útiles~\cite{miao_survey_2016}.\\[6pt]
 Los algoritmos clasificatorios de aprendizaje utilizados en este trabajo son \textit{SVM}~\cite{cortes_support-vector_1995}
 y \textit{kNN}~\cite{fix_discriminatory_1989,cover_nearest_1967}, siendo las máquinas de vectores de
@@ -75,7 +75,7 @@ por varios motivos. Entre varios artículos se comparan algoritmos del mismo tip
 soluciones y resultados muy variables entre sí a pesar de mismas configuraciones a la hora
 de experimentar, artículos sin código referenciado, de forma que sea más fácil interpretar
 los resultados o duplicarlos, y algoritmos novedosos presentados por su autor o autores que
-superanmal resto en alguna métrica concreta sin llegar a la rigurosidad adecuada.\\[6pt]
+superaban al resto en alguna métrica concreta sin llegar a la rigurosidad adecuada.\\[6pt]
 
 Por ello, la motivación principal de este trabajo es la de proveer información no sesgada y
 todo lo objetiva posible por medio de un análisis comparativo entre los
@@ -118,7 +118,7 @@ datos.\\[6pt]
 \end{enumerate}
 
 \subsection{Planificación}
-Un trabajo de fin de grado consta de $12$ créditos ECTS, donde se estima que cada crédito debe valer unas $25$ horas de trabajo aproximadamente. Teniendo en cuenta estos datos, se calcula que la duración del TFG no debería ser superior a $300$ horas. Ha de tenerse en cuenta también que el alumno trabaja $25$ horas semanales y debe superar algunas asignaturas además de su projecto final para terminar la carrera. Por lo tanto, el proyecto se planifica con una duración extendida en el tiempo, pero con una carga de trabajo semanal menos intensiva.\\[6pt]
+Un trabajo de fin de grado consta de $12$ créditos ECTS, donde se estima que cada crédito debe valer unas $25$ horas de trabajo aproximadamente. Teniendo en cuenta estos datos, se calcula que la duración del TFG no debería ser superior a $300$ horas. Ha de tenerse en cuenta también que el alumno trabaja $25$ horas semanales y debe superar algunas asignaturas además de su proyecto final para terminar la carrera. Por lo tanto, el proyecto se planifica con una duración extendida en el tiempo, pero con una carga de trabajo semanal menos intensiva.\\[6pt]
 Se planifica una duración de $5$ meses aproximadamente. Se utilizará un diagrama de Gantt~\cite{Clark1922} para describir la planificación del proyecto, de manera que se realizarán tareas en un orden cronológico. Sin embargo, se reconoce que algunas tareas probablemente requerirán iteraciones posteriores, ya que es probable que se mejore y perfeccione el proyecto a lo largo de su ciclo de vida.\\[6pt]
 Las fases del ciclo de vida son:
 \begin{itemize}
@@ -138,7 +138,7 @@ Las fases del ciclo de vida son:
                   \item Binary Differential Algorithm
                   \item Ant Colony Optimization
                   \item Binary Artificial Bee Colony Optimization
-                  \item Binary Particle Swarn Optimization
+                  \item Binary Particle Swarm Optimization
                   \item Genetic Algorithm (binary \& real)
             \end{itemize}
             De cada una de ellas se investigará su inspiración, funcionamiento, implementación y versiones binarias, normalmente asociadas al problema de selección de características.
@@ -155,8 +155,8 @@ Las fases del ciclo de vida son:
       \caption{Diagrama de Gantt inicial}
 \end{figure}
 
-La planificación inicial tiene en cuenta un curso ideal del ciclo de vida del proyecto, siendo las estapas más extensas la de creación del software e implementación de la documentación. Son etapas excluyentes, no pueden ocurrir a la vez según este tipo de planificación. Al terminar una etapa se pasa inmediatamente a la siguiente.\\[6pt]
-La planificación final del proyecto se ha modificado significativamente debido a una serie de contratiempos y obstáculos surgidos durante su desarrollo, así como la influencia de numerosos eventos externos que han afectado a su cronograma. En particular, se han experimentado retrasos y bloqueos que han incidido en la duración prevista del proyecto. Por ejemplo, las etapas de implementación del software y la investigación de las metaheurísticas se han entrelazado debido a que la implementación efectiva del algoritmo se facilitaba una vez que se había estudiado a fondo la metaheurística correspondiente. Esto ha llevado a una reevaluación de la estrategia de planificación original, reconociendo que no habría sido eficiente estudiar todas las metaheurísticas simultáneamente y luego proceder con su implementación.
+La planificación inicial tiene en cuenta un curso ideal del ciclo de vida del proyecto, siendo las etapas más extensas la de creación del software e implementación de la documentación. Son etapas excluyentes, no pueden ocurrir a la vez según este tipo de planificación. Al terminar una etapa se pasa inmediatamente a la siguiente.\\[6pt]
+La planificación final del proyecto se ha modificado significativamente debido a una serie de contratiempos y obstáculos surgidos durante su desarrollo, así como la influencia de numerosos eventos externos que han afectado a su cronograma. En particular, se han experimentado retrasos y bloqueos que han incidido en la duración prevista del proyecto. Por ejemplo, las etapas de implementación del software y la investigación de las metaheurísticas se han entrelazado debido a que la implementación efectiva del algoritmo se facilitaba una vez que se había estudiado a fondo la metaheurística correspondiente. Esto ha llevado a una re-evaluación de la estrategia de planificación original, reconociendo que no habría sido eficiente estudiar todas las metaheurísticas simultáneamente y luego proceder con su implementación.
 
 \begin{figure}[H]
       \begin{center}
@@ -165,7 +165,7 @@ La planificación final del proyecto se ha modificado significativamente debido 
       \caption{Diagrama de Gantt final}
 \end{figure}
 
-El coste estimado del proyecto se divide en varios subcostes:
+El coste estimado del proyecto se divide en varios sub-costes:
 \begin{itemize}
       \item \textbf{Sueldo}: Considerando un precio de proyecto que deba cubrir gastos y compensar, se estima un salario por investigador de $52.000$€ al año, es decir, $25$€/hora. Al durar el proyecto aproximadamente $8$ meses, el salario final total es de $34.000$€.
       \item \textbf{Ordenador portátil}: El estudiante consta con un portátil HP HP Pavilion Laptop 14-ec0xxx como herramienta principal de trabajo, con un precio de $1000$€. Ha sido usado durante unos $8$ meses aproximadamente. Si se tiene en cuenta que la vida media de un portátil es de aproximadamente $4-5$ años~\cite{woidasky_use_2021} entonces el costo del ordenador sería de $133.3$€.
