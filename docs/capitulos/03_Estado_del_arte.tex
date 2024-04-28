@@ -208,10 +208,10 @@ Donde $\beta$ es un factor de escalado que controla la amplificación de la vari
     \begin{center}
         \includegraphics[width=1\textwidth]{imagenes/de-mutation.png}
     \end{center}
-    \caption[Mutación en DE]{Esta figura ha sido seleccionada de una clase dada por Jaco van Niekerk. Muestra de manera gráfica en un espacio bidimensional como funciona el operador de mutación y cómo se crea el ``trial vector''.}
+    \caption[Mutación en DE]{Esta figura ha sido seleccionada de \cite{10.5555/1557464}. Muestra de manera gráfica en un espacio bidimensional como funciona el operador de mutación y cómo se crea el ``trial vector''.}
 \end{figure}
 
-Una ventaja que tiene el uso de diferencias de vectores en la mutación, es que si todos lo individuos tienen la misma probabilidad de selección, la media de la distribución será cero. Con ello se consigue mantener la deriva genética lo más pequeña posible. La deriva genética es un proceso estocástico en el que la frecuencia de alelos (forma alternativa de un gen) en una población cambia aleatoriamente con el tiempo debido a evento aleatorios. Esto puede llevar a cambios en la composición genética de la población a lo largo de las generaciones, especialmente en poblaciones pequeñas. Por tanto, una media distinta de cero daría pie a sesgos en la deriva genética~\cite{genetic-drift}.
+Una ventaja que tiene el uso de diferencias de vectores en la mutación, es que si todos lo individuos tienen la misma probabilidad de selección, la media de la distribución será cero. Con ello se consigue mantener la deriva genética lo más pequeña posible. La deriva genética es un proceso estocástico en el que la frecuencia de alelos (forma alternativa de un gen) en una población cambia aleatoriamente con el tiempo debido a evento aleatorios. Esto puede llevar a cambios en la composición genética de la población a lo largo de las generaciones, especialmente en poblaciones pequeñas. Por tanto, una media distinta de cero daría pie a sesgos en la deriva genética~\cite{genetic-drift, 10.5555/1557464}.
 
 \subsubsection{Cruce}
 El cruce implementa una recombinación del vector de prueba $u_i$ y el vector padre $x_i$ para producir un vector hijo $x^\prime_i$.
@@ -224,7 +224,7 @@ Donde $\mathcal{J}$ es un conjunto de puntos de perturbación. Estos índices pu
     \begin{center}
         \includegraphics[width=1\textwidth]{imagenes/de-crossover.png}
     \end{center}
-    \caption[Crossover en DE]{Esta figura ha sido seleccionada de una clase dada por Jaco van Niekerk. Muestra de manera gráfica en un espacio bidimensional como funciona el operador de cruce al recombinar los genes/características de los vectores padre y ``trial''.}
+    \caption[Crossover en DE]{Esta figura ha sido seleccionada de \cite{10.5555/1557464}. Muestra de manera gráfica en un espacio bidimensional como funciona el operador de cruce al recombinar los genes/características de los vectores padre y ``trial''.}
 \end{figure}
 
 \subsubsection{Selección}
