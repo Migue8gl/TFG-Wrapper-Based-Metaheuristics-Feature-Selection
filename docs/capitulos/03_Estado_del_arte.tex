@@ -245,3 +245,167 @@ Los operadores del algoritmo son los siguientes:
 \end{enumerate}
 
 Estos operadores trabajan en un ciclo repetitivo donde las abejas empleadas primero van a las fuentes de alimento y actualizan la información sobre su rentabilidad. Luego, las abejas observadoras seleccionan fuentes de alimento basadas en esta información actualizada y las abejas exploradoras buscan nuevas fuentes~\cite{karaboga_idea_nodate}. Este proceso se repite hasta cumplir con los criterios de terminación del algoritmo.
+
+\section{Algoritmo de optimización del saltamontes}
+\subsection{Introducción}
+Los \textbf{grasshoppers} (saltamontes o langosta cuando están en enjambre) son insectos cuyo ciclo de vida consiste en tres etapas: \textit{huevo, ninfa, adulto}. Un saltamontes puede ser encontrado en el enjambre en su estado ninfa y adulto. La diferencia entre ninfa y adulto es la velocidad de movimiento con pasos pequeños en la ninfa y lo contrario en su vida adulta (Las soluciones adultas se encargan de la exploración y las ninfas de la explotación)~\cite{saremi_grasshopper_2017}.
+\subsection{Funcionamiento y Operadores}
+\subsubsection{Operador de posición (primera propuesta)}
+La posición de un individuo se define en la siguiente ecuación:
+\begin{equation}
+    x_i = r_1s_1+r_2g_i+r_3a_i
+\end{equation}
+Donde $x_i$ es la posición del agente número $i$, $s$ la interacción social, $g$ la fuerza gravitacional, $a$ la advección del viento y $r_1, r_2, r_3$ son números aleatorios entre $[0,1]$.
+Esta función de actualización de posición no puede ser usada para la optimización debido a que se alcanza la zona de comfort de manera prematura y no se converge en un punto específico~\cite{saremi_grasshopper_2017}.
+
+\subsubsection{Posición (propuesta final)}
+
+\begin{equation}
+    X_i^d=c_1\left(\sum_{j=1,j\neq i}^N c_2\frac{ub_d-lb_d}{2}s(|x_j^d-x_i^d|)\frac{x_j-x_i}{d_{ij}}\right)+\hat{T_d}
+    \label{eq:goa-position}
+\end{equation}
+
+Donde $ud_b$ es la cota superior en la dimensión $D$, $lb_d$ es la cota inferior en la dimensión $D$, $\hat{T_d}$ es el valor de la dimensión $D$ en el objetivo (la mejor solución encontrada hasta la fecha) y $c$ es el coeficiente decreciente para hacer cada vez más pequeña la zona de comfort, zona de atracción y zona de repulsión.
+
+No se considera la gravedad (G) y la dirección del viento siempre es a favor del objetivo $\hat{T_d}$.
+
+Una diferencia con otros algoritmos de enjambres como PSO es que \textbf{GAO} actualiza la posición de cada saltamontes a partir de la posición actual, el mejor punto encontrado hasta el momento y la posición de todos los otros agentes, mientras que \textbf{PSO} lo hace a partir de la posición actual del agente y la mejor posición encontrada~\cite{saremi_grasshopper_2017}.
+
+Esto significa que PSO no tienen en cuenta al resto de agentes, mientras que GAO sí.
+
+Los parámetros $c_1, c_2$ tienen dos propósitos:
+\begin{itemize}
+    \item $c_1$ $\rightarrow$ Reduce el movimiento del enjambre entero alrededor del objetivo, es decir, maneja la relación entre exploración y explotación para el conjunto global de soluciones.
+    \item $c_2$ $rightarrow$ Reduce la zona de comfort y las regiones de repulsión y atracción. $s$ es la función que decide si un agente debe sentirse atraído o repelido al objetivo, mientras que $\frac{ub_d-lb_d}{2}$ decrece de manera lineal el espacio de búsqueda a medida que $c_2$ decrece.
+\end{itemize}
+
+Ha de tenerse en cuenta también que en el proceso de búsqueda, la exploración debe ir antes que la explotación. En los saltamontes sin embargo, la fase explotativa que es la \textbf{ninfa} es la que se da primero. Por ello el parámetro $c$ debe decrecer a medida que las iteraciones sobre el algoritmo van pasando. Este mecanismo hace que se promueva la explotación a medida que las iteraciones se incrementan, ya que se va reduciendo cada vez más el movimiento general del enjambre y se reduce la zona de comfort. $c$ se actualiza por tanto así:
+\begin{equation}
+    c = c_{\text{max}} - l \cdot \frac{c_{\text{max}} - c_{\text{min}}}{L}
+\end{equation}
+
+Donde $l$ es la iteración actual y $L$ el número máximo de iteraciones.
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=0.8\textwidth]{imagenes/goa-position-convergence.png}
+    \end{center}
+    \caption[Convergencia en GOA]{Esta figura ha sido seleccionada de \cite{saremi_grasshopper_2017}. Muestra la convergencia de los ``saltamontes'' en tan solo unas pocas iteraciones usando la fórmula \ref{eq:goa-position}.}
+\end{figure}
+
+\section{Algoritmo de la libélula}
+\subsection{Introducción}
+Los \textbf{dragonflies} (libélulas en español) son pequeños insectos que se pueden ver en enjambre solo cuando cazan o migran, dando lugar a dos tipos de enjambre:
+\begin{itemize}
+    \item Las diferencias dadas entre ambos enjambres son notorias. En caza, se organizan en enjambres pequeños que vuelan en muchas direcciones en busca de comida. Este tipo de enjambre es llamado \textbf{estático}. Cuando se organizan en enjambres para migrar, estos son numerosos y vuelan en una sola dirección. Estos enjambres en contraposición a los anteriores son llamados \textbf{dinámicos}~\cite{mirjalili_dragonfly_2016}.
+    \item Es obvio el paralelismo que se da entre las principales fases de la búsqueda optimizatoria (\textbf{exploración y explotación}). La fase dinámica es un paralelismo con la exploración, ya que se buscan pequeños objetivos en grupos por el espacio. La fase estática (explotación) se da cuando todos los agentes empiezan a migrar a una dirección concreta.
+\end{itemize}
+
+
+\subsection{Funcionamiento y Operadores}
+
+\subsubsection{Separación}
+\begin{equation}
+    S_i = -\sum_{j=1}^N X - X_j
+\end{equation}
+Se refiere a la elusión estática de colisión entre individuos con su vecindario. Donde $X$ es la posición del agente actual y $X_j$ la posición de su vecino número $j$. Mientras que $N$ es el número total de agentes.
+
+\subsubsection{Alineamiento}
+\begin{equation}
+    A_i = \frac{\sum_{j=1}^N V_i}{N}
+\end{equation}
+Se refiere a la coordinación de velocidad entre individuos de un vecindario. Donde $V_j$ es la velocidad del individuo número $j$ en el vecindario.
+
+\subsubsection{Cohesión}
+\begin{equation}
+    C_i = \frac{\sum_{j=1}^N X_j}{N} - X
+\end{equation}
+Se refiere a la fuerza de atracción de los individuos hacia el centro de masa del vecindario. Se da por hecho un radio alrededor de cada libélula agrupando su vecindario, pues este es muy importante para el comportamiento de esta. En un enjambre dinámico, las libélulas tienden a alinear su vuelo al tiempo que mantienen una separación y cohesión adecuadas. En un enjambre estático, sin embargo, las alineaciones son muy bajas mientras que la cohesión es alta para atacar a las presas. Por lo tanto, se asigna a las libélulas pesos de alta alineación y baja cohesión cuando exploran el espacio de búsqueda y de baja alineación y alta cohesión cuando explotan el espacio de búsqueda. Para la transición entre exploración y explotación, los radios de vecindad se incrementan proporcionalmente al número de iteraciones~\cite{mirjalili_dragonfly_2016}.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenes/da-operators.png}
+    \caption[Vecindario de libélulas]{Vecindario de libélulas~\cite{mirjalili_dragonfly_2016}.}
+\end{figure}
+
+\subsubsection{Atracción comida}
+\begin{equation}
+    F_i = X^+ - X
+\end{equation}
+La fuerza de atracción hacia la comida (la mejor posición encontrada hasta el momento). Donde $X^+$ es la mejor posición encontrada hasta el momento.
+
+\subsubsection{Repulsión depredador}
+\begin{equation}
+    E_i = X^- + X
+\end{equation}
+La fuerza de repulsión hacia un depredador (la peor posición encontrada hasta el momento). Donde $X^-$ es la peor posición encontrada hasta el momento.
+
+\subsubsection{Dirección}
+\begin{equation}
+    \Delta X_{t+1} = (sS_i + aA_i + cC_i + fF_i + eE_i) + w\Delta X_t
+\end{equation}
+El delta de $X$ indica el vector dirección del movimiento de las libélulas. Cada elemento en minúscula es el factor del operador al que multiplica, de forma que es posible acentuar el efecto de cada uno de estos con múltiples combinaciones.
+
+\subsubsection{Posición}
+\begin{equation}
+    X_{t+1} = X_{t} + \Delta X_{t+1}
+\end{equation}
+El operador de actualización de posición.
+
+\section{Algoritmo de optimización de ballenas}
+\subsection{Introducción}
+Simula el comportamiento de las ballenas jorobadas en la caza, utilizando tanto el azar como el mejor agente de búsqueda para perseguir a la presa. Además, emplea una espiral para simular el mecanismo de ataque de la red de burbujas de las ballenas jorobadas~\cite{mirjalili_whale_2016}.
+
+\subsection{Funcionamiento y Operadores}
+\subsubsection{Rodeado de presa}
+\begin{equation}
+    \vec{D}=|\vec{C}\cdot\vec{X}^*(t)-\vec{X}(t)|
+\end{equation}
+\begin{equation}
+    \vec{X}(t+1)=\vec{X}^*(t)-\vec{A}\cdot\vec{D}
+\end{equation}
+Donde $t$ indica la iteración actual, $\vec{A}$ y $\vec{C}$ son vectores de coeficientes, $X^*$ es el vector de posición de la mejor solución encontrada hasta el momento y $\vec{X}$ es el vector posición.
+
+Los vectores $\vec{A}$ y $\vec{C}$ se calculan como sigue:
+\begin{equation}
+    \vec{A}=2\vec{a}\cdot\vec{r}-\vec{a}
+\end{equation}
+\begin{equation}
+    \vec{C}=2\cdot\vec{r}
+\end{equation}
+Donde $\vec{a}$ es decrementado linealmente desde $2$ hasta $0$ y $\vec{r}$ es un vector aleatorio con valores en $[0,1]$.
+
+\subsubsection{Ataque de red de burbujas (explotación)}
+\begin{itemize}
+    \item \textbf{Mecanismo de encogimiento del cerco}
+          Este mecanismo es conseguido mediante el decremento del valor de $\vec{a}$. El vector $\vec{A}$ es un vector de valores aleatorios en el intervalo $[-a,a]$ donde $a$ es decrementado desde $2$ hasta $0$.
+          \begin{figure}[H]
+              \centering
+              \includegraphics[width=0.5\textwidth]{imagenes/wao-shrinking-circle-prey-mechanism.png}
+              \caption[Mecanismo de encogimiento del cerco]{Ataque de red de burbujas usando el mecanismo de encogimiento del cerco~\cite{mirjalili_whale_2016}.}
+          \end{figure}
+
+    \item \textbf{Mecanismo de actualización de posición en espiral}
+          Este mecanismo calcula la distancia entre la ballena $(x,y)$ y la presa $(x^*, y^*)$. Una ecuación con forma de espiral es creada entonces entre la ballena y la presa para simular el comportamiento de estas al cazar.
+          \begin{figure}[H]
+              \centering
+              \includegraphics[width=0.5\textwidth]{imagenes/spiral-update-position-wao.png}
+              \caption[Mecanismo de actualización de posición en espiral]{Ataque de red de burbujas usando el mecanismo de actualización de posición en espiral~\cite{mirjalili_whale_2016}.}
+          \end{figure}
+
+          \begin{equation}
+              \vec{X}(t+1)=\vec{D}^{'}\cdot e^{bl}\cdot cos(2\pi l)+\vec{X}^*(t)
+          \end{equation}
+          Donde $\vec{D}^{'}=|\vec{X}^*(t)-\vec{X}(t)|$ e indica la distancia entre presa y ballena. $b$ es una constante para definir la forma de la espiral, $l$ es un número aleatorio entre $[-1,1]$.
+\end{itemize}
+
+Se utilizan ambos mecanismos, dependiendo de si cierto número $p$ aleatorio es mayor o menor a $0.5$.
+
+\subsubsection{Búsqueda de la presa (exploración)}
+El mismo método utilizando el vector $\vec{A}$ puede ser utilizado para la exploración. Se puede usar $\vec{A}$ con valores más grandes a $1$ o menores a $-1$ para forzar al agente a moverse lejos de otro agente.
+\begin{equation}
+    \vec{D}=|\vec{C}\cdot\vec{X}_{rand}-\vec{X}|
+\end{equation}
+\begin{equation}
+    \vec{X}(t+1)=\vec{X}_{rand}-\vec{A}\cdot\vec{D}
+\end{equation}
+Cuando $|A|\geq 1$ $\rightarrow$ Exploración, cuando $|A|<1$ $\rightarrow$ Explotación.
