@@ -409,3 +409,23 @@ El mismo método utilizando el vector $\vec{A}$ puede ser utilizado para la expl
     \vec{X}(t+1)=\vec{X}_{rand}-\vec{A}\cdot\vec{D}
 \end{equation}
 Cuando $|A|\geq 1$ $\rightarrow$ Exploración, cuando $|A|<1$ $\rightarrow$ Explotación.
+
+\section{Algoritmo del murciélago}
+\subsection{Introducción}
+El algoritmo \textit{metaheurístico} de los murciélagos se basa en la capacidad de eco-localización de estos para detectar a su presa y cazarla finalmente. La eco-localización de los murciélagos no solo les permite detectar a su presa, sino discriminar entre distintos tipos de insectos. Más concretamente, este algoritmo se basa en los micro murciélagos, pues estos usan más frecuentemente la eco-localización en comparación a otras especies de murciélagos. Estos murciélagos emiten un pulso de sonido, el cual, rebota en los objetos y entidades cercanas, permitiendo al murciélago componer una ``visión'' general de sus alrededores. La frecuencia del pulso emitido podría estar relacionada con distintas estrategias de caza~\cite{yang_new_2010}.
+\subsubsection{Acústica de la eco-localización}
+Aunque cada pulso dura solo unos pocos milisegundos (entre 8 y 10 ms), mantiene una frecuencia constante, generalmente entre 25 kHz y 150 kHz. La longitud de onda ($\lambda$) de estos impulsos ultrasónicos, con una frecuencia ($f$) y velocidad del sonido ($v$) en el aire a 340 m/s, está dada por
+\begin{equation}
+    \lambda = \frac{v}{f}
+\end{equation}
+con longitudes entre 2 mm y 14 mm para frecuencias de 25 kHz a 150 kHz, respectivamente. Esta longitud de onda coincide con el tamaño de las presas. Los murciélagos pueden detectar obstáculos tan pequeños como cabellos humanos, utilizando la eco-localización para construir un modelo 3D del entorno, y discriminando distancias, orientaciones y tipos de presas. Aunque los murciélagos tienen buena vista y olfato, utilizan principalmente la eco-localización para la detección de presas y la navegación eficiente~\cite{yang_new_2010}.
+
+\subsection{Funcionamiento y Operadores}
+Para simplificar:
+\begin{itemize}
+    \item Los murciélagos usan la ecolocación para percibir la distancia y distinguir alimento de barreras.
+    \item Vuelan aleatoriamente con velocidad $v_i$ y frecuencia fija $f_{min}$, ajustando longitud de onda $\lambda$ y sonido $A_0$.
+    \item Se asume que la intensidad del sonido varía desde $A_0$ hasta un mínimo $A_{min}$.
+\end{itemize}
+
+\end{document}
