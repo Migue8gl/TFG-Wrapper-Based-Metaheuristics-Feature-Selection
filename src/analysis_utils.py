@@ -206,7 +206,7 @@ def evaluate_optimizer(optimizer: object,
         execution_time += time.time() - start_time
         metrics_each_iteration[i] = metrics_values
 
-        # Evaluate the model on the test set of the current fold
+        # Evaluate the model on the test set of the current iteration
         optimizer.params['target_function_parameters'][DATA] = sample_test
         optimizer.params['target_function_parameters']['weights'] = result[:-4]
 
