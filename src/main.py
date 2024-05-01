@@ -27,7 +27,7 @@ from plots import (
     plot_metric_over_folds,
 )
 
-#plt.style.use(['science', 'ieee'])  # Style of plots
+plt.style.use(['science', 'ieee'])  # Style of plots
 
 
 def main(*args, **kwargs):
