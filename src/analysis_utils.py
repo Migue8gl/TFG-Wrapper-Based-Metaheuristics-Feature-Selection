@@ -2,10 +2,17 @@ import time
 from typing import Optional
 
 import numpy as np
-from constants import DATA, DEFAULT_FOLDS, DEFAULT_ITERATIONS, LABELS, SAMPLE
+from constants import (
+    DATA,
+    DEFAULT_EVALS,
+    DEFAULT_FOLDS,
+    DEFAULT_ITERATIONS,
+    LABELS,
+    SAMPLE,
+)
 from data_utils import split_data_to_dict
 from optimizer import Optimizer
-from sklearn.model_selection import StratifiedKFold
+from sklearn.model_selection import StratifiedKFold, train_test_split
 from sklearn.preprocessing import (
     MinMaxScaler,
     StandardScaler,
@@ -36,9 +43,9 @@ def calculate_average_metric(metrics_each_fold: dict, key: str) -> list:
 
 def k_fold_cross_validation(optimizer: object,
                             dataset: Optional[dict] = None,
-                            k: int = DEFAULT_FOLDS,
-                            scaler: int = 1,
-                            verbose: bool = False) -> dict:
+                            k: Optional[int] = DEFAULT_FOLDS,
+                            scaler: Optional[int] = 1,
+                            verbose: Optional[bool] = False) -> dict:
     """
     Implementation of k-fold cross-validation.
 
@@ -67,23 +74,21 @@ def k_fold_cross_validation(optimizer: object,
         y_train, y_test = dataset[LABELS][train_index], dataset[LABELS][
             test_index]
 
+        # Data normalization
         if scaler == 1:
             scaler = MinMaxScaler()
-            scaler.fit(x_train)
-            x_train = scaler.transform(x_train)
-            x_test = scaler.transform(x_test)
-            train = np.concatenate((x_train, y_train.reshape(-1, 1)), axis=1)
-            test = np.concatenate((x_test, y_test.reshape(-1, 1)), axis=1)
         elif scaler == 2:
             scaler = StandardScaler()
+        else:
+            scaler = None
+
+        if scaler:
             scaler.fit(x_train)
             x_train = scaler.transform(x_train)
             x_test = scaler.transform(x_test)
-            train = np.concatenate((x_train, y_train.reshape(-1, 1)), axis=1)
-            test = np.concatenate((x_test, y_test.reshape(-1, 1)), axis=1)
-        else:
-            train = np.concatenate((x_train, y_train.reshape(-1, 1)), axis=1)
-            test = np.concatenate((x_test, y_test.reshape(-1, 1)), axis=1)
+
+        train = np.concatenate((x_train, y_train.reshape(-1, 1)), axis=1)
+        test = np.concatenate((x_test, y_test.reshape(-1, 1)), axis=1)
 
         sample = split_data_to_dict(train)
         sample_test = split_data_to_dict(test)
@@ -112,17 +117,125 @@ def k_fold_cross_validation(optimizer: object,
             print("Test Fitness:", metrics['fitness'])
             print("Test Accuracy:", metrics['accuracy'])
             print("Selected Features:", metrics['selected_features'])
-            print("Selected Rate:", metrics['selected_rate'])
-            print()
+            print("Selected Rate:", metrics['selected_rate'], '\n')
 
     average_fitness = calculate_average_metric(metrics_each_fold, 'fitness')
-    average_selected_features = calculate_average_metric(metrics_each_fold, 'selected_features')
+    average_selected_features = calculate_average_metric(
+        metrics_each_fold, 'selected_features')
 
     # Compute standard deviation of test fitness values
     std_deviation_test_fitness = np.std(test_fitness)
 
     # Compute mean time
     execution_time /= k
+
+    return {
+        'avg_fitness': average_fitness,
+        'avg_selected_features': average_selected_features,
+        'test_fitness': {
+            'all_fitness': test_fitness,
+            'best': np.min(test_fitness),
+            'avg': np.mean(test_fitness),
+            'std_dev': std_deviation_test_fitness,
+            'acc': np.mean(test_accuracy),
+            'n_features': np.mean(test_selected_features),
+            'selected_rate': np.mean(test_selected_rate)
+        },
+        'execution_time': execution_time
+    }
+
+
+def evaluate_optimizer(optimizer: object,
+                       dataset: Optional[dict] = None,
+                       n: Optional[int] = DEFAULT_EVALS,
+                       scaler: Optional[int] = 1,
+                       verbose: Optional[bool] = False) -> dict:
+    """
+    This function evaluates the optimizer k times to provide reliable results.
+
+    Parameters:
+        - optimizer (object): The optimizer to be used.
+        - dataset (dict, optional): The dataset in dict form.
+        - n (int, optional): The number of evaluations.
+        - scaler (int, optional): The type of scaling to be used.
+        - verbose (bool, optional): Whether to print the results.
+
+    Returns:
+        - metrics (dict): The dictionary containing metrics of the results.
+    """
+    # Variables
+    metrics_each_iteration = {}
+    execution_time = 0
+    test_fitness = []
+    test_accuracy = []
+    test_selected_features = []
+    test_selected_rate = []
+
+    # Execute algorithm n times and recover metrics
+    for i in range(n):
+        # Split in train and test
+        _sample = dataset[SAMPLE]
+        _labels = dataset[LABELS]
+        x_train, x_test, y_train, y_test = train_test_split(_sample,
+                                                            _labels,
+                                                            test_size=0.2,
+                                                            random_state=42)
+
+        # Data normalization
+        # Data normalization
+        if scaler == 1:
+            scaler = MinMaxScaler()
+        elif scaler == 2:
+            scaler = StandardScaler()
+        else:
+            scaler = None
+
+        if scaler:
+            scaler.fit(x_train)
+            x_train = scaler.transform(x_train)
+            x_test = scaler.transform(x_test)
+
+        train = np.concatenate((x_train, y_train.reshape(-1, 1)), axis=1)
+        test = np.concatenate((x_test, y_test.reshape(-1, 1)), axis=1)
+
+        sample = split_data_to_dict(train)
+        sample_test = split_data_to_dict(test)
+
+        # Run optimization algorithm on the current iteration
+        start_time = time.time()
+        result, metrics_values = optimizer.optimize(sample)
+        execution_time += time.time() - start_time
+        metrics_each_iteration[i] = metrics_values
+
+        # Evaluate the model on the test set of the current fold
+        optimizer.params['target_function_parameters'][DATA] = sample_test
+        optimizer.params['target_function_parameters']['weights'] = result[:-4]
+
+        metrics = Optimizer.fitness(
+            **optimizer.params['target_function_parameters'])
+
+        test_fitness.append(metrics['fitness'])
+        test_accuracy.append(metrics['accuracy'])
+        test_selected_features.append(metrics['selected_features'])
+        test_selected_rate.append(metrics['selected_rate'])
+
+        if verbose:
+            print('\n##### Finished iteration {} #####\n'.format(i))
+            print("Test Fitness:", metrics['fitness'])
+            print("Test Accuracy:", metrics['accuracy'])
+            print("Selected Features:", metrics['selected_features'])
+            print("Selected Rate:", metrics['selected_rate'], '\n')
+
+    average_fitness = calculate_average_metric(metrics_each_iteration,
+                                               'fitness')
+    average_selected_features = calculate_average_metric(
+        metrics_each_iteration, 'selected_features')
+
+    # Compute standard deviation of test fitness values
+    std_deviation_test_fitness = np.std(test_fitness)
+
+    # Compute mean time
+    execution_time /= n
 
     return {
         'avg_fitness': average_fitness,
