@@ -166,8 +166,7 @@ class Optimizer:
         # Split into train and test data
         x_train, x_test, y_train, y_test = train_test_split(sample_weighted,
                                                             labels,
-                                                            test_size=0.2,
-                                                            random_state=42)
+                                                            test_size=0.2)
 
         if classifier == "knn":
             classifier = KNeighborsClassifier(
