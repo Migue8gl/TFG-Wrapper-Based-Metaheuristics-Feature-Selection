@@ -417,7 +417,7 @@ El algoritmo \textit{metaheurístico} de los murciélagos se basa en la capacida
 Aunque cada pulso dura solo unos pocos milisegundos (entre 8 y 10 ms), mantiene una frecuencia constante, generalmente entre 25 kHz y 150 kHz. La longitud de onda ($\lambda$) de estos impulsos ultrasónicos, con una frecuencia ($f$) y velocidad del sonido ($v$) en el aire a 340 m/s, está dada por
 \begin{equation}
     \lambda = \frac{v}{f}
-\end{equation} 
+\end{equation}
 con longitudes entre 2 mm y 14 mm para frecuencias de 25 kHz a 150 kHz, respectivamente. Esta longitud de onda coincide con el tamaño de las presas. Los murciélagos pueden detectar obstáculos tan pequeños como cabellos humanos, utilizando la eco-localización para construir un modelo 3D del entorno, y discriminando distancias, orientaciones y tipos de presas. Aunque los murciélagos tienen buena vista y olfato, utilizan principalmente la eco-localización para la detección de presas y la navegación eficiente~\cite{yang_new_2010}.
 
 \subsection{Funcionamiento y Operadores}
@@ -427,4 +427,131 @@ Para simplificar:
     \item Vuelan aleatoriamente con velocidad $v_i$ y frecuencia fija $f_{min}$, ajustando longitud de onda $\lambda$ y sonido $A_0$.
     \item Se asume que la intensidad del sonido varía desde $A_0$ hasta un mínimo $A_{min}$.
 \end{itemize}
+\subsubsection{Movimiento}
 
+Las soluciones (posiciones) y las velocidades de los murciélagos en un instante $i$ son:
+\begin{equation}
+    \begin{aligned}
+         & x_i^t = x_i^{t-1} + v_i^t                                      \\
+         & v_i^t = v_i^{t-1} + (x_i^t - x_*) f_i                          \\
+         & f_i = f_{\text{min}} + (f_{\text{max}} - f_{\text{min}}) \beta
+    \end{aligned}
+\end{equation}
+Donde $\beta$ es un vector aleatorio escogido de una distribución uniforme, $x_*$ es la mejor posición global que es seleccionada tras comprobar los $n$ murciélagos. Como el productor de $\lambda_i f_i$ es el incremento de la velocidad, se puede usar tanto uno como otro para ajustar la velocidad mientras el otro es fijado, todo depende del problema de interés~\cite{yang_new_2010}. En el documento original, se utiliza un rango para $f$ de $[0,100]$. A cada murciélago se le asigna una frecuencia uniformemente de $[f_{\text{min}},f_{\text{max}}]$. Una vez se ha seleccionado una mejor solución, se actualizan los vectores posición de cada murciélago:
+\begin{equation}
+    x_{\text{new}} = x_{\text{old}} + \epsilon A^t
+\end{equation}
+Donde $\epsilon \in [-1,1]$ es un número aleatorio y $A^t$ es la intensidad sonora media de los murciélagos.
+
+\subsubsection{Intensidad sonora y Emisión de pulso}
+
+La intensidad sonora y el ratio de emisión de pulsos deben actualizarse según avance el número de iteraciones. $A_i$ debe decrementarse a la vez que el ratio $r_i$ se incrementa según el murciélago se acerca a su presa~\cite{yang_new_2010}. Se actualizan del siguiente modo:
+\begin{equation}
+    \begin{aligned}
+         & A_i^{t+1} = \alpha A_i^t, \quad r_i^{t+1} = r_i^0 [1 - \exp(-\gamma t)]
+    \end{aligned}
+\end{equation}
+Donde $\gamma, \alpha$ son constantes. Estos valores solo se actualizan si las nuevas soluciones son mejores, de manera que se guíe hacia un óptimo.
+
+\section{Optimización de los lobos grises}
+\subsection{Introducción}
+
+\begin{itemize}
+    \item El algoritmo se inspira en el comportamiento de la manada de los lobos grises y sus escala jerárquica. Los lobos grises son super-depredadores, es decir, están en la cima de la cadena alimentaria~\cite{mirjalili_grey_2014}. Su escala jerárquica es la siguiente:
+          \begin{enumerate}
+              \item $\alpha\rightarrow$ Los lobos alfa son aquellos que lideran la manada, no por su fuerza, si no por su capacidad organizativa dentro de la manada. Estos solo puede procrear dentro de la manada y son los encargados de tomar decisiones importantes sobre todo el conjunto.
+              \item $\beta\rightarrow$ Los lobos beta son subordinados directos de los alfa. Son la opción más directa cuando se trata de sustituir a un alfa. Deben mostrar respeto a los alfa y comandan al resto de la manada según dicte el alfa.
+              \item $\omega\rightarrow$ El nivel más bajo de la cadena. Son los últimos en comer, pero no por ello carecen de importancia, pues la manada puede llegar a enfrentarse a graves problemas cuando este nivel de lobos falta. Son totalmente necesarios para mantener la estructura.
+              \item $\delta\rightarrow$ Lobos que someten a los omegas, pero que deben someterse a los alfas y omegas. A este grupo pertenecen los cazadores, ancianos, centinelas y cuidadores.
+          \end{enumerate}
+
+    \item Modelado de jerarquía:
+          \begin{itemize}
+              \item Se considera la solución más buena como la solución $\alpha$, siendo las siguientes en orden de mejor a peor \textbf{fitness} la $\beta$, la $\delta$ y por último la $\omega$.
+              \item La caza (optimización) es guiada por las soluciones $\alpha$, $\beta$ y $\delta$ mientras que las soluciones $\omega$ siguen a estos tres lobos.
+          \end{itemize}
+\end{itemize}
+
+\subsection{Funcionamiento y Operadores}
+
+\subsubsection{Rodeo de la presa}
+\begin{equation}
+    \vec{D}=|\vec{C}\cdot\vec{X}_p(t)-\vec{X}(t)|
+\end{equation}
+\begin{equation}
+    \vec{X}(t+1)=\vec{X}_p(t)-\vec{A}\cdot\vec{D}
+    \label{eq:grey-wolf-hunt}
+\end{equation}
+Donde $t$ indica la iteración actual, $\vec{A}$ y $\vec{C}$ son vectores de coeficientes, $\vec{X}_p$ es el vector posición de la presa y $\vec{X}$ el vector posición del lobo gris.
+Los vectores $\vec{A}$ y $\vec{C}$ se calculan:
+\begin{equation}
+    \vec{A}=2\vec{a}\cdot\vec{r}_1-\vec{a}
+\end{equation}
+\begin{equation}
+    \vec{C}=2\cdot\vec{r}_2
+\end{equation}
+Donde los componentes del vector $\vec{a}$ son decrementados de $2$ a $0$ linealmente según avanzan las iteraciones. Las variables  $r_1$ y $r_2$ son vectores aleatorios entre $[0,1]$.
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=1\textwidth]{imagenes/grey-wolf-hunt.png}
+    \end{center}
+    \caption[Rodeo de la presa en 2D y 3D]{Esta figura ha sido seleccionada de \cite{mirjalili_grey_2014}. Muestra en espacios 2D (a) y 3D (b) diferentes posiciones que un lobo puede tomar alrededor de la presa dada la ecuación \ref{eq:grey-wolf-hunt}. Define una vecindad alrededor de la solución en forma de hiper-esfera.}
+\end{figure}
+
+\subsubsection{Caza}
+Se supone que el alfa, beta y delta tienen mayor conocimiento de donde está la presa (óptimo) y por tanto la posición del resto de lobos debe actualizarse siguiendo a estos tres primeros~\cite{mirjalili_grey_2014}.
+\begin{equation}
+    \vec{D}_{\alpha}=|\vec{C}_1\cdot\vec{X}_{\alpha}-\vec{X}|,\quad \vec{D}_{\beta}=|\vec{C}_2\cdot\vec{X}_{\beta}-\vec{X}|,\quad \vec{D}_{\delta}=|\vec{C}_3\cdot\vec{X}_{\delta}-\vec{X}|
+\end{equation}
+\begin{equation}
+    \vec{X}_1=\vec{X}_{\alpha}-\vec{A}_1\cdot\vec{D}_{\alpha},\quad \vec{X}_2=\vec{X}_{\beta}-\vec{A}_2\cdot\vec{D}_{\beta},\quad \vec{X}_3=\vec{X}_{\delta}-\vec{A}_3\cdot\vec{D}_{\delta}
+\end{equation}
+\begin{equation}
+    \vec{X}(t+1)=\frac{\vec{X}_1+\vec{X}_2+\vec{X}_3}{3}
+\end{equation}
+
+\subsubsection{Ataque a la presa (explotación)}
+Cuando los lobos están muy cerca de la presa (solución óptima), el valor de $A$ disminuye, llevando a los lobos a converger hacia la presa. Esto se refleja en una reducción en la amplitud de los saltos en el espacio de búsqueda, facilitando una búsqueda local intensiva cerca de la mejor solución encontrada~\cite{mirjalili_grey_2014}.
+
+\subsubsection{Búsqueda de la presa (exploración)}
+Para fomentar la exploración y evitar los óptimos locales, los vectores $A$ pueden tomar valores que obliguen a los lobos a alejarse de la presa, explorando nuevas áreas del espacio de búsqueda. Este comportamiento se activa cuando los elementos de $A$ son mayores que $1$ o menores que $-1$, lo que amplía la capacidad del algoritmo para explorar el espacio de búsqueda de manera más amplia~\cite{mirjalili_grey_2014}.
+
+\section{Algoritmo de la luciérnaga}
+\subsection{Introducción}
+Las luciérnagas son insectos capaces de producir un brillo único, muy visible y característico sobre todo de noche. El brillo que estas producen puede llegar a tener signficados que hoy dia siguen debatiendose en la comunidad científica. Pese a ello, se conoce que este brillo tiene dos funciones fundamentales y bien definidas:
+\begin{enumerate}
+    \item \textbf{Comunicación}: Sirve como instrumento para la comunicación entre dos luciérnagas para el apareamiento.
+    \item \textbf{Atracción}: Se usa para atraer a potenciales presas de la luciérnaga.
+\end{enumerate}
+Por simplicidad del algoritmo, se asumen tres reglas sobre el comportamiento y naturaleza de las luciérnagas~\cite{yang_chapter_2014}:
+\begin{enumerate}
+    \item Las luciérnagas solo tienen un sexo, por lo que todas se ven atraídas por todas y no hay discriminación más allá de que una luciérnaga sea más atractica que otra.
+    \item La luminosidad es proporcional a lo atractiva que es una luciérnaga para el resto.
+    \item La luminosidad de una luciérnaga es determinada por los límites de la función objetivo.
+\end{enumerate}
+
+\subsection{Funcionamiento y Operadores}
+\subsubsection{Intensidad de la luz}
+\begin{equation}
+    \beta = \beta_0 e^{-\gamma r^2}
+\end{equation}
+Donde $\beta_0$ es el atractivo en $r=0$, es decir, en distancia igual a $0$ y $\gamma$ es un coeficiente fijo de absorción de luz~\cite{yang_chapter_2014}. La distancia entre dos luciérnagas es la distancia cartesiana:
+\begin{equation}
+    r_{ij}=\norm{x_i-x_j}=\sqrt{\sum_{k=1}^d(x_{i,k}-x_{j,k})^2}
+\end{equation}
+
+\subsubsection{Movimiento}
+El movimiento de un agente (luciérnaga) es descrito por la siguiente ecuación, que según aumente el brillo y con ello el atractivo, hace que el vector posición se dirija hacia la luciérnaga atractiva:
+\begin{equation}
+    x_i^{t+1} = x_i^t + \beta_0e^{-\gamma r_{ij}^2}(x_j^t-x_i^t)+\alpha\epsilon_i^t
+\end{equation}
+Donde $\alpha$ es un parámetro de aleatoriedad y $\epsilon$ un vector de números alatorios sacados de una distribución Gaussiana o uniforme. \\[6pt]
+El parámetro $\alpha$ debe ser decrementado gradualmente de forma que las luciérnagas pasen de moverse tan aleatoriamente en un principio a converger en un punto óptimo al final~\cite{yang_chapter_2014}:
+\begin{equation}
+    \alpha = \alpha_\infty + (\alpha_0-\alpha_\infty)e^{-t}
+\end{equation}
+Donde $t\in(0,t_{max}]$, siendo $t_{max}$ el número máximo de generaciones, $alpha_0$ el parámetro inicial y $\alpha_\infty$ el valor final. De esta forma la exploración da paso a la explotación a medida que el número de iteraciones avanza.
+
+\section{Búsqueda Cuckoo}
+\subsection{Introducción}
