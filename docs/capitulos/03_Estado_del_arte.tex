@@ -18,7 +18,7 @@ También se puede observar una tendencia  prácticamente igual en la popularidad
     \caption[Popularidad de feature selection + metaheuristics sobre los años]{De igual forma que en la figura \ref{fig:pop_fs} las mateheuristicas han ido muy ligadas a la resolución de este problema. Se ha usado el buscador Scopus para estos resultados.}
 \end{figure}
 
-Y es que las metaheurísticas son algoritmos muy convenientes en la resolución de este tipo de problemas. Algoritmos analíticos no son válidos cuando el conjunto de datos tiene un número de características muy elevado debido a una cantidad de combinaciones simplemente inabordable en términos computacionales. Debido a ello, se suelen utilizar algoritmos más rápidos cuya solución no es óptima en términos globales, pero si suficientemente buena.\\[6pt]
+Y es que las metaheurísticas son algoritmos muy convenientes en la resolución de este tipo de problemas. Algoritmos analíticos no son válidos cuando el conjunto de datos tiene un número de características muy elevado debido a una cantidad de combinaciones simplemente inabordable en términos computacionales. Debido a ello, se suelen utilizar algoritmos más rápidos cuya solución no es óptima en términos globales, pero si suficientemente buena.\$6pt]
 Muchos algoritmos metaheurísticos han sido propuestos a lo largo de los años. Se han escogido los más destacables en cuanto a resultados y más mencionados entre todos ellos, dando una selección de algoritmos metaheurísticos modernos de, en principio, muy alta calidad. No solo son seleccionados algoritmos modernos, sino que también se han escogido una serie de algoritmos más ``clásicos'', pero cuya aplicación es más extendida y con resultados que, de forma empírica, han demostrado ser más que buenos a lo largo de décadas de uso.
 
 \begin{table}[H]
@@ -82,7 +82,7 @@ El proceso típico incluye~\cite{mathew2012genetic}:
 El algoritmo termina cuando se alcanza cierta tolerancia de error o número máximo de iteraciones.
 
 \subsubsection{Selección}
-La selección se puede llevar a cabo con varios métodos, uno de los más utilizados en selección por torneo.\\[6pt]
+La selección se puede llevar a cabo con varios métodos, uno de los más utilizados en selección por torneo.\$6pt]
 En la selección por torneo, los individuos compiten entre sí en grupos pequeños. Cada grupo (torneo) tiene varios competidores (individuos). El competidor con la mejor aptitud (\textbf{fitness}) dentro del grupo tiene más probabilidad de ganar. Los ganadores son seleccionados para ``reproducirse''. Este proceso se repite hasta que se completa el \textit{pool} de apareamiento con los ganadores de los torneos~\cite{miller_genetic_nodate}. La probabilidad de cada individuo en base a su \textbf{fitness} se calcula de la siguiente manera:
 \begin{equation}
     P(\text{parent}_i) = \frac{\text{fitness}(\text{parent}i)}{\sum_{j=1}^{N} \text{fitness}(\text{parent}_j)}
@@ -146,7 +146,7 @@ Donde:
     \item $\Delta\tau_{ij}^k$ y $\Delta\tau_{ij}^g$ son respectivamente, la cantidad de feromonas colocadas en la arista $(i,j)$ por la hormiga $k$ y la cantidad de feromonas depositadas por la mejor hormiga $g$ en el instante $t$ sobre la arista $(i,j)$.
     \item $Q$ es una constante y $F^k$ es el valor de coste de la solución encontrada por la hormiga $k$ en el tour $T^k$, es decir, $F^k$ es el \textit{fitness} de la hormiga $k$.
 \end{itemize}
-Se utiliza el sistema \textit{max-min}, solo la mejor hormiga puede depositar feromona.\\[6pt]
+Se utiliza el sistema \textit{max-min}, solo la mejor hormiga puede depositar feromona.\$6pt]
 En el algoritmo original, no había heurística de deseabilidad o visibilidad ($\eta$), solo información en términos de feromona~\cite{dorigo_ant_1999}.
 
 \section{Optimización por enjambre de partículas}
@@ -181,7 +181,7 @@ Donde:
 Estas ecuaciones se utilizan para guiar el movimiento de las partículas a través del espacio de búsqueda hacia las mejores soluciones, adaptándose tanto a la mejor solución encontrada por la propia partícula ($pbest$) como a la mejor solución encontrada por cualquier partícula en el enjambre ($gbest$)~\cite{kennedy_particle_1995}. Con el tiempo, las partículas tienden a converger hacia las mejores soluciones conocidas.
 
 \section{Evolución diferencial}
-La evolución diferencial surgió como un algoritmo de optimización para problemas no diferenciables y no lineales, con pocas variables de control, robusto, paralelizable y muy eficaz. El algoritmo de evolución diferencial o \textit{differential evolution} en inglés fue diseñado para resolver problemas continuos, a diferencia del propósito original de su ``hermano gemelo'' el algoritmo genético, cuya finalidad inicial era resolver problemas binarios. Este algoritmo fue presentado en $1996$ por Storn y Price en \cite{storn_differential_1997}.\\[6pt]
+La evolución diferencial surgió como un algoritmo de optimización para problemas no diferenciables y no lineales, con pocas variables de control, robusto, paralelizable y muy eficaz. El algoritmo de evolución diferencial o \textit{differential evolution} en inglés fue diseñado para resolver problemas continuos, a diferencia del propósito original de su ``hermano gemelo'' el algoritmo genético, cuya finalidad inicial era resolver problemas binarios. Este algoritmo fue presentado en $1996$ por Storn y Price en \cite{storn_differential_1997}.\$6pt]
 En la evolución diferencial, la diferencia de vectores es un concepto clave que se utiliza en el operador de mutación. Esta se calcula restando dos vectores de la población. Gracias a esta operación puede calcularse la distancia entre vectores y esto conlleva una serie de ventajas~\cite{storn_differential_1997}:
 \begin{itemize}
     \item Las posiciones de los individuos proporcionan información ya que si los individuos están bien distribuidos (y si la población es lo suficientemente grande), la población inicial será una buena representación de todo el espacio de búsqueda.
@@ -546,7 +546,7 @@ El movimiento de un agente (luciérnaga) es descrito por la siguiente ecuación,
 \begin{equation}
     x_i^{t+1} = x_i^t + \beta_0e^{-\gamma r_{ij}^2}(x_j^t-x_i^t)+\alpha\epsilon_i^t
 \end{equation}
-Donde $\alpha$ es un parámetro de aleatoriedad y $\epsilon$ un vector de números alatorios sacados de una distribución Gaussiana o uniforme. \\[6pt]
+Donde $\alpha$ es un parámetro de aleatoriedad y $\epsilon$ un vector de números alatorios sacados de una distribución Gaussiana o uniforme. \$6pt]
 El parámetro $\alpha$ debe ser decrementado gradualmente de forma que las luciérnagas pasen de moverse tan aleatoriamente en un principio a converger en un punto óptimo al final~\cite{yang_chapter_2014}:
 \begin{equation}
     \alpha = \alpha_\infty + (\alpha_0-\alpha_\infty)e^{-t}
@@ -555,3 +555,20 @@ Donde $t\in(0,t_{max}]$, siendo $t_{max}$ el número máximo de generaciones, $a
 
 \section{Búsqueda Cuckoo}
 \subsection{Introducción}
+El algoritmo de búsqueda de los cucos se basa en el tipo de ave de cuyo nombre se inspira el algoritmo. Se basa en el tipo de crianza de estos pájaros y su interesante comportamiento parasitario, así como en los vuelos Lévy~\cite{noauthor_levy_nodate}.\$6pt]
+El parasitismo de cría que adoptan estos pájaros implica poner huevos en nidos de otras aves. Los tipos incluyen parasitismo intraespecífico, cría cooperativa y toma de nidos. Las aves anfitrionas pueden rechazar los huevos ajenos, lo que las lleva a abandonar el nido o construir uno nuevo. Algunos cucos parasitarios imitan los huevos de las aves anfitrionas para evitar el rechazo y aumentar el éxito reproductivo~\cite{yang_cuckoo_2010}.
+\subsection{Funcionamiento y Operadores}
+En el algoritmo de búsqueda cuco se implementa un tipo de vuelo Lévy, debido a que se ha observado que el vuelo de ciertos insectos y aves sigue este tipo de movimiento~\cite{yang_cuckoo_2010}.\\[6pt]
+El algoritmo de búsqueda cuco (Cuckoo) se basa en tres reglas ideales simplificadas:
+
+\begin{enumerate}
+    \item \textbf{Puesta de huevos}: Cada cuco pone un huevo a la vez y lo deposita en un nido elegido al azar. Nuevo huevo en nido $x_i^{t+1}= x_i^t + \alpha \bigoplus Levy(\lambda)$, siendo $\alpha$ el tamaño de paso y siendo el vuelo Lévy:
+          \begin{equation}
+              Levy \sim u=t^{-\lambda}
+          \end{equation}
+          Siendo $t$ la iteración actual y $\lambda$ un parámetro de estabilidad. El símbolo $\bigoplus$ se refiere a una operación de multiplicación entrada por entrada, lo que significa que cada entrada de dos matrices (o vectores) se multiplica una con la otra, resultando en una nueva matriz (o vector) con las mismas dimensiones~\cite{yang_cuckoo_2010}.
+    \item \textbf{Selección de nidos}: Los nidos con huevos de alta calidad se pasan a las generaciones siguientes. Si $f(x_j) > f(x_i), \quad$ entonces $x_i = x_j$.
+    \item \textbf{Descubrimiento de huevos}: Los huevos son descubiertos por aves anfitrionas con una probabilidad $p_a$. Probabilidad de descubrimiento: $p_a \in [0, 1]$
+\end{enumerate}
+
+Cuando un huevo es descubierto, el ave anfitriona puede desecharlo o abandonar el nido y construir uno nuevo $\rightarrow rand() < p_a$. El objetivo es usar las nuevas soluciones (huevos de cuco) para reemplazar soluciones no tan buenas en los nidos~\cite{yang_cuckoo_2010}.
