@@ -72,3 +72,10 @@ if __name__ == "__main__":
     query = "feature AND selection AND metaheuristics"
     img_name = "scopus_chart2.png"
     plot_article_count(start_year, end_year, query, img_name)
+
+    algorithms = ['Grey Wolf Optimizer', 'Grasshopper Optimization Algorithm', 'Firefly Algorithm', 'Cuckoo Search', 'Whale Optimization Algorithm', 'Bat Algorithm', 'Dragonfly Algorithm']
+
+    for algorithm in algorithms:
+        img_name = f"scopus_chart_{algorithm.replace(' ', '_')}.png"
+        query = algorithm.replace(' ', ' AND ')
+        plot_article_count(start_year, end_year, query, img_name)
