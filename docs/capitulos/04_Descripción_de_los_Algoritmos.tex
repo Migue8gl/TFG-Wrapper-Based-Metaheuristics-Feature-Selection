@@ -1,5 +1,6 @@
 \chapter{Descripción de los algoritmos}
-Para aclarar ciertas cuestiones referentes a las soluciones en este tipo de algoritmos estocásticos de tipo evolutivo, si no se especifica un tipo de representación se da por hecho que las soluciones se representan como vectores en un espacio $n$-dimensional. Un conjunto de individuos/vectores dan como resultado una población. La población es una matriz de $N\times M$, donde $N$ es el número de filas o número de individuos en la población y $M$ es el número de características del problema ($M$ dimensiones). Algunos algoritmos admiten codificación binario y otros continua, ese tipo de cuestiones si serán especificadas.
+Para aclarar ciertas cuestiones referentes a las soluciones en este tipo de algoritmos estocásticos de tipo evolutivo, si no se especifica un tipo de representación se da por hecho que las soluciones se representan como vectores en un espacio $n$-dimensional. Un conjunto de individuos/vectores dan como resultado una población. La población es una matriz de $N\times M$, donde $N$ es el número de filas o número de individuos en la población y $M$ es el número de características del problema ($M$ dimensiones). Algunos algoritmos admiten codificación binaria y otros continua, ese tipo de cuestiones si serán especificadas.\\[6pt]
+Por lo general, excepto para los algoritmos \textbf{GA} y \textbf{ACO}, se utilizarán funciones de transferencia a la hora de modificar los algoritmos para su versión binaria, tal y como se ha mencionado en el repaso bibliográfico.
 \section{Algoritmos genéticos}
 \subsection{Introducción}
 Los algoritmos genéticos están inspirados en la selección natural y se utilizan tanto en problemas de optimización con restricciones como sin ellas. Es una metaheurística que modifica una población de soluciones individuales de manera repetida, seleccionando soluciones ``padre'' que dan lugar a la siguiente generación de soluciones en la siguiente iteración del algoritmo. En su forma más básica, un algoritmo genético opera sobre una población de soluciones potenciales a un problema dado. Cada solución potencial, a menudo llamada individuo o cromosoma, está representada como una cadena de símbolos, que puede ser binaria, numérica o simbólica~\cite{10.5555/522098}.
@@ -27,34 +28,46 @@ El proceso típico incluye~\cite{mathew2012genetic}:
 El algoritmo termina cuando se alcanza cierta tolerancia de error o número máximo de iteraciones.
 
 \subsubsection{Selección}
-La selección se puede llevar a cabo con varios métodos, uno de los más utilizados en selección por torneo.\$6pt]
+La selección se puede llevar a cabo con varios métodos, uno de los más utilizados en selección por torneo.\\[6pt]
 En la selección por torneo, los individuos compiten entre sí en grupos pequeños. Cada grupo (torneo) tiene varios competidores (individuos). El competidor con la mejor aptitud (\textbf{fitness}) dentro del grupo tiene más probabilidad de ganar. Los ganadores son seleccionados para ``reproducirse''. Este proceso se repite hasta que se completa el \textit{pool} de apareamiento con los ganadores de los torneos~\cite{miller_genetic_nodate}. La probabilidad de cada individuo en base a su \textbf{fitness} se calcula de la siguiente manera:
 \begin{equation}
     P(\text{parent}_i) = \frac{\text{fitness}(\text{parent}i)}{\sum_{j=1}^{N} \text{fitness}(\text{parent}_j)}
 \end{equation}
 
-\subsubsection{Cruce}
-Existen múltiples tipos de crossover o cruces. Se describen los dos usados en este proyecto (uno para la versión binaria del algoritmo y otra para la real):
-\begin{itemize}
-    \item \textbf{One-point crossover}: Se elige al azar un punto en los cromosomas de ambos progenitores y se designa como "punto de cruce". Los bits a la derecha de ese punto se intercambian entre los dos cromosomas parentales. El resultado son dos descendientes, cada uno con información genética de ambos progenitores~\cite{DAGDIA2020283}.
-          \begin{figure}[H]
-              \begin{center}
-                  \includegraphics[width=0.6\textwidth]{imagenes/one-point-crossover.png}
-              \end{center}
-              \caption[One point crossover]{One-point crossover~\cite{purduelecture}}
-          \end{figure}
-    \item \textbf{Blend crossover}: Dado dos números reales para cada uno de los genes de los padres al hijo se le asignará un número aleatorio entre ese rango de gen para cada gen que conforme al vector cromosómico~\cite{purduelecture}.
-          \begin{figure}[H]
-              \begin{center}
-                  \includegraphics[width=0.6\textwidth]{imagenes/blend-crossover.png}
-              \end{center}
-              \caption[Blend crossover]{Blend crossover~\cite{purduelecture}}
-          \end{figure}
-\end{itemize}
+Para las versiones binaria y continua del algoritmo se utilizan diferentes operadores de mutación y cross-over.
 
-\subsubsection{Mutación}
+\subsubsection{Cruce binario}
+\textbf{One-point crossover}: Se elige al azar un punto en los cromosomas de ambos progenitores y se designa como "punto de cruce". Los bits a la derecha de ese punto se intercambian entre los dos cromosomas parentales. El resultado son dos descendientes, cada uno con información genética de ambos progenitores~\cite{DAGDIA2020283}.
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=0.6\textwidth]{imagenes/one-point-crossover.png}
+    \end{center}
+    \caption[One point crossover]{One-point crossover~\cite{purduelecture}}
+\end{figure}
+
+\subsubsection{Cruce continuo}
+\textbf{Blend crossover}: Dado dos números reales para cada uno de los genes de los padres al hijo se le asignará un número aleatorio entre ese rango de gen para cada gen que conforme al vector cromosómico~\cite{purduelecture}.
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[width=0.6\textwidth]{imagenes/blend-crossover.png}
+    \end{center}
+    \caption[Blend crossover]{Blend crossover~\cite{purduelecture}}
+\end{figure}
+
+\subsubsection{Mutación binaria}
 Su propósito es mantener la diversidad genética de los cromosomas de una población de un algoritmo evolutivo.
 El operador más básico y clásico consiste en cambiar un bit arbitrario de un genotipo o solución de un algoritmo genético binario a su estado inverso dada una probabilidad de mutación~\cite{mirjalili2019genetic}.
+
+\subsubsection{Mutación continua}
+Esta mutación se utiliza especialmente en problemas en los que se busca una exploración más amplia del espacio de búsqueda, ya que la distribución de Cauchy tiene colas pesadas y puede generar valores alejados del centro con mayor probabilidad en comparación con una distribución normal:
+\begin{equation}
+    m(x_i) =
+      \begin{cases}
+        (2r)^{\frac{1}{\eta+1}}-1 & \text{if p $\leq 0.5$}\\
+        1-(2r)^{\frac{1}{\eta+1}} & \text{if p $> 0.5$}\\
+      \end{cases}       
+\end{equation}
+Esta función de mutación está diseñada para generar una exploración más amplia del espacio de búsqueda, con la posibilidad de generar valores más alejados del centro de la distribución. La variable $r$ es un número a aleatorio y $\eta$ es una variable de control.
 
 \subsubsection{Elitismo}
 El elitismo garantiza que las soluciones de alta calidad sobrevivan en las generaciones futuras, ayudando en la explotación del espacio de búsqueda. La cantidad de individuos élite seleccionados debe ser elegida con precisión~\cite{mirjalili2019genetic}.
@@ -91,12 +104,13 @@ Donde:
     \item $\Delta\tau_{ij}^k$ y $\Delta\tau_{ij}^g$ son respectivamente, la cantidad de feromonas colocadas en la arista $(i,j)$ por la hormiga $k$ y la cantidad de feromonas depositadas por la mejor hormiga $g$ en el instante $t$ sobre la arista $(i,j)$.
     \item $Q$ es una constante y $F^k$ es el valor de coste de la solución encontrada por la hormiga $k$ en el tour $T^k$, es decir, $F^k$ es el \textit{fitness} de la hormiga $k$.
 \end{itemize}
-Se utiliza el sistema \textit{max-min}, solo la mejor hormiga puede depositar feromona.\$6pt]
+Se utiliza el sistema \textit{max-min}, solo la mejor hormiga puede depositar feromona.\\[6pt]
 En el algoritmo original, no había heurística de deseabilidad o visibilidad ($\eta$), solo información en términos de feromona~\cite{dorigo_ant_1999}.
 
 \section{Optimización por enjambre de partículas}
 \subsection{Introducción}
-El algoritmo conocido como optimización por enjambre de partículas o en inglés \textit{particle swarm optimization} fue concebido en $1995$ por James Kennedy y Russel Eberhart~\cite{kennedy_particle_1995}. En este algoritmo, un conjunto de soluciones candidatas, llamadas partículas, se mueven en un espacio de búsqueda multidimensional. Cada partícula ajusta su posición de acuerdo con su experiencia personal y la experiencia del grupo.
+El algoritmo conocido como optimización por enjambre de partículas o en inglés \textit{particle swarm optimization} fue concebido en $1995$ por James Kennedy y Russel Eberhart~\cite{kennedy_particle_1995}. En este algoritmo, un conjunto de soluciones candidatas, llamadas partículas, se mueven en un espacio de búsqueda multidimensional. Cada partícula ajusta su posición de acuerdo con su experiencia personal y la experiencia del grupo.\\[6pt]
+Para la versión binaria se utilizan funciones de transferencia.
 
 \subsection{Funcionamiento y Operadores}
 Las soluciones son descritas como individuos dentro de un enjambre (conjunto total de posibles soluciones) que tienen una posición y una velocidad en todo momento. La posición de estos individuos representa la solución en sí.
@@ -126,13 +140,14 @@ Donde:
 Estas ecuaciones se utilizan para guiar el movimiento de las partículas a través del espacio de búsqueda hacia las mejores soluciones, adaptándose tanto a la mejor solución encontrada por la propia partícula ($pbest$) como a la mejor solución encontrada por cualquier partícula en el enjambre ($gbest$)~\cite{kennedy_particle_1995}. Con el tiempo, las partículas tienden a converger hacia las mejores soluciones conocidas.
 
 \section{Evolución diferencial}
-La evolución diferencial surgió como un algoritmo de optimización para problemas no diferenciables y no lineales, con pocas variables de control, robusto, paralelizable y muy eficaz. El algoritmo de evolución diferencial o \textit{differential evolution} en inglés fue diseñado para resolver problemas continuos, a diferencia del propósito original de su ``hermano gemelo'' el algoritmo genético, cuya finalidad inicial era resolver problemas binarios. Este algoritmo fue presentado en $1996$ por Storn y Price en \cite{storn_differential_1997}.\$6pt]
+La evolución diferencial surgió como un algoritmo de optimización para problemas no diferenciables y no lineales, con pocas variables de control, robusto, paralelizable y muy eficaz. El algoritmo de evolución diferencial o \textit{differential evolution} en inglés fue diseñado para resolver problemas continuos, a diferencia del propósito original de su ``hermano gemelo'' el algoritmo genético, cuya finalidad inicial era resolver problemas binarios. Este algoritmo fue presentado en $1996$ por Storn y Price en \cite{storn_differential_1997}.\\[6pt]
 En la evolución diferencial, la diferencia de vectores es un concepto clave que se utiliza en el operador de mutación. Esta se calcula restando dos vectores de la población. Gracias a esta operación puede calcularse la distancia entre vectores y esto conlleva una serie de ventajas~\cite{storn_differential_1997}:
 \begin{itemize}
     \item Las posiciones de los individuos proporcionan información ya que si los individuos están bien distribuidos (y si la población es lo suficientemente grande), la población inicial será una buena representación de todo el espacio de búsqueda.
     \item Las distancias entre estos individuos serán inversamente proporcionales al tamaño de la población.
     \item A medida que avanza la búsqueda y los individuos comienzan a converger hacia un óptimo local, las distancias entre los individuos comenzarán a disminuir.
 \end{itemize}
+Para la versión binaria se utilizan funciones de transferencia.
 
 \subsection{Funcionamiento y Operadores}
 La representación suele ser la misma que en otros algoritmos metaheurísticos. DE fue diseñado para optimizar un problema continuo, por lo que la población debería ser un conjunto de números reales.
@@ -177,7 +192,8 @@ Si el vector hijo, al evaluarlo, tiene un valor \textbf{fitness} mejor que el ve
 
 \section{Optimización por colonia de abejas artificial}
 \subsection{Introducción}
-El algoritmo del enjambre de abejas artificial es un algoritmo estocástico evolutivo, al igual que los ya mencionados anteriormente, que se basa en el comportamientos de los enjambres de abejas para la optimización de problemas. El modelo usado en este algoritmo depende de tres factores, las fuentes de alimento, las abejas buscadores empleadas y las abejas buscadoras desempleadas (hay dos tipos)~\cite{karaboga_idea_nodate}.
+El algoritmo del enjambre de abejas artificial es un algoritmo estocástico evolutivo, al igual que los ya mencionados anteriormente, que se basa en el comportamientos de los enjambres de abejas para la optimización de problemas. El modelo usado en este algoritmo depende de tres factores, las fuentes de alimento, las abejas buscadores empleadas y las abejas buscadoras desempleadas (hay dos tipos)~\cite{karaboga_idea_nodate}.\\[6pt]
+Para la versión binaria se utilizan funciones de transferencia.
 
 \subsection{Funcionamiento y Operadores}
 Los operadores del algoritmo son los siguientes:
@@ -193,7 +209,8 @@ Estos operadores trabajan en un ciclo repetitivo donde las abejas empleadas prim
 
 \section{Algoritmo de optimización del saltamontes}
 \subsection{Introducción}
-Los \textbf{grasshoppers} (saltamontes o langosta cuando están en enjambre) son insectos cuyo ciclo de vida consiste en tres etapas: \textit{huevo, ninfa, adulto}. Un saltamontes puede ser encontrado en el enjambre en su estado ninfa y adulto. La diferencia entre ninfa y adulto es la velocidad de movimiento con pasos pequeños en la ninfa y lo contrario en su vida adulta (Las soluciones adultas se encargan de la exploración y las ninfas de la explotación)~\cite{saremi_grasshopper_2017}.
+Los \textbf{grasshoppers} (saltamontes o langosta cuando están en enjambre) son insectos cuyo ciclo de vida consiste en tres etapas: \textit{huevo, ninfa, adulto}. Un saltamontes puede ser encontrado en el enjambre en su estado ninfa y adulto. La diferencia entre ninfa y adulto es la velocidad de movimiento con pasos pequeños en la ninfa y lo contrario en su vida adulta (Las soluciones adultas se encargan de la exploración y las ninfas de la explotación)~\cite{saremi_grasshopper_2017}.\\[6pt]
+Para la versión binaria se utilizan funciones de transferencia.
 \subsection{Funcionamiento y Operadores}
 \subsubsection{Operador de posición (primera propuesta)}
 La posición de un individuo se define en la siguiente ecuación:
@@ -245,7 +262,7 @@ Los \textbf{dragonflies} (libélulas en español) son pequeños insectos que se 
     \item Las diferencias dadas entre ambos enjambres son notorias. En caza, se organizan en enjambres pequeños que vuelan en muchas direcciones en busca de comida. Este tipo de enjambre es llamado \textbf{estático}. Cuando se organizan en enjambres para migrar, estos son numerosos y vuelan en una sola dirección. Estos enjambres en contraposición a los anteriores son llamados \textbf{dinámicos}~\cite{mirjalili_dragonfly_2016}.
     \item Es obvio el paralelismo que se da entre las principales fases de la búsqueda optimizatoria (\textbf{exploración y explotación}). La fase dinámica es un paralelismo con la exploración, ya que se buscan pequeños objetivos en grupos por el espacio. La fase estática (explotación) se da cuando todos los agentes empiezan a migrar a una dirección concreta.
 \end{itemize}
-
+Para la versión binaria se utilizan funciones de transferencia.
 
 \subsection{Funcionamiento y Operadores}
 
@@ -299,7 +316,8 @@ El operador de actualización de posición.
 
 \section{Algoritmo de optimización de ballenas}
 \subsection{Introducción}
-Simula el comportamiento de las ballenas jorobadas en la caza, utilizando tanto el azar como el mejor agente de búsqueda para perseguir a la presa. Además, emplea una espiral para simular el mecanismo de ataque de la red de burbujas de las ballenas jorobadas~\cite{mirjalili_whale_2016}.
+Simula el comportamiento de las ballenas jorobadas en la caza, utilizando tanto el azar como el mejor agente de búsqueda para perseguir a la presa. Además, emplea una espiral para simular el mecanismo de ataque de la red de burbujas de las ballenas jorobadas~\cite{mirjalili_whale_2016}.\\[6pt]
+Para la versión binaria se utilizan funciones de transferencia.
 
 \subsection{Funcionamiento y Operadores}
 \subsubsection{Rodeado de presa}
@@ -364,8 +382,8 @@ Aunque cada pulso dura solo unos pocos milisegundos (entre 8 y 10 ms), mantiene 
 \begin{equation}
     \lambda = \frac{v}{f}
 \end{equation}
-con longitudes entre 2 mm y 14 mm para frecuencias de 25 kHz a 150 kHz, respectivamente. Esta longitud de onda coincide con el tamaño de las presas. Los murciélagos pueden detectar obstáculos tan pequeños como cabellos humanos, utilizando la eco-localización para construir un modelo 3D del entorno, y discriminando distancias, orientaciones y tipos de presas. Aunque los murciélagos tienen buena vista y olfato, utilizan principalmente la eco-localización para la detección de presas y la navegación eficiente~\cite{yang_new_2010}.
-
+con longitudes entre 2 mm y 14 mm para frecuencias de 25 kHz a 150 kHz, respectivamente. Esta longitud de onda coincide con el tamaño de las presas. Los murciélagos pueden detectar obstáculos tan pequeños como cabellos humanos, utilizando la eco-localización para construir un modelo 3D del entorno, y discriminando distancias, orientaciones y tipos de presas. Aunque los murciélagos tienen buena vista y olfato, utilizan principalmente la eco-localización para la detección de presas y la navegación eficiente~\cite{yang_new_2010}.\\[6pt]
+Para la versión binaria se utilizan funciones de transferencia.
 \subsection{Funcionamiento y Operadores}
 Para simplificar:
 \begin{itemize}
@@ -417,6 +435,7 @@ Donde $\gamma, \alpha$ son constantes. Estos valores solo se actualizan si las n
               \item La caza (optimización) es guiada por las soluciones $\alpha$, $\beta$ y $\delta$ mientras que las soluciones $\omega$ siguen a estos tres lobos.
           \end{itemize}
 \end{itemize}
+Para la versión binaria se utilizan funciones de transferencia.
 
 \subsection{Funcionamiento y Operadores}
 
@@ -476,6 +495,7 @@ Por simplicidad del algoritmo, se asumen tres reglas sobre el comportamiento y n
     \item La luminosidad es proporcional a lo atractiva que es una luciérnaga para el resto.
     \item La luminosidad de una luciérnaga es determinada por los límites de la función objetivo.
 \end{enumerate}
+Para la versión binaria se utilizan funciones de transferencia.
 
 \subsection{Funcionamiento y Operadores}
 \subsubsection{Intensidad de la luz}
@@ -492,7 +512,7 @@ El movimiento de un agente (luciérnaga) es descrito por la siguiente ecuación,
 \begin{equation}
     x_i^{t+1} = x_i^t + \beta_0e^{-\gamma r_{ij}^2}(x_j^t-x_i^t)+\alpha\epsilon_i^t
 \end{equation}
-Donde $\alpha$ es un parámetro de aleatoriedad y $\epsilon$ un vector de números alatorios sacados de una distribución Gaussiana o uniforme. \$6pt]
+Donde $\alpha$ es un parámetro de aleatoriedad y $\epsilon$ un vector de números alatorios sacados de una distribución Gaussiana o uniforme. \\[6pt]
 El parámetro $\alpha$ debe ser decrementado gradualmente de forma que las luciérnagas pasen de moverse tan aleatoriamente en un principio a converger en un punto óptimo al final~\cite{yang_chapter_2014}:
 \begin{equation}
     \alpha = \alpha_\infty + (\alpha_0-\alpha_\infty)e^{-t}
@@ -501,8 +521,9 @@ Donde $t\in(0,t_{max}]$, siendo $t_{max}$ el número máximo de generaciones, $a
 
 \section{Búsqueda Cuckoo}
 \subsection{Introducción}
-El algoritmo de búsqueda de los cucos se basa en el tipo de ave de cuyo nombre se inspira el algoritmo. Se basa en el tipo de crianza de estos pájaros y su interesante comportamiento parasitario, así como en los vuelos Lévy~\cite{noauthor_levy_nodate}.\$6pt]
-El parasitismo de cría que adoptan estos pájaros implica poner huevos en nidos de otras aves. Los tipos incluyen parasitismo intraespecífico, cría cooperativa y toma de nidos. Las aves anfitrionas pueden rechazar los huevos ajenos, lo que las lleva a abandonar el nido o construir uno nuevo. Algunos cucos parasitarios imitan los huevos de las aves anfitrionas para evitar el rechazo y aumentar el éxito reproductivo~\cite{yang_cuckoo_2010}.
+El algoritmo de búsqueda de los cucos se basa en el tipo de ave de cuyo nombre se inspira el algoritmo. Se basa en el tipo de crianza de estos pájaros y su interesante comportamiento parasitario, así como en los vuelos Lévy~\cite{noauthor_levy_nodate}.\\[6pt]
+El parasitismo de cría que adoptan estos pájaros implica poner huevos en nidos de otras aves. Los tipos incluyen parasitismo intraespecífico, cría cooperativa y toma de nidos. Las aves anfitrionas pueden rechazar los huevos ajenos, lo que las lleva a abandonar el nido o construir uno nuevo. Algunos cucos parasitarios imitan los huevos de las aves anfitrionas para evitar el rechazo y aumentar el éxito reproductivo~\cite{yang_cuckoo_2010}.\\[6pt]
+Para la versión binaria se utilizan funciones de transferencia.
 \subsection{Funcionamiento y Operadores}
 En el algoritmo de búsqueda cuco se implementa un tipo de vuelo Lévy, debido a que se ha observado que el vuelo de ciertos insectos y aves sigue este tipo de movimiento~\cite{yang_cuckoo_2010}.\\[6pt]
 El algoritmo de búsqueda cuco (Cuckoo) se basa en tres reglas ideales simplificadas:

@@ -1,0 +1,50 @@
+\chapter{Diseño experimental}
+En este capítulo se describirá el proceso de experimentación llevado a cabo, los conjuntos de datos usados para los distintos experimentos y los parámetros usados en cada uno de los algoritmos.\\[6pt]
+Los conjuntos de datos usados son lo siguientes:
+\begin{table}[H]
+    \centering
+    \caption{Información de los conjuntos de datos}
+    \label{tab:datasets}
+    \begin{tabular}{ l c c c c }
+        \hline
+        \textbf{Dataset} & \textbf{Instancias} & \textbf{Características} & \textbf{Clases} & \textbf{Área} \\ \hline
+        breast-cancer    & 286 & 9 & 2 & Medicina \\ 
+        ecoli            & 336 & 7 & 8 & Biología \\ 
+        parkinsons       & 200 & 22 & 2 & Medicina \\ 
+        spectf-heart     & 348 & 44 & 2 & Medicina \\ 
+        wine             & 182 & 13 & 3 & Alimentación \\ 
+        dermatology      & 366 & 34 & 6 & Medicina \\ 
+        ionosphere       & 350 & 34 & 2 &  Meteorología\\ 
+        sonar            & 207 & 60 & 2 & Biología\\ 
+        waveform5000     & 5000 & 40 & 3 & Física \\ 
+        yeast            & 1483 & 8 & 10 & Biología \\ 
+        diabetes         & 768 & 8 & 2 & Medicina \\ 
+        iris             & 149 & 4 & 3 & Biología \\ 
+        spambase-460     & 459 & 54 & 2 & Informática \\ 
+        wdbc             & 568 & 29 & 2 & Medicina\\ 
+        zoo              & 101 & 18 & 7 & Biología\\ \hline
+    \end{tabular}
+\end{table}
+Los datos han sido normalizados entres $0$ y $1$ siguiendo la función de normalización \textit{MinMaxScaler} de \textit{scikit-learn}~\cite{scikit-learn}. Los conjuntos de datos se han dividido en $20\%$ test, $20\%$ validación y $60\%$ entrenamiento.
+Se han llevado a cabo $10$ ejecuciones sobre cada algoritmo en cada conjunto de datos, tanto en su versión original como en su versión binaria. Estas ejecuciones se han procesado de forma paralela en el servidor de \textit{Hércules}~\cite{citicugr}.\\[6pt]
+Se han recabado datos de todas las ejecuciones para poder comparar los resultados. En forma de gráficos se ha representado la curva de convergencia de cada algoritmo además de una curva de decremento de las características de cada conjunto de datos. Ambos gráficos son muy interesantes a la hora de comparar algoritmos para un mismo conjunto de datos.\\[6pt] 
+Además se han recabado los siguientes datos en ficheros de texto para su posterior análisis:
+\begin{itemize}
+    \item \textbf{classifier}: Clasificador usado (kNN o SVC).
+    \item \textbf{dataset}: Es un conjunto de datos utilizado para el proceso de selección de características.
+    \item \textbf{optimizer}: Algoritmo metaheurístico usado como optimizador.
+    \item \textbf{all\_fitness}: Es una lista que contiene los valores \textit{fitness} de todas las soluciones generadas durante la optimización.
+    \item \textbf{best}: Es el mejor valor encontrado durante la optimización.
+    \item \textbf{avg}: Es el promedio de los valores de \textit{fitness} de todas las soluciones generadas durante la optimización.
+    \item \textbf{std\_dev}: Es la desviación estándar de los valores de \textit{fitness} de todas las soluciones generadas durante la optimización. Indica qué tan dispersos están los valores alrededor del promedio.
+    \item \textbf{acc}: Es la precisión (accuracy) del modelo de clasificación, es decir, la proporción de instancias correctamente clasificadas sobre el total de instancias.
+    \item \textbf{n\_features}: Es el número de características seleccionadas.
+    \item \textbf{selected\_rate}: Es la tasa de selección de características, que representa la proporción de características seleccionadas respecto al total de características disponibles.
+    \item \textbf{execution\_time}: Es el tiempo de ejecución del algoritmo optimizatorio.
+\end{itemize}
+Para la función de \textit{fitness} se ha usado:
+\begin{equation}
+    fitness = acc\cdot\alpha + red\cdot(1-\alpha)
+\end{equation}
+Donde \textit{acc} quiere decir precisión y \textit{red} el porcentaje de características reducidas. La variable $\alpha$ actúa como medio de ponderación y ha sido fijado en $\alpha=0.9$, dando un $90\%$ de prioridad a la precisión.
+Se procede a mostrar los parámetros fijados para cada algoritmo (como referencia se han seguido los parámetros de los artículos originales y binarios).
