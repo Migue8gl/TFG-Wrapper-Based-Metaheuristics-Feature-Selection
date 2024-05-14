@@ -78,6 +78,17 @@ def main(*args, **kwargs):
     name_pattern = r'/([^/]+)\.arff$'
     dataset_name = re.search(name_pattern, dataset_arg).group(1)
 
+    # Create directory to store dataset metrics images
+    img_directory_path = os.path.join(IMG_DIR, encoding, dataset_name)
+    if not os.path.isdir(img_directory_path):
+        os.makedirs(img_directory_path)
+
+    # Create directory to store dataset metrics retults
+    result_path = os.path.join(RESULTS_DIR, encoding, dataset_name)
+
+    if not os.path.isdir(result_path):
+        os.makedirs(result_path)
+
     # SVC Cross validation
     metrics_svc = evaluate_optimizer(dataset=dataset_dict,
                                      optimizer=optimizer,
@@ -101,17 +112,6 @@ def main(*args, **kwargs):
 
     with open(file_path, 'a' if os.path.exists(file_path) else 'w') as file:
         file.write(f"{optimizer_arg}: {metrics_knn['avg_fitness']}\n")
-
-    # Create directory to store dataset metrics images
-    img_directory_path = os.path.join(IMG_DIR, encoding, dataset_name)
-    if not os.path.isdir(img_directory_path):
-        os.makedirs(img_directory_path)
-
-    # Create directory to store dataset metrics retults
-    result_path = os.path.join(RESULTS_DIR, encoding, dataset_name)
-
-    if not os.path.isdir(result_path):
-        os.makedirs(result_path)
 
     data = {
         'classifier': ['knn', 'svc'],
