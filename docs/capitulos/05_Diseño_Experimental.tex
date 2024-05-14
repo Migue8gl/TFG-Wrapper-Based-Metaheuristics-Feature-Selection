@@ -3,31 +3,31 @@ En este capítulo se describirá el proceso de experimentación llevado a cabo, 
 Los conjuntos de datos usados son lo siguientes:
 \begin{table}[H]
     \centering
-    \caption{Información de los conjuntos de datos}
     \label{tab:datasets}
     \begin{tabular}{ l c c c c }
         \hline
         \textbf{Dataset} & \textbf{Instancias} & \textbf{Características} & \textbf{Clases} & \textbf{Área} \\ \hline
-        breast-cancer    & 286 & 9 & 2 & Medicina \\ 
-        ecoli            & 336 & 7 & 8 & Biología \\ 
-        parkinsons       & 200 & 22 & 2 & Medicina \\ 
-        spectf-heart     & 348 & 44 & 2 & Medicina \\ 
-        wine             & 182 & 13 & 3 & Alimentación \\ 
-        dermatology      & 366 & 34 & 6 & Medicina \\ 
-        ionosphere       & 350 & 34 & 2 &  Meteorología\\ 
-        sonar            & 207 & 60 & 2 & Biología\\ 
-        waveform5000     & 5000 & 40 & 3 & Física \\ 
-        yeast            & 1483 & 8 & 10 & Biología \\ 
-        diabetes         & 768 & 8 & 2 & Medicina \\ 
-        iris             & 149 & 4 & 3 & Biología \\ 
-        spambase-460     & 459 & 54 & 2 & Informática \\ 
-        wdbc             & 568 & 29 & 2 & Medicina\\ 
-        zoo              & 101 & 18 & 7 & Biología\\ \hline
+        breast-cancer    & 286                 & 9                        & 2               & Medicina      \\
+        ecoli            & 336                 & 7                        & 8               & Biología      \\
+        parkinsons       & 200                 & 22                       & 2               & Medicina      \\
+        spectf-heart     & 348                 & 44                       & 2               & Medicina      \\
+        wine             & 182                 & 13                       & 3               & Alimentación  \\
+        dermatology      & 366                 & 34                       & 6               & Medicina      \\
+        ionosphere       & 350                 & 34                       & 2               & Meteorología  \\
+        sonar            & 207                 & 60                       & 2               & Biología      \\
+        waveform5000     & 5000                & 40                       & 3               & Física        \\
+        yeast            & 1483                & 8                        & 10              & Biología      \\
+        diabetes         & 768                 & 8                        & 2               & Medicina      \\
+        iris             & 149                 & 4                        & 3               & Biología      \\
+        spambase-460     & 459                 & 54                       & 2               & Informática   \\
+        wdbc             & 568                 & 29                       & 2               & Medicina      \\
+        zoo              & 101                 & 18                       & 7               & Biología      \\ \hline
     \end{tabular}
+    \caption{Información de los conjuntos de datos}
 \end{table}
 Los datos han sido normalizados entres $0$ y $1$ siguiendo la función de normalización \textit{MinMaxScaler} de \textit{scikit-learn}~\cite{scikit-learn}. Los conjuntos de datos se han dividido en $20\%$ test, $20\%$ validación y $60\%$ entrenamiento.
 Se han llevado a cabo $10$ ejecuciones sobre cada algoritmo en cada conjunto de datos, tanto en su versión original como en su versión binaria. Estas ejecuciones se han procesado de forma paralela en el servidor de \textit{Hércules}~\cite{citicugr}.\\[6pt]
-Se han recabado datos de todas las ejecuciones para poder comparar los resultados. En forma de gráficos se ha representado la curva de convergencia de cada algoritmo además de una curva de decremento de las características de cada conjunto de datos. Ambos gráficos son muy interesantes a la hora de comparar algoritmos para un mismo conjunto de datos.\\[6pt] 
+Se han recabado datos de todas las ejecuciones para poder comparar los resultados. En forma de gráficos se ha representado la curva de convergencia de cada algoritmo además de una curva de decremento de las características de cada conjunto de datos. Ambos gráficos son muy interesantes a la hora de comparar algoritmos para un mismo conjunto de datos.\\[6pt]
 Además se han recabado los siguientes datos en ficheros de texto para su posterior análisis:
 \begin{itemize}
     \item \textbf{classifier}: Clasificador usado (kNN o SVC).
@@ -48,3 +48,148 @@ Para la función de \textit{fitness} se ha usado:
 \end{equation}
 Donde \textit{acc} quiere decir precisión y \textit{red} el porcentaje de características reducidas. La variable $\alpha$ actúa como medio de ponderación y ha sido fijado en $\alpha=0.9$, dando un $90\%$ de prioridad a la precisión.
 Se procede a mostrar los parámetros fijados para cada algoritmo (como referencia se han seguido los parámetros de los artículos originales y binarios ya citados para cada algoritmo).
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ c c }
+        \hline
+        \textbf{Parámetro} & \textbf{Valor} \\
+        \hline
+        $c_{min}$          & 0.00001        \\
+        $c_{max}$          & 1              \\
+        F                  & 0.5            \\
+        L                  & 1.5            \\
+        \hline
+    \end{tabular}
+    \caption{Parámetros de GOA}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ c c }
+        \hline
+        \textbf{Parámetro} & \textbf{Valor} \\
+        \hline
+        Parámetro espiral  & 1              \\
+        \hline
+    \end{tabular}
+    \caption{Parámetros de WOA}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ c c }
+        \hline
+        \textbf{Parámetro} & \textbf{Valor} \\
+        \hline
+        Abeja empleada     & 3              \\
+        Abeja vigilante    & 3              \\
+        Límite             & 3              \\
+        \hline
+    \end{tabular}
+    \caption{Parámetros de ABCO}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ c c }
+        \hline
+        \textbf{Parámetro} & \textbf{Valor} \\
+        \hline
+        $\alpha$           & 0.9            \\
+        $\gamma $          & 0.9            \\
+        $f_{min}$          & 0              \\
+        $f_{max}$          & 10             \\
+        \hline
+    \end{tabular}
+    \caption{Parámetros de BA}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ c c }
+        \hline
+        \textbf{Parámetro} & \textbf{Valor} \\
+        \hline
+        Decay              & 0              \\
+        w                  & 0.9            \\
+        $c_1$              & 2              \\
+        $c_2$              & 2              \\
+        \hline
+    \end{tabular}
+    \caption{Parámetros de PSO}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ c c }
+        \hline
+        \textbf{Parámetro} & \textbf{Valor} \\
+        \hline
+        $\alpha_0$         & 0.02           \\
+        $\beta_0$          & 0.1            \\
+        $\gamma_0$         & 1              \\
+        \hline
+    \end{tabular}
+    \caption{Parámetros de FA}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ c c }
+        \hline
+        \textbf{Parámetro} & \textbf{Valor} \\
+        \hline
+        Ratio de cruce     & 1              \\
+        Ratio de mutación  & 0.05           \\
+        Elite              & 2              \\
+        $\eta$             & 1              \\
+        $\alpha$           & $\sqrt{0.3}$   \\
+        \hline
+    \end{tabular}
+    \caption{Parámetros de GA}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ c c }
+        \hline
+        \textbf{Parámetro}   & \textbf{Valor} \\
+        \hline
+        $\alpha$             & 1              \\
+        Q                    & 1              \\
+        Feromona inicial     & 0.1            \\
+        Ratio de evaporación & 0.049          \\
+        \hline
+    \end{tabular}
+    \caption{Parámetros de ACO}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ c c }
+        \hline
+        \textbf{Parámetro}      & \textbf{Valor} \\
+        \hline
+        Ratio de descubrimiento & 0.25           \\
+        $\alpha$                & 1              \\
+        $\lambda$               & 1.5            \\
+        \hline
+    \end{tabular}
+    \caption{Parámetros de CS}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ c c }
+        \hline
+        \textbf{Parámetro} & \textbf{Valor} \\
+        \hline
+        F                  & 0.9            \\
+        Cr                 & 0.2            \\
+        \hline
+    \end{tabular}
+    \caption{Parámetros de DE}
+\end{table}
+
+Los algoritmos de \textbf{DA} y \textbf{GWO} no tienen parámetros configurables.

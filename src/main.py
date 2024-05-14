@@ -75,12 +75,20 @@ def main(*args, **kwargs):
                           (optimizer.params['binary'] == 'r'
                            or not optimizer.params['binary'])) else 'binary'
 
+    name_pattern = r'/([^/]+)\.arff$'
+    dataset_name = re.search(name_pattern, dataset_arg).group(1)
+
     # SVC Cross validation
     metrics_svc = evaluate_optimizer(dataset=dataset_dict,
                                      optimizer=optimizer,
                                      n=i,
                                      scaler=scaling_arg,
                                      verbose=verbose_arg)
+
+    file_path = os.path.join(RESULTS_DIR, encoding, dataset_name, "all_fitness_svc.csv")
+
+    with open(file_path, 'a' if os.path.exists(file_path) else 'w') as file:
+        file.write(f"{optimizer_arg}: {metrics_svc['avg_fitness']}\n")
 
     optimizer.params['target_function_parameters']['classifier'] = 'knn'
     metrics_knn = evaluate_optimizer(dataset=dataset_dict,
@@ -89,8 +97,11 @@ def main(*args, **kwargs):
                                      scaler=scaling_arg,
                                      verbose=verbose_arg)
 
-    name_pattern = r'/([^/]+)\.arff$'
-    dataset_name = re.search(name_pattern, dataset_arg).group(1)
+    file_path = os.path.join(RESULTS_DIR, encoding, f"{dataset_name}_knn.csv")
+
+    with open(file_path, 'a' if os.path.exists(file_path) else 'w') as file:
+        file.write(f"{optimizer_arg}: {metrics_knn['avg_fitness']}\n")
+
     # Create directory to store dataset metrics images
     img_directory_path = os.path.join(IMG_DIR, encoding, dataset_name)
     if not os.path.isdir(img_directory_path):
