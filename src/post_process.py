@@ -4,51 +4,9 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from constants import (
     IMG_DIR,
-    KNN_CLASSIFIER,
-    OPTIMIZER_COLOR,
     RESULTS_DIR,
-    SVC_CLASSIFIER,
 )
-from plots import plot_grouped_boxplots, plot_rankings
-
-
-def plot_all_optimizers(df_analysis_b: pd.DataFrame,
-                        df_analysis_r: pd.DataFrame,
-                        optimizer_color: dict = OPTIMIZER_COLOR):
-    """
-    Plots boxplots for all optimizers for a given dataset and classifier.
-
-    Parameters:
-        - df_analysis_b (pandas.DataFrame): Dataframe with binary analysis results.
-        - df_analysis_r (pandas.DataFrame): Dataframe with real analysis results.
-        - classifiers (list): List of classifiers to plot.
-        - optimizer_color (dict): Dictionary with optimizer:color pairs.
-    """
-
-    def _plot_optimizers(df_encoding: pd.DataFrame, encoding: str,
-                         dataset_name: str, classifier: str):
-        filter_dict = {'dataset': dataset_name, 'classifier': classifier}
-
-        fig_fitness = plot_grouped_boxplots(
-            df_encoding,
-            x='optimizer',
-            x_color=optimizer_color,
-            filter=filter_dict,
-            title=
-            f'Boxplot Grouped by Optimizer - {encoding} - {classifier} - {dataset_name}',
-            ylabel='Average Fitness')
-        plt.savefig(
-            f'{RESULTS_DIR}{encoding}/{dataset_name}/optimizer_boxplot_fitness_{classifier}_{encoding[0]}.png'
-        )
-        plt.close(fig_fitness)
-
-    classifiers = [SVC_CLASSIFIER, KNN_CLASSIFIER]
-    for encoding in ['binary', 'real']:
-        df_encoding = df_analysis_b if encoding == 'binary' else df_analysis_r
-        for dataset_name in df_encoding['dataset'].unique():
-            for classifier in classifiers:
-                _plot_optimizers(df_encoding, encoding, dataset_name,
-                                 classifier)
+from plots import plot_all_boxplots_optimizers, plot_rankings
 
 
 def make_rankings_for_optimizers(df_analysis_b: pd.DataFrame,
@@ -140,7 +98,7 @@ def main():
     if not os.path.isdir(result_path):
         os.makedirs(result_path)
 
-    plot_all_optimizers(df_analysis_b, df_analysis_r)
+    plot_all_boxplots_optimizers(df_analysis_b, df_analysis_r)
 
     make_rankings_for_optimizers(df_analysis_b, df_analysis_r)
 

@@ -1,3 +1,4 @@
+import json
 import os
 import re
 import sys
@@ -96,10 +97,19 @@ def main(*args, **kwargs):
                                      scaler=scaling_arg,
                                      verbose=verbose_arg)
 
-    file_path = os.path.join(RESULTS_DIR, encoding, dataset_name, "all_fitness_svc.csv")
+    file_path = os.path.join(RESULTS_DIR, encoding, dataset_name,
+                             "all_fitness_svc.csv")
 
-    with open(file_path, 'a' if os.path.exists(file_path) else 'w') as file:
-        file.write(f"{optimizer_arg}: {metrics_svc['avg_fitness']}\n")
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as file:
+            fitness_dict = json.load(file)
+    else:
+        fitness_dict = {}
+
+    fitness_dict[optimizer_arg] = metrics_svc['avg_fitness'].tolist()
+
+    with open(file_path, 'w') as file:
+        json.dump(fitness_dict, file, indent=4)
 
     optimizer.params['target_function_parameters']['classifier'] = 'knn'
     metrics_knn = evaluate_optimizer(dataset=dataset_dict,
@@ -113,10 +123,19 @@ def main(*args, **kwargs):
     if not os.path.isdir(result_path):
         os.makedirs(result_path)
 
-    file_path = os.path.join(RESULTS_DIR, encoding, dataset_name, "all_fitness_knn.csv")
+    file_path = os.path.join(RESULTS_DIR, encoding, dataset_name,
+                             "all_fitness_knn.csv")
 
-    with open(file_path, 'a' if os.path.exists(file_path) else 'w') as file:
-        file.write(f"{optimizer_arg}: {metrics_svc['avg_fitness']}\n")
+    if os.path.exists(file_path):
+        with open(file_path, 'r') as file:
+            fitness_dict = json.load(file)
+    else:
+        fitness_dict = {}
+
+    fitness_dict[optimizer_arg] = metrics_knn['avg_fitness'].tolist()
+
+    with open(file_path, 'w') as file:
+        json.dump(fitness_dict, file, indent=4)
 
     data = {
         'classifier': ['knn', 'svc'],

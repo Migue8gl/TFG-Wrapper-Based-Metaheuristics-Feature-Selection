@@ -6,7 +6,12 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scienceplots  # noqa: F401
-from constants import OPTIMIZER_COLOR
+from constants import (
+    KNN_CLASSIFIER,
+    OPTIMIZER_COLOR,
+    RESULTS_DIR,
+    SVC_CLASSIFIER,
+)
 
 plt.style.use(["science", "ieee"])  # Style of plots
 
@@ -108,7 +113,8 @@ def plot_fitness_over_population_sizes(
 def plot_fitness_all_optimizers(optimizers_fitness: dict,
                                 iterations: list,
                                 ax: Optional[matplotlib.axes.Axes] = None,
-                                title: Optional[str] = None):
+                                title: Optional[str] = None,
+                                optimizer_color: dict = OPTIMIZER_COLOR):
     """
     Plots the fitness values of multiple optimizers over a specified number of iterations.
 
@@ -117,13 +123,18 @@ def plot_fitness_all_optimizers(optimizers_fitness: dict,
         - iterations (int): The total number of iterations.
         - ax (matplotlib.axes.Axes, optional): The matplotlib axes to plot the fitness values on. If not provided, a new figure and axes will be created.
         - title (str, optional): The title of the plot. If not provided, a default title will be used.
+        - optimizer_color (dict, optional): A dictionary containing the colors of each optimizer. The keys are the names of the optimizers and the values are the corresponding colors.
     """
     iteration_numbers = np.linspace(
         0, iterations + 1, len(next(iter(optimizers_fitness.values()))))
     if ax is None:
         _, ax = plt.subplots()
     for key, fitness_values in optimizers_fitness.items():
-        ax.plot(iteration_numbers, fitness_values, label=key, marker="X")
+        ax.plot(iteration_numbers,
+                fitness_values,
+                label=key,
+                marker="X",
+                c=optimizer_color[key.lower()])
     ax.set_xlabel("Iteration")
     ax.set_ylabel("Fitness")
     if title is None:
@@ -300,3 +311,42 @@ def plot_rankings(ranking: pd.DataFrame,
     plt.xticks(rotation=45,
                ha='right')  # Rotate x-axis labels for better readability
     plt.tight_layout()
+
+
+def plot_all_boxplots_optimizers(df_analysis_b: pd.DataFrame,
+                                 df_analysis_r: pd.DataFrame,
+                                 optimizer_color: dict = OPTIMIZER_COLOR):
+    """
+    Plots boxplots for all optimizers for a given dataset and classifier.
+
+    Parameters:
+        - df_analysis_b (pandas.DataFrame): Dataframe with binary analysis results.
+        - df_analysis_r (pandas.DataFrame): Dataframe with real analysis results.
+        - classifiers (list): List of classifiers to plot.
+        - optimizer_color (dict): Dictionary with optimizer:color pairs.
+    """
+
+    def _plot_optimizers(df_encoding: pd.DataFrame, encoding: str,
+                         dataset_name: str, classifier: str):
+        filter_dict = {'dataset': dataset_name, 'classifier': classifier}
+
+        fig_fitness = plot_grouped_boxplots(
+            df_encoding,
+            x='optimizer',
+            x_color=optimizer_color,
+            filter=filter_dict,
+            title=
+            f'Boxplot Grouped by Optimizer - {encoding} - {classifier} - {dataset_name}',
+            ylabel='Average Fitness')
+        plt.savefig(
+            f'{RESULTS_DIR}{encoding}/{dataset_name}/optimizer_boxplot_fitness_{classifier}_{encoding[0]}.png'
+        )
+        plt.close(fig_fitness)
+
+    classifiers = [SVC_CLASSIFIER, KNN_CLASSIFIER]
+    for encoding in ['binary', 'real']:
+        df_encoding = df_analysis_b if encoding == 'binary' else df_analysis_r
+        for dataset_name in df_encoding['dataset'].unique():
+            for classifier in classifiers:
+                _plot_optimizers(df_encoding, encoding, dataset_name,
+                                 classifier)
