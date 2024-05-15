@@ -36,7 +36,8 @@ def generate_analysis_results(encoding):
         if os.path.isdir(dataset_path):
             for filename in os.listdir(dataset_path):
                 if filename.endswith(
-                        ".csv") and filename != 'analysis_results.csv':
+                        ".csv"
+                ) and filename != 'analysis_results.csv' and 'all_fitness' not in filename:
                     file_path = os.path.join(dataset_path, filename)
                     dfs.append(process_csv_file(file_path))
 

@@ -108,10 +108,15 @@ def main(*args, **kwargs):
                                      scaler=scaling_arg,
                                      verbose=verbose_arg)
 
-    file_path = os.path.join(RESULTS_DIR, encoding, f"{dataset_name}_knn.csv")
+    result_path = os.path.join(RESULTS_DIR, encoding, dataset_name)
+
+    if not os.path.isdir(result_path):
+        os.makedirs(result_path)
+
+    file_path = os.path.join(RESULTS_DIR, encoding, dataset_name, "all_fitness_knn.csv")
 
     with open(file_path, 'a' if os.path.exists(file_path) else 'w') as file:
-        file.write(f"{optimizer_arg}: {metrics_knn['avg_fitness']}\n")
+        file.write(f"{optimizer_arg}: {metrics_svc['avg_fitness']}\n")
 
     data = {
         'classifier': ['knn', 'svc'],

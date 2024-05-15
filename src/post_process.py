@@ -132,7 +132,7 @@ def main():
     if not os.path.isdir(img_directory_path):
         os.makedirs(img_directory_path)
 
-    # Create directory to store dataset metrics retults
+    # Create directory to store dataset metrics results
     result_path = os.path.join(RESULTS_DIR, 'real')
     if not os.path.isdir(result_path):
         os.makedirs(result_path)
