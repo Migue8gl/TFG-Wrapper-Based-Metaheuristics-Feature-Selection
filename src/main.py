@@ -98,7 +98,7 @@ def main(*args, **kwargs):
                                      verbose=verbose_arg)
 
     file_path = os.path.join(RESULTS_DIR, encoding, dataset_name,
-                             "all_fitness_svc.csv")
+                             "all_fitness_svc.json")
 
     if os.path.exists(file_path):
         with open(file_path, 'r') as file:
@@ -124,7 +124,7 @@ def main(*args, **kwargs):
         os.makedirs(result_path)
 
     file_path = os.path.join(RESULTS_DIR, encoding, dataset_name,
-                             "all_fitness_knn.csv")
+                             "all_fitness_knn.json")
 
     if os.path.exists(file_path):
         with open(file_path, 'r') as file:

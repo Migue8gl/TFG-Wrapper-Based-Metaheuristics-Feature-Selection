@@ -108,7 +108,7 @@ def main():
     if not os.path.isdir(result_path):
         os.makedirs(result_path)
 
-    #plot_all_boxplots_optimizers(df_analysis_b, df_analysis_r)
+    plot_all_boxplots_optimizers(df_analysis_b, df_analysis_r)
 
     make_rankings_for_optimizers(df_analysis_b, df_analysis_r)
 
