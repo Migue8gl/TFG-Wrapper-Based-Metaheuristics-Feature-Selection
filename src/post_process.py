@@ -2,11 +2,9 @@ import os
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from constants import (
-    IMG_DIR,
-    RESULTS_DIR,
-)
-from plots import plot_all_boxplots_optimizers, plot_rankings
+from constants import (IMG_DIR, RESULTS_DIR, DEFAULT_ITERATIONS)
+import json
+from plots import plot_all_boxplots_optimizers, plot_rankings, plot_fitness_all_optimizers
 
 
 def make_rankings_for_optimizers(df_analysis_b: pd.DataFrame,
@@ -81,6 +79,18 @@ def make_rankings_for_optimizers(df_analysis_b: pd.DataFrame,
 def main():
     df_analysis_b = pd.read_csv(RESULTS_DIR + 'binary/analysis_results.csv')
     df_analysis_r = pd.read_csv(RESULTS_DIR + 'real/analysis_results.csv')
+
+    for encoding in ['binary', 'real']:
+        for dataset_name in df_analysis_b['dataset'].unique():
+            for classifier in df_analysis_b['classifier'].unique():
+                with open(
+                        os.path.join(RESULTS_DIR, encoding, dataset_name,
+                                     f'all_fitness_{classifier}.json'),
+                        'r') as file:
+                    fitness_register = json.load(file)
+                plot_fitness_all_optimizers(fitness_register)
+                plt.savefig(os.path.join(IMG_DIR, encoding, dataset_name, 'optimizers_fitness.png'))
+                plt.close()
 
     # Create directory to store dataset metrics images
     img_directory_path = os.path.join(IMG_DIR, 'real')
