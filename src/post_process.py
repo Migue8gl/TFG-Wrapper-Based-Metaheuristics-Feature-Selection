@@ -89,7 +89,7 @@ def main():
                         'r') as file:
                     fitness_register = json.load(file)
                 plot_fitness_all_optimizers(fitness_register)
-                plt.savefig(os.path.join(IMG_DIR, encoding, dataset_name, 'optimizers_fitness.png'))
+                plt.savefig(os.path.join(IMG_DIR, encoding, dataset_name, f'optimizers_fitness_{classifier}.png'))
                 plt.close()
 
     # Create directory to store dataset metrics images
@@ -108,7 +108,7 @@ def main():
     if not os.path.isdir(result_path):
         os.makedirs(result_path)
 
-    plot_all_boxplots_optimizers(df_analysis_b, df_analysis_r)
+    #plot_all_boxplots_optimizers(df_analysis_b, df_analysis_r)
 
     make_rankings_for_optimizers(df_analysis_b, df_analysis_r)
 

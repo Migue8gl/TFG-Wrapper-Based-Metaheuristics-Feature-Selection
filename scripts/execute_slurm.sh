@@ -8,6 +8,7 @@ datasets=(
     'data/spectf-heart.arff'
     'data/ionosphere.arff'
     'data/parkinsons.arff'
+    'data/diabetes.arff'
     'data/iris.arff'
     'data/wine.arff'
     'data/ecoli.arff'

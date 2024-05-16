@@ -12,6 +12,7 @@ data=(
     'data/wine.arff'
     'data/ecoli.arff'
     'data/breast-cancer.arff'
+    'data/diabetes.arff'
     'data/zoo.arff'
     'data/dermatology.arff'
     'data/sonar.arff'
