@@ -24,7 +24,17 @@ Los conjuntos de datos usados son lo siguientes:
         zoo              & 101                 & 18                       & 7               & Biología      \\ \hline
     \end{tabular}
     \caption{Información de los conjuntos de datos}
+    \label{tab:datasets_info}
 \end{table}
+Se han seleccionado los conjuntos de datos descritos en la tabla \ref{tab:datasets_info} por los siguientes motivos:
+\begin{itemize}
+    \item \textbf{Variedad de áreas:} Se ha buscado representar una amplia gama de áreas, como Medicina, Biología, Alimentación, Meteorología, Física e Informática. Esto asegura que los problemas abordados sean variados y abarquen diferentes dominios de aplicación.
+    \item \textbf{Diversidad de problemas:} Los conjuntos de datos elegidos cubren una variedad de problemas, desde diagnósticos médicos y clasificación de especies hasta predicciones en meteorología y detección de spam. Esta diversidad permite evaluar el rendimiento de los algoritmos en múltiples contextos.
+    \item \textbf{Número de características:} Algunos conjuntos de datos, como \textit{spectf-heart} y \textit{spambase-460}, tienen un gran número de características, lo que es particularmente útil para evaluar la eficacia de las técnicas de selección de características. Esta variedad en el número de características permite probar la robustez de los algoritmos en situaciones de alta dimensionalidad. La inclusión de otros como \textit{iris} con tan pocas características hacen de conjunto de datos de referencia, todos los algoritmos deberían optimizar este \textit{dataset}.
+    \item \textbf{Popularidad y uso en investigaciones:} Los conjuntos de datos seleccionados son populares y ampliamente utilizados en estudios y artículos de referencia~\cite{zhang_return-cost-based_2017, mafarja_binary_2019, emary_binary_2016, mafarja_whale_2018}. Esto facilita la comparación de resultados con otros trabajos y asegura que los datos son reconocidos y aceptados en la comunidad científica.
+    \item \textbf{Variedad en el número de instancias y clases:} La selección incluye conjuntos de datos con diferentes números de instancias y clases. Esta variedad es crucial para probar la escalabilidad y versatilidad de los algoritmos.
+    \item \textbf{Relevancia práctica:} Muchos de estos conjuntos de datos, como \textit{diabetes} y \textit{breast-cancer}, tienen una alta relevancia práctica en sus respectivas áreas, lo que subraya la importancia de encontrar soluciones eficientes y precisas para problemas del mundo real.
+\end{itemize}
 Los datos han sido normalizados entres $0$ y $1$ siguiendo la función de normalización \textit{MinMaxScaler} de \textit{scikit-learn}~\cite{scikit-learn}. Los conjuntos de datos se han dividido en $20\%$ test, $20\%$ validación y $60\%$ entrenamiento.
 Se han llevado a cabo $10$ ejecuciones sobre cada algoritmo en cada conjunto de datos, tanto en su versión original como en su versión binaria. Estas ejecuciones se han procesado de forma paralela en el servidor de \textit{Hércules}~\cite{citicugr}.\\[6pt]
 Se han recabado datos de todas las ejecuciones para poder comparar los resultados. En forma de gráficos se ha representado la curva de convergencia de cada algoritmo además de una curva de decremento de las características de cada conjunto de datos. Ambos gráficos son muy interesantes a la hora de comparar algoritmos para un mismo conjunto de datos.\\[6pt]

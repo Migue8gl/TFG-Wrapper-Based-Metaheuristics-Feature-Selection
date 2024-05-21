@@ -93,12 +93,27 @@ Es inmediato pensar que a mayor cantidad de datos, mejor calidad del modelo, y a
 \end{enumerate}
 
 De hecho, como puede observarse en la figura \ref{fig:learning_from_data_vc}, el modelo más complejo tiene un error esperado mucho mayor que el simple. El $E_{out}$ o error fuera de la muestra (error de generalización) es mucho más abrupto, es decir, generaliza peor.\\[6pt]
-Por supuesto, con suficientes datos, con un $N$ (número de puntos) suficientemente grande, la tendencia del error es a la baja~\cite{Mostafa2012, shalev2014understanding}. Ocurre, sin embargo, que la recolección, limpieza y transformación de datos es una tarea compleja, por ello es mejor ceñirse, de nuevo, a el modelo más pequeño que obtenga una solución con suficiente calidad.
+Por supuesto, con suficientes datos, con un $N$ (número de puntos) suficientemente grande, la tendencia del error es a la baja~\cite{Mostafa2012, shalev2014understanding}. Ocurre, sin embargo, que la recolección, limpieza y transformación de datos es una tarea compleja, por ello es mejor ceñirse, de nuevo, a el modelo más pequeño que obtenga una solución con suficiente calidad.\\[6pt]
+
+Como se ha mencionado anteriormente, la selección de características ayuda a la reducción del ruido. Siendo $f$ la función objetivo a predecir, $H^n$ el conjunto de hipótesis o conjunto de modelos de dimensión $n$ posibles, $h^*(x)$ el mejor modelo aprendido y $x$ una variable de entrada. El ruido conocido
+como ruido estocástico es aquel que atiende a una variación aleatoria que
+puede surgir de diversos factores, como mediciones imprecisas de señales o la falta de
+precisión en sensores. Por otro lado, el ruido determinista está directamente
+relacionado con la complejidad de un modelo. Su presencia aumenta la probabilidad de
+sobre-ajuste. El ruido determinista puede explicarse como la parte de la función $f$ que el conjunto
+de hipótesis $H^n$ no puede capturar, es decir, $f(x) - h^*(x)$. Este tipo de ruido se
+considera así porque la función (modelo) no es lo suficientemente compleja como para comprender
+esa parte. Este ruido depende de $H^n$ y permanece constante para un valor dado de $x$~\cite{Mostafa2012}.\\[6pt]
+La reducción de características ayuda a manejar ambos tipos de ruido~\cite{miao_survey_2016,Mostafa2012} al simplificar el
+modelo, lo que puede reducir el impacto del ruido estocástico y disminuir la complejidad del
+modelo, lo que a su vez puede ayudar a mitigar el ruido determinista al mejorar la capacidad
+del modelo para capturar las características relevantes y descartar las irrelevantes.
+Esto puede conducir a una mejor capacidad de generalización y a una reducción del sobre-ajuste.\\[6pt]
 
 \subsection{Concepto}
-El funcionamiento y motivo es explicado ya en la definición del problema en \ref{def_problem}. Por evitar redundancias se procede a explicar el concepto de manera abreviada y puntualizando en los apartados más importantes.\\[6pt]
+El funcionamiento y motivo es explicado ya en la sección de motivación en \ref{motivation}. Por evitar redundancias se procede a explicar el concepto de manera abreviada y puntualizando en los apartados más importantes.\\[6pt]
 La selección de características es una conocida y necesaria técnica de pre-procesamiento de datos para la construcción de un modelo de aprendizaje. Su función es escoger un subconjunto óptimo de características dentro del conjunto inicial, de forma que la complejidad del modelo se reduzca.\\[6pt]
-Este problema es del tipo $NP$-Hard, como ya se ha mencionado previamente en \ref{def_problem} y explicado en \ref{complexity}.
+Este problema es del tipo $NP$-Hard, como ya se ha mencionado previamente en \ref{motivation} y explicado en \ref{complexity}.
 La selección de características ayuda a una serie de factores como son la interpretabilidad, mejora de la eficiencia temporal y espacial del modelo y sobre todo con la \textbf{maldición de la dimensionalidad}~\cite{venkat2018curse, bellman1957dynamic}.
 
 \subsection{Maldición de la dimensionalidad}
@@ -137,7 +152,7 @@ De esta forma y faltando evidencia concluyente al respecto, es interesante menci
 \section{Aprendizaje automático}
 El aprendizaje automático es una sub-rama de estudio de la inteligencia artificial o \textbf{IA}, la cual aglomera una serie de métodos que pueden, de manera automática, detectar patrones en conjuntos masivos de datos para predecir datos futuros~\cite{murphy2012machine}. El aprendizaje automático o \textit{machine learning} en inglés, es usado en una amplia variedad de campos por su utilidad trasversal. Algunos de ellos son la agricultura, marketing, videojuegos, meteorología, física, etc.\\[6pt]
 Los algoritmos de aprendizaje automático son capaces de encontrar patrones en los datos, como ya se ha mencionado. Por ello, es necesario nutrir a estos algoritmos con datos de calidad. Un modelo de aprendizaje automático será tan bueno como los datos que se le puedan proveer, no más. De esta forma la recoleción de datos y su procesamiento se convierten en una prioridad a la hora de crear modelos.\\[6pt]
-Hay muchas formas de estructurar los datos y muchos tipos de algoritmos acorde a estos ``inputs''. En este documento se tratará con información en formato tabular, es decir, información en tablas con filas y columnas, donde cada fila representa un registro de información y cada columna una característica asociada. Esta última es la que determinará la complejidad del modelo. 
+Hay muchas formas de estructurar los datos y muchos tipos de algoritmos acorde a estos ``inputs''. En este documento se tratará con información en formato tabular, es decir, información en tablas con filas y columnas, donde cada fila representa un registro de información y cada columna una característica asociada. Esta última es la que determinará la complejidad del modelo.
 
 \subsection{Aprendizaje supervisado}
 Este subtipo de aprendizaje automático se caracteriza por tener un conjunto de datos sobre los que se entrena y una salida esperada (etiquetas) para cada punto de los datos~\cite{sah2020machine}. Es bastante costoso porque etiquetar cada dato es una tarea laboriosa y poco escalable.
