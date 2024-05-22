@@ -41,23 +41,24 @@ Se han recabado datos de todas las ejecuciones para poder comparar los resultado
 Además se han recabado los siguientes datos en ficheros de texto para su posterior análisis:
 \begin{itemize}
     \item \textbf{classifier}: Clasificador usado (kNN o SVC).
-    \item \textbf{dataset}: Es un conjunto de datos utilizado para el proceso de selección de características.
+    \item \textbf{dataset}: El conjunto de datos utilizado para el proceso de selección de características.
     \item \textbf{optimizer}: Algoritmo metaheurístico usado como optimizador.
-    \item \textbf{all\_fitness}: Es una lista que contiene los valores \textit{fitness} de todas las soluciones generadas durante la optimización.
-    \item \textbf{best}: Es el mejor valor encontrado durante la optimización.
-    \item \textbf{avg}: Es el promedio de los valores de \textit{fitness} de todas las soluciones generadas durante la optimización.
-    \item \textbf{std\_dev}: Es la desviación estándar de los valores de \textit{fitness} de todas las soluciones generadas durante la optimización. Indica qué tan dispersos están los valores alrededor del promedio.
-    \item \textbf{acc}: Es la precisión (accuracy) del modelo de clasificación, es decir, la proporción de instancias correctamente clasificadas sobre el total de instancias.
-    \item \textbf{n\_features}: Es el número de características seleccionadas.
-    \item \textbf{selected\_rate}: Es la tasa de selección de características, que representa la proporción de características seleccionadas respecto al total de características disponibles.
-    \item \textbf{execution\_time}: Es el tiempo de ejecución del algoritmo optimizatorio.
+    \item \textbf{all\_fitness}: Lista que contiene los valores \textit{fitness} de todas las soluciones generadas durante la optimización.
+    \item \textbf{best}: Mejor valor encontrado durante la optimización.
+    \item \textbf{avg}: Promedio de los valores de \textit{fitness} de todas las soluciones generadas durante la optimización.
+    \item \textbf{std\_dev}: Desviación estándar de los valores de \textit{fitness} de todas las soluciones generadas durante la optimización. Indica qué tan dispersos están los valores alrededor del promedio.
+    \item \textbf{acc}: Precisión (accuracy) del modelo de clasificación, es decir, la proporción de instancias correctamente clasificadas sobre el total de instancias.
+    \item \textbf{n\_features}: Número de características seleccionadas.
+    \item \textbf{selected\_rate}: Tasa de selección de características, que representa la proporción de características seleccionadas respecto al total de características disponibles.
+    \item \textbf{execution\_time}: Tiempo de ejecución del algoritmo optimizatorio.
 \end{itemize}
 Para la función de \textit{fitness} se ha usado:
 \begin{equation}
     fitness = acc\cdot\alpha + red\cdot(1-\alpha)
 \end{equation}
 Donde \textit{acc} quiere decir precisión y \textit{red} el porcentaje de características reducidas. La variable $\alpha$ actúa como medio de ponderación y ha sido fijado en $\alpha=0.9$, dando un $90\%$ de prioridad a la precisión.
-Se procede a mostrar los parámetros fijados para cada algoritmo (como referencia se han seguido los parámetros de los artículos originales y binarios ya citados para cada algoritmo).
+Se procede a mostrar los parámetros fijados para cada algoritmo (como referencia se han seguido los parámetros de los artículos originales y binarios ya citados para cada algoritmo).\\[6pt]
+Los parámetros fijados en cada uno de los algoritmos de optimización metaheurísticos han sido elegidos por las recomendaciones dadas en los artículos de referencia de los que se sacan, más concretamente los artículos que presentan la versión binaria. Estos son citados en la descripción de cada tabla.
 
 \begin{table}[H]
     \centering
@@ -71,7 +72,7 @@ Se procede a mostrar los parámetros fijados para cada algoritmo (como referenci
         L                  & 1.5            \\
         \hline
     \end{tabular}
-    \caption{Parámetros de GOA}
+    \caption{Parámetros de GOA~\cite{mafarja_binary_2019}}
 \end{table}
 
 \begin{table}[H]
@@ -83,7 +84,7 @@ Se procede a mostrar los parámetros fijados para cada algoritmo (como referenci
         Parámetro espiral  & 1              \\
         \hline
     \end{tabular}
-    \caption{Parámetros de WOA}
+    \caption{Parámetros de WOA. En el paper original~\cite{mirjalili_whale_2016} y en el de la versión binaria~\cite{mafarja_whale_2018} no se da un valor. El valor por defecto ha sido sacado de la implementación de~\cite{Li2019AnAW}}
 \end{table}
 
 \begin{table}[H]
@@ -97,7 +98,7 @@ Se procede a mostrar los parámetros fijados para cada algoritmo (como referenci
         Límite             & 3              \\
         \hline
     \end{tabular}
-    \caption{Parámetros de ABCO}
+    \caption{Parámetros de ABCO~\cite{karaboga_idea_nodate}}
 \end{table}
 
 \begin{table}[H]
@@ -109,10 +110,10 @@ Se procede a mostrar los parámetros fijados para cada algoritmo (como referenci
         $\alpha$           & 0.9            \\
         $\gamma $          & 0.9            \\
         $f_{min}$          & 0              \\
-        $f_{max}$          & 10             \\
+        $f_{max}$          & 2             \\
         \hline
     \end{tabular}
-    \caption{Parámetros de BA}
+    \caption{Parámetros de BA~\cite{mirjalili_binary_2014}}
 \end{table}
 
 \begin{table}[H]
@@ -121,13 +122,12 @@ Se procede a mostrar los parámetros fijados para cada algoritmo (como referenci
         \hline
         \textbf{Parámetro} & \textbf{Valor} \\
         \hline
-        Decay              & 0              \\
         w                  & 0.9            \\
         $c_1$              & 2              \\
         $c_2$              & 2              \\
         \hline
     \end{tabular}
-    \caption{Parámetros de PSO}
+    \caption{Parámetros de PSO~\cite{mirjalili_s-shaped_2013}}
 \end{table}
 
 \begin{table}[H]
@@ -136,12 +136,12 @@ Se procede a mostrar los parámetros fijados para cada algoritmo (como referenci
         \hline
         \textbf{Parámetro} & \textbf{Valor} \\
         \hline
-        $\alpha_0$         & 0.02           \\
-        $\beta_0$          & 0.1            \\
+        $\alpha_0$         & 0.5           \\
+        $\beta_0$          & 0.2            \\
         $\gamma_0$         & 1              \\
         \hline
     \end{tabular}
-    \caption{Parámetros de FA}
+    \caption{Parámetros de FA~\cite{zhang2016optimal}}
 \end{table}
 
 \begin{table}[H]
@@ -157,7 +157,7 @@ Se procede a mostrar los parámetros fijados para cada algoritmo (como referenci
         $\alpha$           & $\sqrt{0.3}$   \\
         \hline
     \end{tabular}
-    \caption{Parámetros de GA}
+    \caption{Parámetros de GA. Dada la cantidad de variantes y cantidad de valores de parámetros propuestos, estos han sido escogidos de manera empírica y basándose en recomendaciones del tutor del proyecto.}
 \end{table}
 
 \begin{table}[H]
@@ -172,7 +172,7 @@ Se procede a mostrar los parámetros fijados para cada algoritmo (como referenci
         Ratio de evaporación & 0.049          \\
         \hline
     \end{tabular}
-    \caption{Parámetros de ACO}
+    \caption{Parámetros de ACO~\cite{kashef_advanced_2015}}
 \end{table}
 
 \begin{table}[H]
@@ -186,7 +186,7 @@ Se procede a mostrar los parámetros fijados para cada algoritmo (como referenci
         $\lambda$               & 1.5            \\
         \hline
     \end{tabular}
-    \caption{Parámetros de CS}
+    \caption{Parámetros de CS~\cite{rodrigues_bcs_2013}}
 \end{table}
 
 \begin{table}[H]
@@ -195,11 +195,11 @@ Se procede a mostrar los parámetros fijados para cada algoritmo (como referenci
         \hline
         \textbf{Parámetro} & \textbf{Valor} \\
         \hline
-        F                  & 0.9            \\
-        Cr                 & 0.2            \\
+        F                  & 0.5            \\
+        Cr                 & 0.1            \\
         \hline
     \end{tabular}
-    \caption{Parámetros de DE}
+    \caption{Parámetros de DE~\cite{storn_differential_1997}}
 \end{table}
 
 Los algoritmos de \textbf{DA} y \textbf{GWO} no tienen parámetros configurables.

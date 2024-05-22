@@ -112,7 +112,7 @@ def update_position(position, alpha_0, beta_0, gama, min_values, max_values,
                 light_j = light_value(position[j, -1], firefly_i, firefly_j,
                                       gama)
                 if (light_i > light_j):
-                    epson = np.random.rand(dim)
+                    epson = np.random.rand(dim)-0.5
                     beta = beta_value(firefly_i, firefly_j, gama, beta_0)
                     if binary == 's':
                         position[i, :-4] = s_shaped_transfer_function(

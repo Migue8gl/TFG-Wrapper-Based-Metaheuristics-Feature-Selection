@@ -258,9 +258,9 @@ class Optimizer:
             parameters = {
                 "food_sources": DEFAULT_POPULATION_SIZE,
                 "iterations": DEFAULT_ITERATIONS,
-                "employed_bees": 3,
-                "outlookers_bees": 3,
-                "limit": 3,
+                "employed_bees": int(DEFAULT_POPULATION_SIZE / 2),
+                "outlookers_bees": int(DEFAULT_POPULATION_SIZE / 2),
+                "limit": int(solution_len * int(DEFAULT_POPULATION_SIZE / 2)),
                 "binary": "s",
             }
         elif optimizer_lower == "ba":
@@ -270,7 +270,7 @@ class Optimizer:
                 "alpha": 0.9,
                 "gama": 0.9,
                 "fmin": 0,
-                "fmax": 10,
+                "fmax": 2,
                 "binary": "s",
             }
         elif optimizer_lower == "pso":
@@ -287,8 +287,8 @@ class Optimizer:
             parameters = {
                 "swarm_size": DEFAULT_POPULATION_SIZE,
                 "generations": DEFAULT_ITERATIONS,
-                "alpha_0": 0.02,
-                "beta_0": 0.1,
+                "alpha_0": 0.5,
+                "beta_0": 0.2,
                 "gama": 1,
                 "binary": "s",
             }
@@ -326,8 +326,8 @@ class Optimizer:
             parameters = {
                 "n": DEFAULT_POPULATION_SIZE,
                 "iterations": DEFAULT_ITERATIONS,
-                "F": 0.9,
-                "Cr": 0.2,
+                "F": 0.5,
+                "Cr": 0.1,
                 'binary': 's',
             }
         elif optimizer_lower == "dummy":  # TODO Add parameters
