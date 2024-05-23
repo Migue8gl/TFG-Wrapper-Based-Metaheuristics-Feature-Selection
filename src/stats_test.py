@@ -3,38 +3,39 @@ import os
 
 import pandas as pd
 from constants import RESULTS_DIR
-from scipy.stats import wilcoxon
+from scipy.stats import shapiro, levene, ttest_ind, wilcoxon
 
 
-def wilcoxon_test_optimizer(grouped_df_binary, grouped_df_real, column='avg'):
-    p_values = {}
-    for optimizer, group in grouped_df_binary:
-        if optimizer != 'aco':
-            avg_opt1 = group[column]
-            avg_opt2 = grouped_df_real.get_group(optimizer)[column]
-
-            _, p_value = wilcoxon(avg_opt1, avg_opt2)
-            p_values[optimizer] = p_value
-    return p_values
+def check_normality(data):
+    _, p_value = shapiro(data)
+    return p_value
 
 
-def wilcoxon_test_classifier(grouped_df, column='avg'):
-    p_values = {}
-    knn_group = grouped_df.get_group('knn')
-    svc_group = grouped_df.get_group('svc')
+def check_homogeneity(var1, var2):
+    _, p_value = levene(var1, var2)
+    return p_value
 
-    avg_knn = knn_group[column]
-    avg_svc = svc_group[column]
 
-    _, p_value = wilcoxon(avg_knn, avg_svc)
-    p_values['knn_vs_svc'] = p_value
-    return p_values
+def apply_student_t_test(var1, var2):
+    _, p_value = ttest_ind(var1, var2)
+    return p_value
+
+
+def apply_welch_t_test(var1, var2):
+    _, p_value = ttest_ind(var1, var2, equal_var=False)
+    return p_value
+
+
+def apply_wilcoxon_test(var1, var2):
+    _, p_value = wilcoxon(var1, var2)
+    return p_value
 
 
 def main():
     df_binary = pd.read_csv(RESULTS_DIR + 'binary/analysis_results.csv')
     df_real = pd.read_csv(RESULTS_DIR + 'real/analysis_results.csv')
 
+    p_values = {}
     if not os.path.exists(os.path.join(RESULTS_DIR, 'stats')):
         os.makedirs(os.path.join(RESULTS_DIR, 'stats'))
 
@@ -42,27 +43,28 @@ def main():
         grouped_binary = df_binary.groupby('optimizer')
         grouped_real = df_real.groupby('optimizer')
 
-        p_values = wilcoxon_test_optimizer(grouped_binary, grouped_real,
-                                           column)
-        with open(
-                os.path.join(RESULTS_DIR, 'stats',
-                             f'wilcoxon_{column}_optimizer.txt'), 'w') as f:
-            json.dump(p_values, f, indent=4)
+        for optimizer, group in grouped_binary:
+            if optimizer != 'aco':
+                avg_opt1 = group[column]
+                avg_opt2 = grouped_real.get_group(optimizer)[column]
 
-        grouped_binary = df_binary.groupby('classifier')
-        grouped_real = df_real.groupby('classifier')
-        p_values = wilcoxon_test_classifier(grouped_binary, column)
-        with open(
-                os.path.join(RESULTS_DIR, 'stats',
-                             f'wilcoxon_{column}_classifier_binary.txt'),
-                'w') as f:
-            json.dump(p_values, f, indent=4)
+                normality_p_value = check_normality(avg_opt1)
+                homogeneity_p_value = check_homogeneity(avg_opt1, avg_opt2)
 
-        p_values = wilcoxon_test_classifier(grouped_real, column)
+                if normality_p_value > 0.05 and homogeneity_p_value > 0.05:
+                    p_value = apply_student_t_test(avg_opt1, avg_opt2)
+                    test = 't-test'
+                elif normality_p_value > 0.05:
+                    p_value = apply_welch_t_test(avg_opt1, avg_opt2)
+                    test = 'welch-t-test'
+                else:
+                    p_value = apply_wilcoxon_test(avg_opt1, avg_opt2)
+                    test = 'wilcoxon-test'
+                p_values[optimizer] = p_value
+
         with open(
                 os.path.join(RESULTS_DIR, 'stats',
-                             f'wilcoxon_{column}_classifier_real.txt'),
-                'w') as f:
+                             f'{test}_{column}_optimizer.txt'), 'w') as f:
             json.dump(p_values, f, indent=4)
 
 

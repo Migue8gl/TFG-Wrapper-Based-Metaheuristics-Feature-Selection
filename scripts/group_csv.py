@@ -16,16 +16,7 @@ def process_csv_file(file_path):
     df['dataset'] = dataset_name
     df['optimizer'] = optimizer_name[:
                                      -4]  # Remove ".csv" extension from optimizer name
-    return df.round({
-        'all_fitness': 3,
-        'best': 3,
-        'avg': 3,
-        'std_dev': 3,
-        'acc': 3,
-        'n_features': 3,
-        'selected_rate': 3,
-        'execution_time': 3
-    })
+    return df
 
 
 def generate_analysis_results(encoding):
