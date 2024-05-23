@@ -38,7 +38,7 @@ def main():
     if not os.path.exists(os.path.join(RESULTS_DIR, 'stats')):
         os.makedirs(os.path.join(RESULTS_DIR, 'stats'))
 
-    for column in ['avg', 'std_dev', 'acc', 'selected_rate', 'execution_time']:
+    for column in ['avg', 'acc', 'selected_rate', 'execution_time']:
         grouped_binary = df_binary.groupby('optimizer')
         grouped_real = df_real.groupby('optimizer')
 

@@ -13,3 +13,5 @@ __pycache__
 *.xml
 *.gz
 *toc
+img/
+results/
