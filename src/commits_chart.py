@@ -1,16 +1,9 @@
 import datetime
-import os
 import subprocess
-import sys
 from collections import defaultdict
 
+import constants
 import matplotlib.pyplot as plt
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from src import constants
-
-del sys.path[0]
 
 
 # Function to extract commit data

@@ -1,13 +1,7 @@
 import os
-import sys
 
+import constants
 import pandas as pd
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from src import constants
-
-del sys.path[0]
 
 
 def process_csv_file(file_path):
