@@ -7,11 +7,11 @@ def load_credentials(filename: str) -> tuple:
     """
     Load Telegram bot credentials from a text file.
 
-    Parameters:
-        - filename (str): Name of the text file containing credentials.
+    Args:
+       filename (str): Name of the text file containing credentials.
 
     Returns:
-        - tuple: A tuple containing the token and chat ID.
+       tuple: A tuple containing the token and chat ID.
     """
     with open(filename, 'r') as file:
         token = file.readline().strip()
@@ -26,14 +26,14 @@ def send_telegram_message(token: str,
     """
     Send a message through Telegram.
 
-    Parameters:
-        - token (str): Your Telegram bot token.
-        - chat_id (str): Your Telegram chat ID.
-        - message (str): The message to send.
-        - verbose (bool): If True, print the JSON response. Default is False.
+    Args:
+       token (str): Your Telegram bot token.
+       chat_id (str): Your Telegram chat ID.
+       message (str): The message to send.
+       verbose (bool): If True, print the JSON response. Default is False.
 
     Returns:
-        - Union[dict, str]: The JSON response from the Telegram API or an error message as a string.
+       Union[dict, str]: The JSON response from the Telegram API or an error message as a string.
     """
     url = f"https://api.telegram.org/bot{token}/sendMessage"
     params = {'chat_id': chat_id, 'text': message}
@@ -60,15 +60,15 @@ def send_telegram_image(token: str,
     """
     Send an image through Telegram.
 
-    Parameters:
-        - token (str): Your Telegram bot token.
-        - chat_id (str): Your Telegram chat ID.
-        - image_path (str): Path to the image file.
-        - caption (str): Caption for the image. Default is None.
-        - verbose (bool): If True, print the JSON response. Default is False.
+    Args:
+       token (str): Your Telegram bot token.
+       chat_id (str): Your Telegram chat ID.
+       image_path (str): Path to the image file.
+       caption (str): Caption for the image. Default is None.
+       verbose (bool): If True, print the JSON response. Default is False.
 
     Returns:
-        - Union[dict, str]: The JSON response from the Telegram API or an error message as a string.
+       Union[dict, str]: The JSON response from the Telegram API or an error message as a string.
     """
     url = f"https://api.telegram.org/bot{token}/sendPhoto"
     params = {
@@ -102,15 +102,15 @@ def send_telegram_file(token: str,
     """
     Send a file through Telegram.
 
-    Parameters:
-        - token (str): Your Telegram bot token.
-        - chat_id (str): Your Telegram chat ID.
-        - file_path (str): Path to the file.
-        - caption (str): Caption for the file. Default is None.
-        - verbose (bool): If True, print the JSON response. Default is False.
+    Args:
+       token (str): Your Telegram bot token.
+       chat_id (str): Your Telegram chat ID.
+       file_path (str): Path to the file.
+       caption (str): Caption for the file. Default is None.
+       verbose (bool): If True, print the JSON response. Default is False.
 
     Returns:
-        - Union[dict, str]: The JSON response from the Telegram API or an error message as a string.
+       Union[dict, str]: The JSON response from the Telegram API or an error message as a string.
     """
     url = f"https://api.telegram.org/bot{token}/sendDocument"
     params = {

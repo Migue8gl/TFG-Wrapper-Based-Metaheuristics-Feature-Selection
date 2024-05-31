@@ -6,7 +6,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scienceplots  # noqa: F401
-from constants import (
+
+from .constants import (
     KNN_CLASSIFIER,
     OPTIMIZER_COLOR,
     RESULTS_DIR,

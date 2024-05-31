@@ -4,7 +4,16 @@ import constants
 import pandas as pd
 
 
-def process_csv_file(file_path):
+def process_csv_file(file_path: str):
+    """
+    Adds a new column 'dataset' and 'optimizer' based on the file name to the csv readed.
+
+    Args:
+        file_path (str): Name of the file path where csv is.
+
+    Returns:
+        df (pd.DataFrame): DataFrame processed.
+    """
     dataset_name, optimizer_name = os.path.basename(file_path).split('_')[:2]
     df = pd.read_csv(file_path)
     df['dataset'] = dataset_name
@@ -13,7 +22,13 @@ def process_csv_file(file_path):
     return df
 
 
-def generate_analysis_results(encoding):
+def generate_analysis_results(encoding: str):
+    """
+    Generates a csv with the analysis results of all csv files in a directory.
+
+    Args:
+        encoding (str): Encoding of the data. It can be 'binary' or 'real'.
+    """
     dfs = []
     encoding_dir = os.path.join(constants.RESULTS_DIR, encoding)
     for dataset_dir in os.listdir(encoding_dir):

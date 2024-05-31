@@ -2,7 +2,13 @@ import time
 from typing import Optional
 
 import numpy as np
-from constants import (
+from sklearn.model_selection import StratifiedKFold, train_test_split
+from sklearn.preprocessing import (
+    MinMaxScaler,
+    StandardScaler,
+)
+
+from .constants import (
     DATA,
     DEFAULT_EVALS,
     DEFAULT_FOLDS,
@@ -10,25 +16,20 @@ from constants import (
     LABELS,
     SAMPLE,
 )
-from data_utils import split_data_to_dict
-from optimizer import Optimizer
-from sklearn.model_selection import StratifiedKFold, train_test_split
-from sklearn.preprocessing import (
-    MinMaxScaler,
-    StandardScaler,
-)
+from .data_utils import split_data_to_dict
+from .optimizer import Optimizer
 
 
 def calculate_average_metric(metrics_each_fold: dict, key: str) -> list:
     """
     Calculate the average metric values from a dictionary of metrics values for each fold.
 
-    Parameters:
-        - metrics_each_fold (dict): Dictionary of metrics values for each fold.
-        - key (str): Key specifying the values to extract.
+    Args:
+       metrics_each_fold (dict): Dictionary of metrics values for each fold.
+       key (str): Key specifying the values to extract.
 
     Returns:
-        - average_fitness_values (list): An array of average fitness values across all folds.
+       average_fitness_values (list): An array of average fitness values across all folds.
     """
     # Transpose fitness values to have each list represent values for a specific index
     transposed_fitness = np.array([[item[key] for item in sublist]
@@ -49,15 +50,15 @@ def k_fold_cross_validation(optimizer: object,
     """
     Implementation of k-fold cross-validation.
 
-    Parameters:
-        - optimizer (object): The optimizer to be used.
-        - dataset (dict, optional): The dataset in dict form.
-        - k (int, optional): The number of folds.
-        - scaler (int, optional): The type of scaling to be used.
-        - verbose (bool, optional): Whether to print the results.
+    Args:
+       optimizer (object): The optimizer to be used.
+       dataset (dict, optional): The dataset in dict form.
+       k (int, optional): The number of folds.
+       scaler (int, optional): The type of scaling to be used.
+       verbose (bool, optional): Whether to print the results.
 
     Returns:
-        - metrics (dict): The dictionary containing metrics of the results.
+       metrics (dict): The dictionary containing metrics of the results.
     """
     skf = StratifiedKFold(n_splits=k, shuffle=True, random_state=42)
     test_fitness = []
@@ -100,11 +101,11 @@ def k_fold_cross_validation(optimizer: object,
         metrics_each_fold[fold_index] = metrics_values
 
         # Evaluate the model on the test set of the current fold
-        optimizer.params['target_function_parameters'][DATA] = sample_test
-        optimizer.params['target_function_parameters']['weights'] = result[:-4]
+        optimizer.params['target_function_Args'][DATA] = sample_test
+        optimizer.params['target_function_Args']['weights'] = result[:-4]
 
         metrics = Optimizer.fitness(
-            **optimizer.params['target_function_parameters'])
+            **optimizer.params['target_function_Args'])
 
         test_fitness.append(metrics['fitness'])
         test_accuracy.append(metrics['accuracy'])
@@ -153,15 +154,15 @@ def evaluate_optimizer(optimizer: object,
     """
     This function evaluates the optimizer k times to provide reliable results.
 
-    Parameters:
-        - optimizer (object): The optimizer to be used.
-        - dataset (dict, optional): The dataset in dict form.
-        - n (int, optional): The number of evaluations.
-        - scaler (int, optional): The type of scaling to be used.
-        - verbose (bool, optional): Whether to print the results.
+    Args:
+       optimizer (object): The optimizer to be used.
+       dataset (dict, optional): The dataset in dict form.
+       n (int, optional): The number of evaluations.
+       scaler (int, optional): The type of scaling to be used.
+       verbose (bool, optional): Whether to print the results.
 
     Returns:
-        - metrics (dict): The dictionary containing metrics of the results.
+       metrics (dict): The dictionary containing metrics of the results.
     """
     # Variables
     metrics_each_iteration = {}
@@ -207,11 +208,11 @@ def evaluate_optimizer(optimizer: object,
         metrics_each_iteration[i] = metrics_values
 
         # Evaluate the model on the test set of the current iteration
-        optimizer.params['target_function_parameters'][DATA] = sample_test
-        optimizer.params['target_function_parameters']['weights'] = result[:-4]
+        optimizer.params['target_function_Args'][DATA] = sample_test
+        optimizer.params['target_function_Args']['weights'] = result[:-4]
 
         metrics = Optimizer.fitness(
-            **optimizer.params['target_function_parameters'])
+            **optimizer.params['target_function_Args'])
 
         test_fitness.append(metrics['fitness'])
         test_accuracy.append(metrics['accuracy'])
@@ -258,13 +259,13 @@ def analysis_fitness_over_population(dataset: dict,
     """
     Analysis function to study how fitness variates over different population sizes.
 
-    Parameters:
-        - optimizer (object): The optimizer to be used.
-        - dataset (dict, optional): The dataset in dict form.
-        - k (int, optional): The number of folds.
+    Args:
+       optimizer (object): The optimizer to be used.
+       dataset (dict, optional): The dataset in dict form.
+       k (int, optional): The number of folds.
 
     Returns:
-        - average_fitness_test (float): The average fitness of the test set.
+       average_fitness_test (float): The average fitness of the test set.
     """
     initial_population_size = 5
     max_population_size = 55
@@ -290,16 +291,16 @@ def analysis_optimizers_comparison(dataset: dict,
     """
     Analysis function to compare different optimizers between each other.
 
-    Parameters:
-        - dataset (dict, optional): The dataset in dict form.
-        - k (int, optional): The number of folds.
-        - max_iter (int, optional): The maximum number of iterations for each optimizer.
+    Args:
+       dataset (dict, optional): The dataset in dict form.
+       k (int, optional): The number of folds.
+       max_iter (int, optional): The maximum number of iterations for each optimizer.
 
     Returns:
-        - optimizers_fitness (dict): The dictionary containing metrics of the results for each optimizer.
+       optimizers_fitness (dict): The dictionary containing metrics of the results for each optimizer.
     """
-    parameters_dict = {
-        key: Optimizer.get_optimizers_parameters(key, dataset[SAMPLE].shape[1])
+    Args_dict = {
+        key: Optimizer.get_optimizers_Args(key, dataset[SAMPLE].shape[1])
         for key in Optimizer.get_optimizers_names()
     }
     optimizers_fitness = {}
@@ -309,7 +310,7 @@ def analysis_optimizers_comparison(dataset: dict,
         for _ in range(0, max_iter):
             metrics = k_fold_cross_validation(dataset=dataset,
                                               optimizer=Optimizer(
-                                                  key, **parameters_dict[key]),
+                                                  key, **Args_dict[key]),
                                               k=k,
                                               verbose=False)
             fitness_values.append(np.array(metrics['test_fitness']['avg']))

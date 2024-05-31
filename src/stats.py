@@ -2,8 +2,9 @@ import json
 import os
 
 import pandas as pd
-from constants import RESULTS_DIR
-from scipy.stats import shapiro, levene, ttest_ind, wilcoxon
+from scipy.stats import levene, shapiro, ttest_ind, wilcoxon
+
+from .constants import RESULTS_DIR
 
 
 def check_normality(data):

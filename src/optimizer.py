@@ -2,7 +2,12 @@ from math import sqrt
 from typing import Optional
 
 import numpy as np
-from constants import (
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.svm import SVC
+
+from .constants import (
     ALPHA,
     DATA,
     DEFAULT_ITERATIONS,
@@ -15,7 +20,7 @@ from constants import (
     SAMPLE,
     SVC_CLASSIFIER,  # noqa: F401
 )
-from pyMetaheuristic.algorithm import (
+from .pyMetaheuristic.algorithm import (
     ant_colony_optimization,
     artificial_bee_colony_optimization,
     bat_algorithm,
@@ -30,10 +35,6 @@ from pyMetaheuristic.algorithm import (
     particle_swarm_optimization,
     whale_optimization_algorithm,
 )
-from sklearn.metrics import accuracy_score
-from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
 
 
 class Optimizer:

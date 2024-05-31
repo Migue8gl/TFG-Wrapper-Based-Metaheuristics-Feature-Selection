@@ -6,13 +6,12 @@ import constants
 import matplotlib.pyplot as plt
 
 
-# Function to extract commit data
 def get_commit_data() -> list:
     """
     Returns a list of commit dates in the format "YYYY-MM".
 
     Returns:
-        - commit_data (list): A list of commit dates in the format "YYYY-MM".
+        commit_data (list): A list of commit dates in the format "YYYY-MM".
     """
     command = 'git log --pretty=format:"%ad" --date=format:"%Y-%m" --reverse'
     result = subprocess.run(command,
@@ -28,11 +27,11 @@ def count_commits(commit_data: list) -> dict:
     """
     Returns a dictionary of commit counts per month.
     
-    Parameters:
-        - commit_data (list): A list of commit dates in the format "YYYY-MM".
+    Args:
+        commit_data (list): A list of commit dates in the format "YYYY-MM".
     
     Returns:
-        - commits_per_month (dict): A dictionary of commit counts per month.
+        commits_per_month (dict): A dictionary of commit counts per month.
     """
     commits_per_month = defaultdict(int)
     for commit_date in commit_data:
@@ -47,8 +46,8 @@ def plot_data(data: dict):
     """
     Plots the data as a line chart.
 
-    Parameters:
-        - data (dict): A dictionary of commit counts per month.
+    Args:
+        data (dict): A dictionary of commit counts per month.
     """
     months = list(data.keys())
     commits = list(data.values())

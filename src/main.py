@@ -7,10 +7,11 @@ import time
 import matplotlib.pyplot as plt
 import notifications
 import pandas as pd
-from analysis_utils import (
+
+from .analysis_utils import (
     evaluate_optimizer,
 )
-from constants import (
+from .constants import (
     CREDENTIALS_DIR,
     D2,
     DEFAULT_EVALS,
@@ -19,12 +20,12 @@ from constants import (
     RESULTS_DIR,
     SAMPLE,
 )
-from data_utils import (
+from .data_utils import (
     load_data,
     split_data_to_dict,
 )
-from optimizer import Optimizer
-from plots import (
+from .optimizer import Optimizer
+from .plots import (
     plot_metric_over_folds,
 )
 
