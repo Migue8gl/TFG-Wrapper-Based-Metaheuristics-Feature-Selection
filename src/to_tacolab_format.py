@@ -24,6 +24,12 @@ def main(filename: str):
         pivot_df = pivot_df.map(lambda x: '{:,.2e}'.format(x)
                                 if isinstance(x, float) else x)
 
+        # Renaming the columns from F1 to FN starting from the second column
+        pivot_df.columns = ['alg'] + [
+            'F{}'.format(i) if isinstance(i, int) else i
+            for i in range(1, len(pivot_df.columns))
+        ]
+
         with pd.ExcelWriter(os.path.join(directory,
                                          f'tacolab_results_{metric}.xlsx'),
                             engine='openpyxl') as writer:
