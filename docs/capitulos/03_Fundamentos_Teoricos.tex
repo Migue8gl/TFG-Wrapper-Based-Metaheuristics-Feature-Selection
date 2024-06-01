@@ -21,13 +21,13 @@ Para poder convertir un problema abstracto en un problema de optimización concr
 La definición general de un problema de optimización proporciona una estructura sólida para abordar el problema abstracto. Establece la función objetivo que se busca minimizar o maximizar, junto con las restricciones que deben cumplirse. Estas restricciones pueden ser tanto desigualdades como igualdades, y todas juntas definen el \textbf{espacio de búsqueda} del problema.
 
 \subsection{Función objetivo y función fitness}
-Ambos términos, aunque a menudo se utilizan como sinónimos, desempeñan roles distintos en el ámbito de la optimización. La función \textit{objetivo}, como su nombre indica, establece el objetivo a alcanzar en la resolución del problema. Esta función cuantifica el rendimiento de las soluciones encontradas en relación con el objetivo específico del problema, que puede ser maximizar ganancias, minimizar distancia, entre otros objetivos. Por otro lado, la función de \textit{fitness}  evalúa la idoneidad de una solución dentro de una población de soluciones. Es decir, determina la calidad relativa de la solución respecto a otras alternativas.
+Ambos términos, aunque a menudo se utilizan como sinónimos, desempeñan roles distintos en el ámbito de la optimización. La función \textit{objetivo}, como su nombre indica, establece el objetivo a alcanzar en la resolución del problema. Esta función cuantifica el rendimiento de las soluciones encontradas en relación con el objetivo específico del problema, que puede ser maximizar ganancias, minimizar distancia, entre otros objetivos. Por otro lado, la función de \textit{fitness} solo tiene que evaluar la idoneidad de una solución dentro de una población de soluciones. Es decir, determina la calidad relativa de la solución respecto a otras alternativas.
 
-Debe destacarse que la métrica de la función de \textit{fitness} suele ser estrictamente positiva, ya que representa la calidad de una solución, generalmente en un rango de valores entre $0$ y $1$. Por otro lado, la función objetivo puede ser positiva o negativa, dependiendo de si se busca maximizar o minimizar el objetivo. Además, la función de aptitud también puede llegar a ser una aproximación de la función objetivo, pero no necesariamente coinciden exactamente.\\[6pt]
-Resumiendo, podría decirse que la función \textit{fitness} es un tipo particular de función objetivo que se utiliza como métrica de rendimiento~\cite{eiben2015}.
+Por otro lado, la función objetivo puede ser positiva o negativa, dependiendo de si se busca maximizar o minimizar el objetivo. Además, la función \textit{fitness} también puede llegar a ser una aproximación de la función objetivo, pero no necesariamente coinciden exactamente.\\[6pt]
+Resumiendo, la función \textit{fitness} es un tipo particular de función objetivo que se utiliza como métrica de rendimiento~\cite{eiben2015}.
 
-\subsection{Puntos globales o locales}
-Se conocen como punto de óptimo global (mínimo o máximo) la solución (o vector hablando en términos matemáticos) cuyo valor para la función objetivo es el más grande en todo el espacio de soluciones posible, es decir, el espacio de búsqueda. Los puntos locales en cambio son varios, no solo uno como es el global. Son soluciones máximas o mínimas dentro de una región de soluciones.
+\subsection{Óptimos globales o locales}
+Se conocen como punto de óptimo global (mínimo o máximo) la solución (o vector hablando en términos matemáticos) cuyo valor para la función objetivo es el más grande en todo el espacio de soluciones posible, es decir, el espacio de búsqueda. Los óptimos locales en cambio son varios, no solo uno como es el global. Son soluciones máximas o mínimas dentro de una región de soluciones.
 
 \begin{figure}[H]
     \begin{center}
@@ -48,29 +48,6 @@ En cambio el objetivo está en un máximo local en el punto $x^*$ si:
     \end{split}
 \end{equation}
 
-\section{Teoría de la computación}
-La teoría de la computación es un campo que estudia los fundamentos matemáticos y los límites de la computación. En esencia, se ocupa de preguntas fundamentales sobre qué se puede y qué no se puede computar, cómo se pueden resolver problemas de manera eficiente y qué tan difíciles son ciertos problemas en términos de recursos computacionales.\\[6pt]
-Suele usarse la máquina de Turing, como modelo abstracto de computadora, para las demostraciones realizadas, creando un marco sencillo en el que entender cómo se ejecutan los algoritmos y cómo se resuelven estos.
-\subsection{Máquina de Turing}
-Una máquina de Turing, cuyo nombre proviene de su creador Alan Turing, es un modelo de computación matemático que es capaz de ejecutar algoritmos mediante el control de una serie de símbolos en la tira de una cinta y de acuerdo a una serie de reglas establecidas~\cite{stone1972}.\\[6pt]
-Es capaz de general un modelo abstracto mediante el cual representar todo de algoritmos que resuelvan problemas computables.
-
-\subsection{Grupos de complejidad P y NP}\label{complexity}
-Se puede definir un lenguaje como una serie de cadenas dentro de un alfabeto, siendo este último un conjunto finito de símbolos~\cite{johnjeffery_automata}. \\[6pt]
-Dada esta definición se dice que un lenguaje que es \textit{reconocible}, es decir, que una máquina de Turing puede determinar si una cadena pertenece al lenguaje o no, en un tiempo ``polinómico determinista" son conocidos como problema de la clase $P$. Que un problema sea resoluble en tiempo polinómico determinista en una máquina de Turing, significa que para cada estado solo existe una posible acción y que su tiempo de resolución puede expresarse como una función polinómica~\cite{johnjeffery_automata}. \\[6pt]
-En contraposición, un problema de la clase $NP$ no es resoluble en tiempo polinómico determinista, sino en tiempo polinómico no determinista. Esto es, que puede resolverse expresando el tiempo como una función polinómica, pero con la diferencia de que el no determinismo implica que para pasar de un estado a otro es posible considerar múltiples acciones.\\[6pt]
-La diferencia entre los problemas de las clases $P$ y $NP$ es fundamental en la teoría de la complejidad computacional. Mientras que los problemas de la clase $P$ son eficientemente resueltos, los problemas de la clase $NP$ pueden ser verificados en tiempo polinómico, pero su resolución en tiempo polinómico no está demostrada y tiende a ser exponencial.
-
-\subsection{NP-Hard}
-Un problema de decisión $H$ se considera $NP$-Hard o duro si, para cada problema $L$ en $NP$, hay una reducción de muchos a uno de tiempo polinómico de $L$ a $H$~\cite{leeuwen_algorithms_1998,johnjeffery_automata}. Esto significa que cualquier problema en $NP$ puede ser transformado en $H$ en tiempo polinómico, lo que sugiere que $H$ es al menos tan difícil como cualquier problema en $NP$.
-
-\begin{figure}[H]
-    \begin{center}
-        \includegraphics[width=0.6\textwidth]{imagenes/np_subsets.png}
-    \end{center}
-    \caption[Relación entre clases de complejidad]{En esta figura se puede ver la relación de pertenencia entre clases de complejidad. Puede observarse que $NP$-Hard no es un subconjunto de $NP$. Una solución para un problema $NP$-Hard podría transformarse mediante reducción y solucionar un problema $NP$, pero no siempre es así al revés.}
-\end{figure}
-
 \section{Selección de características}
 La selección de características es un ejemplo de problema $NP$-Hard y uno de los problemas más importantes en el mundo de la inteligencia artificial, más concretamente en el \textbf{machine learning} o aprendizaje automático.
 
@@ -85,7 +62,7 @@ El aprendizaje automático se basa en los datos como fuente de aprendizaje. Es i
     \label{fig:learning_from_data_vc}
 \end{figure}
 
-Es inmediato pensar que a mayor cantidad de datos, mejor calidad del modelo, y así es. Sin embargo, también existe una ``normal general'' que relaciona la complejidad del modelo y su capacidad de generalización. Es cierto que un modelo muy complejo (muchos parámetros) es capaz de ajustar mejor funciones más complejas, pero dentro de un conjunto con una serie de modelos suficientemente complejos, suele ser mejor idea elegir el más simple. Hay una serie clara de ventajas para ello:
+Es inmediato pensar que, a mayor cantidad de datos, mejor calidad del modelo, y así suele ser. Sin embargo, también existe una ``normal general'' que relaciona la complejidad del modelo y su capacidad de generalización. Es cierto que un modelo muy complejo (muchos parámetros) es capaz de ajustar mejor funciones más complejas, pero dentro de un conjunto con una serie de modelos suficientemente complejos, suele ser mejor idea elegir el más simple. Hay una serie clara de ventajas para ello:
 \begin{enumerate}
     \item Menor  sensibilidad al sobre-ajuste.
     \item Mayor interpretabilidad del modelo y sus resultados.
@@ -93,7 +70,7 @@ Es inmediato pensar que a mayor cantidad de datos, mejor calidad del modelo, y a
 \end{enumerate}
 
 De hecho, como puede observarse en la figura \ref{fig:learning_from_data_vc}, el modelo más complejo tiene un error esperado mucho mayor que el simple. El $E_{out}$ o error fuera de la muestra (error de generalización) es mucho más abrupto, es decir, generaliza peor.\\[6pt]
-Por supuesto, con suficientes datos, con un $N$ (número de puntos) suficientemente grande, la tendencia del error es a la baja~\cite{Mostafa2012, shalev2014understanding}. Ocurre, sin embargo, que la recolección, limpieza y transformación de datos es una tarea compleja, por ello es mejor ceñirse, de nuevo, a el modelo más pequeño que obtenga una solución con suficiente calidad.\\[6pt]
+Por supuesto, con suficientes datos, con un $N$ (número de datos) suficientemente grande, la tendencia del error es a la baja~\cite{Mostafa2012, shalev2014understanding}. Ocurre, sin embargo, que la recolección, limpieza y transformación de datos es una tarea compleja, por ello es mejor ceñirse, de nuevo, a el modelo más pequeño que obtenga una solución con suficiente calidad.\\[6pt]
 
 Como se ha mencionado anteriormente, la selección de características ayuda a la reducción del ruido. Siendo $f$ la función objetivo a predecir, $H^n$ el conjunto de hipótesis o conjunto de modelos de dimensión $n$ posibles, $h^*(x)$ el mejor modelo aprendido y $x$ una variable de entrada. El ruido conocido
 como ruido estocástico es aquel que atiende a una variación aleatoria que
@@ -126,7 +103,7 @@ El término fue acuñado por Bellman en $1961$~\cite{bellman1961adaptive}. Este 
     \caption[Tendencia de incremento de dimensionalidad en varios espacios de características]{Esta figura extraída de \cite{peng_interpreting_2024} muestra la tendencia en la densidad a medida que se incrementa la dimensionalidad del espacio. En $(a)$ se muestra la densidad con diez puntos de datos en un espacio $1D$, en $(b)$ se muestra la tendencia al incrementar las dimensiones.}
 \end{figure}
 
-Además, en espacios de alta dimensión, la medición de distancias puede volverse inválida. Esto se debe a que las distancias entre puntos de datos diferentes tienden a converger a un mismo valor a medida que aumenta la dimensionalidad. Esto significa que las medidas de distancia ya no son tan útiles para medir la similitud entre datos~\cite{peng_interpreting_2024, venkat2018curse}. En el trabajo de Beyer y compañeros~\cite{beyer99nn} se observó como esto ocurría y por tanto un escaneo lineal (recorrer los puntos uno a uno) resultaba en altas dimensiones más práctico que otras técnicas complejas.
+Además, en espacios de alta dimensión, la medición de distancias puede volverse menos precisa. Esto se debe a que las distancias entre puntos de datos diferentes tienden a converger a un mismo valor a medida que aumenta la dimensionalidad. Esto significa que las medidas de distancia ya no son tan útiles para medir la similitud entre datos~\cite{peng_interpreting_2024, venkat2018curse}. En el trabajo de Beyer y colaboradores~\cite{beyer99nn} se observó como esto ocurría y por tanto un escaneo lineal (recorrer los puntos uno a uno) resultaba en altas dimensiones más práctico que otras técnicas complejas.
 \section{Metaheurísticas}
 Dentro de la optimización hay muchos tipos de métodos, dentro de los pseudoaleatorios pueden encontrarse las metaheurísticas. Estas son algoritmos basados en una abstracción de mayor nivel de la \textbf{heurísticas}. Mientras que las heurísticas se apoyan en el conocimiento específico del campo en el que se encuentra el problema, y están restringidas a su dominio, las metaheurísticas son aplicables a todo tipo de problemas, independientemente de su área de optimización~\cite{bianchi2009survey}. Es cierto que hay algoritmos que son más convenientes para ciertos problemas que otros, pero su aplicación es generalizada. Normalmente, las metaheurísticas son diseñadas a siguiendo una inspiración en la naturaleza, ya sea en fenómenos físicos o en el comportamiento animal. Ejemplo de estos son algoritmos como el \textit{Búsqueda Cuckoo}, \textit{Enfriamiento Simulado} o incluso \textit{Algoritmos Genéticos}.\\[6pt]
 Las metaheurísticas son especialmente útiles en problemas cuya resolución no es factible debido a altos costos computacionales, ya sea porque es posible analíticamente pero computacionalmente costoso, o porque el problema no es abordable mediante algoritmos convencionales. Son capaces de encontrar óptimos locales lo suficientemente aceptables, soluciones no óptimas, pero si muy buenas~\cite{bianchi2009survey}.
@@ -140,7 +117,7 @@ Las metaheurísticas son especialmente útiles en problemas cuya resolución no 
 
 \subsection{Exploración vs explotación}
 Las metaheurísticas, y algoritmos basados en técnicas pseudoaleatorias, deben tener un balance entre sus factores explorativos y explotativos. De no ser así, los algoritmos tendrían tendencias a la convergencia temprana, dejando de lado mucho espacio por explorar y por ende soluciones posiblemente mejores (estancamiento en óptimos locales) o serían muy lentos en la convergencia hacia una solución.\\[6pt]
-La \textbf{exploración} se refiere a la habilidad del algoritmo de buscar nuevas y diversas regiones en el espacio de búsqueda/solución. Es una característica de la búsqueda global, que también puede ser llamada \textit{diversificación}. En cambio, la explotación es la habilidad de la búsqueda de explotar las mejores soluciones encontradas hasta el momento y mejorarlas localmente, dentro de un ``vecindario''~\cite{xu2014exploration}.\\[6pt]
+La \textbf{exploración} se refiere a la habilidad del algoritmo de buscar nuevas y diversas regiones en el espacio de búsqueda/solución. Es una característica de la búsqueda global, que también puede ser llamada \textit{diversificación}. En cambio, la \textbf{explotación} es la habilidad de la búsqueda de explotar las mejores soluciones encontradas hasta el momento y mejorarlas localmente, dentro de un ``vecindario''~\cite{xu2014exploration}.\\[6pt]
 No existe un equilibrio \textit{de facto} entre exploración y explotación en las metaheurísticas. Aún no se ha alcanzado una respuesta definitiva a esta cuestión. Desde una perspectiva de sistemas, una metaheurística puede entenderse como un sistema dinámico compuesto por numerosos ``individuos'' que interactúan entre sí. Estos individuos representan las distintas soluciones o posiciones en el espacio de búsqueda que la metaheurística explora~\cite{6896450}. Las interacciones entre estos individuos son las que conforman comportamientos explorativos o explotativos y dependen del problema a solucionar y del propio algoritmo su equilibrio.
 
 \section{Teorema No Free Lunch}

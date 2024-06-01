@@ -12,10 +12,10 @@
 \thispagestyle{empty}
 
 \begin{center}
-{\large\bfseries Estudio y Análisis de Metaheurísticas modernas para el problema de Selección de Características}\\
+       {\large\bfseries Estudio y Análisis de Metaheurísticas modernas para el problema de Selección de Características}\\
 \end{center}
 \begin{center}
-MIGUEL GARCÍA LÓPEZ\\
+       MIGUEL GARCÍA LÓPEZ\\
 \end{center}
 
 %\vspace{0.7cm}
@@ -24,7 +24,19 @@ MIGUEL GARCÍA LÓPEZ\\
 \vspace{0.7cm}
 \noindent{\textbf{Resumen}}\\
 
-En el ámbito del Machine Learning, algunos algoritmos, como KNN o SVM, muestran excelentes resultados, pero muchas veces estos requieren de un procesamiento previo para identificar las características más relevantes. Ya sea por escoger un problema amplio y complejo, por falta de conocimiento o por falta de contexto a la hora de recolectar los datos, es posible que se llegue a aglomerar información de más, dando lugar a conjuntos de datos inmensos. Incluso aquellos algoritmos que internamente realizan esta identificación de características pueden beneficiarse de un procesamiento adicional. Este preprocesamiento, conocido como selección de características (features selection), se considera un problema complejo de optimización combinatoria.\\[6pt]
+En el ámbito del \textit{Machine Learning}, algunos algoritmos, como KNN o SVM, muestran excelentes resultados, pero a menudo requieren un procesamiento previo para identificar las características más relevantes. Esto se debe a que, ya sea por la amplitud y complejidad del problema, por falta de conocimiento o contexto al recolectar los datos, es posible aglomerar información innecesaria, dando lugar a conjuntos de datos inmensos. Incluso los algoritmos que internamente realizan esta identificación pueden beneficiarse de un procesamiento adicional. Este preprocesamiento, conocido como selección de características (\textit{feature selection}), se considera un problema complejo de optimización combinatoria.
+
+Existen varios métodos comunes para la selección de características:
+
+\begin{itemize}
+       \item \textbf{Filtrado}: Evalúa características individualmente según su relación con la variable objetivo, usando métricas como correlación o chi-cuadrado.
+       \item \textbf{Envoltura (\textit{Wrapper})}: Evalúa conjuntos de características mediante el entrenamiento y la evaluación de un modelo, utilizando métodos como búsqueda hacia adelante o hacia atrás.
+       \item \textbf{Métodos basados en árboles}: Algoritmos como \textit{Random Forests} proporcionan una estimación de la importancia de cada característica.
+       \item \textbf{Análisis de Componentes Principales (PCA)}: Técnica de reducción de dimensionalidad que transforma las características originales en componentes principales.
+       \item \textbf{Selección L1 (\textit{Lasso Regression})}: Utiliza una penalización L1 en la regresión lineal, eliminando características menos importantes.
+\end{itemize}
+
+Estos métodos pueden utilizarse individualmente o en combinación para mejorar la selección de características y el rendimiento de los modelos de \textit{Machine Learning}. En este documento se hablarán de métodos metaheurísticos para la resolución de este problema.\\[6pt]
 
 Las metaheurísticas son algoritmos diseñados para resolver problemas de optimización complejos cuando los recursos son limitados. Aunque inicialmente se desarrollaron para abordar principalmente problemas combinatorios, en la actualidad se están proponiendo y aplicando cada vez más en problemas que implican variables continuas o reales. En respuesta a la creciente demanda en el campo de la selección de características, se han adaptado versiones especializadas de estas metaheurísticas para abordar este tipo de problemas combinatorios. Sin embargo, a pesar del número creciente de propuestas en este campo, las comparaciones objetivas entre ellas son limitadas. Aunque existen revisiones bibliográficas, muchas de ellas carecen de comparaciones adecuadas debido a la importancia y actualidad del problema de selección de características. Por lo tanto, hay una necesidad de estudios que proporcionen una evaluación comparativa más rigurosa y exhaustiva de las diferentes propuestas en este ámbito.\\[6pt]
 
@@ -36,10 +48,10 @@ En este trabajo de carácter científico, se llevará a cabo una revisión bibli
 
 
 \begin{center}
-{\large\bfseries Study and Analysis of Modern Metaheuristics for the Feature Selection Problem}\\
+       {\large\bfseries Study and Analysis of Modern Metaheuristics for the Feature Selection Problem}\\
 \end{center}
 \begin{center}
-MIGUEL GARCÍA LÓPEZ\\
+       MIGUEL GARCÍA LÓPEZ\\
 \end{center}
 
 %\vspace{0.7cm}
@@ -48,7 +60,19 @@ MIGUEL GARCÍA LÓPEZ\\
 \vspace{0.7cm}
 \noindent{\textbf{Abstract}}\\
 
-In the field of Machine Learning, some algorithms like KNN or SVM often yield excellent results, but they often require preprocessing to identify the most relevant features. Whether due to tackling a broad and complex problem, lack of domain knowledge, or collecting data without proper context, it's possible to gather excessive information, resulting in vast datasets. Even algorithms internally performing feature identification can benefit from additional processing. This preprocessing, known as feature selection, is considered a complex combinatorial optimization problem.\\[6pt]
+In the field of Machine Learning, some algorithms, such as KNN or SVM, show excellent results, but often require preprocessing to identify the most relevant features. This is because, whether due to the broad and complex nature of the problem, lack of knowledge, or lack of context when collecting data, it is possible to aggregate unnecessary information, resulting in immense datasets. Even algorithms that internally perform this identification can benefit from additional processing. This preprocessing, known as feature selection, is considered a complex combinatorial optimization problem.
+
+There are several common methods for feature selection:
+
+\begin{itemize}
+       \item \textbf{Filtering}: Evaluates features individually based on their relationship with the target variable, using metrics such as correlation or chi-square.
+       \item \textbf{Wrapper}: Evaluates sets of features by training and evaluating a model, using methods such as forward or backward search.
+       \item \textbf{Tree-based methods}: Algorithms like Random Forests provide an estimate of the importance of each feature.
+       \item \textbf{Principal Component Analysis (PCA)}: A dimensionality reduction technique that transforms the original features into principal components.
+       \item \textbf{L1 Selection (Lasso Regression)}: Uses an L1 penalty in linear regression, eliminating less important features.
+\end{itemize}
+
+These methods can be used individually or in combination to improve feature selection and the performance of \textit{Machine Learning} models. This document will discuss metaheuristic methods for solving this problem.\\[6pt]
 
 Metaheuristics are algorithms designed to solve complex optimization problems when resources are limited. Initially developed mainly for combinatorial problems, they are increasingly proposed and applied to problems involving continuous or real variables. In response to the growing demand in feature selection, specialized versions of these metaheuristics have been adapted to tackle combinatorial problems. However, despite the increasing number of proposals in this field, objective comparisons between them are limited. Although there are literature reviews, many lack adequate comparisons due to the importance and timeliness of the feature selection problem. Therefore, there is a need for studies providing a more rigorous and exhaustive comparative evaluation of different proposals in this area.\\[6pt]
 
@@ -60,7 +84,7 @@ In this scientific work, a literature review of various recent metaheuristics fo
 \noindent\rule[-1ex]{\textwidth}{2pt}\\[4.5ex]
 
 Yo, \textbf{Miguel García López}, alumno de la titulación Ingeniería Informática de la \textbf{Escuela Técnica Superior
-de Ingenierías Informática y de Telecomunicación de la Universidad de Granada}, con DNI 77159865E, autorizo la
+       de Ingenierías Informática y de Telecomunicación de la Universidad de Granada}, con DNI 77159865E, autorizo la
 ubicación de la siguiente copia de mi Trabajo Fin de Grado en la biblioteca del centro para que pueda ser
 consultada por las personas que lo deseen.
 
@@ -71,7 +95,7 @@ consultada por las personas que lo deseen.
 \vspace{2cm}
 
 \begin{flushright}
-Granada a 29 de Enero de 2024.
+       Granada a 29 de Enero de 2024.
 \end{flushright}
 
 
@@ -106,7 +130,7 @@ Y para que conste, expiden y firman el presente informe en Granada a 29 de Enero
 \chapter*{Agradecimientos}
 \thispagestyle{empty}
 
-       \vspace{1cm}
+\vspace{1cm}
 
 
 Poner aquí agradecimientos...
