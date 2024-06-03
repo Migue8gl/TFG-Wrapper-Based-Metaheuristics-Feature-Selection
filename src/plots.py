@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 import scienceplots  # noqa: F401
 
-from .constants import (
+from constants import (
     KNN_CLASSIFIER,
     OPTIMIZER_COLOR,
     RESULTS_DIR,
@@ -336,6 +336,17 @@ def plot_all_boxplots_optimizers(df_analysis_b: pd.DataFrame,
             title=
             f'Boxplot Grouped by Optimizer - {encoding} - {classifier} - {dataset_name}',
             ylabel='Average Fitness')
+
+        plt.xticks(fontsize=12)  # Increase x-label font size
+        plt.yticks(fontsize=12)  # Increase y-label font size
+        plt.xlabel('Optimizer',
+                   fontsize=14)  # Set x-axis label with larger font size
+        plt.ylabel('Average Fitness',
+                   fontsize=14)  # Set y-axis label with larger font size
+        plt.title(
+            f'Boxplot Grouped by Optimizer - {encoding} - {classifier} - {dataset_name}',
+            fontsize=16)
+
         plt.savefig(
             f'{RESULTS_DIR}{encoding}/{dataset_name}/optimizer_boxplot_fitness_{classifier}_{encoding[0]}.png'
         )

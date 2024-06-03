@@ -1,5 +1,361 @@
 \chapter{Análisis y resultados}
-En este capítulo se van a discutir los resultados obtenidos tras realizar los experimentos descritos en el capítulo anterior. Se mostrarán gráficas que ilustren la curva de convergencia de cada algoritmo en cada conjunto de datos, para cada clasificador (kNN y SVC) y en cada versión del algoritmo, es decir, original y versión binaria. Junto a eso también se han elaborado una gráficas de ``cajas y bigotes'' que ilustran no solo los mejores resultados, sino su robustez y estabilidad de resultados tras varias iteraciones. \\[6pt]
+En este capítulo se van a discutir los resultados obtenidos tras realizar los experimentos descritos en el capítulo anterior. Se mostrarán gráficas que ilustren la curva de convergencia de los algoritmos en algunos conjunto de datos, para cada clasificador (kNN y SVC) y en cada versión del algoritmo, es decir, original y versión binaria. Junto a eso también se han elaborado una gráficas de ``cajas y bigotes'' o \textit{boxplots} que ilustran no solo los mejores resultados, sino su robustez y estabilidad tras varias iteraciones. \\[6pt]
 Además se mostrarán tablas y gráficas de los ranking obtenidos en versión binaria y en versión continua para cada clasificador tras hacer la media de los resultados en todos los conjuntos de datos.\\[6pt]
 Por último, los resultados vendrán expuestos en forma de tabla junto a las métricas correspondientes, de forma que se facilite el análisis de los algoritmos, de las versiones reales y continuas y de los clasificadores usados.\\[6pt]
-En primer lugar se analizarán los resultados arrojados por los algoritmos originales para kNN.
+También ser realizarán análisis estadísticos de los resultados obtenidos utilizando como herramienta la página web \textbf{TACOlab}~\cite{taco_website}, facilitada por el tutor del proyecto, de forma que se puedan hacer los mejores y más robustos tests de forma automática y sencilla.\\[6pt]
+Como detalle a tener en cuenta, se ha añadido en las comparaciones un optimizador al que se le ha llamado ``Dummy'', debido a su naturaleza totalmente aleatorio y sin criterio alguno. Se añade como algoritmo de referencia, ninguna otra metaheurística debería ser peor que esta en promedio. En caso contrario podría decirse que el algoritmo en cuestión está mal diseñado.
+
+\section{Binario}
+En esta sección se discutirán y analizarán los resultados para las metaheurísticas de codificación binaria o discreta. Estas versiones tienen un enfoque del problema distinto al de las reales, pues codifican cada característica con un $0$ o un $1$, o lo que es lo mismo, descartan características. Dada su naturaleza, cabría pensar que son los algoritmos más específicos que podrían usarse para el problema se selección de características.
+
+\subsection{General}
+En esta sub-sección se presentarán los resultados generales obtenidos con las metaheurísticas binarias. Esto permitirá una visión más amplia de su desempeño y proporcionará intuiciones iniciales sobre la efectividad de cada algoritmo en distintos contextos.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/ionosphere/optimizer_boxplot_fitness_knn_b.png}
+    \caption{Boxplot ionosphere en kNN}
+    \label{fig:boxplot_ionosphere}
+\end{figure}
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/wdbc/optimizer_boxplot_fitness_knn_b.png}
+    \caption{Boxplot wdbc en kNN}
+    \label{fig:boxplot_wdbc}
+\end{figure}
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/diabetes/optimizer_boxplot_fitness_knn_b.png}
+    \caption{Boxplot diabetes en kNN}
+    \label{fig:boxplot_diabetes}
+\end{figure}
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/parkinsons/optimizer_boxplot_fitness_knn_b.png}
+    \caption{Boxplot parkinsons en kNN}
+    \label{fig:boxplot_parkinsons}
+\end{figure}
+
+Como ya se aclaró en capítulos anteriores, para obtener estos resultados se han ejecutado $10$ veces cada algoritmo en cada conjunto de datos.\\[6pt]
+Se muestran algunos de los resultados obtenidos con los algoritmos binarios en \ref{fig:boxplot_ionosphere}, \ref{fig:boxplot_wdbc}, \ref{fig:boxplot_diabetes} y \ref{fig:boxplot_parkinsons} con el clasificador \textbf{kNN}. Obviamente, no es posible incluir gráficas para todas las combinaciones posibles sin saturar el capítulo; para ello, se remite al lector al capítulo de apéndices.\\[6pt]
+Se puede observar que la mayoría de los algoritmos obtienen resultados bastante buenos en los distintos conjuntos de datos, considerándose los valores de fitness suficientemente buenos para considerarlos soluciones de calidad, obviamente considerando cada problema por separado, con las características de cada uno. Es importante destacar que no todos los conjuntos de datos presentan la misma dificultad, ya que distintos tipos de problemas presentan diferentes desafíos. En particular, se puede notar que los algoritmos aplicados al conjunto de datos \textit{ionosphere} (figura \ref{fig:boxplot_ionosphere}) muestran menos variabilidad en sus valores de fitness, reflejándose en una desviación estándar menor en comparación con los resultados de \textit{diabetes} (figura \ref{fig:boxplot_diabetes}) o \textit{parkinsons} (figura \ref{fig:boxplot_parkinsons}). Con ello, queda reflejado como a los algoritmos les cuesta menos optimizar ciertos problemas y suelen ser más estables en estos. Esto puede deberse muchos factores, por ejemplo, mayor cantidad de mínimos locales en algunos problemas en comparación a otros.\\[6pt]
+También se pueden identificar ciertos algoritmos que parecen tener un mejor desempeño en general. Por ejemplo, algoritmos como \textbf{GWO} y \textbf{PSO} tienden a obtener resultados muy buenos, mientras que otros como \textbf{ACO} y \textbf{ABCO} parecen ser menos efectivos en los conjuntos de datos analizados.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/ionosphere/optimizer_boxplot_fitness_svc_b.png}
+    \caption{Boxplot ionosphere en SVC}
+    \label{fig:boxplot_ionospheresvc}
+\end{figure}
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/wdbc/optimizer_boxplot_fitness_svc_b.png}
+    \caption{Boxplot wdbc en SVC}
+    \label{fig:boxplot_wdbcsvc}
+\end{figure}
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/diabetes/optimizer_boxplot_fitness_svc_b.png}
+    \caption{Boxplot diabetes en SVC}
+    \label{fig:boxplot_diabetessvc}
+\end{figure}
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/parkinsons/optimizer_boxplot_fitness_svc_b.png}
+    \caption{Boxplot parkinsons en SVC}
+    \label{fig:boxplot_parkinsonssvc}
+\end{figure}
+
+En los resultados obtenidos con el clasificador \textbf{SVC}, se observa un rendimiento ligeramente mejor en comparación con \textbf{kNN}, al menos en los conjuntos de datos presentados. Esta mejora inicial sugiere que \textbf{SVC} puede ser más efectivo en ciertos contextos. Los algoritmos dominantes continúan mostrando un rendimiento superior, como era de esperarse, aunque se pueden apreciar algunas mejoras en la variabilidad de algoritmos específicos. Por ejemplo, \textbf{WOA} muestra una menor variabilidad en el conjunto de datos \textit{parkinsons}, como se puede observar en la figura \ref{fig:boxplot_parkinsonssvc}. Por el contrario, otros algoritmos como \textbf{GWO} parecen ser menos estables en el mismo conjunto de datos, indicando una mayor variabilidad en su desempeño.\\[6pt]
+Aunque estas observaciones iniciales proporcionan algunas ideas sobre el comportamiento de los algoritmos, es importante tener en cuenta que no se pueden sacar conclusiones definitivas solo a partir de las gráficas presentadas. Para obtener una comprensión más profunda y precisa del rendimiento de cada algoritmo, se deben realizar análisis estadísticos adicionales y considerar variaciones en los conjuntos de datos.\\[6pt]
+Por lo tanto, en las siguientes secciones, se analizarán métricas específicas como el fitness, la precisión, la tasa de reducción y el tiempo para obtener una comprensión más completa del desempeño de los algoritmos en estudio.
+
+\subsection{Fitness}
+Se procede a comparar y analizar los distintos algoritmos basándonos en la métrica de \textit{fitness}. Como se explica en la ecuación \ref{eq:fitness}, este valor está compuesto por otras dos métricas a tener en cuenta, la precisión o \textit{accuracy} (no confundir con \textit{precision}) y el ratio de reducción de características. La métrica de \textit{fitness} es el marcador más importante para comprobar la calidad de un algoritmo. Pese a ello, más tarde se analizarán ambas métricas que lo componen por separado, pues es interesante obtener una visión más precisa de los resultados.\\[6pt]
+Debe tenerse en cuenta que, al estar compuesto el \textit{fitness} en un $90\%$ por el \textit{accuracy}, ambas métricas estarán altamente relacionadas entre sí en la gran mayoría de los casos. Aún así, ha de tenerse en cuenta el $10\%$ restante.\\[6pt]
+Como puede observarse en la tabla \ref{tab:fitness_svc}, los algoritmos que consiguen mejores resultados son \textbf{ACO}, \textbf{GWO}, \textbf{PSO}, \textbf{FA}, \textbf{DE}, \textbf{GA}, \textbf{CS} y \textbf{WOA} con el clasificador \textbf{SVC}. Los más destacables en cuanto al número de veces que estos se repiten por ser los mejores por \textit{dataset} son \textbf{CS}, \textbf{ACO}, \textbf{DE} y \textbf{GWO}.\\[6pt]
+
+Las tablas de convergencia para \textbf{SVC} presentadas en las figuras \ref{fig:convergencia_svc_1} y \ref{fig:convergencia_svc_2} ofrecen una visión detallada del desempeño de cada algoritmo en los diferentes conjuntos de datos. Es evidente que el algoritmo de referencia, \textbf{Dummy}, muestra consistentemente el peor rendimiento en la mayoría de los casos, con mejoras mínimas o nulas.\\[6pt]
+Es interesante destacar que el algoritmo \textbf{ACO} exhibe variabilidad en su rendimiento, siendo el mejor en algunos conjuntos de datos y el peor en otros. Resulta notable su inferioridad sobre el algoritmo aleatorio en algunos problemas tales como \textit{waveform5000} o \textit{yeast}. Estos observaciones pueden relacionarse con el principio del \textit{no free lunch}, discutido en la sección \ref{sec:teorema-no-free-lunch}, el cual establece que no existe un algoritmo universalmente óptimo para todos los problemas. En cambio, cada problema requiere una solución específica, y es improbable encontrar un algoritmo que supere a todos los demás en todos los contextos.
+
+\subsubsection{Clásicos vs Modernos}
+Los algoritmos clásicos de optimización como el \textbf{PSO}, \textbf{GA} o \textbf{DE} han demostrado ser extremadamente efectivos en una amplia gama de problemas. Su capacidad para explorar y explotar el espacio de búsqueda ha llevado a soluciones de alta calidad en diversas aplicaciones, desde la ingeniería hasta la economía. Estos métodos son conocidos por su robustez, simplicidad y eficacia, lo que los convierte en herramientas valiosas para investigadores y profesionales.\\[6pt]
+Sin embargo, en los últimos años, han surgido nuevos algoritmos de optimización que prometen mejorar aún más estos resultados. Algoritmos como el \textbf{WOA}, \textbf{GWO} y \textbf{CS} han sido diseñados para abordar algunas de las limitaciones de los métodos clásicos, como la convergencia prematura y la exploración insuficiente del espacio de búsqueda. Estos algoritmos modernos incorporan nuevas estrategias y mecanismos de búsqueda inspirados en la naturaleza, que buscan mejorar la eficiencia y la precisión de las soluciones obtenidas.\\[6pt]
+
+\begin{figure}[htb]
+    \centering
+    \begin{subfigure}[b]{1\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/rankings_knn_avg.png}
+        \caption{Ranking por fitness para knn}
+        \label{fig:ranking_knn}
+    \end{subfigure}
+    \begin{subfigure}[b]{1\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/rankings_svc_avg.png}
+        \caption{Ranking por fitness para svc}
+        \label{fig:ranking_svc}
+    \end{subfigure}
+    \caption{Rankings para fitness}
+\end{figure}
+
+Los rankings han sido creados basándose en los valores \textit{fitness} de los algoritmos para todos los conjuntos de datos. De forma visual es capaz de verse de un vistazo aquellos más versátiles, los que mejor se han comportado en distintos escenarios.\\[6pt]
+
+En los rankings que se pueden observar en las gráficas \ref{fig:ranking_knn} para \textbf{kNN} y en \ref{fig:ranking_svc} para \textbf{SVC} puede verse como el mejor algoritmo es el \textbf{GWO}, el algoritmo de los lobos grises, considerado como moderno. Puede observarse además el valor \textit{fitness} obtenido en las tablas \ref{tab:fitness_knn} y \ref{tab:fitness_svc}, con gran diferencia en comparación al resto. Le siguen algoritmos como \textbf{PSO}, \textbf{CS} y \textbf{GA}.\\[6pt]
+
+El \textbf{PSO}, a pesar de ser uno de los algoritmos más antiguos en la optimización metaheurística, sigue manteniendo una posición destacada en los rankings. Estos hechos junto a su simplicidad y efectividad en la convergencia hacia soluciones óptimas, hacen ver que \textbf{PSO} sigue siendo una opción muy interesante, incluso en problemas de tipo binario como la selección de características, escenario para los que \textbf{PSO} no fue diseñado. Esto hace de esta metaheurística una opción que parece sugerir mucha robustez.\\[6pt]
+
+El \textbf{CS}, basado en el comportamiento de anidación de ciertos pájaros, también se muestra como una opción fuerte, compitiendo por el podio con \textbf{GA}.\\[6pt]
+
+Finalmente, el \textbf{GA}, uno de los algoritmos más estudiados y aplicados en el ámbito de la optimización, sigue siendo relevante. Su capacidad para encontrar soluciones óptimas a través de mecanismos inspirados en la evolución natural, como la selección, el cruce y la mutación, le permite abordar una amplia gama de problemas con éxito. Además, este algoritmo al ser inicialmente pensado para aplicarse en dominios de codificación discreta, hace de esta metaheurística una opción muy interesante y robusta en el problema de selección de características, además de llevar años siendo aplicado con éxito en otros dominios.\\[6pt]
+
+Es visible que algunas de estas nuevas propuestas son muy potentes, llegando a mejorar en la propuesta binaria en comparación a algoritmos clásicos que llevan tiempo en la escena como las opciones \textit{de facto}. Pese a ello, el grueso de los algoritmos comparados son opciones modernas, y muchos de estos algoritmos clásicos obtienen mejores resultados que la mayoría de este reciente grupo. De las cinto mejores, tres de ellos son clásicos, lo cual es más impresionante si se considera que hay un desbalance en número de \textit{clásicos vs modernos}. \textit{DE} es otro algoritmo asentado, que es capaz de clasificar en posiciones medias de \textit{fitness}.\\[6pt]
+
+El peor de todos los algoritmos comparados es, sin embargo, \textbf{ABCO}, un algoritmo clásico. No parece poder alcanzar en calidad ni a modernos ni a algoritmos más antiguos como \textbf{PSO}.
+
+\subsubsection{Mejor vs Peor}
+Como ya se ha podido observar en, el algoritmo con mejor puntuación es \textbf{GWO} y el peor \textbf{ABCO} (\ref{tab:fitness_svc}, \ref{tab:fitness_knn}, \ref{tab:ranking_fitness_bin}). \\[6pt]
+En las figuras de \ref{fig:convergencia_svc_2} y \ref{fig:convergencia_svc_1} se aprecia como \textbf{ABCO} muestra rendimientos muy buenos en según que conjunto de datos. Por ejemplo, en \textit{yeast} o en \textit{sonar}, el algoritmo obtiene resultados muy decentes y competitivos siendo estos dos conjuntos de datos de los más complicados de la selección, por convergencia y número de características. Pese a ello, en conjunto, no consigue superar al resto.\\[6pt]
+En cambio \textbf{GWO} parece un adaptarse bien a todos los problemas seleccionados sin excepción. Es capaz de obtener el mínimo, en el valor \textit{fitness} de evaluación durante el entrenamiento, en casi todos los \textit{datasets}.
+
+\begin{table}[htb]
+    \centering
+    \begin{tabular}{lllll}
+        \toprule
+        {}         & Original  & Holm           & Hommel         & Hochberg       \\
+        \midrule
+        dummy\_knn & 6.104E-05 & \textbf{0.002} & \textbf{0.002} & \textbf{0.002} \\
+        dummy\_svc & 3.052E-04 & \textbf{0.007} & \textbf{0.007} & \textbf{0.007} \\
+        goa\_knn   & 0.001     & \textbf{0.027} & \textbf{0.024} & \textbf{0.027} \\
+        abco\_knn  & 0.002     & \textbf{0.034} & \textbf{0.032} & \textbf{0.034} \\
+        abco\_svc  & 0.002     & \textbf{0.045} & \textbf{0.043} & \textbf{0.045} \\
+        ba\_svc    & 0.004     & 0.085          & 0.078          & 0.085          \\
+        da\_svc    & 0.005     & 0.102          & 0.097          & 0.102          \\
+        goa\_svc   & 0.008     & 0.149          & 0.149          & 0.149          \\
+        de\_knn    & 0.026     & 0.435          & 0.307          & 0.409          \\
+        aco\_knn   & 0.026     & 0.435          & 0.307          & 0.409          \\
+        da\_knn    & 0.064     & 0.956          & 0.573          & 0.887          \\
+        woa\_svc   & 0.073     & 1.000          & 0.588          & 0.887          \\
+        fa\_knn    & 0.083     & 1.000          & 0.653          & 0.887          \\
+        ga\_knn    & 0.107     & 1.000          & 0.686          & 0.887          \\
+        cs\_knn    & 0.107     & 1.000          & 0.686          & 0.887          \\
+        de\_svc    & 0.109     & 1.000          & 0.686          & 0.887          \\
+        fa\_svc    & 0.121     & 1.000          & 0.719          & 0.887          \\
+        ba\_knn    & 0.135     & 1.000          & 0.719          & 0.887          \\
+        ga\_svc    & 0.252     & 1.000          & 0.799          & 0.887          \\
+        woa\_knn   & 0.256     & 1.000          & 0.799          & 0.887          \\
+        cs\_svc    & 0.364     & 1.000          & 0.887          & 0.887          \\
+        pso\_knn   & 0.489     & 1.000          & 0.887          & 0.887          \\
+        aco\_svc   & 0.490     & 1.000          & 0.887          & 0.887          \\
+        pso\_svc   & 0.599     & 1.000          & 0.887          & 0.887          \\
+        gwo\_knn   & 0.887     & 1.000          & 0.887          & 0.887          \\
+        \bottomrule
+    \end{tabular}
+    \caption{P-valores del mejor vs el resto}
+    \label{tab:p-valus_gwo_vs_rest}
+\end{table}
+
+Se procede a hacer una comparativa estadística mediante la prueba de \textit{Wilcoxon} y el test post hoc de \textit{Holm} para determinar las diferencias significativas entre el mejor algoritmo (\textbf{GWO}) y el resto. Los resultados, presentados en la tabla \ref{tab:p-valus_gwo_vs_rest}, muestran los p-valores originales y ajustados, lo que nos permite identificar cuáles de las diferencias observadas son estadísticamente significativas con un error corregido. Este análisis es crucial para validar los resultados y asegurar que las conclusiones obtenidas no sean producto del azar, proporcionando una base sólida para afirmar la superioridad de \textbf{GWO} frente a los demás algoritmos en los conjuntos de datos evaluados, en frente al peor de ellos.\\[6pt]
+
+Para evaluar el rendimiento de los algoritmos, se plantean las siguientes hipótesis:
+
+\textbf{Hipótesis nula (\(H_0\))}:
+\begin{equation}
+    H_0: \text{Rendimiento}_{GWO} \leq \text{Rendimiento}_{\text{ABCO}}
+\end{equation}
+
+\textbf{Hipótesis alternativa (\(H_1\))}:
+\begin{equation}
+    H_1: \text{Rendimiento}_{GWO} > \text{Rendimiento}_{\text{ABCO}}
+\end{equation}
+
+Si bien no se observan diferencias significativas sobre la mayoría de algoritmos, sí sobre el peor (\textbf{ABCO}) y sobre la versión de \textbf{GOA} usando \textbf{kNN}. Tanto en la versión que utiliza el clasificador \textbf{SVC} como en \textbf{kNN} se obtienen resultados suficientemente significativos como para poder considerar que los resultados de \textbf{GWO} frente a los de \textbf{ABCO} no son producto del azar. Por tanto, utilizando un valor crítico de $\alpha=0.05$ se puede rechazar la hipótesis nula.
+
+
+\begin{figure}[htb]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/breast-cancer/optimizers_fitness_svc.png}
+        \caption{breast-cancer}
+        \label{fig:convergencia_breast_cancer_svc}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/dermatology/optimizers_fitness_svc.png}
+        \caption{dermatology}
+        \label{fig:convergencia_dermatology_svc}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/diabetes/optimizers_fitness_svc.png}
+        \caption{diabetes}
+        \label{fig:convergencia_diabetes_svc}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/ecoli/optimizers_fitness_svc.png}
+        \caption{ecoli}
+        \label{fig:convergencia_ecoli_svc}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/ionosphere/optimizers_fitness_svc.png}
+        \caption{ionosphere}
+        \label{fig:convergencia_ionosphere_svc}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/iris/optimizers_fitness_svc.png}
+        \caption{iris}
+        \label{fig:convergencia_iris_svc}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/parkinsons/optimizers_fitness_svc.png}
+        \caption{parkinsons}
+        \label{fig:convergencia_parkinsons_svc}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/sonar/optimizers_fitness_svc.png}
+        \caption{sonar}
+        \label{fig:convergencia_sonar_svc}
+    \end{subfigure}
+    \caption{Convergencia con SVC parte 1}
+    \label{fig:convergencia_svc_1}
+\end{figure}
+
+\begin{figure}[htb]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/spambase-460/optimizers_fitness_svc.png}
+        \caption{spambase-460}
+        \label{fig:convergencia_spambase-460_svc}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/spectf-heart/optimizers_fitness_svc.png}
+        \caption{spectf-heart}
+        \label{fig:convergencia_spectf-heart_svc}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/waveform5000/optimizers_fitness_svc.png}
+        \caption{waveform5000}
+        \label{fig:convergencia_waveform5000_svc}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/wdbc/optimizers_fitness_svc.png}
+        \caption{wdbc}
+        \label{fig:convergencia_wdbc_svc}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/wine/optimizers_fitness_svc.png}
+        \caption{wine}
+        \label{fig:convergencia_wine_svc}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/yeast/optimizers_fitness_svc.png}
+        \caption{yeast}
+        \label{fig:convergencia_yeast_svc}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/zoo/optimizers_fitness_svc.png}
+        \caption{zoo}
+        \label{fig:convergencia_zoo_svc}
+    \end{subfigure}
+    \caption{Convergencia con SVC parte 2}
+    \label{fig:convergencia_svc_2}
+\end{figure}
+
+\begin{sidewaystable}[htb]
+    \begin{adjustbox}{width=\linewidth}
+        \begin{tabular}{llllllllllllllll}
+            \toprule
+            optimizer & breast-cancer     & dermatology       & diabetes          & ecoli             & ionosphere        & iris              & parkinsons        & sonar             & spambase-460      & spectf-heart      & waveform5000      & wdbc              & wine              & yeast             & zoo    \tabularnewline
+            \midrule
+            abco      & 3.08E-01          & 1.76E-01          & 3.13E-01          & 2.99E-01          & 2.12E-01          & 1.00E-01          & 2.87E-01          & 4.53E-01          & 3.19E-01          & 2.80E-01          & 2.37E-01          & 1.60E-01          & 3.23E-01          & 5.26E-01          & 3.21E-01\tabularnewline
+            aco       & \textbf{1.94E-01} & 2.04E-01          & 2.70E-01          & 3.53E-01          & 1.71E-01          & 1.15E-01          & 2.07E-01          & \textbf{3.33E-01} & 1.74E-01          & \textbf{2.27E-01} & 2.48E-01          & 8.78E-02          & 2.20E-01          & 4.91E-01          & 5.69E-01\tabularnewline
+            ba        & 3.46E-01          & 1.62E-01          & 2.76E-01          & 2.68E-01          & 1.64E-01          & 1.45E-01          & 2.24E-01          & 4.47E-01          & 2.58E-01          & 3.13E-01          & 2.04E-01          & 1.35E-01          & 2.70E-01          & 5.09E-01          & 3.84E-01\tabularnewline
+            cs        & 3.63E-01          & \textbf{9.01E-02} & 2.67E-01          & \textbf{2.31E-01} & \textbf{1.34E-01} & 1.15E-01          & \textbf{2.01E-01} & 4.26E-01          & 2.08E-01          & 2.91E-01          & 1.92E-01          & 1.44E-01          & 2.96E-01          & 5.00E-01          & 3.01E-01\tabularnewline
+            da        & 2.17E-01          & 1.84E-01          & 2.72E-01          & 3.01E-01          & 1.87E-01          & 1.45E-01          & 2.36E-01          & 4.44E-01          & 2.74E-01          & 2.90E-01          & 2.02E-01          & 1.32E-01          & 3.77E-01          & 5.12E-01          & 3.36E-01\tabularnewline
+            de        & 3.47E-01          & 1.91E-01          & 3.48E-01          & 2.82E-01          & 1.40E-01          & \textbf{7.00E-02} & 2.48E-01          & 3.63E-01          & 2.67E-01          & 2.74E-01          & 1.92E-01          & 1.31E-01          & \textbf{2.05E-01} & 5.22E-01          & 3.24E-01\tabularnewline
+            dummy     & 2.92E-01          & 2.70E-01          & 3.46E-01          & 3.49E-01          & 1.74E-01          & 2.40E-01          & 2.29E-01          & 3.88E-01          & 3.82E-01          & 3.93E-01          & 2.35E-01          & 1.52E-01          & 3.38E-01          & 5.75E-01          & 4.86E-01\tabularnewline
+            fa        & 2.58E-01          & 1.21E-01          & 2.88E-01          & 3.23E-01          & 1.57E-01          & 1.20E-01          & 3.10E-01          & 3.86E-01          & 2.14E-01          & 2.84E-01          & 2.04E-01          & 1.31E-01          & 4.10E-01          & 4.98E-01          & \textbf{2.46E-01}\tabularnewline
+            ga        & 3.02E-01          & 1.45E-01          & 2.59E-01          & 3.45E-01          & 1.36E-01          & 1.30E-01          & 2.21E-01          & 4.26E-01          & 1.81E-01          & 2.85E-01          & \textbf{1.80E-01} & 1.11E-01          & 3.04E-01          & 4.99E-01          & 3.07E-01\tabularnewline
+            goa       & 2.98E-01          & 2.19E-01          & 3.26E-01          & 3.01E-01          & 1.61E-01          & 3.03E-01          & 2.26E-01          & 3.99E-01          & 3.69E-01          & 2.41E-01          & 2.00E-01          & 8.80E-02          & 4.06E-01          & 5.41E-01          & 4.34E-01\tabularnewline
+            gwo       & 3.11E-01          & 1.73E-01          & 2.61E-01          & 2.79E-01          & 1.46E-01          & 1.15E-01          & 2.44E-01          & 3.34E-01          & \textbf{1.72E-01} & 2.77E-01          & 1.92E-01          & \textbf{5.51E-02} & 2.64E-01          & 4.81E-01          & 3.04E-01\tabularnewline
+            pso       & 2.82E-01          & 1.30E-01          & 2.60E-01          & 2.92E-01          & 1.38E-01          & 1.30E-01          & 2.54E-01          & 3.89E-01          & 2.40E-01          & 2.78E-01          & 1.87E-01          & 1.15E-01          & 2.14E-01          & \textbf{4.59E-01} & 3.24E-01\tabularnewline
+            woa       & 2.64E-01          & 1.61E-01          & \textbf{2.27E-01} & 2.61E-01          & 1.68E-01          & 1.15E-01          & 2.66E-01          & 3.68E-01          & 1.91E-01          & 3.54E-01          & 1.84E-01          & 1.11E-01          & 3.33E-01          & 5.22E-01          & 3.55E-01\tabularnewline
+            \bottomrule
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Fitness medio con clasificador SVC}
+    \label{tab:fitness_svc}
+\end{sidewaystable}
+
+\begin{sidewaystable}[htb]
+    \begin{adjustbox}{width=\linewidth}
+        \begin{tabular}{llllllllllllllll}
+            \toprule
+            optimizer & breast-cancer & dermatology & diabetes & ecoli    & ionosphere & iris     & parkinsons & sonar    & spambase-460 & spectf-heart & waveform5000 & wdbc     & wine     & yeast    & zoo\tabularnewline
+            \midrule
+            abco      & 3.64E-01      & 1.76E-01    & 3.39E-01 & 3.15E-01 & 3.11E-01   & 1.00E-01 & 2.10E-01   & 4.22E-01 & 2.88E-01     & 3.44E-01     & 2.72E-01     & 1.77E-01 & 2.66E-01 & 5.07E-01 & 3.94E-01\tabularnewline
+            aco       & 2.35E-01      & 2.88E-01    & 3.15E-01 & 2.80E-01 & 2.34E-01   & 8.50E-02 & 2.30E-01   & 3.75E-01 & 2.60E-01     & 3.55E-01     & 2.85E-01     & 1.22E-01 & 2.07E-01 & 5.12E-01 & 3.90E-01\tabularnewline
+            ba        & 2.96E-01      & 1.59E-01    & 3.29E-01 & 3.31E-01 & 2.49E-01   & 2.50E-02 & 1.98E-01   & 4.05E-01 & 2.38E-01     & 3.20E-01     & 2.44E-01     & 1.15E-01 & 1.85E-01 & 5.05E-01 & 4.21E-01\tabularnewline
+            cs        & 3.33E-01      & 1.90E-01    & 3.16E-01 & 1.95E-01 & 3.08E-01   & 1.00E-01 & 2.08E-01   & 4.28E-01 & 1.66E-01     & 2.82E-01     & 2.42E-01     & 1.15E-01 & 2.41E-01 & 5.25E-01 & 3.57E-01\tabularnewline
+            da        & 3.56E-01      & 2.00E-01    & 2.83E-01 & 2.51E-01 & 2.71E-01   & 5.50E-02 & 1.76E-01   & 4.62E-01 & 2.97E-01     & 3.29E-01     & 2.64E-01     & 1.49E-01 & 1.88E-01 & 5.46E-01 & 4.20E-01\tabularnewline
+            de        & 3.54E-01      & 1.46E-01    & 3.23E-01 & 2.81E-01 & 2.51E-01   & 1.00E-01 & 3.26E-01   & 3.70E-01 & 1.94E-01     & 2.79E-01     & 2.34E-01     & 1.63E-01 & 1.79E-01 & 5.04E-01 & 3.96E-01\tabularnewline
+            dummy     & 4.33E-01      & 2.34E-01    & 3.56E-01 & 3.03E-01 & 3.10E-01   & 1.45E-01 & 2.45E-01   & 4.76E-01 & 3.25E-01     & 3.04E-01     & 2.81E-01     & 1.63E-01 & 3.33E-01 & 5.13E-01 & 4.83E-01\tabularnewline
+            fa        & 4.21E-01      & 1.46E-01    & 2.89E-01 & 2.68E-01 & 2.02E-01   & 2.75E-02 & 2.36E-01   & 4.53E-01 & 2.42E-01     & 3.08E-01     & 2.40E-01     & 1.30E-01 & 1.61E-01 & 5.13E-01 & 4.81E-01\tabularnewline
+            ga        & 2.64E-01      & 1.25E-01    & 3.31E-01 & 2.94E-01 & 2.24E-01   & 8.50E-02 & 2.49E-01   & 3.82E-01 & 2.03E-01     & 3.03E-01     & 2.09E-01     & 9.70E-02 & 2.43E-01 & 5.13E-01 & 4.52E-01\tabularnewline
+            goa       & 3.57E-01      & 2.16E-01    & 3.19E-01 & 3.14E-01 & 2.39E-01   & 1.32E-01 & 2.03E-01   & 3.90E-01 & 2.96E-01     & 3.41E-01     & 2.29E-01     & 1.18E-01 & 2.40E-01 & 5.61E-01 & 3.79E-01\tabularnewline
+            gwo       & 2.63E-01      & 1.01E-01    & 2.78E-01 & 2.29E-01 & 2.27E-01   & 8.50E-02 & 2.14E-01   & 4.41E-01 & 1.89E-01     & 2.89E-01     & 2.06E-01     & 1.05E-01 & 1.05E-01 & 4.92E-01 & 4.31E-01\tabularnewline
+            pso       & 3.41E-01      & 1.21E-01    & 2.95E-01 & 2.16E-01 & 2.60E-01   & 8.50E-02 & 2.33E-01   & 3.78E-01 & 2.21E-01     & 2.99E-01     & 2.11E-01     & 1.12E-01 & 2.07E-01 & 4.56E-01 & 3.60E-01\tabularnewline
+            woa       & 3.23E-01      & 1.58E-01    & 3.34E-01 & 2.63E-01 & 2.17E-01   & 1.00E-01 & 2.59E-01   & 4.05E-01 & 2.02E-01     & 3.09E-01     & 2.48E-01     & 1.16E-01 & 1.04E-01 & 5.26E-01 & 2.13E-01\tabularnewline
+            \bottomrule
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Fitness medio con clasificador kNN}
+    \label{tab:fitness_knn}
+\end{sidewaystable}
+
+\begin{sidewaystable}[htb]
+    \begin{adjustbox}{width=\linewidth}
+        \begin{tabular}{lllllllllllllllllllllllllll}
+            \toprule
+            {}            & abco\_knn & abco\_svc & aco\_knn & aco\_svc   & ba\_knn    & ba\_svc & cs\_knn    & cs\_svc    & da\_knn    & da\_svc & de\_knn & de\_svc & dummy\_knn & dummy\_svc & fa\_knn & fa\_svc & ga\_knn & ga\_svc    & goa\_knn & goa\_svc & gwo\_knn & gwo\_svc       & pso\_knn   & pso\_svc & woa\_knn   & woa\_svc   \\
+            \midrule
+            breast-cancer & 24        & 13        & 3        & \textbf{1} & 10         & 18      & 16         & 23         & 21         & 2       & 20      & 19      & 26         & 9          & 25      & 4       & 6.5     & 12         & 22       & 11       & 5        & 14             & 17         & 8        & 15         & 6.5        \\
+            dermatology   & 15.5      & 15.5      & 26       & 21         & 11         & 13      & 18         & \textbf{1} & 20         & 17      & 8.5     & 19      & 24         & 25         & 8.5     & 3.5     & 5       & 7          & 22       & 23       & 2        & 14             & 3.5        & 6        & 10         & 12         \\
+            diabetes      & 23        & 14        & 15       & 6          & 20         & 8       & 16         & 5          & 10         & 7       & 18      & 25      & 26         & 24         & 12      & 11      & 21      & 2          & 17       & 19       & 9        & 4              & 13         & 3        & 22         & \textbf{1} \\
+            ecoli         & 21        & 16        & 11       & 26         & 23         & 8.5     & \textbf{1} & 4          & 5          & 17.5    & 12      & 13      & 19         & 25         & 8.5     & 22      & 15      & 24         & 20       & 17.5     & 3        & 10             & 2          & 14       & 7          & 6          \\
+            ionosphere    & 26        & 14        & 18       & 10         & 20         & 8       & 24         & \textbf{1} & 23         & 12      & 21      & 4       & 25         & 11         & 13      & 6       & 16      & 2          & 19       & 7        & 17       & 5              & 22         & 3        & 15         & 9          \\
+            iris          & 11        & 11        & 6.5      & 15.5       & \textbf{1} & 23      & 11         & 15.5       & 3          & 23      & 11      & 4       & 23         & 25         & 2       & 18      & 6.5     & 19.5       & 21       & 26       & 6.5      & 15.5           & 6.5        & 19.5     & 11         & 15.5       \\
+            parkinsons    & 7         & 24        & 13       & 5          & 2          & 10      & 6          & 3          & \textbf{1} & 15.5    & 26      & 19      & 18         & 12         & 15.5    & 25      & 20      & 9          & 4        & 11       & 8        & 17             & 14         & 21       & 22         & 23         \\
+            sonar         & 16        & 23.5      & 6        & \textbf{1} & 14.5       & 22      & 19         & 17.5       & 25         & 21      & 5       & 3       & 26         & 10         & 23.5    & 9       & 8       & 17.5       & 12       & 13       & 20       & 2              & 7          & 11       & 14.5       & 4          \\
+            spambase-460  & 20        & 23        & 17       & 3          & 13         & 16      & \textbf{1} & 10         & 22         & 19      & 7       & 18      & 24         & 26         & 15      & 11      & 9       & 4          & 21       & 25       & 5        & 2              & 12         & 14       & 8          & 6          \\
+            spectf-heart  & 23        & 7         & 25       & \textbf{1} & 20         & 19      & 8          & 13         & 21         & 12      & 6       & 3       & 16         & 26         & 17      & 9       & 15      & 10         & 22       & 2        & 11       & 4              & 14         & 5        & 18         & 24         \\
+            waveform5000  & 24        & 17        & 26       & 21.5       & 20         & 9.5     & 19         & 5          & 23         & 8       & 15      & 5       & 25         & 16         & 18      & 9.5     & 12      & \textbf{1} & 14       & 7        & 11       & 5              & 13         & 3        & 21.5       & 2          \\
+            wdbc          & 26        & 23        & 14       & 2          & 10         & 19      & 10         & 20         & 21         & 18      & 24.5    & 16.5    & 24.5       & 22         & 15      & 16.5    & 4       & 6.5        & 13       & 3        & 5        & \textbf{1}     & 8          & 10       & 12         & 6.5        \\
+            wine          & 16        & 20        & 8.5      & 11         & 5          & 17      & 13         & 18         & 6          & 24      & 4       & 7       & 21.5       & 23         & 3       & 26      & 14      & 19         & 12       & 25       & 2        & 15             & 8.5        & 10       & \textbf{1} & 21.5       \\
+            yeast         & 11        & 21        & 13.5     & 4          & 9.5        & 12      & 20         & 8          & 24         & 13.5    & 9.5     & 18      & 16         & 26         & 16      & 6       & 16      & 7          & 25       & 23       & 5        & 3              & \textbf{1} & 2        & 22         & 19         \\
+            zoo           & 16        & 6         & 15       & 26         & 19         & 14      & 11         & 3          & 18         & 9       & 17      & 7.5     & 24         & 25         & 23      & 2       & 22      & 5          & 13       & 21       & 20       & 4              & 12         & 7.5      & \textbf{1} & 10         \\
+            \midrule
+            Mean          & 18.633    & 16.533    & 14.500   & 10.267     & 13.200     & 14.467  & 12.867     & 9.800      & 16.200     & 14.567  & 13.633  & 12.067  & 22.533     & 20.333     & 14.333  & 11.900  & 12.667  & 9.700      & 17.133   & 15.567   & 8.633    & \textbf{7.700} & 10.233     & 9.133    & 13.333     & 11.067     \\
+            \bottomrule
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Ranking de los algoritmos}
+    \label{tab:ranking_fitness_bin}
+\end{sidewaystable}
+\clearpage
+
+\subsection{Clasificación y reducción}
+Como se ha mencionado al principio de la anterior sección y como se explica en la fórmula \ref{eq:fitness}, el \textit{fitness} está compuesto por las métricas de \textit{accuracy} en la clasificación y por el ratio de reducción de las características. Con ello se intenta reducir tantas características como sea posible, manteniendo un valor lo más alto posible de precisión.\\[6pt]
+Con estos aspectos aclarados, en esta sección se analizarán los algoritmos desde la perspectiva individual de cada una de las métricas que componen la función \textit{fitness}. De esta manera, se proveerá información de cuál o cuáles algoritmos son los mejores para cada una de las métricas.\\[6pt]
+Esta visión es interesante ya que, los pesos fijados por el autor para cada métrica son los estándar en la mayoría de artículos, pero es posible que en otros problemas sea necesario ajustarlos a las necesidades del mismo. Por tanto si se conocen las características de los diferentes algoritmos para cada métrica por separado, se obtendrá un conocimiento que proporcionará un uso de los distintos algoritmos más flexible.\\[6pt]
+
+\subsubsection{Clásicos vs Modernos}
+Se procede a comparar los algoritmos clásicos frente a los algoritmos modernos en cuanto a su capacidad clasificatoria, es decir, el valor de cada uno de ellos obtenido en \textit{accuracy}.

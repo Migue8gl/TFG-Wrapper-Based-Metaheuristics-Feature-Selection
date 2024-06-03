@@ -4,8 +4,8 @@ import os
 import matplotlib.pyplot as plt
 import pandas as pd
 
-from .constants import IMG_DIR, RESULTS_DIR
-from .plots import (
+from constants import IMG_DIR, RESULTS_DIR
+from plots import (
     plot_all_boxplots_optimizers,
     plot_fitness_all_optimizers,
     plot_rankings,
