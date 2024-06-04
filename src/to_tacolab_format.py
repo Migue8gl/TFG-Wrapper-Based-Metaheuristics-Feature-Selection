@@ -17,6 +17,10 @@ def main(filename: str):
                             columns='dataset',
                             values=metric)
 
+        # Posterior analysis are looking for minimum values, so we invert the metric
+        if metric == 'acc':
+            pivot_df = 1 - pivot_df
+
         # Add a column named 'alg' with the optimizer names
         pivot_df.insert(0, 'alg', pivot_df.index)
 

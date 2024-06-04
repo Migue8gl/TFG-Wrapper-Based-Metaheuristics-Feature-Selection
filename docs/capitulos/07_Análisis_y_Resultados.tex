@@ -347,7 +347,7 @@ Si bien no se observan diferencias significativas sobre la mayoría de algoritmo
             \bottomrule
         \end{tabular}
     \end{adjustbox}
-    \caption{Ranking de los algoritmos}
+    \caption{Ranking de los algoritmos en \textit{fitness}}
     \label{tab:ranking_fitness_bin}
 \end{sidewaystable}
 \clearpage
@@ -358,4 +358,237 @@ Con estos aspectos aclarados, en esta sección se analizarán los algoritmos des
 Esta visión es interesante ya que, los pesos fijados por el autor para cada métrica son los estándar en la mayoría de artículos, pero es posible que en otros problemas sea necesario ajustarlos a las necesidades del mismo. Por tanto si se conocen las características de los diferentes algoritmos para cada métrica por separado, se obtendrá un conocimiento que proporcionará un uso de los mismos más flexible.
 
 \subsubsection{Clásicos vs Modernos}
-Se procede a comparar los algoritmos clásicos frente a los algoritmos modernos en cuanto a su capacidad clasificatoria, es decir, el valor de cada uno de ellos obtenido en \textit{accuracy}.
+Se procede a comparar los algoritmos clásicos frente a los algoritmos modernos en cuanto a su capacidad clasificatoria, es decir, el valor de cada uno de ellos obtenido en \textit{accuracy}.\\[6pt]
+
+En los rankings definidos en la tabla \ref{tab:ranking_acc_bin}, queda claro que \textbf{CS} usando el algoritmo \textbf{SVC} es capaz de obtener los mejores resultados en cuanto a la precisión en la clasificación. Le siguen algoritmos como \textbf{DE}, \textbf{GWO} o \textbf{FA}.\\[6pt]
+
+Si bien es cierto que la mayoría en el top de mejores algoritmos en \textit{accuracy} son algoritmos modernos, los clásicos no se quedan atrás. En las comparaciones obtienen muy buenos resultados, no siendo los mejores y muy lejos de ser los peores. En los algoritmos modernos hay mayor diversidad en este punto. Hay unos pocos que destacan, pero el resto parece verse superado en muchas ocasiones por los algoritmos clásicos.\\[6pt]
+
+Pese a ello, se puede apreciar en la tabla \ref{tab:p-values_accuracy} como algoritmos como \textbf{PSO} no obtienen resultados significativos con respecto al resto de sus competidores. Si se comparan los p-valores de los algoritmos modernos con los de los clásicos, se aprecia que, a excepción de algunos algoritmos como \textbf{Dummy} (obviamente) y \textbf{ACO}, no hay diferencia estadísticamente suficientemente significativa como para determinar que un grupo de algoritmos es mejor que otro. De hecho, al corregir estos valores usando un post hoc como \textbf{Holms}, las diferencias son incluso menores.\\[6pt]
+
+\begin{figure}[htb]
+    \centering
+    \begin{subfigure}[b]{1\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/rankings_knn_selected_rate.png}
+        \caption{Ranking por ratio de reducción para knn}
+        \label{fig:ranking_knn_red}
+    \end{subfigure}
+    \begin{subfigure}[b]{1\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/rankings_svc_selected_rate.png}
+        \caption{Ranking por ratio de reducción para svc}
+        \label{fig:ranking_svc_red}
+    \end{subfigure}
+    \caption{Rankings para reducción de características}
+    \label{fig:rankings_red}
+\end{figure}
+
+Por tanto tanto un grupo como otro parece alcanzar resultados bastante satisfactorios en este sentido.
+
+En cuanto a la reducción de características, según se observa en los rankings \ref{fig:rankings_red} como \textbf{ACO} es sin duda el mejor, por mucho además. Es capaz de reducir en algunos casos hasta el $90\%$ de las características.\\[6pt]
+Si se observan los p-valores obtenidos en la tabla \ref{tab:p-values_red} y se agrupan los modernos y los clásicos, se obtienen los siguientes resultados:
+\begin{itemize}
+    \item \textbf{PSO}: A excepción del \textbf{ACO} (el mejor), \textbf{GWO} (segundo mejor) y \textbf{GA}, es superior a todo el resto de algoritmos con una diferencia significativa más que suficiente, incluso tras corrección post hoc con el método \textbf{Holms}.
+    \item \textbf{ACO}: Es el mejor con diferencia significativa más que suficiente como para poder afirmar que este algoritmo es muy destacable en la reducción de características.
+    \item \textbf{GA}: Ocurre lo mismo que con \textbf{PSO}. Pese a excepciones de algoritmos por encima suyo en el ranking, \textbf{GA} es muy superior al resto de algoritmos, con diferencias muy notables y de nuevo significativas.
+    \item \textbf{DE}: Obtiene resultados muy buenos y estadísticamente significativos con respecto a \textbf{BA}, \textbf{WOA} y \textbf{FA}. Pese a ser mejor que otros algoritmos modernos, la diferencia no es suficientemente como para rechazar la hipótesis nula.
+    \item \textbf{ABCO}: El peor parado del grupo de los algoritmos clásicos. No parece ser una buena propuesta a la hora de reducir.
+\end{itemize}
+
+Dada estos resultados, los algoritmos clásicos salen muy bien parados en la reducción de características frente a los modernos. Si bien es cierto que hay dos algoritmos que destacan sobre el resto de los modernos (\textbf{CS} y \textbf{GWO}) en la reducción de características, los clásicos en conjunto, con excepción de \textbf{ABCO}, parecen una opción robusta y que, en combinación a sus resultados de precisión (\textit{accuracy}), son muy precisos a la hora de seleccionar características importantes.
+
+\subsubsection{Mejor vs resto}
+Como se ha mencionado anteriormente, la metaheurística \textbf{ACO} es sin lugar a dudas la mejor
+Un ejemplo de esto es en el conjunto de datos de \textit{ionosphere}. Se puede observar como el segundo algoritmo que más reduce, que es \textbf{GWO}, obtiene una reducción media del $74\%$, mientras que el \textbf{ACO} obtiene una reducción media del $91.5\%$, con tan solo una diferencia de $4.6\%$ en precisión a favor de \textbf{GWO}~\ref{tab:bin_red_acc_all}. \\[6pt]
+Si bien es cierto que su precisión no es de las mejores, se mantiene en mitad de los rankings con el resto de algoritmos. Teniendo ese aspecto en cuenta, añadido a que es capaz de reducir características a un nivel muy significativo con respecto al resto de algoritmos, \textbf{ACO} se presenta como un algoritmo muy interesante para aquellos problemas en los que se pueda permitir cierto nivel de error en la precisión, pero en cambio, sea crucial una compresión del tamaño del modelo o un tiempo den entrenamiento corto.\\[6pt]
+
+Si comparamos los p-valores~\ref{tab:p-values_aco_rest}, tras aplicar post hoc para mayor seguridad, de \textbf{ACO} con respecto al resto de algoritmos, vemos que claramente la mejora en reducción no se debe al azar de manera muy probable.
+
+\begin{table}[htb]
+    \centering
+    \begin{tabular}{lllll}
+        \toprule
+        {}         & Original  & Holm  & Hommel & Hochberg \\
+        \midrule
+        dummy\_svc & 6.104E-05 & 0.002 & 0.001  & 0.001    \\
+        goa\_svc   & 6.104E-05 & 0.002 & 0.001  & 0.001    \\
+        goa\_knn   & 6.104E-05 & 0.002 & 0.001  & 0.001    \\
+        fa\_knn    & 6.104E-05 & 0.002 & 0.001  & 0.001    \\
+        dummy\_knn & 6.104E-05 & 0.002 & 0.001  & 0.001    \\
+        fa\_svc    & 0.001     & 0.014 & 0.002  & 0.003    \\
+        cs\_svc    & 0.001     & 0.021 & 0.002  & 0.003    \\
+        pso\_svc   & 0.001     & 0.021 & 0.002  & 0.003    \\
+        pso\_knn   & 0.001     & 0.021 & 0.002  & 0.003    \\
+        gwo\_svc   & 0.001     & 0.021 & 0.002  & 0.003    \\
+        ga\_svc    & 0.001     & 0.021 & 0.002  & 0.003    \\
+        ga\_knn    & 0.001     & 0.021 & 0.002  & 0.003    \\
+        abco\_knn  & 0.001     & 0.021 & 0.002  & 0.003    \\
+        de\_svc    & 0.001     & 0.021 & 0.002  & 0.003    \\
+        de\_knn    & 0.001     & 0.021 & 0.002  & 0.003    \\
+        da\_svc    & 0.001     & 0.021 & 0.002  & 0.003    \\
+        da\_knn    & 0.001     & 0.021 & 0.002  & 0.003    \\
+        cs\_knn    & 0.001     & 0.021 & 0.002  & 0.003    \\
+        ba\_svc    & 0.001     & 0.021 & 0.002  & 0.003    \\
+        ba\_knn    & 0.001     & 0.021 & 0.002  & 0.003    \\
+        abco\_svc  & 0.001     & 0.021 & 0.002  & 0.003    \\
+        woa\_knn   & 0.001     & 0.021 & 0.002  & 0.003    \\
+        woa\_svc   & 0.001     & 0.021 & 0.002  & 0.003    \\
+        gwo\_knn   & 0.002     & 0.021 & 0.003  & 0.003    \\
+        aco\_svc   & 0.530     & 0.530 & 0.530  & 0.530    \\
+        \bottomrule
+    \end{tabular}
+    \caption{P-valores de ACO vs el resto de algoritmos en reducción de características}
+    \label{tab:p-values_aco_rest}
+\end{table}
+
+
+\begin{sidewaystable}[htb]
+    \centering
+    \begin{adjustbox}{width=\linewidth}
+        \begin{tabular}{lllllllllllllllllllllllllll}
+            \toprule
+            {}            & abco\_knn & abco\_svc  & aco\_knn & aco\_svc     & ba\_knn      & ba\_svc & cs\_knn    & cs\_svc        & da\_knn    & da\_svc      & de\_knn & de\_svc      & dummy\_knn & dummy\_svc & fa\_knn      & fa\_svc & ga\_knn & ga\_svc & goa\_knn & goa\_svc & gwo\_knn & gwo\_svc   & pso\_knn   & pso\_svc & woa\_knn   & woa\_svc   \\
+            \midrule
+            breast-cancer & 15        & 7          & 6        & \textbf{1.5} & 11.5         & 19      & 17         & 23             & 24         & \textbf{1.5} & 21      & 19           & 25         & 3.5        & 26           & 3.5     & 9       & 13      & 19       & 9        & 9        & 15         & 22         & 11.5     & 15         & 5          \\
+            dermatology   & 9         & 11.5       & 26       & 25           & 9            & 11.5    & 18         & \textbf{1}     & 18         & 16           & 6.5     & 18           & 20         & 24         & 4.5          & 2       & 6.5     & 15      & 22.5     & 22.5     & 3        & 21         & 4.5        & 9        & 13.5       & 13.5       \\
+            diabetes      & 18.5      & 10         & 24.5     & 13.5         & 21           & 4.5     & 18.5       & 2              & 11         & 6.5          & 18.5    & 24.5         & 22         & 18.5       & 6.5          & 8.5     & 26      & 4.5     & 13.5     & 16       & 12       & 8.5        & 15         & 3        & 23         & \textbf{1} \\
+            ecoli         & 15.5      & 10         & 20.5     & 26           & 22.5         & 8       & \textbf{1} & 3              & 5.5        & 20.5         & 13      & 11           & 13         & 24         & 8            & 22.5    & 18      & 25      & 18       & 13       & 4        & 15.5       & 2          & 18       & 5.5        & 8          \\
+            ionosphere    & 22        & 11         & 24.5     & 14           & 16           & 6       & 26         & \textbf{1.5}   & 22         & 12           & 19      & \textbf{1.5} & 24.5       & 3          & 13           & 4       & 17.5    & 6       & 17.5     & 8.5      & 20       & 8.5        & 22         & 6        & 15         & 10         \\
+            iris          & 12        & 12         & 7        & 17.5         & \textbf{1.5} & 23.5    & 12         & 17.5           & 3          & 23.5         & 12      & 4            & 17.5       & 25         & \textbf{1.5} & 17.5    & 7       & 21.5    & 7        & 26       & 7        & 17.5       & 7          & 21.5     & 12         & 17.5       \\
+            parkinsons    & 2         & 17         & 23.5     & 17           & 3.5          & 8.5     & 8.5        & 5.5            & \textbf{1} & 13.5         & 26      & 13.5         & 8.5        & 3.5        & 11           & 25      & 23.5    & 13.5    & 5.5      & 8.5      & 13.5     & 20.5       & 17         & 20.5     & 20.5       & 20.5       \\
+            sonar         & 8         & 16         & 18       & 8            & 11           & 20      & 18         & 18             & 26         & 22.5         & 4.5     & 2.5          & 22.5       & 2.5        & 22.5         & 6       & 14      & 22.5    & 11       & 14       & 25       & \textbf{1} & 8          & 11       & 14         & 4.5        \\
+            spambase-460  & 16.5      & 20         & 24       & 11           & 12.5         & 15      & \textbf{1} & 9              & 21.5       & 19           & 2.5     & 18           & 21.5       & 25         & 14           & 7.5     & 10      & 5       & 23       & 26       & 7.5      & 2.5        & 12.5       & 16.5     & 6          & 4          \\
+            spectf-heart  & 17.5      & \textbf{1} & 26       & 8            & 17.5         & 14      & 10         & 10             & 22         & 12           & 5       & 5            & 5          & 25         & 14           & 5       & 21      & 14      & 23       & 2        & 17.5     & 5          & 20         & 10       & 17.5       & 24         \\
+            waveform5000  & 20        & 8          & 26       & 25           & 19           & 4.5     & 22         & 2              & 24         & 9            & 17      & 3            & 23         & 11         & 15.5         & 6.5     & 13.5    & 4.5     & 18       & 10       & 15.5     & 12         & 13.5       & 6.5      & 21         & \textbf{1} \\
+            wdbc          & 22        & 6.5        & 25.5     & 13.5         & 3            & 16      & 6.5        & 24             & 23         & 16           & 25.5    & 13.5         & 19.5       & 10.5       & 10.5         & 10.5    & 6.5     & 19.5    & 10.5     & 2        & 19.5     & \textbf{1} & 16         & 19.5     & 6.5        & 4          \\
+            wine          & 13.5      & 19         & 9.5      & 12           & 5            & 15.5    & 13.5       & 19             & 5          & 24           & 5       & 7            & 19         & 21         & 3            & 25.5    & 15.5    & 22      & 9.5      & 25.5     & 2        & 17         & 9.5        & 9.5      & \textbf{1} & 23         \\
+            yeast         & 6         & 13         & 23       & 19.5         & 10           & 7       & 22         & 8.5            & 25         & 14.5         & 12      & 14.5         & 4.5        & 26         & 16           & 4.5     & 21      & 8.5     & 24       & 18       & 11       & 3          & \textbf{1} & 2        & 19.5       & 17         \\
+            zoo           & 13.5      & 3.5        & 18       & 13.5         & 10.5         & 3.5     & 18         & 6.5            & 16         & 6.5          & 22      & 22           & 24.5       & 2          & 24.5         & 6.5     & 13.5    & 20      & 22       & 6.5      & 13.5     & 9          & \textbf{1} & 10.5                               \\
+            Mean          & 14.067    & 11.033     & 20.133   & 15.833       & 12.067       & 12.433  & 13.633     & \textbf{9.833} & 16.600     & 14.467       & 13.567  & 10.767       & 17.833     & 16.300     & 12.700       & 10.033  & 15.567  & 13.400  & 15.700   & 14.733   & 12.567   & 10.300     & 12.233     & 11.567   & 12.733     & 10.900     \\
+            \bottomrule
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Ranking de los algoritmos en \textit{accuracy}}
+    \label{tab:ranking_acc_bin}
+\end{sidewaystable}
+
+\begin{sidewaystable}[htb]
+    \centering
+    \begin{adjustbox}{width=\linewidth}
+        \begin{tabular}{lllllllllllllllllllllllllll}
+            \toprule
+            {}         & abco\_knn & abco\_svc & aco\_knn  & aco\_svc  & ba\_knn   & ba\_svc   & cs\_knn   & cs\_svc   & da\_knn   & da\_svc   & de\_knn   & de\_svc   & dummy\_knn & dummy\_svc & fa\_knn   & fa\_svc   & ga\_knn   & ga\_svc   & goa\_knn  & goa\_svc  & gwo\_knn  & gwo\_svc  & pso\_knn  & pso\_svc  & woa\_knn  & woa\_svc  \\
+            \midrule
+            abco\_knn  & -         & + (0.346) & - (0.015) & = (0.530) & + (0.402) & = (0.950) & = (0.784) & + (0.135) & - (0.346) & = (0.804) & = (0.529) & + (0.277) & - (0.008)  & - (0.233)  & = (0.679) & + (0.208) & = (0.649) & = (0.910) & - (0.379) & - (0.426) & + (0.414) & + (0.263) & + (0.196) & + (0.142) & + (0.410) & + (0.303) \\
+            abco\_svc  & - (0.346) & -         & - (0.010) & - (0.209) & = (0.934) & = (0.660) & - (0.402) & + (0.463) & - (0.164) & - (0.083) & - (0.379) & = (0.890) & - (0.012)  & - (0.064)  & = (0.847) & = (0.720) & - (0.187) & - (0.156) & - (0.083) & - (0.095) & = (0.762) & = (0.890) & = (0.706) & = (0.934) & = (0.889) & = (1.000) \\
+            aco\_knn   & + (0.015) & + (0.010) & -         & + (0.095) & + (0.003) & + (0.035) & + (0.038) & + (0.017) & + (0.045) & + (0.060) & + (0.038) & + (0.007) & + (0.451)  & + (0.330)  & + (0.026) & + (0.026) & + (0.081) & + (0.073) & + (0.021) & + (0.280) & + (0.012) & + (0.011) & + (0.014) & + (0.008) & + (0.004) & + (0.007) \\
+            aco\_svc   & = (0.530) & + (0.209) & - (0.095) & -         & + (0.132) & + (0.330) & + (0.454) & + (0.167) & = (0.847) & = (0.530) & + (0.330) & + (0.116) & = (0.754)  & = (0.934)  & + (0.105) & + (0.117) & = (0.712) & + (0.359) & = (0.754) & = (0.720) & + (0.188) & + (0.079) & + (0.328) & + (0.188) & + (0.286) & + (0.124) \\
+            ba\_knn    & - (0.402) & = (0.934) & - (0.003) & - (0.132) & -         & = (0.890) & - (0.307) & = (0.570) & - (0.069) & = (0.804) & = (0.875) & = (0.804) & - (0.010)  & - (0.149)  & = (0.802) & + (0.414) & - (0.061) & = (0.762) & - (0.038) & = (0.561) & = (0.802) & = (0.762) & = (0.616) & = (0.784) & = (0.950) & = (0.720) \\
+            ba\_svc    & = (0.950) & = (0.660) & - (0.035) & - (0.330) & = (0.890) & -         & = (0.851) & + (0.094) & - (0.252) & - (0.162) & = (0.804) & + (0.490) & - (0.012)  & - (0.151)  & = (0.625) & + (0.389) & - (0.286) & = (0.689) & - (0.142) & - (0.167) & = (0.887) & + (0.421) & = (0.576) & + (0.286) & = (0.820) & = (0.551) \\
+            cs\_knn    & = (0.784) & + (0.402) & - (0.038) & - (0.454) & + (0.307) & = (0.851) & -         & + (0.364) & - (0.451) & = (0.847) & = (0.944) & + (0.414) & - (0.045)  & - (0.315)  & = (0.934) & + (0.454) & = (0.551) & = (0.934) & = (0.762) & = (0.572) & = (0.762) & + (0.359) & = (0.720) & + (0.451) & = (0.576) & = (0.530) \\
+            cs\_svc    & - (0.135) & - (0.463) & - (0.017) & - (0.167) & = (0.570) & - (0.094) & - (0.364) & -         & - (0.083) & - (0.026) & - (0.359) & = (0.706) & - (0.010)  & - (0.064)  & - (0.151) & = (0.826) & - (0.107) & - (0.055) & - (0.052) & - (0.095) & - (0.303) & = (0.706) & - (0.359) & = (0.510) & = (0.639) & - (0.490) \\
+            da\_knn    & + (0.346) & + (0.164) & - (0.045) & = (0.847) & + (0.069) & + (0.252) & + (0.451) & + (0.083) & -         & + (0.410) & + (0.346) & + (0.103) & - (0.233)  & = (0.524)  & + (0.191) & + (0.303) & = (0.934) & + (0.489) & = (0.934) & = (0.890) & + (0.121) & + (0.188) & + (0.132) & + (0.252) & + (0.117) & + (0.188) \\
+            da\_svc    & = (0.804) & + (0.083) & - (0.060) & = (0.530) & = (0.804) & + (0.162) & = (0.847) & + (0.026) & - (0.410) & -         & = (0.934) & + (0.196) & - (0.379)  & - (0.330)  & + (0.485) & + (0.121) & = (0.762) & + (0.327) & - (0.478) & - (0.359) & = (0.950) & + (0.149) & = (0.572) & + (0.132) & = (0.524) & + (0.208) \\
+            de\_knn    & = (0.529) & + (0.379) & - (0.038) & - (0.330) & = (0.875) & = (0.804) & = (0.944) & + (0.359) & - (0.346) & = (0.934) & -         & + (0.315) & - (0.059)  & - (0.379)  & = (0.762) & + (0.209) & - (0.346) & = (0.762) & - (0.421) & = (0.616) & + (0.389) & + (0.142) & = (0.720) & + (0.303) & + (0.315) & + (0.286) \\
+            de\_svc    & - (0.277) & = (0.890) & - (0.007) & - (0.116) & = (0.804) & - (0.490) & - (0.414) & = (0.706) & - (0.103) & - (0.196) & - (0.315) & -         & - (0.020)  & - (0.060)  & = (0.820) & = (0.660) & - (0.135) & - (0.402) & - (0.038) & - (0.229) & -         & = (1.000) & = (0.733) & = (0.720) & = (0.978) & = (0.847) \\
+            dummy\_knn & + (0.008) & + (0.012) & - (0.451) & = (0.754) & + (0.010) & + (0.012) & + (0.045) & + (0.010) & + (0.233) & + (0.379) & + (0.059) & + (0.020) & -          & = (0.975)  & + (0.060) & + (0.092) & + (0.252) & + (0.142) & + (0.155) & = (0.600) & + (0.028) & + (0.012) & + (0.008) & + (0.012) & + (0.048) & + (0.052) \\
+            dummy\_svc & + (0.233) & + (0.064) & - (0.330) & = (0.934) & + (0.149) & + (0.151) & + (0.315) & + (0.064) & = (0.524) & + (0.330) & + (0.379) & + (0.060) & = (0.975)  & -          & + (0.233) & + (0.142) & = (0.514) & + (0.303) & + (0.451) & = (0.890) & + (0.209) & + (0.055) & + (0.277) & + (0.048) & + (0.208) & + (0.055) \\
+            fa\_knn    & = (0.679) & = (0.847) & - (0.026) & - (0.105) & = (0.802) & = (0.625) & = (0.934) & + (0.151) & - (0.191) & - (0.485) & = (0.762) & = (0.820) & - (0.060)  & - (0.233)  & -         & = (0.572) & - (0.167) & = (0.944) & - (0.330) & = (0.890) & = (0.802) & = (0.561) & = (0.950) & = (0.639) & = (0.932) & = (0.616) \\
+            fa\_svc    & - (0.208) & = (0.720) & - (0.026) & - (0.117) & - (0.414) & - (0.389) & - (0.454) & = (0.826) & - (0.303) & - (0.121) & - (0.209) & = (0.660) & - (0.092)  & - (0.142)  & = (0.572) & -         & - (0.095) & - (0.182) & - (0.187) & - (0.209) & - (0.414) & = (0.784) & = (0.639) & - (0.470) & - (0.421) & = (0.950) \\
+            ga\_knn    & = (0.649) & + (0.187) & - (0.081) & = (0.712) & + (0.061) & + (0.286) & = (0.551) & + (0.107) & = (0.934) & = (0.762) & + (0.346) & + (0.135) & - (0.252)  & = (0.514)  & + (0.167) & + (0.095) & -         & = (0.842) & = (0.906) & = (1.000) & + (0.081) & + (0.088) & + (0.162) & + (0.140) & + (0.263) & + (0.121) \\
+            ga\_svc    & = (0.910) & + (0.156) & - (0.073) & - (0.359) & = (0.762) & = (0.689) & = (0.934) & + (0.055) & - (0.489) & - (0.327) & = (0.762) & + (0.402) & - (0.142)  & - (0.303)  & = (0.944) & + (0.182) & = (0.842) & -         & = (0.524) & - (0.454) & = (1.000) & + (0.233) & = (0.842) & + (0.290) & = (0.762) & = (0.514) \\
+            goa\_knn   & + (0.379) & + (0.083) & - (0.021) & = (0.754) & + (0.038) & + (0.142) & = (0.762) & + (0.052) & = (0.934) & + (0.478) & + (0.421) & + (0.038) & - (0.155)  & - (0.451)  & + (0.330) & + (0.187) & = (0.906) & = (0.524) & -         & = (0.950) & + (0.233) & + (0.064) & + (0.196) & + (0.065) & + (0.107) & + (0.095) \\
+            goa\_svc   & + (0.426) & + (0.095) & - (0.280) & = (0.720) & = (0.561) & + (0.167) & = (0.572) & + (0.095) & = (0.890) & + (0.359) & = (0.616) & + (0.229) & = (0.600)  & = (0.890)  & = (0.890) & + (0.209) & -         & + (0.454) & = (0.950) & -         & = (0.706) & + (0.117) & + (0.359) & + (0.135) & = (0.615) & + (0.083) \\
+            gwo\_knn   & - (0.414) & = (0.762) & - (0.012) & - (0.188) & = (0.802) & = (0.887) & = (0.762) & + (0.303) & - (0.121) & = (0.950) & - (0.389) & = (1.000) & - (0.028)  & - (0.209)  & = (0.802) & + (0.414) & - (0.081) & -         & - (0.233) & = (0.706) & -         & = (0.798) & = (0.572) & = (0.851) & = (0.802) & = (0.629) \\
+            gwo\_svc   & - (0.263) & = (0.890) & - (0.011) & - (0.079) & = (0.762) & - (0.421) & - (0.359) & = (0.706) & - (0.188) & - (0.149) & - (0.142) & -         & - (0.012)  & - (0.055)  & = (0.561) & = (0.784) & - (0.088) & - (0.233) & - (0.064) & - (0.117) & = (0.798) & -         & = (0.599) & = (0.660) & = (0.675) & = (0.727) \\
+            pso\_knn   & - (0.196) & = (0.706) & - (0.014) & - (0.328) & = (0.616) & = (0.576) & = (0.720) & + (0.359) & - (0.132) & = (0.572) & = (0.720) & = (0.733) & - (0.008)  & - (0.277)  & = (0.950) & = (0.639) & - (0.162) & = (0.842) & - (0.196) & - (0.359) & = (0.572) & = (0.599) & -         & = (0.660) & = (0.934) & = (0.776) \\
+            pso\_svc   & - (0.142) & = (0.934) & - (0.008) & - (0.188) & = (0.784) & - (0.286) & - (0.451) & = (0.510) & - (0.252) & - (0.132) & - (0.303) & = (0.720) & - (0.012)  & - (0.048)  & = (0.639) & + (0.470) & - (0.140) & - (0.290) & - (0.065) & - (0.135) & = (0.851) & = (0.660) & = (0.660) & -         & -         & = (0.802) \\
+            woa\_knn   & - (0.410) & = (0.889) & - (0.004) & - (0.286) & = (0.950) & = (0.820) & = (0.576) & = (0.639) & - (0.117) & = (0.524) & - (0.315) & = (0.978) & - (0.048)  & - (0.208)  & = (0.932) & + (0.421) & - (0.263) & = (0.762) & - (0.107) & = (0.615) & = (0.802) & = (0.675) & = (0.934) & = (1.000) & -         & = (0.780) \\
+            woa\_svc   & - (0.303) & -         & - (0.007) & - (0.124) & = (0.720) & = (0.551) & = (0.530) & + (0.490) & - (0.188) & - (0.208) & - (0.286) & = (0.847) & - (0.052)  & - (0.055)  & = (0.616) & = (0.950) & - (0.121) & = (0.514) & - (0.095) & - (0.083) & = (0.629) & = (0.727) & = (0.776) & = (0.802) & = (0.780) & -         \\
+            \bottomrule
+        \end{tabular}
+    \end{adjustbox}
+    \caption{P-valores para todos los algoritmos en \textit{accuracy}}
+    \label{tab:p-values_accuracy}
+\end{sidewaystable}
+
+\begin{sidewaystable}[htb]
+    \centering
+    \begin{adjustbox}{width=\linewidth}
+        \begin{tabular}{lllllllllllllllllllllllllll}
+            \toprule
+            {}         & abco\_knn     & abco\_svc     & aco\_knn      & aco\_svc      & ba\_knn       & ba\_svc       & cs\_knn       & cs\_svc       & da\_knn       & da\_svc       & de\_knn       & de\_svc       & dummy\_knn    & dummy\_svc    & fa\_knn       & fa\_svc       & ga\_knn       & ga\_svc       & goa\_knn      & goa\_svc      & gwo\_knn      & gwo\_svc      & pso\_knn      & pso\_svc      & woa\_knn      & woa\_svc      \\
+            \midrule
+            abco\_knn  & -             & - (0.328)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.002)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & = (0.820)     & = (0.609)     & + (1.831E-04) & + (3.052E-04) & + (0.001)     & + (0.001)     & + (0.015)     & + (0.018)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     \\
+            abco\_svc  & + (0.328)     & -             & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & = (0.978)     & = (0.847)     & + (1.831E-04) & + (1.831E-04) & + (0.001)     & + (0.001)     & + (0.010)     & + (0.010)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     \\
+            aco\_knn   & - (0.001)     & - (0.001)     & -             & = (0.530)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (6.104E-05) & - (6.104E-05) & - (6.104E-05) & - (0.001)     & - (0.001)     & - (0.001)     & - (6.104E-05) & - (6.104E-05) & - (0.002)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     \\
+            aco\_svc   & - (0.001)     & - (0.001)     & = (0.530)     & -             & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (6.104E-05) & - (6.104E-05) & - (6.104E-05) & - (6.104E-05) & - (0.002)     & - (0.001)     & - (6.104E-05) & - (6.104E-05) & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     \\
+            ba\_knn    & - (0.001)     & - (0.001)     & + (0.001)     & + (0.001)     & -             & = (0.778)     & + (0.001)     & + (0.001)     & + (0.014)     & + (0.003)     & + (0.010)     & + (0.132)     & - (6.104E-05) & - (1.221E-04) & = (0.570)     & - (0.443)     & + (0.001)     & + (0.001)     & = (0.934)     & = (0.978)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.002)     & + (0.008)     \\
+            ba\_svc    & - (0.002)     & - (0.001)     & + (0.001)     & + (0.001)     & = (0.778)     & -             & + (0.002)     & + (0.001)     & + (0.002)     & + (0.003)     & + (0.010)     & + (0.017)     & - (0.001)     & - (6.104E-05) & - (0.396)     & - (0.489)     & + (0.001)     & + (0.001)     & = (0.639)     & = (0.804)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     \\
+            cs\_knn    & - (0.001)     & - (0.001)     & + (0.001)     & + (0.001)     & - (0.001)     & - (0.002)     & -             & = (0.529)     & - (0.149)     & - (0.286)     & - (0.001)     & - (0.001)     & - (6.104E-05) & - (0.001)     & - (0.001)     & - (0.001)     & + (0.001)     & + (0.002)     & - (0.029)     & - (0.025)     & + (0.001)     & + (0.003)     & + (0.001)     & + (0.001)     & - (0.208)     & - (0.103)     \\
+            cs\_svc    & - (0.001)     & - (0.001)     & + (0.001)     & + (0.001)     & - (0.001)     & - (0.001)     & = (0.529)     & -             & - (0.330)     & = (0.851)     & - (0.038)     & - (0.004)     & - (6.104E-05) & - (6.104E-05) & - (1.831E-04) & - (6.104E-05) & + (0.001)     & + (0.001)     & - (0.064)     & - (0.033)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & - (0.346)     & - (0.279)     \\
+            da\_knn    & - (0.001)     & - (0.001)     & + (0.001)     & + (0.001)     & - (0.014)     & - (0.002)     & + (0.149)     & + (0.330)     & -             & + (0.258)     & = (0.778)     & - (0.315)     & - (0.001)     & - (6.104E-05) & - (0.005)     & - (0.001)     & + (0.001)     & + (0.001)     & = (0.524)     & - (0.394)     & + (0.001)     & + (0.004)     & + (0.002)     & + (0.001)     & + (0.485)     & + (0.328)     \\
+            da\_svc    & - (0.001)     & - (0.001)     & + (0.001)     & + (0.001)     & - (0.003)     & - (0.003)     & + (0.286)     & = (0.851)     & - (0.258)     & -             & - (0.132)     & - (0.090)     & - (6.104E-05) & - (6.104E-05) & - (0.001)     & - (6.104E-05) & + (0.001)     & + (0.002)     & - (0.389)     & - (0.244)     & + (0.001)     & + (0.004)     & + (0.001)     & + (0.001)     & = (0.950)     & = (0.706)     \\
+            de\_knn    & - (0.001)     & - (0.001)     & + (0.001)     & + (0.001)     & - (0.010)     & - (0.010)     & + (0.001)     & + (0.038)     & = (0.778)     & + (0.132)     & -             & = (0.724)     & - (6.104E-05) & - (6.104E-05) & - (1.831E-04) & - (0.001)     & + (0.001)     & + (0.001)     & - (0.359)     & - (0.169)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.117)     & + (0.184)     \\
+            de\_svc    & - (0.001)     & - (0.001)     & + (0.001)     & + (0.001)     & - (0.132)     & - (0.017)     & + (0.001)     & + (0.004)     & + (0.315)     & + (0.090)     & = (0.724)     & -             & - (6.104E-05) & - (6.104E-05) & - (0.017)     & - (0.004)     & + (0.001)     & + (0.001)     & = (0.599)     & - (0.330)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.001)     & + (0.005)     & + (0.015)     \\
+            dummy\_knn & = (0.820)     & = (0.978)     & + (6.104E-05) & + (6.104E-05) & + (6.104E-05) & + (0.001)     & + (6.104E-05) & + (6.104E-05) & + (0.001)     & + (6.104E-05) & + (6.104E-05) & + (6.104E-05) & -             & - (0.410)     & + (0.001)     & + (6.104E-05) & + (6.104E-05) & + (6.104E-05) & + (0.001)     & + (0.002)     & + (6.104E-05) & + (0.001)     & + (6.104E-05) & + (0.001)     & + (6.104E-05) & + (6.104E-05) \\
+            dummy\_svc & = (0.609)     & = (0.847)     & + (6.104E-05) & + (6.104E-05) & + (1.221E-04) & + (6.104E-05) & + (0.001)     & + (6.104E-05) & + (6.104E-05) & + (6.104E-05) & + (6.104E-05) & + (6.104E-05) & + (0.410)     & -             & + (6.104E-05) & + (6.104E-05) & + (6.104E-05) & + (6.104E-05) & + (0.001)     & + (0.001)     & + (6.104E-05) & + (6.104E-05) & + (6.104E-05) & + (6.104E-05) & + (6.104E-05) & + (0.001)     \\
+            fa\_knn    & - (1.831E-04) & - (1.831E-04) & + (6.104E-05) & + (6.104E-05) & = (0.570)     & + (0.396)     & + (0.001)     & + (1.831E-04) & + (0.005)     & + (0.001)     & + (1.831E-04) & + (0.017)     & - (0.001)     & - (6.104E-05) & -             & -             & + (6.104E-05) & + (0.001)     & + (0.258)     & = (0.561)     & + (6.104E-05) & + (0.001)     & + (6.104E-05) & + (6.104E-05) & + (0.002)     & + (0.002)     \\
+            fa\_svc    & - (3.052E-04) & - (1.831E-04) & + (0.001)     & + (6.104E-05) & + (0.443)     & + (0.489)     & + (0.001)     & + (6.104E-05) & + (0.001)     & + (6.104E-05) & + (0.001)     & + (0.004)     & - (6.104E-05) & - (6.104E-05) & = (1.000)     & -             & + (6.104E-05) & + (6.104E-05) & = (0.570)     & = (0.890)     & + (6.104E-05) & + (6.104E-05) & + (6.104E-05) & + (0.001)     & + (3.052E-04) & + (0.001)     \\
+            ga\_knn    & - (0.001)     & - (0.001)     & + (0.001)     & + (0.002)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (6.104E-05) & - (6.104E-05) & - (6.104E-05) & - (6.104E-05) & -             & - (0.170)     & - (6.104E-05) & - (6.104E-05) & + (0.031)     & = (0.950)     & - (0.013)     & - (0.038)     & - (0.001)     & - (0.001)     \\
+            ga\_svc    & - (0.001)     & - (0.001)     & + (0.001)     & + (0.001)     & - (0.001)     & - (0.001)     & - (0.002)     & - (0.001)     & - (0.001)     & - (0.002)     & - (0.001)     & - (0.001)     & - (6.104E-05) & - (6.104E-05) & - (0.001)     & - (6.104E-05) & + (0.170)     & -             & - (6.104E-05) & - (6.104E-05) & + (0.008)     & + (0.233)     & - (0.208)     & - (0.055)     & - (0.001)     & - (0.001)     \\
+            goa\_knn   & - (0.015)     & - (0.010)     & + (6.104E-05) & + (6.104E-05) & = (0.934)     & = (0.639)     & + (0.029)     & + (0.064)     & = (0.524)     & + (0.389)     & + (0.359)     & = (0.599)     & - (0.001)     & - (0.001)     & - (0.258)     & = (0.570)     & + (6.104E-05) & + (6.104E-05) & -             & - (0.258)     & + (6.104E-05) & + (3.052E-04) & + (0.001)     & + (6.104E-05) & + (0.201)     & + (0.151)     \\
+            goa\_svc   & - (0.018)     & - (0.010)     & + (6.104E-05) & + (6.104E-05) & = (0.978)     & = (0.804)     & + (0.025)     & + (0.033)     & + (0.394)     & + (0.244)     & + (0.169)     & + (0.330)     & - (0.002)     & - (0.001)     & = (0.561)     & = (0.890)     & + (6.104E-05) & + (6.104E-05) & + (0.258)     & -             & + (6.104E-05) & + (3.052E-04) & + (0.001)     & + (6.104E-05) & + (0.055)     & + (0.083)     \\
+            gwo\_knn   & - (0.001)     & - (0.001)     & + (0.002)     & + (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (6.104E-05) & - (6.104E-05) & - (6.104E-05) & - (6.104E-05) & - (0.031)     & - (0.008)     & - (6.104E-05) & - (6.104E-05) & -             & - (0.028)     & - (0.002)     & - (0.003)     & - (0.001)     & - (0.001)     \\
+            gwo\_svc   & - (0.001)     & - (0.001)     & + (0.001)     & + (0.001)     & - (0.001)     & - (0.001)     & - (0.003)     & - (0.001)     & - (0.004)     & - (0.004)     & - (0.001)     & - (0.001)     & - (0.001)     & - (6.104E-05) & - (0.001)     & - (6.104E-05) & = (0.950)     & - (0.233)     & - (3.052E-04) & - (3.052E-04) & + (0.028)     & -             & - (0.235)     & - (0.184)     & - (0.002)     & - (0.002)     \\
+            pso\_knn   & - (0.001)     & - (0.001)     & + (0.001)     & + (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.002)     & - (0.001)     & - (0.001)     & - (0.001)     & - (6.104E-05) & - (6.104E-05) & - (6.104E-05) & - (6.104E-05) & + (0.013)     & + (0.208)     & - (0.001)     & - (0.001)     & + (0.002)     & + (0.235)     & -             & = (0.950)     & - (0.001)     & - (0.001)     \\
+            pso\_svc   & - (0.001)     & - (0.001)     & + (0.001)     & + (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (0.001)     & - (6.104E-05) & - (6.104E-05) & - (0.001)     & + (0.038)     & + (0.055)     & - (6.104E-05) & - (6.104E-05) & + (0.003)     & + (0.184)     & = (0.950)     & -             & - (0.001)     & - (0.001)     \\
+            woa\_knn   & - (0.001)     & - (0.001)     & + (0.001)     & + (0.001)     & - (0.002)     & - (0.001)     & + (0.208)     & + (0.346)     & - (0.485)     & = (0.950)     & - (0.117)     & - (0.005)     & - (6.104E-05) & - (6.104E-05) & - (0.002)     & - (3.052E-04) & + (0.001)     & + (0.001)     & - (0.201)     & - (0.055)     & + (0.001)     & + (0.002)     & + (0.001)     & + (0.001)     & -             & - (0.442)     \\
+            woa\_svc   & - (0.001)     & - (0.001)     & + (0.001)     & + (0.001)     & - (0.008)     & - (0.001)     & + (0.103)     & + (0.279)     & - (0.328)     & = (0.706)     & - (0.184)     & - (0.015)     & - (6.104E-05) & - (0.001)     & - (0.002)     & - (0.001)     & + (0.001)     & + (0.001)     & - (0.151)     & - (0.083)     & + (0.001)     & + (0.002)     & + (0.001)     & + (0.001)     & + (0.442)     & -             \\
+            \bottomrule
+        \end{tabular}
+    \end{adjustbox}
+    \caption{P-valores para todos los algoritmos en \textit{reducción de características}}
+    \label{tab:p-values_red}
+\end{sidewaystable}
+
+\begin{sidewaystable}[htb]
+    \centering
+    \begin{adjustbox}{width=\linewidth}
+        \begin{tabular}{lllllllllllllllll}
+            \toprule
+                      &                          & dataset       &             &          &         &            &         &            &         &              &              &              &         &         &         & \tabularnewline
+            optimizer & Data                     & breast-cancer & dermatology & diabetes & ecoli   & ionosphere & iris    & parkinsons & sonar   & spambase-460 & spectf-heart & waveform5000 & wdbc    & wine    & yeast   & zoo\tabularnewline
+            \midrule
+            abco      & Average - acc            & 74.17\%       & 88.00\%     & 73.23\%  & 77.14\% & 85.33\%    & 91.67\% & 77.50\%    & 60.00\% & 74.74\%      & 79.29\%      & 83.75\%      & 91.74\% & 71.25\% & 51.33\% & 70.00\%\tabularnewline
+                      & Average - selected\_rate & 75.56\%       & 67.65\%     & 72.50\%  & 92.86\% & 80.00\%    & 25.00\% & 84.55\%    & 92.67\% & 91.58\%      & 93.64\%      & 91.00\%      & 85.33\% & 63.85\% & 87.50\% & 51.18\%\tabularnewline
+            aco       & Average - acc            & 79.17\%       & 78.67\%     & 71.94\%  & 65.71\% & 82.00\%    & 90.00\% & 77.50\%    & 63.33\% & 81.05\%      & 75.00\%      & 73.45\%      & 90.87\% & 77.50\% & 50.00\% & 38.00\%\tabularnewline
+                      & Average - selected\_rate & 6.67\%        & 12.35\%     & 17.50\%  & 44.29\% & 8.53\%     & 25.00\% & 4.09\%     & 2.50\%  & 3.33\%       & 1.82\%       & 9.25\%       & 5.67\%  & 17.69\% & 41.25\% & 10.59\%\tabularnewline
+            ba        & Average - acc            & 66.67\%       & 88.00\%     & 74.52\%  & 77.86\% & 88.00\%    & 86.67\% & 81.25\%    & 57.78\% & 78.42\%      & 72.86\%      & 84.70\%      & 90.43\% & 75.00\% & 52.67\% & 62.00\%\tabularnewline
+                      & Average - selected\_rate & 45.56\%       & 53.82\%     & 46.25\%  & 68.57\% & 55.59\%    & 25.00\% & 55.00\%    & 66.83\% & 63.86\%      & 68.86\%      & 66.50\%      & 49.00\% & 44.62\% & 82.50\% & 41.76\%\tabularnewline
+            cs        & Average - acc            & 64.17\%       & 94.67\%     & 75.16\%  & 81.43\% & 90.00\%    & 90.00\% & 82.50\%    & 58.89\% & 82.63\%      & 74.29\%      & 85.35\%      & 88.26\% & 71.25\% & 52.33\% & 70.00\%\tabularnewline
+                      & Average - selected\_rate & 40.00\%       & 42.06\%     & 43.75\%  & 64.29\% & 44.12\%    & 25.00\% & 43.64\%    & 55.83\% & 52.11\%      & 59.77\%      & 59.75\%      & 38.00\% & 37.69\% & 71.25\% & 31.18\%\tabularnewline
+            da        & Average - acc            & 79.17\%       & 85.33\%     & 74.19\%  & 72.86\% & 84.67\%    & 86.67\% & 78.75\%    & 56.67\% & 76.32\%      & 73.57\%      & 83.70\%      & 90.43\% & 62.50\% & 50.67\% & 68.00\%\tabularnewline
+                      & Average - selected\_rate & 30.00\%       & 52.06\%     & 40.00\%  & 57.14\% & 48.53\%    & 25.00\% & 45.00\%    & 54.17\% & 60.53\%      & 51.82\%      & 55.00\%      & 46.33\% & 39.23\% & 67.50\% & 47.65\%\tabularnewline
+            de        & Average - acc            & 66.67\%       & 84.00\%     & 66.77\%  & 76.43\% & 90.00\%    & 95.00\% & 78.75\%    & 66.67\% & 76.84\%      & 75.71\%      & 85.25\%      & 90.87\% & 81.25\% & 50.67\% & 68.00\%\tabularnewline
+                      & Average - selected\_rate & 46.67\%       & 47.06\%     & 48.75\%  & 70.00\% & 49.71\%    & 25.00\% & 56.36\%    & 62.50\% & 58.25\%      & 55.68\%      & 58.75\%      & 48.67\% & 36.15\% & 77.50\% & 35.88\%\tabularnewline
+            dummy     & Average - acc            & 76.67\%       & 79.33\%     & 70.00\%  & 69.29\% & 89.33\%    & 80.00\% & 83.75\%    & 66.67\% & 67.37\%      & 65.71\%      & 83.15\%      & 91.30\% & 70.00\% & 46.17\% & 54.00\%\tabularnewline
+                      & Average - selected\_rate & 82.22\%       & 83.82\%     & 76.25\%  & 72.86\% & 77.94\%    & 60.00\% & 82.27\%    & 88.33\% & 88.77\%      & 84.55\%      & 83.50\%      & 73.67\% & 68.46\% & 90.00\% & 71.76\%\tabularnewline
+            fa        & Average - acc            & 76.67\%       & 92.67\%     & 73.55\%  & 71.43\% & 88.67\%    & 90.00\% & 72.50\%    & 64.44\% & 83.16\%      & 75.71\%      & 84.00\%      & 91.30\% & 60.00\% & 53.00\% & 78.00\%\tabularnewline
+                      & Average - selected\_rate & 47.78\%       & 55.29\%     & 50.00\%  & 65.71\% & 55.29\%    & 30.00\% & 62.73\%    & 66.00\% & 62.28\%      & 65.45\%      & 60.25\%      & 52.33\% & 50.00\% & 75.00\% & 48.24\%\tabularnewline
+            ga        & Average - acc            & 69.17\%       & 86.67\%     & 74.52\%  & 67.86\% & 88.00\%    & 88.33\% & 78.75\%    & 56.67\% & 84.21\%      & 72.86\%      & 84.75\%      & 90.00\% & 68.75\% & 52.33\% & 68.00\%\tabularnewline
+                      & Average - selected\_rate & 24.44\%       & 25.29\%     & 30.00\%  & 55.71\% & 27.65\%    & 25.00\% & 29.55\%    & 35.83\% & 38.77\%      & 40.23\%      & 42.75\%      & 21.00\% & 22.31\% & 70.00\% & 19.41\%\tabularnewline
+            goa       & Average - acc            & 73.33\%       & 81.33\%     & 70.97\%  & 75.71\% & 86.67\%    & 75.00\% & 81.25\%    & 61.11\% & 64.74\%      & 78.57\%      & 83.60\%      & 94.78\% & 60.00\% & 50.17\% & 56.00\%\tabularnewline
+                      & Average - selected\_rate & 57.78\%       & 50.88\%     & 65.00\%  & 82.86\% & 41.18\%    & 77.50\% & 57.27\%    & 49.33\% & 51.93\%      & 48.64\%      & 52.50\%      & 41.00\% & 46.15\% & 92.50\% & 38.24\%\tabularnewline
+            gwo       & Average - acc            & 68.33\%       & 82.67\%     & 73.55\%  & 75.00\% & 86.67\%    & 90.00\% & 76.25\%    & 68.89\% & 85.26\%      & 75.71\%      & 82.65\%      & 95.65\% & 72.50\% & 53.83\% & 68.00\%\tabularnewline
+                      & Average - selected\_rate & 25.56\%       & 17.06\%     & 22.50\%  & 54.29\% & 26.18\%    & 25.00\% & 30.45\%    & 54.50\% & 39.65\%      & 58.18\%      & 36.00\%      & 16.00\% & 16.92\% & 65.00\% & 16.47\%\tabularnewline
+            pso       & Average - acc            & 71.67\%       & 88.67\%     & 74.84\%  & 73.57\% & 88.00\%    & 88.33\% & 76.25\%    & 62.22\% & 77.89\%      & 74.29\%      & 84.00\%      & 90.00\% & 78.75\% & 55.50\% & 66.00\%\tabularnewline
+                      & Average - selected\_rate & 26.67\%       & 28.24\%     & 33.75\%  & 54.29\% & 29.71\%    & 25.00\% & 40.00\%    & 48.67\% & 41.40\%      & 46.36\%      & 42.75\%      & 24.67\% & 22.31\% & 58.75\% & 18.24\%\tabularnewline
+            woa       & Average - acc            & 75.83\%       & 87.33\%     & 79.03\%  & 77.86\% & 86.00\%    & 90.00\% & 76.25\%    & 65.56\% & 84.74\%      & 67.14\%      & 85.90\%      & 92.17\% & 67.50\% & 50.33\% & 64.00\%\tabularnewline
+                      & Average - selected\_rate & 46.67\%       & 47.06\%     & 38.75\%  & 61.43\% & 42.35\%    & 25.00\% & 52.73\%    & 58.00\% & 53.68\%      & 58.18\%      & 57.00\%      & 40.67\% & 40.00\% & 75.00\% & 31.18\%\tabularnewline
+            \bottomrule
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Porcentajes de características seleccionadas y precisión en clasificación para cada algoritmo binario}
+    \label{tab:bin_red_acc_all}
+\end{sidewaystable}
+
