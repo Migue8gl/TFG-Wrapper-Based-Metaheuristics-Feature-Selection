@@ -402,7 +402,7 @@ Como se ha mencionado anteriormente, la metaheurística \textbf{ACO} es sin luga
 Un ejemplo de esto es en el conjunto de datos de \textit{ionosphere}. Se puede observar como el segundo algoritmo que más reduce, que es \textbf{bGWO}, obtiene una reducción media del $74\%$, mientras que el \textbf{ACO} obtiene una reducción media del $91.5\%$, con tan solo una diferencia de $4.6\%$ en precisión a favor de \textbf{bGWO}~\ref{tab:bin_red_acc_all}. \\[6pt]
 Si bien es cierto que su precisión no es de las mejores, se mantiene en mitad de los rankings con el resto de algoritmos. Teniendo ese aspecto en cuenta, añadido a que es capaz de reducir características a un nivel muy significativo con respecto al resto de algoritmos, \textbf{ACO} se presenta como un algoritmo muy interesante para aquellos problemas en los que se pueda permitir cierto nivel de error en la precisión, pero en cambio, sea crucial una compresión del tamaño del modelo o un tiempo den entrenamiento corto.\\[6pt]
 
-Si comparamos los p-valores~\ref{tab:p-values_aco_rest}, tras aplicar post hoc para mayor seguridad, de \textbf{ACO} con respecto al resto de algoritmos, vemos que claramente la mejora en reducción no se debe al azar de manera muy probable.
+Si comparamos los p-valores~\ref{tab:p-values_aco_rest}, tras aplicar post hoc para mayor seguridad, de \textbf{ACO} con respecto al resto de algoritmos, se ve que claramente la mejora en reducción no se debe al azar de manera muy probable.
 
 \subsubsection{bWOA vs bGWO}
 Dentro del conjunto de algoritmos analizados, hay ciertos pares que resultan interesantes por la semejanza algorítmica e inspirativa entre ambos. En esta sección, se compararán los algoritmos \textbf{bWOA} y \textbf{bGWO}. Ambos pertenecen a la categoría de algoritmos de optimización inspirados en la naturaleza y ambos se inspiran fuertemente en el comportamiento social y estrategias de caza de ciertos animales.\\[6pt]
@@ -420,11 +420,11 @@ Es en cambio en la comparación en la métrica de reducción de características
     \centering
     \begin{tabular}{lllll}
         \toprule
-        {}       & Original & Holm  & Hommel & Hochberg \\
+        {}       & Original & Holm           & Hommel         & Hochberg       \\
         \midrule
-        woa\_knn & 0.001    & \textbf{0.003} & \textbf{0.002}  & \textbf{0.002}    \\
-        woa\_svc & 0.001    & \textbf{0.003} & \textbf{0.002}  & \textbf{0.002}    \\
-        gwo\_svc & 0.028    & \textbf{0.028} & \textbf{0.028}  & \textbf{0.028}    \\
+        woa\_knn & 0.001    & \textbf{0.003} & \textbf{0.002} & \textbf{0.002} \\
+        woa\_svc & 0.001    & \textbf{0.003} & \textbf{0.002} & \textbf{0.002} \\
+        gwo\_svc & 0.028    & \textbf{0.028} & \textbf{0.028} & \textbf{0.028} \\
         \bottomrule
     \end{tabular}
     \caption{P-valores tras corrección entre bGWO-kNN y demás algoritmos en reducción de características}
@@ -655,3 +655,103 @@ Incluso la versión de \textbf{bGWO} que utiliza \textit{kNN} es significativame
     \label{tab:bin_red_acc_all}
 \end{sidewaystable}
 
+\clearpage
+\subsection{Tiempo de ejecución}
+Una última métrica muy importante a analizar es el tiempo de ejecución. Por definición, la mayoría de metaheurísticas deberían ser rápidas, al menos en comparación a algoritmos exactos, pues es en sustitución de estos donde brillan realmente. En el caso concreto del problema de selección de características es algo a tener muy en cuenta, pues unos de los cuellos de botella principales en el entrenamiento de grandes modelos es el tiempo de ejecución. Por tanto, en esta sección se procederá a analizar varios algoritmos y sus diferencias en cuanto a tiempos.\\[6pt]
+En esta comparativa, se dejará de lado al algoritmo \textbf{bDummy}, pues es el mejor indiscutible en rapidez debido a sus cálculos arbitrarios.
+
+\subsubsection{Clásicos vs Modernos}
+Los resultados en cuanto a tiempo de ejecución son variados. Algoritmos como \textbf{bABCO} y \textbf{GA}, siendo clásicos, son los peores según el siguiente ranking \ref{tab:bin-execution_time_ranking}. Otros sin embargo posicionan mucho mejor en comparación, véase \textbf{bPSO} o \textbf{bDE}, que son bastante más rápidos. En cuanto a los modernos, parece haber una diferencia muy grande en la clasificación de \textbf{FA} con respecto al resto.\\[6pt]
+Es muy destacable ver como uno de los mejores en casi todas las métricas anteriormente analizadas, que es el \textbf{bGWO}, aquí es el segundo peor. También apreciar que la mayoría de algoritmos modernos se encuentran en mitad de la clasificación. Destacar que a pesar del pésimo rendimiento de \textbf{bABCO} con respecto al resto de algoritmos, los clásicos \textbf{bPSO}, \textbf{bDE} y \textbf{bACO} son muy eficientes.\\[6pt]
+Si bien hay diferencias significativas en casi todas las comparativas entre algoritmos, no se observa una tendencia de un grupo siendo mejor que otro. Entre los más lentos hay modernos y clásicos, de igual forma que entre los más rápidos y los que se encuentran en la mitad.
+
+\subsubsection{Mejor vs Resto}
+En cuanto a la clasificación de los algoritmos modernos, llama la atención el rendimiento destacado de \textbf{bFA} en términos de velocidad. Este algoritmo parece sobresalir significativamente en comparación con otros algoritmos modernos y clásicos en lo que respecta al tiempo de ejecución. Este hallazgo podría tener importantes implicaciones para aplicaciones donde la velocidad de convergencia es crucial. Los resultados obtenidos en las comparaciones con el resto de algoritmos son muy similares todos entre sí, dado que todos los p-valores obtenidos indican diferencias significativas \ref{tab:fa_vs_rest-bin_exec_time}
+
+\begin{table}[htb]
+    \centering
+    \begin{tabular}{lllll}
+        \toprule
+        {}        & Original  & Holm           & Hommel             & Hochberg           \\
+        \midrule
+        abco\_knn & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        pso\_svc  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        pso\_knn  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        gwo\_svc  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        gwo\_knn  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        goa\_svc  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        goa\_knn  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        ga\_svc   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        ga\_knn   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        woa\_knn  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        de\_svc   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        da\_svc   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        da\_knn   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        cs\_svc   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        cs\_knn   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        ba\_svc   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        ba\_knn   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        aco\_svc  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        aco\_knn  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        abco\_svc & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        de\_knn   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        woa\_svc  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        fa\_svc   & 0.044     & \textbf{0.044} & \textbf{0.044}     & \textbf{0.044}     \\
+        \bottomrule
+    \end{tabular}
+    \caption{P-valores de bFA vs el resto en tiempo de ejecución - binario}
+    \label{tab:fa_vs_rest-bin_exec_time}
+\end{table}
+
+\subsubsection{GA vs DE}
+Los algoritmos \textbf{bDE} y \textbf{GA} comparten varios conceptos y similitudes fundamentales. Emplean operadores de variación, como la mutación y la recombinación (\textit{crossover}), para introducir diversidad en la población y generar nuevas soluciones. Ambos algoritmos seleccionan soluciones de la población actual (padres) para generar nuevas soluciones (descendientes) mediante estos operadores de variación. Posteriormente, las nuevas soluciones reemplazan a las soluciones menos aptas en la población, siguiendo una estrategia de selección basada en la función de \textit{fitness}.\\[6pt]
+\textbf{bDE} de hecho, como se ha explicado en secciones anteriores, surgió como una alternativa más refinada a \textbf{GA} para codificaciones continuas. Tiene sentido por tanto comparar ambas metaheurísticas entre sí.\\[6pt]
+
+Si se observa la tabla \ref{tab:bin-execution_time_ranking}, \textbf{bDE} posiciona por encima de \textbf{GA} en todos y cada uno de los conjuntos de datos utilizados, tanto su versión con \textbf{kNN} como su versión con \textbf{SVC}. Para poder rechazar la hipótesis nula y poder afirmar que \textbf{bDE} es mejor opción en cuanto a velocidad, se observan los p-valores corregidos comparando a \textbf{bDE} con \textbf{GA} en \ref{tab:de_vs_ga-bin_exec_time}.
+
+\begin{table}[htb]
+    \centering
+    \begin{tabular}{lllll}
+        \toprule
+        {}      & Original  & Holm               & Hommel             & Hochberg           \\
+        \midrule
+        ga\_knn & 6.104E-05 & \textbf{1.831E-04} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        ga\_svc & 6.104E-05 & \textbf{1.831E-04} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
+        de\_svc & 0.015     & \textbf{0.015}     & \textbf{0.015}     & \textbf{0.015}     \\
+        \bottomrule
+    \end{tabular}
+    \caption{P-valores de bDE vs GA en tiempo de ejecución - binario}
+    \label{tab:de_vs_ga-bin_exec_time}
+\end{table}
+
+Hay una diferencia significativa a favor de \textbf{bDE}, de hecho la hay incluso entre versiones que usan \textbf{kNN} y \textbf{SVC}. Esto indicaría que algoritmos que usan \textbf{kNN} son más rápidos que los que usan \textbf{SVC}, debido a la sencillez de el primero con respecto al segundo y a los parámetros elegidos. Al menos ocurre tal fenómeno en esta comparación y en la anteriormente analizada con \textbf{bFA}. Queda claro además que \textbf{bDE} es mejor que \textbf{bGA} en todos los conjuntos de datos en tiempo de ejecución.
+
+\begin{sidewaystable}[htb]
+    \centering
+    \begin{adjustbox}{width=\linewidth}
+        \begin{tabular}{lllllllllllllllllllllllll}
+            \toprule
+            {}   & abco\_knn & abco\_svc & aco\_knn & aco\_svc & ba\_knn & ba\_svc & cs\_knn & cs\_svc & da\_knn & da\_svc & de\_knn & de\_svc & fa\_knn        & fa\_svc    & ga\_knn & ga\_svc & goa\_knn & goa\_svc & gwo\_knn & gwo\_svc & pso\_knn & pso\_svc & woa\_knn & woa\_svc \\
+            \midrule
+            F01  & 24        & 23        & 12       & 3        & 20      & 18      & 17      & 14.5    & 13      & 8       & 10      & 5       & \textbf{2}     & \textbf{1} & 19      & 16      & 14.5     & 7        & 22       & 21       & 9        & 4        & 11       & 6        \\
+            F02  & 23        & 24        & 7        & 15       & 11      & 21      & 8       & 19.5    & 4       & 16      & 5       & 13      & \textbf{1}     & \textbf{2} & 10      & 18      & 9        & 17       & 19.5     & 22       & 3        & 12       & 6        & 14       \\
+            F03  & 23        & 24        & 8        & 14       & 18      & 20      & 10      & 17      & 6       & 15      & 4       & 11      & \textbf{2}     & \textbf{1} & 16      & 19      & 7        & 13       & 21       & 22       & 3        & 9        & 5        & 12       \\
+            F04  & 24        & 23        & 12       & 7        & 20      & 18      & 16      & 15      & 14      & 8       & 9.5     & 4       & \textbf{2}     & \textbf{1} & 19      & 17      & 13       & 6        & 22       & 21       & 9.5      & 3        & 11       & 5        \\
+            F05  & 23        & 24        & 6        & 17       & 12      & 20      & 8       & 18      & 4       & 13      & 5       & 14      & \textbf{1}     & \textbf{2} & 10      & 19      & 9        & 16       & 21       & 22       & 3        & 11       & 7        & 15       \\
+            F06  & 24        & 23        & 11       & 7        & 20      & 17      & 18      & 9       & 15      & 8       & 13      & 6       & \textbf{2}     & \textbf{1} & 19      & 16      & 14       & 5        & 22       & 21       & 10       & 3        & 12       & 4        \\
+            F07  & 23        & 24        & 6        & 11       & 18      & 20      & 14      & 17      & 4       & 10      & 5       & 9       & \textbf{1}     & \textbf{2} & 16      & 19      & 12       & 15       & 21       & 22       & 3        & 7        & 8        & 13       \\
+            F08  & 23        & 24        & 13       & 18       & 12      & 20      & 6       & 17      & 4       & 11      & 5       & 14      & \textbf{1}     & \textbf{2} & 9       & 19      & 10       & 16       & 21       & 22       & 3        & 8        & 7        & 15       \\
+            F09  & 22        & 24        & 10       & 17       & 11      & 21      & 7       & 19      & 4       & 15      & 5       & 14      & \textbf{1}     & \textbf{2} & 9       & 20      & 8        & 18       & 13       & 23       & 3        & 12       & 6        & 16       \\
+            F10  & 22        & 24        & 8        & 16       & 11      & 21      & 6       & 18      & 4       & 13      & 5       & 14      & \textbf{1}     & \textbf{2} & 10      & 19      & 9        & 17       & 20       & 23       & 3        & 12       & 7        & 15       \\
+            F11  & 13        & 24        & 3.5      & 22       & 10      & 21      & 8       & 19      & 5       & 18      & 3.5     & 15      & \textbf{1}     & 11         & 9       & 20      & 7        & 17       & 12       & 23       & 2        & 14       & 6        & 16       \\
+            F12  & 23        & 24        & 6        & 18       & 11      & 21      & 9       & 17      & 4       & 13      & 5       & 14      & \textbf{1}     & \textbf{2} & 10      & 19.5    & 8        & 16       & 19.5     & 22       & 3        & 12       & 7        & 15       \\
+            F13  & 24        & 23        & 11       & 6        & 20      & 17      & 18      & 10      & 14      & 7       & 12      & 4       & \textbf{2}     & \textbf{1} & 19      & 16      & 15       & 8        & 22       & 21       & 9        & 3        & 13       & 5        \\
+            F14  & 22        & 24        & 8        & 13       & 11      & 21      & 9       & 19      & 4       & 17      & 6       & 14      & \textbf{1}     & \textbf{2} & 10      & 20      & 5        & 18       & 15       & 23       & 3        & 12       & 7        & 16       \\
+            F15  & 23        & 24        & 7        & 9        & 18      & 20      & 15      & 16      & 6       & 12      & 5       & 10      & \textbf{1}     & \textbf{2} & 17      & 19      & 11       & 14       & 21       & 22       & 3        & 4        & 8        & 13       \\
+            Mean & 22.400    & 23.733    & 8.567    & 12.867   & 14.867  & 19.733  & 11.267  & 16.333  & 7.000   & 12.267  & 6.533   & 10.733  & \textbf{1.333} & 2.267      & 13.467  & 18.433  & 10.100   & 13.533   & 19.467   & 22.000   & 4.633    & 8.400    & 8.067    & 12.000   \\
+            \bottomrule
+        \end{tabular}
+    \end{adjustbox}
+    \caption{Ranking de algoritmos en tiempo de ejecución - binario}
+    \label{tab:bin-execution_time_ranking}
+\end{sidewaystable}
