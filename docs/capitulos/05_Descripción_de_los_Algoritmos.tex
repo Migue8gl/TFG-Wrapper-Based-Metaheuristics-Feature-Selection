@@ -17,7 +17,7 @@ El proceso típico incluye~\cite{mathew2012genetic}:
     \item Elitismo: selección de los mejores individuos~\cite{mirjalili2019genetic}.
 \end{itemize}
 
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
         \includegraphics[width=0.6\textwidth]{imagenes/ga-working-principle.png}
     \end{center}
@@ -38,7 +38,7 @@ Para las versiones binaria y continua del algoritmo se utilizan diferentes opera
 
 \subsubsection{Cruce binario}
 \textbf{One-point crossover}: Se elige al azar un punto en los cromosomas de ambos progenitores y se designa como "punto de cruce". Los bits a la derecha de ese punto se intercambian entre los dos cromosomas parentales. El resultado son dos descendientes, cada uno con información genética de ambos progenitores~\cite{DAGDIA2020283}.
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
         \includegraphics[width=0.6\textwidth]{imagenes/one-point-crossover.png}
     \end{center}
@@ -47,7 +47,7 @@ Para las versiones binaria y continua del algoritmo se utilizan diferentes opera
 
 \subsubsection{Cruce continuo}
 \textbf{Blend crossover}: Dado dos números reales para cada uno de los genes de los padres al hijo se le asignará un número aleatorio entre ese rango de gen para cada gen que conforme al vector cromosómico~\cite{purduelecture}.
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
         \includegraphics[width=0.6\textwidth]{imagenes/blend-crossover.png}
     \end{center}
@@ -164,7 +164,7 @@ Finalmente, se calcula el vector de prueba:
 \end{equation}
 Donde $\beta$ es un factor de escalado que controla la amplificación de la variación diferencial (mutación más diversa/grande)~\cite{storn_differential_1997}.
 
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
         \includegraphics[width=1\textwidth]{imagenes/de-mutation.png}
     \end{center}
@@ -180,7 +180,7 @@ El cruce implementa una recombinación del vector de prueba $u_i$ y el vector pa
 \end{equation}
 Donde $\mathcal{J}$ es un conjunto de puntos de perturbación. Estos índices pueden ser calculados de muchas formas, por ejemplo, de manera aleatoria.
 
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
         \includegraphics[width=1\textwidth]{imagenes/de-crossover.png}
     \end{center}
@@ -248,7 +248,7 @@ Ha de tenerse en cuenta también que en el proceso de búsqueda, la exploración
 
 Donde $l$ es la iteración actual y $L$ el número máximo de iteraciones.
 
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
         \includegraphics[width=0.8\textwidth]{imagenes/goa-position-convergence.png}
     \end{center}
@@ -284,7 +284,7 @@ Se refiere a la coordinación de velocidad entre individuos de un vecindario. Do
 \end{equation}
 Se refiere a la fuerza de atracción de los individuos hacia el centro de masa del vecindario. Se da por hecho un radio alrededor de cada libélula agrupando su vecindario, pues este es muy importante para el comportamiento de esta. En un enjambre dinámico, las libélulas tienden a alinear su vuelo al tiempo que mantienen una separación y cohesión adecuadas.\\[6pt]
 En un enjambre estático, sin embargo, las alineaciones son muy bajas mientras que la cohesión es alta para atacar a las presas. Por lo tanto, se asigna a las libélulas pesos de alta alineación y baja cohesión cuando exploran el espacio de búsqueda y de baja alineación y alta cohesión cuando explotan el espacio de búsqueda. Para la transición entre exploración y explotación, los radios de vecindad se incrementan proporcionalmente al número de iteraciones~\cite{mirjalili_dragonfly_2016}.
-\begin{figure}[H]
+\begin{figure}[htp]
     \centering
     \includegraphics[width=0.9\textwidth]{imagenes/da-operators.png}
     \caption[Vecindario de libélulas]{Vecindario de libélulas~\cite{mirjalili_dragonfly_2016}.}
@@ -342,7 +342,7 @@ Donde $\vec{a}$ es decrementado linealmente desde $2$ hasta $0$ y $\vec{r}$ es u
 \begin{itemize}
     \item \textbf{Mecanismo de encogimiento del cerco}
           Este mecanismo es conseguido mediante el decremento del valor de $\vec{a}$. El vector $\vec{A}$ es un vector de valores aleatorios en el intervalo $[-a,a]$ donde $a$ es decrementado desde $2$ hasta $0$.
-          \begin{figure}[H]
+          \begin{figure}[htp]
               \centering
               \includegraphics[width=0.5\textwidth]{imagenes/wao-shrinking-circle-prey-mechanism.png}
               \caption[Mecanismo de encogimiento del cerco]{Ataque de red de burbujas usando el mecanismo de encogimiento del cerco~\cite{mirjalili_whale_2016}.}
@@ -350,7 +350,7 @@ Donde $\vec{a}$ es decrementado linealmente desde $2$ hasta $0$ y $\vec{r}$ es u
 
     \item \textbf{Mecanismo de actualización de posición en espiral}
           Este mecanismo calcula la distancia entre la ballena $(x,y)$ y la presa $(x^*, y^*)$. Una ecuación con forma de espiral es creada entonces entre la ballena y la presa para simular el comportamiento de estas al cazar.
-          \begin{figure}[H]
+          \begin{figure}[htp]
               \centering
               \includegraphics[width=0.5\textwidth]{imagenes/spiral-update-position-wao.png}
               \caption[Mecanismo de actualización de posición en espiral]{Ataque de red de burbujas usando el mecanismo de actualización de posición en espiral~\cite{mirjalili_whale_2016}.}
@@ -457,7 +457,7 @@ Los vectores $\vec{A}$ y $\vec{C}$ se calculan:
 \end{equation}
 Donde los componentes del vector $\vec{a}$ son decrementados de $2$ a $0$ linealmente según avanzan las iteraciones. Las variables  $r_1$ y $r_2$ son vectores aleatorios entre $[0,1]$.
 
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
         \includegraphics[width=1\textwidth]{imagenes/grey-wolf-hunt.png}
     \end{center}

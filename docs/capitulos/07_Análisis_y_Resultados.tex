@@ -12,28 +12,28 @@ En esta sección se discutirán y analizarán los resultados para las metaheurí
 \subsection{General}
 En esta sub-sección se presentarán los resultados generales obtenidos con las metaheurísticas binarias. Esto permitirá una visión más amplia de su desempeño y proporcionará intuiciones iniciales sobre la efectividad de cada algoritmo en distintos contextos.
 
-\begin{figure}[htb]
+\begin{figure}[htp]
     \centering
     \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/ionosphere/optimizer_boxplot_fitness_knn_b.png}
     \caption{Boxplot ionosphere en kNN - binario}
     \label{fig:boxplot_ionosphere}
 \end{figure}
 
-\begin{figure}[htb]
+\begin{figure}[htp]
     \centering
     \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/wdbc/optimizer_boxplot_fitness_knn_b.png}
     \caption{Boxplot wdbc en kNN - binario}
     \label{fig:boxplot_wdbc}
 \end{figure}
 
-\begin{figure}[htb]
+\begin{figure}[htp]
     \centering
     \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/diabetes/optimizer_boxplot_fitness_knn_b.png}
     \caption{Boxplot diabetes en kNN - binario}
     \label{fig:boxplot_diabetes}
 \end{figure}
 
-\begin{figure}[htb]
+\begin{figure}[htp]
     \centering
     \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/parkinsons/optimizer_boxplot_fitness_knn_b.png}
     \caption{Boxplot parkinsons en kNN - binario}
@@ -45,28 +45,28 @@ Se muestran algunos de los resultados obtenidos con los algoritmos binarios en \
 Se puede observar que la mayoría de los algoritmos obtienen resultados bastante buenos en los distintos conjuntos de datos, considerándose los valores de fitness suficientemente buenos para considerarlos soluciones de calidad, obviamente considerando cada problema por separado, con las características de cada uno. Es importante destacar que no todos los conjuntos de datos presentan la misma dificultad, ya que distintos tipos de problemas presentan diferentes desafíos. En particular, se puede notar que los algoritmos aplicados al conjunto de datos \textit{ionosphere} (figura \ref{fig:boxplot_ionosphere}) muestran menos variabilidad en sus valores de fitness, reflejándose en una desviación estándar menor en comparación con los resultados de \textit{diabetes} (figura \ref{fig:boxplot_diabetes}) o \textit{parkinsons} (figura \ref{fig:boxplot_parkinsons}). Con ello, queda reflejado como a los algoritmos les cuesta menos optimizar ciertos problemas y suelen ser más estables en estos. Esto puede deberse muchos factores, por ejemplo, mayor cantidad de mínimos locales en algunos problemas en comparación a otros.\\[6pt]
 También se pueden identificar ciertos algoritmos que parecen tener un mejor desempeño en general. Por ejemplo, algoritmos como \textbf{bGWO} y \textbf{bPSO} tienden a obtener resultados muy buenos, mientras que otros como \textbf{ACO} y \textbf{bABCO} parecen ser menos efectivos en los conjuntos de datos analizados.
 
-\begin{figure}[htb]
+\begin{figure}[htp]
     \centering
     \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/ionosphere/optimizer_boxplot_fitness_svc_b.png}
     \caption{Boxplot ionosphere en SVC - binario}
     \label{fig:boxplot_ionospheresvc}
 \end{figure}
 
-\begin{figure}[htb]
+\begin{figure}[htp]
     \centering
     \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/wdbc/optimizer_boxplot_fitness_svc_b.png}
     \caption{Boxplot wdbc en SVC - binario}
     \label{fig:boxplot_wdbcsvc}
 \end{figure}
 
-\begin{figure}[htb]
+\begin{figure}[htp]
     \centering
     \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/diabetes/optimizer_boxplot_fitness_svc_b.png}
     \caption{Boxplot diabetes en SVC - binario}
     \label{fig:boxplot_diabetessvc}
 \end{figure}
 
-\begin{figure}[htb]
+\begin{figure}[htp]
     \centering
     \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/parkinsons/optimizer_boxplot_fitness_svc_b.png}
     \caption{Boxplot parkinsons en SVC - binario}
@@ -80,7 +80,7 @@ Por lo tanto, en las siguientes secciones, se analizarán métricas específicas
 \subsection{Fitness}
 Se procede a comparar y analizar los distintos algoritmos basándonos en la métrica de \textit{fitness}. Como se explica en la ecuación \ref{eq:fitness}, este valor está compuesto por otras dos métricas a tener en cuenta, la precisión o \textit{accuracy} (no confundir con \textit{precision}) y el ratio de reducción de características. La métrica de \textit{fitness} es el marcador más importante para comprobar la calidad de un algoritmo. Pese a ello, más tarde se analizarán ambas métricas que lo componen por separado, pues es interesante obtener una visión más precisa de los resultados.\\[6pt]
 Debe tenerse en cuenta que, al estar compuesto el \textit{fitness} en un $90\%$ por el \textit{accuracy}, ambas métricas estarán altamente relacionadas entre sí en la gran mayoría de los casos. Aún así, ha de tenerse en cuenta el $10\%$ restante.\\[6pt]
-Como puede observarse en la tabla \ref{tab:fitness_svc}, los algoritmos que consiguen mejores resultados son \textbf{ACO}, \textbf{bGWO}, \textbf{bPSO}, \textbf{bFA}, \textbf{bDE}, \textbf{bGA}, \textbf{bCS} y \textbf{bWOA} con el clasificador \textbf{SVC}. Los más destacables en cuanto al número de veces que estos se repiten por ser los mejores por \textit{dataset} son \textbf{bCS}, \textbf{bACO}, \textbf{bDE} y \textbf{bGWO}.\\[6pt]
+Como puede observarse en la tabla \ref{tab:fitness_svc}, los algoritmos que consiguen mejores resultados son \textbf{ACO}, \textbf{bGWO}, \textbf{bPSO}, \textbf{bFA}, \textbf{bDE}, \textbf{bGA}, \textbf{bCS} y \textbf{bWOA} con el clasificador \textbf{SVC}. Los más destacables en cuanto al número de veces que estos se repiten por ser los mejores por \textit{dataset} son \textbf{bCS}, \textbf{ACO}, \textbf{bDE} y \textbf{bGWO}.\\[6pt]
 
 Las tablas de convergencia para \textbf{SVC} presentadas en las figuras \ref{fig:convergencia_svc_1} y \ref{fig:convergencia_svc_2} ofrecen una visión detallada del desempeño de cada algoritmo en los diferentes conjuntos de datos. Es evidente que el algoritmo de referencia, \textbf{bDummy}, muestra consistentemente el peor rendimiento en la mayoría de los casos, con mejoras mínimas o nulas.\\[6pt]
 Es interesante destacar que el algoritmo \textbf{ACO} exhibe variabilidad en su rendimiento, siendo el mejor en algunos conjuntos de datos y el peor en otros. Resulta notable su inferioridad sobre el algoritmo aleatorio en algunos problemas tales como \textit{waveform5000} o \textit{yeast}. Estos observaciones pueden relacionarse con el principio del \textit{no free lunch}, discutido en la sección \ref{sec:teorema-no-free-lunch}, el cual establece que no existe un algoritmo universalmente óptimo para todos los problemas. En cambio, cada problema requiere una solución específica, y es improbable encontrar un algoritmo que supere a todos los demás en todos los contextos.
@@ -89,7 +89,7 @@ Es interesante destacar que el algoritmo \textbf{ACO} exhibe variabilidad en su 
 Los algoritmos clásicos de optimización como el \textbf{bPSO}, \textbf{bGA} o \textbf{bDE} han demostrado ser extremadamente efectivos en una amplia gama de problemas. Su capacidad para explorar y explotar el espacio de búsqueda ha llevado a soluciones de alta calidad en diversas aplicaciones, desde la ingeniería hasta la economía. Estos métodos son conocidos por su robustez, simplicidad y eficacia, lo que los convierte en herramientas valiosas para investigadores y profesionales.\\[6pt]
 Sin embargo, en los últimos años, han surgido nuevos algoritmos de optimización que prometen mejorar aún más estos resultados. Algoritmos como el \textbf{bWOA}, \textbf{bGWO} y \textbf{bCS} han sido diseñados para abordar algunas de las limitaciones de los métodos clásicos, como la convergencia prematura y la exploración insuficiente del espacio de búsqueda. Estos algoritmos modernos incorporan nuevas estrategias y mecanismos de búsqueda inspirados en la naturaleza, que buscan mejorar la eficiencia y la precisión de las soluciones obtenidas.\\[6pt]
 
-\begin{figure}[htb]
+\begin{figure}[htp]
     \centering
     \begin{subfigure}[b]{1\textwidth}
         \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/rankings_knn_avg.png}
@@ -123,7 +123,7 @@ Como ya se ha podido observar en, el algoritmo con mejor puntuación es \textbf{
 En las figuras de \ref{fig:convergencia_svc_2} y \ref{fig:convergencia_svc_1} se aprecia como \textbf{bABCO} muestra rendimientos muy buenos en según que conjunto de datos. Por ejemplo, en \textit{yeast} o en \textit{sonar}, el algoritmo obtiene resultados muy decentes y competitivos siendo estos dos conjuntos de datos de los más complicados de la selección, por convergencia y número de características. Pese a ello, en conjunto, no consigue superar al resto.\\[6pt]
 En cambio \textbf{bGWO} parece un adaptarse bien a todos los problemas seleccionados sin excepción. Es capaz de obtener el mínimo, en el valor \textit{fitness} de evaluación durante el entrenamiento, en casi todos los \textit{datasets}.
 
-\begin{table}[htb]
+\begin{table}[htp]
     \centering
     \begin{tabular}{lllll}
         \toprule
@@ -176,101 +176,7 @@ Para evaluar el rendimiento de los algoritmos, se plantean las siguientes hipót
 
 Si bien no se observan diferencias significativas sobre la mayoría de algoritmos, sí sobre el peor (\textbf{bABCO}) y sobre la versión de \textbf{bGOA} usando \textbf{kNN}. Tanto en la versión que utiliza el clasificador \textbf{SVC} como en \textbf{kNN} se obtienen resultados suficientemente significativos como para poder considerar que los resultados de \textbf{bGWO} frente a los de \textbf{bABCO} no son producto del azar. Por tanto, utilizando un valor crítico de $\alpha=0.05$ se puede rechazar la hipótesis nula.
 
-
-\begin{figure}[htb]
-    \centering
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/breast-cancer/optimizers_fitness_svc.png}
-        \caption{breast-cancer}
-        \label{fig:convergencia_breast_cancer_svc}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/dermatology/optimizers_fitness_svc.png}
-        \caption{dermatology}
-        \label{fig:convergencia_dermatology_svc}
-    \end{subfigure}
-
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/diabetes/optimizers_fitness_svc.png}
-        \caption{diabetes}
-        \label{fig:convergencia_diabetes_svc}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/ecoli/optimizers_fitness_svc.png}
-        \caption{ecoli}
-        \label{fig:convergencia_ecoli_svc}
-    \end{subfigure}
-
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/ionosphere/optimizers_fitness_svc.png}
-        \caption{ionosphere}
-        \label{fig:convergencia_ionosphere_svc}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/iris/optimizers_fitness_svc.png}
-        \caption{iris}
-        \label{fig:convergencia_iris_svc}
-    \end{subfigure}
-
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/parkinsons/optimizers_fitness_svc.png}
-        \caption{parkinsons}
-        \label{fig:convergencia_parkinsons_svc}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/sonar/optimizers_fitness_svc.png}
-        \caption{sonar}
-        \label{fig:convergencia_sonar_svc}
-    \end{subfigure}
-    \caption{Convergencia con SVC parte 1 - binario}
-    \label{fig:convergencia_svc_1}
-\end{figure}
-
-\begin{figure}[htb]
-    \centering
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/spambase-460/optimizers_fitness_svc.png}
-        \caption{spambase-460}
-        \label{fig:convergencia_spambase-460_svc}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/spectf-heart/optimizers_fitness_svc.png}
-        \caption{spectf-heart}
-        \label{fig:convergencia_spectf-heart_svc}
-    \end{subfigure}
-
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/waveform5000/optimizers_fitness_svc.png}
-        \caption{waveform5000}
-        \label{fig:convergencia_waveform5000_svc}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/wdbc/optimizers_fitness_svc.png}
-        \caption{wdbc}
-        \label{fig:convergencia_wdbc_svc}
-    \end{subfigure}
-
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/wine/optimizers_fitness_svc.png}
-        \caption{wine}
-        \label{fig:convergencia_wine_svc}
-    \end{subfigure}
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/yeast/optimizers_fitness_svc.png}
-        \caption{yeast}
-        \label{fig:convergencia_yeast_svc}
-    \end{subfigure}
-
-    \begin{subfigure}[b]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/zoo/optimizers_fitness_svc.png}
-        \caption{zoo}
-        \label{fig:convergencia_zoo_svc}
-    \end{subfigure}
-    \caption{Convergencia con SVC parte 2 - binario}
-    \label{fig:convergencia_svc_2}
-\end{figure}
-
-\begin{sidewaystable}[htb]
+\begin{sidewaystable}[htp]
     \begin{adjustbox}{width=\linewidth}
         \begin{tabular}{llllllllllllllll}
             \toprule
@@ -296,7 +202,7 @@ Si bien no se observan diferencias significativas sobre la mayoría de algoritmo
     \label{tab:fitness_svc}
 \end{sidewaystable}
 
-\begin{sidewaystable}[htb]
+\begin{sidewaystable}[htp]
     \begin{adjustbox}{width=\linewidth}
         \begin{tabular}{llllllllllllllll}
             \toprule
@@ -322,7 +228,7 @@ Si bien no se observan diferencias significativas sobre la mayoría de algoritmo
     \label{tab:fitness_knn}
 \end{sidewaystable}
 
-\begin{sidewaystable}[htb]
+\begin{sidewaystable}[htp]
     \begin{adjustbox}{width=\linewidth}
         \begin{tabular}{lllllllllllllllllllllllllll}
             \toprule
@@ -367,7 +273,7 @@ Si bien es cierto que la mayoría en el top de mejores algoritmos en \textit{acc
 
 Pese a ello, se puede apreciar en la tabla \ref{tab:p-values_accuracy} como algoritmos como \textbf{bPSO} no obtienen resultados significativos con respecto al resto de sus competidores. Si se comparan los p-valores de los algoritmos modernos con los de los clásicos, se aprecia que, a excepción de algunos algoritmos como \textbf{bDummy} (obviamente) y \textbf{ACO}, no hay diferencia estadísticamente suficientemente significativa como para determinar que un grupo de algoritmos es mejor que otro. De hecho, al corregir estos valores usando un post hoc como \textbf{Holms}, las diferencias son incluso menores.\\[6pt]
 
-\begin{figure}[htb]
+\begin{figure}[htp]
     \centering
     \begin{subfigure}[b]{1\textwidth}
         \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/rankings_knn_selected_rate.png}
@@ -416,7 +322,7 @@ Ambos algoritmos por tanto, y pese a sus diferencias, comparten una naturaleza y
 
 Es en cambio en la comparación en la métrica de reducción de características donde se ve que \textbf{bGWO} presenta una diferencia notable con respecto a \textbf{bWOA}. Puede observarse gráficamente en las figuras \ref{fig:svc_selected_rate_gwo_woa_bin} como \textbf{bWOA} reduce considerablemente menos que \textbf{bGWO}. Comprobarse también que las diferencias entre ambos son estadísticamente significativas \ref{tab:pval_corr_gwo_woa-bin}
 
-\begin{table}[htb]
+\begin{table}[htp]
     \centering
     \begin{tabular}{lllll}
         \toprule
@@ -433,7 +339,7 @@ Es en cambio en la comparación en la métrica de reducción de características
 
 Incluso la versión de \textbf{bGWO} que utiliza \textit{kNN} es significativamente más discriminativa con las características seleccionadas que su versión con \textbf{SVC}.
 
-\begin{figure}[htb]
+\begin{figure}[htp]
     \centering
     \begin{subfigure}[b]{0.45\textwidth}
         \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/spectf-heart/SVC_n_features_over_10_evaluations_woa_binary_spectf-heart.jpg}
@@ -466,7 +372,7 @@ Incluso la versión de \textbf{bGWO} que utiliza \textit{kNN} es significativame
     \label{fig:svc_selected_rate_gwo_woa_bin}
 \end{figure}
 
-\begin{table}[htb]
+\begin{table}[htp]
     \centering
     \begin{tabular}{lllll}
         \toprule
@@ -504,7 +410,7 @@ Incluso la versión de \textbf{bGWO} que utiliza \textit{kNN} es significativame
 \end{table}
 
 
-\begin{sidewaystable}[htb]
+\begin{sidewaystable}[htp]
     \centering
     \begin{adjustbox}{width=\linewidth}
         \begin{tabular}{lllllllllllllllllllllllllll}
@@ -534,7 +440,7 @@ Incluso la versión de \textbf{bGWO} que utiliza \textit{kNN} es significativame
     \label{tab:ranking_acc_bin}
 \end{sidewaystable}
 
-\begin{sidewaystable}[htb]
+\begin{sidewaystable}[htp]
     \centering
     \begin{adjustbox}{width=\linewidth}
         \begin{tabular}{lllllllllllllllllllllllllll}
@@ -574,7 +480,7 @@ Incluso la versión de \textbf{bGWO} que utiliza \textit{kNN} es significativame
     \label{tab:p-values_accuracy}
 \end{sidewaystable}
 
-\begin{sidewaystable}[htb]
+\begin{sidewaystable}[htp]
     \centering
     \begin{adjustbox}{width=\linewidth}
         \begin{tabular}{lllllllllllllllllllllllllll}
@@ -614,7 +520,7 @@ Incluso la versión de \textbf{bGWO} que utiliza \textit{kNN} es significativame
     \label{tab:p-values_red}
 \end{sidewaystable}
 
-\begin{sidewaystable}[htb]
+\begin{sidewaystable}[htp]
     \centering
     \begin{adjustbox}{width=\linewidth}
         \begin{tabular}{lllllllllllllllll}
@@ -662,13 +568,13 @@ En esta comparativa, se dejará de lado al algoritmo \textbf{bDummy}, pues es el
 
 \subsubsection{Clásicos vs Modernos}
 Los resultados en cuanto a tiempo de ejecución son variados. Algoritmos como \textbf{bABCO} y \textbf{GA}, siendo clásicos, son los peores según el siguiente ranking \ref{tab:bin-execution_time_ranking}. Otros sin embargo posicionan mucho mejor en comparación, véase \textbf{bPSO} o \textbf{bDE}, que son bastante más rápidos. En cuanto a los modernos, parece haber una diferencia muy grande en la clasificación de \textbf{FA} con respecto al resto.\\[6pt]
-Es muy destacable ver como uno de los mejores en casi todas las métricas anteriormente analizadas, que es el \textbf{bGWO}, aquí es el segundo peor. También apreciar que la mayoría de algoritmos modernos se encuentran en mitad de la clasificación. Destacar que a pesar del pésimo rendimiento de \textbf{bABCO} con respecto al resto de algoritmos, los clásicos \textbf{bPSO}, \textbf{bDE} y \textbf{bACO} son muy eficientes.\\[6pt]
+Es muy destacable ver como uno de los mejores en casi todas las métricas anteriormente analizadas, que es el \textbf{bGWO}, aquí es el segundo peor. También apreciar que la mayoría de algoritmos modernos se encuentran en mitad de la clasificación. Destacar que a pesar del pésimo rendimiento de \textbf{bABCO} con respecto al resto de algoritmos, los clásicos \textbf{bPSO}, \textbf{bDE} y \textbf{ACO} son muy eficientes.\\[6pt]
 Si bien hay diferencias significativas en casi todas las comparativas entre algoritmos, no se observa una tendencia de un grupo siendo mejor que otro. Entre los más lentos hay modernos y clásicos, de igual forma que entre los más rápidos y los que se encuentran en la mitad.
 
 \subsubsection{Mejor vs Resto}
 En cuanto a la clasificación de los algoritmos modernos, llama la atención el rendimiento destacado de \textbf{bFA} en términos de velocidad. Este algoritmo parece sobresalir significativamente en comparación con otros algoritmos modernos y clásicos en lo que respecta al tiempo de ejecución. Este hallazgo podría tener importantes implicaciones para aplicaciones donde la velocidad de convergencia es crucial. Los resultados obtenidos en las comparaciones con el resto de algoritmos son muy similares todos entre sí, dado que todos los p-valores obtenidos indican diferencias significativas \ref{tab:fa_vs_rest-bin_exec_time}
 
-\begin{table}[htb]
+\begin{table}[htp]
     \centering
     \begin{tabular}{lllll}
         \toprule
@@ -709,7 +615,7 @@ Los algoritmos \textbf{bDE} y \textbf{GA} comparten varios conceptos y similitud
 
 Si se observa la tabla \ref{tab:bin-execution_time_ranking}, \textbf{bDE} posiciona por encima de \textbf{GA} en todos y cada uno de los conjuntos de datos utilizados, tanto su versión con \textbf{kNN} como su versión con \textbf{SVC}. Para poder rechazar la hipótesis nula y poder afirmar que \textbf{bDE} es mejor opción en cuanto a velocidad, se observan los p-valores corregidos comparando a \textbf{bDE} con \textbf{GA} en \ref{tab:de_vs_ga-bin_exec_time}.
 
-\begin{table}[htb]
+\begin{table}[htp]
     \centering
     \begin{tabular}{lllll}
         \toprule
@@ -726,7 +632,7 @@ Si se observa la tabla \ref{tab:bin-execution_time_ranking}, \textbf{bDE} posici
 
 Hay una diferencia significativa a favor de \textbf{bDE}, de hecho la hay incluso entre versiones que usan \textbf{kNN} y \textbf{SVC}. Esto indicaría que algoritmos que usan \textbf{kNN} son más rápidos que los que usan \textbf{SVC}, debido a la sencillez de el primero con respecto al segundo y a los parámetros elegidos. Al menos ocurre tal fenómeno en esta comparación y en la anteriormente analizada con \textbf{bFA}. Queda claro además que \textbf{bDE} es mejor que \textbf{bGA} en todos los conjuntos de datos en tiempo de ejecución.
 
-\begin{sidewaystable}[htb]
+\begin{sidewaystable}[htp]
     \centering
     \begin{adjustbox}{width=\linewidth}
         \begin{tabular}{lllllllllllllllllllllllll}
@@ -755,3 +661,270 @@ Hay una diferencia significativa a favor de \textbf{bDE}, de hecho la hay inclus
     \caption{Ranking de algoritmos en tiempo de ejecución - binario}
     \label{tab:bin-execution_time_ranking}
 \end{sidewaystable}
+
+\clearpage
+
+\subsection{Convergencia}
+En esta última sub-sección se hará una comparativa de los diferentes algoritmos observando su capacidad de convergencia.\\[6pt]
+Inicialmente, si se observan las gráficas de convergencia de cada \textit{dataset} \ref{fig:convergencia_svc_1}, \ref{fig:convergencia_svc_2}, \ref{fig:convergencia_knn_1}, \ref{fig:convergencia_knn_2} y se analizan las curvas, se puede decir que absolutamente todos los algoritmos convergen, ya sea a una solución mejor o peor, pero todos lo hacen (incluso \textbf{Dummy}). No hay ninguno en ningún problema que retroceda en cuanto a su valor \textit{fitness} y todos poseen una curva descendiente bastante suave.\\[6pt]
+Con el tiempo, esta curva tiende a alcanzar un límite inferior, como si de una función logarítmica se tratase. Esto indica, que el algoritmo está mejorando cada vez menos porque ha encontrado un óptimo local.\\[6pt]
+Claramente, el peor algoritmo y al que más le cuesta converger es \textbf{bDummy}. Pese a ello, \textbf{bDummy} termina por superar en algunos problemas a \textbf{ACO}, que según que problema parece variar mucho en su proceso optimizatorio.\\[6pt]
+Otro algoritmo que converge más lentamente que el resto es el \textbf{bDA} y el \textbf{bGOA}. Por ejemplo, en el problema de \textit{diabetes}, representado en la figura~\ref{fig:convergencia_diabetes_svc}, se puede apreciar que el \textbf{bDA} es mejor que \textbf{bGOA} y que ambos son los más lentos a excepción del \textbf{bDummy}.    
+
+\begin{figure}[htp]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/breast-cancer/optimizers_fitness_svc.png}
+        \caption{breast-cancer}
+        \label{fig:convergencia_breast_cancer_svc}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/dermatology/optimizers_fitness_svc.png}
+        \caption{dermatology}
+        \label{fig:convergencia_dermatology_svc}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/diabetes/optimizers_fitness_svc.png}
+        \caption{diabetes}
+        \label{fig:convergencia_diabetes_svc}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/ecoli/optimizers_fitness_svc.png}
+        \caption{ecoli}
+        \label{fig:convergencia_ecoli_svc}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/ionosphere/optimizers_fitness_svc.png}
+        \caption{ionosphere}
+        \label{fig:convergencia_ionosphere_svc}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/iris/optimizers_fitness_svc.png}
+        \caption{iris}
+        \label{fig:convergencia_iris_svc}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/parkinsons/optimizers_fitness_svc.png}
+        \caption{parkinsons}
+        \label{fig:convergencia_parkinsons_svc}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/sonar/optimizers_fitness_svc.png}
+        \caption{sonar}
+        \label{fig:convergencia_sonar_svc}
+    \end{subfigure}
+    \caption{Convergencia con SVC parte 1 - binario}
+    \label{fig:convergencia_svc_1}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/spambase-460/optimizers_fitness_svc.png}
+        \caption{spambase-460}
+        \label{fig:convergencia_spambase-460_svc}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/spectf-heart/optimizers_fitness_svc.png}
+        \caption{spectf-heart}
+        \label{fig:convergencia_spectf-heart_svc}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/waveform5000/optimizers_fitness_svc.png}
+        \caption{waveform5000}
+        \label{fig:convergencia_waveform5000_svc}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/wdbc/optimizers_fitness_svc.png}
+        \caption{wdbc}
+        \label{fig:convergencia_wdbc_svc}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/wine/optimizers_fitness_svc.png}
+        \caption{wine}
+        \label{fig:convergencia_wine_svc}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/yeast/optimizers_fitness_svc.png}
+        \caption{yeast}
+        \label{fig:convergencia_yeast_svc}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/zoo/optimizers_fitness_svc.png}
+        \caption{zoo}
+        \label{fig:convergencia_zoo_svc}
+    \end{subfigure}
+    \caption{Convergencia con SVC parte 2 - binario}
+    \label{fig:convergencia_svc_2}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/breast-cancer/optimizers_fitness_knn.png}
+        \caption{breast-cancer}
+        \label{fig:convergencia_breast_cancer_knn}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/dermatology/optimizers_fitness_knn.png}
+        \caption{dermatology}
+        \label{fig:convergencia_dermatology_knn}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/diabetes/optimizers_fitness_knn.png}
+        \caption{diabetes}
+        \label{fig:convergencia_diabetes_knn}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/ecoli/optimizers_fitness_knn.png}
+        \caption{ecoli}
+        \label{fig:convergencia_ecoli_knn}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/ionosphere/optimizers_fitness_knn.png}
+        \caption{ionosphere}
+        \label{fig:convergencia_ionosphere_knn}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/iris/optimizers_fitness_knn.png}
+        \caption{iris}
+        \label{fig:convergencia_iris_knn}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/parkinsons/optimizers_fitness_knn.png}
+        \caption{parkinsons}
+        \label{fig:convergencia_parkinsons_knn}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/sonar/optimizers_fitness_knn.png}
+        \caption{sonar}
+        \label{fig:convergencia_sonar_knn}
+    \end{subfigure}
+    \caption{Convergencia con kNN parte 1 - binario}
+    \label{fig:convergencia_knn_1}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/spambase-460/optimizers_fitness_knn.png}
+        \caption{spambase-460}
+        \label{fig:convergencia_spambase-460_knn}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/spectf-heart/optimizers_fitness_knn.png}
+        \caption{spectf-heart}
+        \label{fig:convergencia_spectf-heart_knn}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/waveform5000/optimizers_fitness_knn.png}
+        \caption{waveform5000}
+        \label{fig:convergencia_waveform5000_knn}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/wdbc/optimizers_fitness_knn.png}
+        \caption{wdbc}
+        \label{fig:convergencia_wdbc_knn}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/wine/optimizers_fitness_knn.png}
+        \caption{wine}
+        \label{fig:convergencia_wine_knn}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/yeast/optimizers_fitness_knn.png}
+        \caption{yeast}
+        \label{fig:convergencia_yeast_knn}
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/zoo/optimizers_fitness_knn.png}
+        \caption{zoo}
+        \label{fig:convergencia_zoo_knn}
+    \end{subfigure}
+    \caption{Convergencia con kNN parte 2 - binario}
+    \label{fig:convergencia_knn_2}
+\end{figure}
+
+\clearpage
+\section{Continuo}
+En esta sección se analizarán las metaheurísticos en su versión real o continua. En este apartado se ha optado por no usar en las comparativas el algoritmo \textbf{ACO} en su versión continua. Dado que \textbf{ACO} fue concebido como un algoritmo binario y que sus implementaciones, pese a haberlas, se alejan bastante de la idea original y distorsionan el algoritmo, se ha tomado la decisión de no incluirlo. Por tanto, se compararan las versiones continuas, que son las originales de cada algoritmo, entre sí. En el caso de \textbf{GA} se hace uso de operadores especiales, según se explicó en anteriores capítulos, para adaptarlo a un contexto de codificación real, siendo el único que requería de una modificación de los operadores.\\[6pt]
+La estrategia seguida en los algoritmos continuos es distinta a los binarios. En los binarios, como se ha mencionado, se eligen características, mientras que otras son rechazadas. Por otro lado, en los continuos no se llegan a descartar características, sino que se ponderan por importancia. Desde este punto de vista, se podría pensar que los continuos tienen mayor maniobrabilidad en el entrenamiento, pues se encargan de ajustar pesos en vez de eliminarlos. A priori, mayor cantidad de información es mejor. El análisis realizado en esta sección tratará de comprobar como se comportan los continuos para el problema de selección de características, partiendo del hecho de que ninguno de ellos ha sido diseñado específicamente para ello, como sí es el caso de los binarios.
+
+\subsection{General}
+De igual forma que en el apartado anterior sobre los binarios, se procede a presentar una serie de \textit{boxplots} los cuales dan una primera visión sobre los algoritmos de manera general. Se presentarán unos pocos de los resultados que se han obtenido para los algoritmos continuos. Para una visión completa de todos los \textit{boxplots} se recomienda ver el anexo.
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/waveform5000/optimizer_boxplot_fitness_knn_r.png}
+    \caption{Boxplot waveform5000 en kNN - real}
+    \label{fig:boxplot_waveform5000}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/yeast/optimizer_boxplot_fitness_knn_r.png}
+    \caption{Boxplot yeast en kNN - real}
+    \label{fig:boxplot_yeast}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/spectf-heart/optimizer_boxplot_fitness_knn_r.png}
+    \caption{Boxplot spectf-heart en kNN - real}
+    \label{fig:boxplot_spectf-heart}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/dermatology/optimizer_boxplot_fitness_knn_r.png}
+    \caption{Boxplot dermatology en kNN - real}
+    \label{fig:boxplot_dermatology}
+\end{figure}
+
+En las figuras presentadas en \ref{fig:boxplot_waveform5000}, \ref{fig:boxplot_yeast}, \ref{fig:boxplot_spectf-heart}, \ref{fig:boxplot_dermatology} pueden observarse los resultados obtenidos para los conjuntos de datos \textbf{waveform5000}, \textbf{yeast}, \textbf{spectf-heart} y \textbf{dermatology} usando el clasificador \textbf{kNN}. \\[6pt]
+A primera vista, destaca ver la \textit{desviación típica} de los resultados de la mayoría de propuestas, pues es bastante pequeña en general. Esto da a entender que los resultados obtenidos en las $10$ pruebas difieren poco entre sí y por tanto son resultados bastante robustos. No se hacen saltos en el valor de \textit{fitness} de una prueba a otra.\\[6pt]
+Destacar como algoritmos muy notorios el \textbf{CS}, \textbf{GWO}, \textbf{BA} y \textbf{PSO}, que parecen obtener muy buenos resultados y ser bastante compactos en cuanto a su desviación. Por el contrario, algoritmos como \textbf{GOA} parecen obtener un rendimiento más bajo, comparable con el algoritmo de referencia \textbf{Dummy}. Si se observan las colas de \textbf{GOA} en las figuras, esta es más larga por arriba, hacia valores muy malos de \textit{fitness}. No representa el grueso de los resultados, pues es la cola, que representa un $25\%$ de los datos, pero sigue siendo un valor más que importante.\\[6pt]
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/waveform5000/optimizer_boxplot_fitness_svc_r.png}
+    \caption{Boxplot waveform5000 en SVC - real}
+    \label{fig:boxplot_waveform5000svc}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/yeast/optimizer_boxplot_fitness_svc_r.png}
+    \caption{Boxplot yeast en SVC - real}
+    \label{fig:boxplot_yeastsvc}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/spectf-heart/optimizer_boxplot_fitness_svc_r.png}
+    \caption{Boxplot spectf-heart en SVC - real}
+    \label{fig:boxplot_spectf-heartsvc}
+\end{figure}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/dermatology/optimizer_boxplot_fitness_svc_r.png}
+    \caption{Boxplot dermatology en SVC - real}
+    \label{fig:boxplot_dermatologysvc}
+\end{figure}
+
+En las figuras \ref{fig:boxplot_dermatologysvc}, \ref{fig:boxplot_waveform5000svc}, \ref{fig:boxplot_yeastsvc} y \ref{fig:boxplot_spectf-heartsvc} usando \textbf{SVC} se observan resultados parecidos, con algunas diferencias, pero con tendencias en algoritmos dominantes y algoritmos pobres muy similares.
+
+\subsubsection{Fitness}

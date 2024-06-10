@@ -13,7 +13,7 @@ y \textit{kNN}~\cite{fix_discriminatory_1989,cover_nearest_1967}, siendo las má
 soporte un método robusto y eficiente y los vecinos más cercanos un método simple, interpretable
 y muy eficaz. Se analizará el resultado entre ambos clasificadores entre otros muchos análisis comparativos.
 
-\begin{figure}[h]
+\begin{figure}[htp]
   \begin{center}
     \includegraphics[width=1\textwidth]{imagenes/scopus_chart.png}
   \end{center}
@@ -21,7 +21,7 @@ y muy eficaz. Se analizará el resultado entre ambos clasificadores entre otros 
   \label{fig:pop_fs}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[htp]
   \begin{center}
     \includegraphics[width=1\textwidth]{imagenes/scopus_chart2.png}
   \end{center}
@@ -35,7 +35,7 @@ También ha de mencionarse la tendencia, prácticamente igual en cuanto a escala
 Y es que las metaheurísticas son algoritmos muy convenientes en la resolución de este tipo de problemas. Los algoritmos analíticos pueden enfrentar dificultades cuando el conjunto de datos tiene un número muy elevado de características, debido a que la cantidad de combinaciones posibles puede hacer que el problema sea inabordable en términos computacionales. Debido a ello, se suelen utilizar algoritmos más rápidos cuya solución no es óptima en términos globales, pero si suficientemente buena.\\[6pt]
 Muchos algoritmos metaheurísticos han sido propuestos a lo largo de los años. Se han escogido los más destacables en cuanto a resultados y más mencionados entre todos ellos, dando una selección de algoritmos metaheurísticos modernos de, en principio, muy alta calidad. No solo son seleccionados algoritmos modernos, sino que también se han escogido una serie de algoritmos más ``clásicos'', pero cuya aplicación es más extendida y con resultados que, de forma empírica, han demostrado ser más que buenos a lo largo de décadas de uso.
 
-\begin{table}[H]
+\begin{table}[htp]
   \parbox{.45\linewidth}{
     \centering
     \begin{tabular}{l}
@@ -84,7 +84,7 @@ El algoritmo de optimización basado en colonias de abejas es considerado otro g
 \section{Propuestas metaheurísticas modernas}
 Con el paso de los años se han ido refinando y probando nuevos tipos de algoritmos. Nuevas inspiraciones, basadas en el comportamiento animal, en teoría social, en teoría física o matemática. También se han creado nuevas versiones de algoritmos clásicos para resolver ciertos problemas que el algoritmo tenía de base o abordar otros nuevos. De cualquier manera, el número de nuevas metaheurísticas no ha dejado de crecer desde su origen, pues sus usos son muy extensos. Desde la selección de características hasta métodos de búsqueda de hiper-parámetros muy eficientes y con muy buenos resultados~\cite{jaderberg2017population}.
 
-\begin{figure}[H]
+\begin{figure}[htp]
   \begin{center}
     \includegraphics[width=1\textwidth]{imagenes/pbt.png}
   \end{center}
@@ -93,7 +93,7 @@ Con el paso de los años se han ido refinando y probando nuevos tipos de algorit
 
 Dada una exhaustiva investigación, que incluye múltiples búsquedas en los últimos años en el motor de búsqueda de Scopus y una extensa lectura de varios estudios (``surveys'')~\cite{dokeroglu_comprehensive_2022, agrawal_metaheuristic_2021, boussaid_survey_2013} enfocados en metaheurísticas aplicadas a la \textbf{selección de características} se ha hecho una lista de los más usados, citados y con mejores resultados.
 
-\begin{figure}[H]
+\begin{figure}[htp]
   \centering
   \begin{subfigure}[b]{0.45\textwidth}
     \includegraphics[width=\textwidth]{imagenes/scopus_chart_Bat_Algorithm.png}
@@ -148,7 +148,7 @@ Otros algoritmos incluidos en la recopilación de este proyecto y que han sido m
 Esta selección de siete metaheurísticas es, según la investigación realizada, la más representativa de la actualidad en cuanto al problema de selección de características se refiere. Su diseño permite fácilmente la modificación del algoritmo para adaptarlos al problema de selección de características, el cual requiere de una codificación discreta de los vectores soluciones. Algunas de las propuestas más novedosas para el problema de selección de características son las de \textbf{bGWO}~\cite{emary_binary_2016}, \textbf{bWOA}~\cite{hussien_s-shaped_2019, mafarja_whale_2018}, \textbf{bDA}~\cite{mafarja_binary_2018}, \textbf{bGOA}~\cite{mafarja_binary_2019}, \textbf{bBA}~\cite{mirjalili_binary_2014}, \textbf{bCS}~\cite{rodrigues_bcs_2013} y \textbf{bFA}~\cite{zhang2016optimal}. Por su parte, los algoritmos clásicos también tienen múltiples versiones ``binarias'' o discretas, véase \textbf{bPSO}~\cite{mirjalili_s-shaped_2013}, \textbf{bABCO}~\cite{kiran_binary_2021} o \textbf{bDE}~\cite{pampara_binary_2006}. Nótese que los algoritmos genéticos no tienen como tal una versión binaria como el resto de algoritmos, pues estos fueron pensados originalmente para resolver problemas discretos. Gracias a que sus operadores son muy flexibles es posible también que acepten una codificación real y que resuelvan ese tipo de problemas con un rendimiento muy alto. En cuanto a los algoritmos de hormigas, tampoco necesitan una modificación especial, pues fueron creados también para resolver problemas discretos. Pese a que \textbf{ACO} tenga versiones del algoritmo con codificación continua~\cite{socha_aco_2004}, en este proyecto se ha preferido obviarlas, pues se considera que alteran demasiado el diseño del algoritmo original como para considerarlo una versión en vez de una metaheurística nueva.\\[6pt]
 Puede observarse que la técnica más empleada para pasar de un algoritmo con codificación continua a codificación binaria es la del uso de \textit{funciones de transferencia}~\cite{he_novel_2022, mirjalili_s-shaped_2013, dokeroglu_comprehensive_2022}. De este tipo de funciones hay varias familias, pero las más usadas sin lugar a duda son las funciones del grupo ``s-shaped'' y ``v-shaped'', nombre que proviene de la forma en ``s'' y ``v'' que tienen este tipo de funciones representadas en una gráfica. La premisa es sencilla, la característica $x_i$ tendrá más probabilidad de ser o $0$ o $1$ dependiendo de su valor tras pasar por la función de transferencia. Se representa por tanto el recorrido desde los valores para la $y\in[0,1]$ como una probabilidad dada una entrada $x$.
 
-\begin{figure}[H]
+\begin{figure}[htp]
   \begin{center}
     \includegraphics[width=0.8\textwidth]{imagenes/transfer_functions.png}
   \end{center}

@@ -1,7 +1,7 @@
 \chapter{Diseño experimental}
 En este capítulo se describirá el proceso de experimentación llevado a cabo, los conjuntos de datos usados para los distintos experimentos y los parámetros usados en cada uno de los algoritmos.\\[6pt]
 Los conjuntos de datos usados son lo siguientes:
-\begin{table}[H]
+\begin{table}[htp]
     \centering
     \label{tab:datasets}
     \begin{tabular}{ l c c c c }
@@ -61,7 +61,7 @@ Donde \textit{acc} quiere decir precisión y \textit{red} el porcentaje de carac
 Se procede a mostrar los parámetros fijados para cada algoritmo (como referencia se han seguido los parámetros de los artículos originales y binarios ya citados para cada algoritmo).\\[6pt]
 Los parámetros fijados en cada uno de los algoritmos de optimización metaheurísticos han sido elegidos por las recomendaciones dadas en los artículos de referencia de los que se sacan, más concretamente los artículos que presentan la versión binaria. Estos son citados en la descripción de cada tabla.
 
-\begin{table}[H]
+\begin{table}[htp]
     \centering
     \begin{tabular}{ c c }
         \hline
@@ -76,7 +76,7 @@ Los parámetros fijados en cada uno de los algoritmos de optimización metaheur�
     \caption{Parámetros de GOA~\cite{mafarja_binary_2019}}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[htp]
     \centering
     \begin{tabular}{ c c }
         \hline
@@ -88,7 +88,7 @@ Los parámetros fijados en cada uno de los algoritmos de optimización metaheur�
     \caption{Parámetros de WOA. En el paper original~\cite{mirjalili_whale_2016} y en el de la versión binaria~\cite{mafarja_whale_2018} no se da un valor. El valor por defecto ha sido sacado de la implementación de~\cite{Li2019AnAW}}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[htp]
     \centering
     \begin{tabular}{ c c }
         \hline
@@ -102,7 +102,7 @@ Los parámetros fijados en cada uno de los algoritmos de optimización metaheur�
     \caption{Parámetros de ABCO~\cite{karaboga_idea_nodate}}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[htp]
     \centering
     \begin{tabular}{ c c }
         \hline
@@ -117,7 +117,7 @@ Los parámetros fijados en cada uno de los algoritmos de optimización metaheur�
     \caption{Parámetros de BA~\cite{mirjalili_binary_2014}}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[htp]
     \centering
     \begin{tabular}{ c c }
         \hline
@@ -131,7 +131,7 @@ Los parámetros fijados en cada uno de los algoritmos de optimización metaheur�
     \caption{Parámetros de PSO~\cite{mirjalili_s-shaped_2013}}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[htp]
     \centering
     \begin{tabular}{ c c }
         \hline
@@ -145,7 +145,7 @@ Los parámetros fijados en cada uno de los algoritmos de optimización metaheur�
     \caption{Parámetros de FA~\cite{zhang2016optimal}}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[htp]
     \centering
     \begin{tabular}{ c c }
         \hline
@@ -161,7 +161,7 @@ Los parámetros fijados en cada uno de los algoritmos de optimización metaheur�
     \caption{Parámetros de GA. Dada la cantidad de variantes y cantidad de valores de parámetros propuestos, estos han sido escogidos de manera empírica y basándose en recomendaciones del tutor del proyecto.}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[htp]
     \centering
     \begin{tabular}{ c c }
         \hline
@@ -176,7 +176,7 @@ Los parámetros fijados en cada uno de los algoritmos de optimización metaheur�
     \caption{Parámetros de ACO~\cite{kashef_advanced_2015}}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[htp]
     \centering
     \begin{tabular}{ c c }
         \hline
@@ -190,7 +190,7 @@ Los parámetros fijados en cada uno de los algoritmos de optimización metaheur�
     \caption{Parámetros de CS~\cite{rodrigues_bcs_2013}}
 \end{table}
 
-\begin{table}[H]
+\begin{table}[htp]
     \centering
     \begin{tabular}{ c c }
         \hline
@@ -203,4 +203,6 @@ Los parámetros fijados en cada uno de los algoritmos de optimización metaheur�
     \caption{Parámetros de DE~\cite{storn_differential_1997}}
 \end{table}
 
-Los algoritmos de \textbf{DA} y \textbf{GWO} no tienen parámetros configurables.
+Los algoritmos de \textbf{DA} y \textbf{GWO} no tienen parámetros configurables.\\[6pt]
+Cada destacar que el algoritmo \textbf{ACO} no se ha añadido al grupo de experimentación de los algoritmos continuos, debido a la naturaleza de su diseño, pues se considera que las versiones existentes en codificación real perturban demasiado el diseño de este, además de que por su propia inspiración no tendría sentido su modificación.\\[6pt]
+Por último, cabe mencionar que se ha introducido un límite de corte en la selección de características. De este método se benefician sobre todo los algoritmos continuos, debido a que estos ajustan los pesos en el rango de valores de $[0,1]$, pero no reducen completamente como los binarios. De esta forma, toda característica que tenga un peso asociado menor a $0.05$ se considera suficientemente irrelevante como para descartarla.

@@ -261,7 +261,7 @@ def plot_grouped_boxplots(data: pd.DataFrame,
     # Set x-axis labels
     plt.xticks(range(1,
                      len(grouped_data) + 1),
-               [dataset for dataset, _ in grouped_data],
+               [x_name.upper() for x_name, _ in grouped_data],
                rotation=45)
 
     # Annotate each median line
@@ -299,15 +299,16 @@ def plot_rankings(ranking: pd.DataFrame,
 
     for x, y in sorted(zip(x_values, y_values), key=lambda x: x[1]):
         color = optimizer_color[x]
-        plt.bar(x, y, color=color,
-                label=f'{x}: {y:.2f}')  # Show ranking with two decimals
+        plt.bar(
+            x.upper(), y, color=color,
+            label=f'{x.upper()}: {y:.2f}')  # Show ranking with two decimals
 
     plt.title(title)
     plt.xlabel('Optimizer')
     plt.ylabel('Mean Ranking')
     plt.legend()  # Show legend with optimizer names and their rankings
-    plt.xticks(rotation=45,
-               ha='right')  # Rotate x-axis labels for better readability
+    plt.xticks(rotation=45, ha='right',
+               fontsize=14)  # Rotate x-axis labels for better readability
     plt.tight_layout()
 
 
@@ -337,7 +338,7 @@ def plot_all_boxplots_optimizers(df_analysis_b: pd.DataFrame,
             f'Boxplot Grouped by Optimizer - {encoding} - {classifier} - {dataset_name}',
             ylabel='Average Fitness')
 
-        plt.xticks(fontsize=12)  # Increase x-label font size
+        plt.xticks(fontsize=14)  # Increase x-label font size
         plt.yticks(fontsize=12)  # Increase y-label font size
         plt.xlabel('Optimizer',
                    fontsize=14)  # Set x-axis label with larger font size

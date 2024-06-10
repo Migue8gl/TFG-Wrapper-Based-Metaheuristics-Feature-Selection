@@ -29,7 +29,7 @@ Resumiendo, la función \textit{fitness} es un tipo particular de función objet
 \subsection{Óptimos globales o locales}
 Se conocen como punto de óptimo global (mínimo o máximo) la solución (o vector hablando en términos matemáticos) cuyo valor para la función objetivo es el más grande en todo el espacio de soluciones posible, es decir, el espacio de búsqueda. Los óptimos locales en cambio son varios, no solo uno como es el global. Son soluciones máximas o mínimas dentro de una región de soluciones.
 
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
         \includegraphics[width=1\textwidth]{imagenes/min-max_points.png}
     \end{center}
@@ -54,7 +54,7 @@ La selección de características es un ejemplo de problema $NP$-Hard y uno de l
 \subsection{Necesidad y motivo}
 El aprendizaje automático se basa en los datos como fuente de aprendizaje. Es indispensable tener un buen conjunto de datos para poder obtener un modelo robusto y preciso. Por norma general o como se diría en inglés \textit{``as a rule of thumb''}, a más grande el conjunto de datos, mayor calidad del modelo. De hecho hay una correlación inmediata con esta sentencia.
 
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
         \includegraphics[width=1\textwidth]{imagenes/learning_from_data_vc.png}
     \end{center}
@@ -96,7 +96,7 @@ La selección de características ayuda a una serie de factores como son la inte
 \subsection{Maldición de la dimensionalidad}
 El término fue acuñado por Bellman en $1961$~\cite{bellman1961adaptive}. Este fenómeno ocurre cuando la dimensionalidad de los datos es muy grande. En un espacio de características de alta dimensión, es común que los datos estén muy dispersos, lo que significa que hay muy pocos datos en comparación con la cantidad posible de características. Esto dificulta que los modelos representen correctamente todo el espacio de características~\cite{peng_interpreting_2024}.
 
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
         \includegraphics[width=1\textwidth]{imagenes/curse-dimen-example.png}
     \end{center}
@@ -108,7 +108,7 @@ Además, en espacios de alta dimensión, la medición de distancias puede volver
 Dentro de la optimización hay muchos tipos de métodos, dentro de los pseudoaleatorios pueden encontrarse las metaheurísticas. Estas son algoritmos basados en una abstracción de mayor nivel de la \textbf{heurísticas}. Mientras que las heurísticas se apoyan en el conocimiento específico del campo en el que se encuentra el problema, y están restringidas a su dominio, las metaheurísticas son aplicables a todo tipo de problemas, independientemente de su área de optimización~\cite{bianchi2009survey}. Es cierto que hay algoritmos que son más convenientes para ciertos problemas que otros, pero su aplicación es generalizada. Normalmente, las metaheurísticas son diseñadas a siguiendo una inspiración en la naturaleza, ya sea en fenómenos físicos o en el comportamiento animal. Ejemplo de estos son algoritmos como el \textit{Búsqueda Cuckoo}, \textit{Enfriamiento Simulado} o incluso \textit{Algoritmos Genéticos}.\\[6pt]
 Las metaheurísticas son especialmente útiles en problemas cuya resolución no es factible debido a altos costos computacionales, ya sea porque es posible analíticamente pero computacionalmente costoso, o porque el problema no es abordable mediante algoritmos convencionales. Son capaces de encontrar óptimos locales lo suficientemente aceptables, soluciones no óptimas, pero si muy buenas~\cite{bianchi2009survey}.
 
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
         \includegraphics[width=0.8\textwidth]{imagenes/mh_euler_graph.png}
     \end{center}
@@ -123,7 +123,7 @@ No existe un equilibrio \textit{de facto} entre exploración y explotación en l
 \section{Teorema No Free Lunch}\label{sec:teorema-no-free-lunch}
 El Teorema de ``No Free Lunch'' (NFL) establece que, en promedio, ningún algoritmo de búsqueda puede superar a otros algoritmos en la búsqueda de todas las funciones objetivo posibles. En otras palabras, no existe un algoritmo universalmente óptimo que pueda dominar en todos los problemas de búsqueda. Esto implica que, si un algoritmo es efectivo para un conjunto particular de problemas, es probable que no lo sea para otros~\cite{585893}.\\[6pt]
 Relacionar este teorema con las metaheurísticas implica reconocer que no hay una única metaheurística que sea la mejor para todos los problemas de optimización. Cada problema puede tener características únicas que lo hacen más o menos adecuado para ciertas metaheurísticas. Por lo tanto, en lugar de buscar una solución universal, las metaheurísticas se centran en explorar y explotar diferentes áreas del espacio de búsqueda para encontrar soluciones aceptables o incluso óptimas para problemas específicos.\\[6pt]
-Pese a ello, las suposiciones de este tipo de teoremas, como conjuntos de datos extraídos de una distribución uniforme sobre todos los conjuntos de datos posibles, están completamente desalineadas con el mundo real, donde los datos suelen ser altamente estructurados y no están uniformemente muestreados~\cite{goldblum2023free}.\\[6pt]
+Pese a ello, las suposiciones de este tipo de teoremas, como conjuntos de datos extraídos de una distribución uniforme sobre todos los conjuntos de datos posibles, están completamente desalineadas con el mundo real, donde los datos suelen ser altamente estructurados y no están uniformemente muestreados~\cite{goldblum2023free, garcia-martinez_arbitrary_2012}.\\[6pt]
 De esta forma y faltando evidencia concluyente al respecto, es interesante mencionar el \textbf{NFL}, pero sin llegar a negar la posibilidad de nuevas y más precisas interpretaciones.
 
 \section{Aprendizaje automático}
@@ -134,7 +134,7 @@ Hay muchas formas de estructurar los datos y muchos tipos de algoritmos acorde a
 \subsection{Aprendizaje supervisado}
 Este subtipo de aprendizaje automático se caracteriza por tener un conjunto de datos sobre los que se entrena y una salida esperada (etiquetas) para cada punto de los datos~\cite{sah2020machine}. Es bastante costoso porque etiquetar cada dato es una tarea laboriosa y poco escalable.
 
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
         \includegraphics[width=1\textwidth]{imagenes/ml-supervised-learning.png}
     \end{center}
@@ -144,7 +144,7 @@ Este subtipo de aprendizaje automático se caracteriza por tener un conjunto de 
 \subsection{Aprendizaje no supervisado}
 Cuando los datos solo vienen en forma de entrada y no se tiene ninguna salida (no hay etiquetas) entonces se trata de un aprendizaje no supervisado. Los algoritmos de este tipo se basan en la diferenciación de los datos mediante los patrones subyacentes que puedan encontrar. Son comunes en el aprendizaje no supervisado los algoritmos de \textit{clustering}~\cite{sah2020machine}.
 
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
         \includegraphics[width=0.7\textwidth]{imagenes/ml_unsupervised-learning.png}
     \end{center}
@@ -156,7 +156,7 @@ Las máquinas de vectores de soportes o \textit{SVM} fueron introducidas por pri
 Las máquinas de vectores de soporte son algoritmos cuya principal característica se basa en la creación de un hiperplano o conjunto de hiperplanos en un espacio $n$-dimensional~\cite{scikit-learn-svm,}. Este hiperplano o hiperplanos es elegido de manera que maximice el margen entre los puntos de datos de todas las clases a predecir. El margen es la distancia entre el hiperplano y los puntos de datos más cercanos de cada clase, estos puntos se denominan vectores de soporte. De esta manera se consigue minimizar el error de generalización~\cite{hastie2009elements}.\\[6pt]
 La idea más intuitiva es, que al haber más espacio entre los puntos de distintas clases, hay más posibilidad de que los puntos no vistos, los puntos a predecir, caigan en zonas correctas.
 
-\begin{figure}[H]
+\begin{figure}[htp]
     \begin{center}
         \includegraphics[width=0.5\textwidth]{imagenes/svm-margin.png}
     \end{center}
@@ -166,5 +166,19 @@ La idea más intuitiva es, que al haber más espacio entre los puntos de distint
 \subsection{K-nearest neighbors}
 El algoritmo de $k$ vecinos más cercanos fue presentado en \cite{fix_discriminatory_1989} por Evelyn Fix y Joseph Hodges, y más tarde ampliado en \cite{cover_nearest_1967} por Thomas Cover.\\[6pt]
 Puede ser utilizado para regresión o clasificación, pero su uso suele darse más en este último problema. Este algoritmo ofrece una premisa sencilla, la clase de un punto $p$ dependerá de cuál sea la clase mayoritaria dentro del subconjunto de $k$ vecinos más cercanos~\cite{10.1007/978-3-540-39964-3_62}.\\[6pt]
+El funcionamiento del algoritmo se puede resumir en los siguientes pasos:
+
+\begin{enumerate}
+    \item \textbf{Selección del valor de $k$}: El usuario debe determinar el número de vecinos a considerar. Este número puede variar dependiendo del problema y los datos específicos.
+
+    \item \textbf{Cálculo de distancias}: Para un punto nuevo, se calculan las distancias a todos los puntos en el conjunto de datos de entrenamiento. Las distancias comúnmente se calculan utilizando métricas como la distancia euclidiana, aunque otras métricas (como la distancia de Manhattan o la distancia de Minkowski) pueden ser utilizadas dependiendo del contexto y las características de los datos.
+
+    \item \textbf{Identificación de los $k$ vecinos más cercanos}: Una vez calculadas las distancias, se seleccionan los $k$ puntos del conjunto de datos de entrenamiento que estén más cerca del punto nuevo.
+
+    \item \textbf{Asignación de clase (para clasificación)}: La clase del nuevo punto se determina por la mayoría de votos entre los $k$ vecinos seleccionados. En otras palabras, se asigna la clase más común entre estos vecinos.
+
+    \item \textbf{Predicción de valor (para regresión)}: En el caso de la regresión, el valor predicho para el nuevo punto es el promedio (o alguna otra función agregada) de los valores de los $k$ vecinos seleccionados.
+\end{enumerate}
+
 Valores mayores de $k$ incrementan la varianza, pero decrementan el sesgo (equilibrio sesgo-varianza~\cite{Mostafa2012}). De forma inversa, a menor $k$ mayor sesgo y menor varianza.\\[6pt]
 Otra forma de verlo es que si $k=1$ (el valor mínimo), el modelo entrenado será muy complejo, pues cada punto puede variar de clase por mínimo que sea el cambia en su entorno. Es un modelo que tiende a sobre-ajustar. Con $k=n$ el modelo es lo más simple posible, al tener en cuenta absolutamente todos los puntos, la clasificación será siempre la de la clase más repetida.
