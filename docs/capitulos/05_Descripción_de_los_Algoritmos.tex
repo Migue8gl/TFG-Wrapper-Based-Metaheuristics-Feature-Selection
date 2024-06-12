@@ -62,10 +62,10 @@ El operador más básico y clásico consiste en cambiar un bit arbitrario de un 
 Esta mutación se utiliza especialmente en problemas en los que se busca una exploración más amplia del espacio de búsqueda, ya que la distribución de Cauchy tiene colas pesadas y puede generar valores alejados del centro con mayor probabilidad en comparación con una distribución normal:
 \begin{equation}
     m(x_i) =
-      \begin{cases}
-        (2r)^{\frac{1}{\eta+1}}-1 & \text{if p $\leq 0.5$}\\
-        1-(2r)^{\frac{1}{\eta+1}} & \text{if p $> 0.5$}\\
-      \end{cases}       
+    \begin{cases}
+        (2r)^{\frac{1}{\eta+1}}-1 & \text{if p $\leq 0.5$} \\
+        1-(2r)^{\frac{1}{\eta+1}} & \text{if p $> 0.5$}    \\
+    \end{cases}
 \end{equation}
 Esta función de mutación está diseñada para generar una exploración más amplia del espacio de búsqueda, con la posibilidad de generar valores más alejados del centro de la distribución. La variable $r$ es un número a aleatorio y $\eta$ es una variable de control.
 
@@ -171,7 +171,7 @@ Donde $\beta$ es un factor de escalado que controla la amplificación de la vari
     \caption[Mutación en DE]{Esta figura ha sido seleccionada de \cite{10.5555/1557464}. Muestra de manera gráfica en un espacio bidimensional como funciona el operador de mutación y cómo se crea el ``trial vector''.}
 \end{figure}
 
-Una ventaja que tiene el uso de diferencias de vectores en la mutación, es que si todos lo individuos tienen la misma probabilidad de selección, la media de la distribución será cero. Con ello se consigue mantener la deriva genética lo más pequeña posible. La deriva genética es un proceso estocástico en el que la frecuencia de alelos (forma alternativa de un gen) en una población cambia aleatoriamente con el tiempo debido a evento aleatorios. Esto puede llevar a cambios en la composición genética de la población a lo largo de las generaciones, especialmente en poblaciones pequeñas. Por tanto, una media distinta de cero daría pie a sesgos en la deriva genética~\cite{genetic-drift, 10.5555/1557464}.
+Una ventaja del uso de diferencias de vectores en la mutación es que ayuda a mantener la forma de la distribución en lugar de centrarse en el centro, como hacen muchos operadores de cruce. Además, al tener una media de la distribución cercana a cero, se minimiza la deriva genética~\cite{10.5555/1557464}. Este fenómeno puede causar cambios en la composición genética de la población a lo largo de las generaciones, especialmente en poblaciones pequeñas. Por lo tanto, mantener una media cercana a cero ayuda a prevenir sesgos en la deriva genética.
 
 \subsubsection{Cruce}
 El cruce implementa una recombinación del vector de prueba $u_i$ y el vector padre $x_i$ para producir un vector hijo $x^\prime_i$.
@@ -192,7 +192,7 @@ Si el vector hijo, al evaluarlo, tiene un valor \textbf{fitness} mejor que el ve
 
 \section{Optimización por colonia de abejas artificial}
 \subsection{Introducción}
-El algoritmo del enjambre de abejas artificial es un algoritmo estocástico evolutivo, al igual que los ya mencionados anteriormente, que se basa en el comportamientos de los enjambres de abejas para la optimización de problemas. El modelo usado en este algoritmo depende de tres factores, las fuentes de alimento, las abejas buscadores empleadas y las abejas buscadoras desempleadas (hay dos tipos)~\cite{karaboga_idea_nodate}.\\[6pt]
+El algoritmo del enjambre de abejas artificial es un algoritmo estocástico evolutivo, al igual que los ya mencionados anteriormente, que se basa en el comportamientos de los enjambres de abejas para la optimización de problemas. El modelo usado en este algoritmo depende de tres factores, las fuentes de alimento, las abejas buscadores empleadas y las abejas buscadoras libres (hay dos tipos)~\cite{karaboga_idea_nodate}.\\[6pt]
 Para la versión binaria se utilizan funciones de transferencia.
 
 \subsection{Funcionamiento y Operadores}
@@ -204,6 +204,12 @@ Los operadores del algoritmo son los siguientes:
 
     \item \textbf{Abejas Exploradoras (Scout Bees)}: Son abejas que buscan nuevas fuentes de alimento sin información previa. Su rol es crucial para la exploración y el descubrimiento de nuevas fuentes de alimento. Cuando una fuente se agota o no mejora después de cierto número de intentos (determinado por un parámetro de control llamado "límite"), una abeja empleada puede convertirse en exploradora.
 \end{enumerate}
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{imagenes/abco.png}
+    \caption[Comportamiento de ABCO]{Figura obtenida de~\cite{Karaboga2009108}.}
+\end{figure}
 
 Estos operadores trabajan en un ciclo repetitivo donde las abejas empleadas primero van a las fuentes de alimento y actualizan la información sobre su rentabilidad. Luego, las abejas observadoras seleccionan fuentes de alimento basadas en esta información actualizada y las abejas exploradoras buscan nuevas fuentes~\cite{karaboga_idea_nodate}. Este proceso se repite hasta cumplir con los criterios de terminación del algoritmo.
 
@@ -238,7 +244,7 @@ Esto significa que PSO no tienen en cuenta al resto de agentes, mientras que GAO
 Los parámetros $c_1, c_2$ tienen dos propósitos:
 \begin{itemize}
     \item $c_1$ $\rightarrow$ Reduce el movimiento del enjambre entero alrededor del objetivo, es decir, maneja la relación entre exploración y explotación para el conjunto global de soluciones.
-    \item $c_2$ $rightarrow$ Reduce la zona de comfort y las regiones de repulsión y atracción. $s$ es la función que decide si un agente debe sentirse atraído o repelido al objetivo, mientras que $\frac{ub_d-lb_d}{2}$ decrece de manera lineal el espacio de búsqueda a medida que $c_2$ decrece.
+    \item $c_2$ $\rightarrow$ Reduce la zona de comfort y las regiones de repulsión y atracción. $s$ es la función que decide si un agente debe sentirse atraído o repelido al objetivo, mientras que $\frac{ub_d-lb_d}{2}$ decrece de manera lineal el espacio de búsqueda a medida que $c_2$ decrece.
 \end{itemize}
 
 Ha de tenerse en cuenta también que en el proceso de búsqueda, la exploración debe ir antes que la explotación. En los saltamontes sin embargo, la fase explotativa que es la \textbf{ninfa} es la que se da primero. Por ello el parámetro $c$ debe decrecer a medida que las iteraciones sobre el algoritmo van pasando. Este mecanismo hace que se promueva la explotación a medida que las iteraciones se incrementan, ya que se va reduciendo cada vez más el movimiento general del enjambre y se reduce la zona de comfort. $c$ se actualiza por tanto así:

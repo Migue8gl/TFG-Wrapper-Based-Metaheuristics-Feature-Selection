@@ -3,27 +3,26 @@ En este capítulo se describirá el proceso de experimentación llevado a cabo, 
 Los conjuntos de datos usados son lo siguientes:
 \begin{table}[htp]
     \centering
-    \label{tab:datasets}
     \begin{tabular}{ l c c c c }
         \hline
         \textbf{Dataset} & \textbf{Instancias} & \textbf{Características} & \textbf{Clases} & \textbf{Área} \\ \hline
-        breast-cancer    & 286                 & 9                        & 2               & Medicina      \\
-        ecoli            & 336                 & 7                        & 8               & Biología      \\
-        parkinsons       & 200                 & 22                       & 2               & Medicina      \\
-        spectf-heart     & 348                 & 44                       & 2               & Medicina      \\
-        wine             & 182                 & 13                       & 3               & Alimentación  \\
-        dermatology      & 366                 & 34                       & 6               & Medicina      \\
-        ionosphere       & 350                 & 34                       & 2               & Meteorología  \\
         sonar            & 207                 & 60                       & 2               & Biología      \\
-        waveform5000     & 5000                & 40                       & 3               & Física        \\
-        yeast            & 1483                & 8                        & 10              & Biología      \\
-        diabetes         & 768                 & 8                        & 2               & Medicina      \\
-        iris             & 149                 & 4                        & 3               & Biología      \\
         spambase-460     & 459                 & 54                       & 2               & Informática   \\
+        spectf-heart     & 348                 & 44                       & 2               & Medicina      \\
+        waveform5000     & 5000                & 40                       & 3               & Física        \\
+        ionosphere       & 350                 & 34                       & 2               & Meteorología  \\
+        dermatology      & 366                 & 34                       & 6               & Medicina      \\
+        zoo              & 101                 & 18                       & 7               & Biología      \\
+        parkinsons       & 200                 & 22                       & 2               & Medicina      \\
         wdbc             & 568                 & 29                       & 2               & Medicina      \\
-        zoo              & 101                 & 18                       & 7               & Biología      \\ \hline
+        wine             & 182                 & 13                       & 3               & Alimentación  \\
+        breast-cancer    & 286                 & 9                        & 2               & Medicina      \\
+        diabetes         & 768                 & 8                        & 2               & Medicina      \\
+        ecoli            & 336                 & 7                        & 8               & Biología      \\
+        yeast            & 1483                & 8                        & 10              & Biología      \\
+        iris             & 149                 & 4                        & 3               & Biología      \\ \hline
     \end{tabular}
-    \caption{Información de los conjuntos de datos}
+    \caption{Información de los conjuntos de datos ordenada por número de características}
     \label{tab:datasets_info}
 \end{table}
 Se han seleccionado los conjuntos de datos descritos en la tabla \ref{tab:datasets_info} por los siguientes motivos:
@@ -63,146 +62,37 @@ Los parámetros fijados en cada uno de los algoritmos de optimización metaheur�
 
 \begin{table}[htp]
     \centering
-    \begin{tabular}{ c c }
+    \begin{tabular}{c|c}
         \hline
-        \textbf{Parámetro} & \textbf{Valor} \\
+        \textbf{Algoritmo}                 & \textbf{Parámetros}                                                                                                                          \\
         \hline
-        $c_{min}$          & 0.00001        \\
-        $c_{max}$          & 1              \\
-        F                  & 0.5            \\
-        L                  & 1.5            \\
-        \hline
-    \end{tabular}
-    \caption{Parámetros de GOA~\cite{mafarja_binary_2019}}
-\end{table}
-
-\begin{table}[htp]
-    \centering
-    \begin{tabular}{ c c }
-        \hline
-        \textbf{Parámetro} & \textbf{Valor} \\
-        \hline
-        Parámetro espiral  & 1              \\
+        GOA~\cite{mafarja_binary_2019}     & \begin{tabular}[c]{@{}c@{}}$c_{min}$: 0.00001\ $c_{max}$: 1\ F: 0.5\ L: 1.5\end{tabular}         \\
+        WOA~\cite{Li2019AnAW}              & Parámetro espiral: 1                                                                                                                         \\
+        ABCO~\cite{karaboga_idea_nodate}   & \begin{tabular}[c]{@{}c@{}}Abeja empleada: 3\ Abeja vigilante: 3\ Límite: 3\end{tabular}                                                     \\
+        BA~\cite{mirjalili_binary_2014}    & \begin{tabular}[c]{@{}c@{}}$\alpha$: 0.9\ $\gamma$: 0.9\ $f_{min}$: 0\ $f_{max}$: 2\end{tabular} \\
+        PSO~\cite{mirjalili_s-shaped_2013} & \begin{tabular}[c]{@{}c@{}}w: 0.9\ $c_1$: 2\ $c_2$: 2\end{tabular}                                                                           \\
+        FA~\cite{zhang2016optimal}         & \begin{tabular}[c]{@{}c@{}}$\alpha_0$: 0.5\ $\beta_0$: 0.2\ $\gamma_0$: 1\end{tabular}                                                       \\
+        GA\cite{10.5555/522098}            & \begin{tabular}[c]{@{}c@{}}Ratio de cruce: 1\ Ratio de mutación: 0.05\ Elite: 2\ $\eta$: 1\ $\alpha$: $\sqrt{0.3}$\end{tabular}  \\
+        ACO~\cite{kashef_advanced_2015}    & \begin{tabular}[c]{@{}c@{}}$\alpha$: 1\ Q: 1\ Feromona inicial: 0.1\ Ratio de evaporación: 0.049\end{tabular}                                \\
+        CS~\cite{rodrigues_bcs_2013}       & \begin{tabular}[c]{@{}c@{}}Ratio de descubrimiento: 0.25\ $\alpha$: 1\ $\lambda$: 1.5\end{tabular}                                           \\
+        DE~\cite{storn_differential_1997}  & \begin{tabular}[c]{@{}c@{}}F: 0.5\ Cr: 0.1\end{tabular}                                                                                      \\
         \hline
     \end{tabular}
-    \caption{Parámetros de WOA. En el paper original~\cite{mirjalili_whale_2016} y en el de la versión binaria~\cite{mafarja_whale_2018} no se da un valor. El valor por defecto ha sido sacado de la implementación de~\cite{Li2019AnAW}}
+    \caption{Parámetros de diferentes algoritmos de optimización}
 \end{table}
 
-\begin{table}[htp]
-    \centering
-    \begin{tabular}{ c c }
-        \hline
-        \textbf{Parámetro} & \textbf{Valor} \\
-        \hline
-        Abeja empleada     & 3              \\
-        Abeja vigilante    & 3              \\
-        Límite             & 3              \\
-        \hline
-    \end{tabular}
-    \caption{Parámetros de ABCO~\cite{karaboga_idea_nodate}}
-\end{table}
-
-\begin{table}[htp]
-    \centering
-    \begin{tabular}{ c c }
-        \hline
-        \textbf{Parámetro} & \textbf{Valor} \\
-        \hline
-        $\alpha$           & 0.9            \\
-        $\gamma $          & 0.9            \\
-        $f_{min}$          & 0              \\
-        $f_{max}$          & 2             \\
-        \hline
-    \end{tabular}
-    \caption{Parámetros de BA~\cite{mirjalili_binary_2014}}
-\end{table}
-
-\begin{table}[htp]
-    \centering
-    \begin{tabular}{ c c }
-        \hline
-        \textbf{Parámetro} & \textbf{Valor} \\
-        \hline
-        w                  & 0.9            \\
-        $c_1$              & 2              \\
-        $c_2$              & 2              \\
-        \hline
-    \end{tabular}
-    \caption{Parámetros de PSO~\cite{mirjalili_s-shaped_2013}}
-\end{table}
-
-\begin{table}[htp]
-    \centering
-    \begin{tabular}{ c c }
-        \hline
-        \textbf{Parámetro} & \textbf{Valor} \\
-        \hline
-        $\alpha_0$         & 0.5           \\
-        $\beta_0$          & 0.2            \\
-        $\gamma_0$         & 1              \\
-        \hline
-    \end{tabular}
-    \caption{Parámetros de FA~\cite{zhang2016optimal}}
-\end{table}
-
-\begin{table}[htp]
-    \centering
-    \begin{tabular}{ c c }
-        \hline
-        \textbf{Parámetro} & \textbf{Valor} \\
-        \hline
-        Ratio de cruce     & 1              \\
-        Ratio de mutación  & 0.05           \\
-        Elite              & 2              \\
-        $\eta$             & 1              \\
-        $\alpha$           & $\sqrt{0.3}$   \\
-        \hline
-    \end{tabular}
-    \caption{Parámetros de GA. Dada la cantidad de variantes y cantidad de valores de parámetros propuestos, estos han sido escogidos de manera empírica y basándose en recomendaciones del tutor del proyecto.}
-\end{table}
-
-\begin{table}[htp]
-    \centering
-    \begin{tabular}{ c c }
-        \hline
-        \textbf{Parámetro}   & \textbf{Valor} \\
-        \hline
-        $\alpha$             & 1              \\
-        Q                    & 1              \\
-        Feromona inicial     & 0.1            \\
-        Ratio de evaporación & 0.049          \\
-        \hline
-    \end{tabular}
-    \caption{Parámetros de ACO~\cite{kashef_advanced_2015}}
-\end{table}
-
-\begin{table}[htp]
-    \centering
-    \begin{tabular}{ c c }
-        \hline
-        \textbf{Parámetro}      & \textbf{Valor} \\
-        \hline
-        Ratio de descubrimiento & 0.25           \\
-        $\alpha$                & 1              \\
-        $\lambda$               & 1.5            \\
-        \hline
-    \end{tabular}
-    \caption{Parámetros de CS~\cite{rodrigues_bcs_2013}}
-\end{table}
-
-\begin{table}[htp]
-    \centering
-    \begin{tabular}{ c c }
-        \hline
-        \textbf{Parámetro} & \textbf{Valor} \\
-        \hline
-        F                  & 0.5            \\
-        Cr                 & 0.1            \\
-        \hline
-    \end{tabular}
-    \caption{Parámetros de DE~\cite{storn_differential_1997}}
-\end{table}
-
-Los algoritmos de \textbf{DA} y \textbf{GWO} no tienen parámetros configurables.\\[6pt]
+Dada la cantidad de variantes y cantidad de valores de parámetros propuestos en \textbf{GA}, estos han sido escogidos de manera empírica y basándose en recomendaciones del tutor del proyecto. En \textbf{WOA}, en el paper original~\cite{mirjalili_whale_2016} y en el de la versión binaria~\cite{mafarja_whale_2018}, no se da un valor. El valor por defecto ha sido sacado de la implementación de~\cite{Li2019AnAW}. Los algoritmos de \textbf{DA} y \textbf{GWO} no tienen parámetros configurables.\\[6pt]
 Cada destacar que el algoritmo \textbf{ACO} no se ha añadido al grupo de experimentación de los algoritmos continuos, debido a la naturaleza de su diseño, pues se considera que las versiones existentes en codificación real perturban demasiado el diseño de este, además de que por su propia inspiración no tendría sentido su modificación.\\[6pt]
-Por último, cabe mencionar que se ha introducido un límite de corte en la selección de características. De este método se benefician sobre todo los algoritmos continuos, debido a que estos ajustan los pesos en el rango de valores de $[0,1]$, pero no reducen completamente como los binarios. De esta forma, toda característica que tenga un peso asociado menor a $0.05$ se considera suficientemente irrelevante como para descartarla.
+Por último, cabe mencionar que se ha introducido un límite de corte en la selección de características. De este método se benefician sobre todo los algoritmos continuos, debido a que estos ajustan los pesos en el rango de valores de $[0,1]$, pero no reducen completamente como los binarios. De esta forma, toda característica que tenga un peso asociado menor a $0.05$ se considera suficientemente irrelevante como para descartarla.\\[6pt]
+
+Para evaluar el rendimiento de los algoritmos, se plantean las siguientes hipótesis:
+
+\textbf{Hipótesis nula (\(H_0\))}:
+\begin{equation}
+    H_0: \text{Rendimiento}_{Alg_1} \leq \text{Rendimiento}_{Alg_2}
+\end{equation}
+
+\textbf{Hipótesis alternativa (\(H_1\))}:
+\begin{equation}
+    H_1: \text{Rendimiento}_{Alg_1} > \text{Rendimiento}_{Alg_2}
+\end{equation}
