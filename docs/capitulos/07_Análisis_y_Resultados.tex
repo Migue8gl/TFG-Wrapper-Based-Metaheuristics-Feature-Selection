@@ -67,12 +67,85 @@ También es apreciable que los mejores algoritmos producen mejores resultados de
 Se muestran algunos de los resultados obtenidos con los algoritmos binarios en \ref{fig:boxplot_ionosphere}, \ref{fig:boxplot_wdbc}, \ref{fig:boxplot_diabetes} y \ref{fig:boxplot_parkinsons} con el clasificador \textbf{kNN}. Obviamente, no es posible incluir gráficas para todas las combinaciones posibles sin saturar el capítulo; para ello, se remite al lector al capítulo de apéndices.\\[6pt]
 Se puede observar que la mayoría de los algoritmos obtienen resultados bastante buenos en los distintos conjuntos de datos, considerándose los valores de fitness suficientemente buenos para considerarlos soluciones de calidad, obviamente considerando cada problema por separado, con las características de cada uno. Es importante destacar que no todos los conjuntos de datos presentan la misma dificultad, ya que distintos tipos de problemas presentan diferentes desafíos. En particular, se puede notar que los algoritmos aplicados al conjunto de datos \textit{ionosphere} (figura \ref{fig:boxplot_ionosphere}) muestran menos variabilidad en sus valores de fitness, reflejándose en una desviación estándar menor en comparación con los resultados de \textit{diabetes} (figura \ref{fig:boxplot_diabetes}) o \textit{parkinsons} (figura \ref{fig:boxplot_parkinsons}). Con ello, queda reflejado como a los algoritmos les cuesta menos optimizar ciertos problemas y suelen ser más estables en estos. Esto puede deberse muchos factores, por ejemplo, mayor cantidad de mínimos locales en algunos problemas en comparación a otros.\\[6pt]
 También se pueden identificar ciertos algoritmos que parecen tener un mejor desempeño en general. Por ejemplo, algoritmos como \textbf{bGWO} y \textbf{bPSO} tienden a obtener resultados muy buenos y poco variantes, mientras que otros como \textbf{ACO} y \textbf{bABCO} parecen ser menos efectivos en los conjuntos de datos analizados.\\[6pt]
-Pese a ello, se percibe una variabilidad de los resultados en \textbf{fitness} bastante similar en todos los algoritmos usados. Donde un algoritmo es robusto en cuanto a variabilidad, en otro no lo es. Esto se observa en todos los problemas.
+Pese a ello, se percibe una variabilidad de los resultados en \textit{fitness} bastante similar en todos los algoritmos usados. Donde un algoritmo es robusto en cuanto a variabilidad, en otro no lo es. Esto se observa en todos los problemas.
 
 \subsection{Fitness}
 Se procede a comparar y analizar los distintos algoritmos basándonos en la métrica de \textit{fitness}. Como se explica en la ecuación \ref{eq:fitness}, este valor está compuesto por otras dos métricas a tener en cuenta, la precisión o \textit{accuracy} y el ratio de reducción de características. La métrica de \textit{fitness} es el marcador más importante para comprobar la calidad de un algoritmo. Pese a ello, más tarde se analizarán ambas métricas que lo componen por separado, pues es interesante obtener una visión más precisa de los resultados.\\[6pt]
 Debe tenerse en cuenta que, al estar compuesto el \textit{fitness} en un $90\%$ por el \textit{accuracy}, ambas métricas estarán altamente relacionadas entre sí en la gran mayoría de los casos.\\[6pt]
-Como puede observarse en la tabla \ref{tab:fitness_svc}, los algoritmos que consiguen mejores resultados son \textbf{ACO}, \textbf{bGWO}, \textbf{bPSO}, \textbf{bFA}, \textbf{bDE}, \textbf{bGA}, \textbf{bCS} y \textbf{bWOA} con el clasificador \textbf{SVC}. Los más destacables en cuanto al número de veces que estos se repiten por ser los mejores por \textit{dataset} son \textbf{bCS}, \textbf{ACO}, \textbf{bDE} y \textbf{bGWO}.
+Como puede observarse en la tabla \ref{tab:fitness_svc}, los algoritmos que consiguen mejores resultados son \textbf{ACO}, \textbf{bGWO}, \textbf{bPSO}, \textbf{bFA}, \textbf{bDE}, \textbf{bGA}, \textbf{bCS} y \textbf{bWOA} con el clasificador \textbf{SVC}. Los más destacables en cuanto al número de veces que estos se repiten por ser los mejores por \textit{dataset} son \textbf{bCS}, \textbf{ACO}, \textbf{bDE} y \textbf{bGWO} \ref{tab:n-best-fitness_combined}. Puede verse que en \textbf{SVC} los resultados son más discriminativos y se reparten menos los mejores resultados entre el conjunto completo de algoritmos.
+
+\begin{table}[htp]
+    \centering
+    \begin{tabular}{ccc}
+        \toprule
+        Algoritmo     & N veces mejor (knn) & N veces mejor (svc) \\
+        \midrule
+        \textbf{bCS}  & 2                   & 4                   \\
+        \textbf{ACO}  & 1                   & 3                   \\
+        \textbf{bDE}  & 2                   & 2                   \\
+        \textbf{bGWO} & 3                   & 2                   \\
+        \bottomrule
+    \end{tabular}
+    \caption{Algoritmos con más veces mejor resultados - knn y svc - binario}
+    \label{tab:n-best-fitness_combined}
+\end{table}
+
+\subsubsection{Mejor vs Peor}
+Como se puede observar en \ref{fig:ranking_knn} y en \ref{fig:ranking_svc}, el algoritmo con mejor puntuación es \textbf{bGWO} y el peor \textbf{bABCO} (se puede ver también su valor en los rankings de las tablas en el apéndice: \ref{tab:ranking_fitness_bin_svc}, \ref{tab:ranking_fitness_bin_knn}). \\[6pt]
+En las figuras de \ref{fig:convergencia_svc_2} y \ref{fig:convergencia_svc_1} se aprecia como \textbf{bABCO} muestra rendimientos muy buenos en según que conjunto de datos. Por ejemplo, en \textit{yeast} o en \textit{sonar}, el algoritmo obtiene resultados muy decentes y competitivos siendo estos dos conjuntos de datos de los más complicados de la selección, por convergencia y número de características. Pese a ello, en conjunto, no consigue superar al resto.\\[6pt]
+En cambio \textbf{bGWO} parece un adaptarse bien a todos los problemas seleccionados sin excepción. Es capaz de obtener el mínimo, en el valor \textit{fitness} de evaluación durante el entrenamiento, en casi todos los \textit{datasets}.
+
+\begin{table}[htp]
+    \centering
+    \begin{tabular}{lllll}
+        \toprule
+        {}    & Original  & Holm           & Hommel         & Hochberg       \\
+        \midrule
+        dummy & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        abco  & 0.003     & \textbf{0.029} & \textbf{0.029} & \textbf{0.029} \\
+        da    & 0.005     & 0.054          & 0.051          & 0.054          \\
+        goa   & 0.010     & 0.092          & 0.082          & 0.092          \\
+        fa    & 0.022     & 0.172          & 0.106          & 0.172          \\
+        de    & 0.026     & 0.179          & 0.106          & 0.179          \\
+        ga    & 0.038     & 0.230          & 0.127          & 0.191          \\
+        ba    & 0.055     & 0.277          & 0.166          & 0.191          \\
+        aco   & 0.055     & 0.277          & 0.166          & 0.191          \\
+        woa   & 0.064     & 0.277          & 0.191          & 0.191          \\
+        cs    & 0.135     & 0.277          & 0.271          & 0.271          \\
+        pso   & 0.346     & 0.346          & 0.346          & 0.346          \\
+        \bottomrule
+    \end{tabular}
+    \caption{P-valores del bGWO vs el resto - knn - binario}
+    \label{tab:p-values_gwo_vs_rest_knn}
+\end{table}
+
+\begin{table}[htp]
+    \centering
+    \begin{tabular}{lllll}
+        \toprule
+        {}    & Original  & Holm           & Hommel         & Hochberg       \\
+        \midrule
+        dummy & 3.052E-04 & \textbf{0.004} & \textbf{0.004} & \textbf{0.004} \\
+        abco  & 0.002     & \textbf{0.024} & \textbf{0.022} & \textbf{0.024} \\
+        ba    & 0.004     & \textbf{0.043} & \textbf{0.037} & \textbf{0.043} \\
+        da    & 0.005     & \textbf{0.048} & \textbf{0.043} & \textbf{0.048} \\
+        goa   & 0.008     & 0.066          & 0.066          & 0.066          \\
+        woa   & 0.073     & 0.514          & 0.367          & 0.514          \\
+        de    & 0.109     & 0.656          & 0.547          & 0.599          \\
+        fa    & 0.121     & 0.656          & 0.599          & 0.599          \\
+        ga    & 0.252     & 1.000          & 0.599          & 0.599          \\
+        cs    & 0.364     & 1.000          & 0.599          & 0.599          \\
+        aco   & 0.490     & 1.000          & 0.599          & 0.599          \\
+        pso   & 0.599     & 1.000          & 0.599          & 0.599          \\
+        \bottomrule
+    \end{tabular}
+    \caption{P-valores del bGWO vs el resto - svc - binario}
+    \label{tab:p-values_gwo_vs_rest_svc}
+\end{table}
+
+Se procede a hacer una comparativa estadística mediante la prueba de \textit{Wilcoxon} y el test post hoc de \textit{Holm} para determinar las diferencias significativas entre el mejor algoritmo (\textbf{bGWO}) y el resto. Los resultados, presentados en las tablas \ref{tab:p-values_gwo_vs_rest_knn} y \ref{tab:p-values_gwo_vs_rest_svc}, muestran los p-valores originales y ajustados, lo que nos permite identificar cuáles de las diferencias observadas son estadísticamente significativas con un error corregido. Este análisis es crucial para validar los resultados y asegurar que las conclusiones obtenidas no sean producto del azar, proporcionando una base sólida para afirmar la superioridad de \textbf{bGWO} frente a los demás algoritmos en los conjuntos de datos evaluados, en frente al peor de ellos.\\[6pt]
+
+Si bien no se observan diferencias significativas sobre la mayoría de algoritmos, sí sobre el peor (\textbf{bABCO}) usando \textbf{kNN}. Tanto en la versión que utiliza el clasificador \textbf{SVC} como en \textbf{kNN} se obtienen resultados suficientemente significativos como para poder considerar que los resultados de \textbf{bGWO} frente a los de \textbf{bABCO} no son producto del azar. Por tanto, utilizando un valor crítico de $\alpha=0.05$ se puede rechazar la hipótesis nula. Esto no solo ocurre con \textbf{bABCO} en los resultados de \textbf{SVC}, sino que también con \textbf{bBA} y \textbf{bDA}. Por ello se puede afirmar que \textbf{bGWO} en este último clasificador es mejor, con un respaldo estadístico, frente a esos algoritmos también.
 
 \subsubsection{Clásicos vs Modernos}
 Los algoritmos clásicos de optimización como el \textbf{bPSO}, \textbf{bGA} o \textbf{bDE} han demostrado ser extremadamente efectivos en una amplia gama de problemas. Su capacidad para explorar y explotar el espacio de búsqueda ha llevado a soluciones de alta calidad en diversas aplicaciones, desde la ingeniería hasta la economía. Estos métodos son conocidos por su robustez, simplicidad y eficacia, lo que los convierte en herramientas valiosas.\\[6pt]
@@ -86,82 +159,81 @@ El \textbf{bCS}, basado en el comportamiento de anidación de ciertos pájaros, 
 
 Finalmente, el \textbf{bGA}, uno de los algoritmos más estudiados y aplicados en el ámbito de la optimización, sigue siendo relevante. Su capacidad para encontrar soluciones óptimas a través de mecanismos inspirados en la evolución natural, como la selección, el cruce y la mutación, le permite abordar una amplia gama de problemas con éxito. Además, este algoritmo al ser inicialmente pensado para aplicarse en dominios de codificación discreta, hace de esta metaheurística una opción muy interesante y robusta en el problema de selección de características, además de llevar años siendo aplicado con éxito en otros dominios.\\[6pt]
 
-Es visible que algunas de estas nuevas propuestas son muy potentes, llegando a mejorar en la propuesta binaria en comparación a algoritmos clásicos que llevan tiempo en la escena como las opciones \textit{de facto}. Pese a ello, el grueso de los algoritmos comparados son opciones modernas, y muchos de estos algoritmos clásicos obtienen mejores resultados que la mayoría de este reciente grupo. De las cinto mejores, tres de ellos son clásicos, lo cual es más impresionante si se considera que hay un desbalance en número de \textit{clásicos vs modernos}. \textit{DE} es otro algoritmo asentado, que es capaz de clasificar en posiciones medias de \textit{fitness}.\\[6pt]
+Es visible que algunas de estas nuevas propuestas son muy potentes, llegando a mejorar en la propuesta binaria en comparación a algoritmos clásicos que llevan tiempo en la escena como las opciones \textit{de facto}. Pese a ello, el grueso de los algoritmos comparados son opciones modernas, y muchos de estos algoritmos clásicos obtienen mejores resultados que la mayoría de este reciente grupo. De los cinco mejores, tres de ellos son clásicos, lo cual es más impresionante si se considera que hay un desbalance en número de \textit{clásicos vs modernos}. \textbf{bDE} es otro algoritmo asentado, que es capaz de clasificar en posiciones medias de \textit{fitness}.\\[6pt]
 
 Por tanto, los clásicos siguen siendo una opción muy potente e interesante. Pese a desarrollarse nuevos algoritmos, estos siguen obteniendo soluciones de alta calidad.
 
-\subsubsection{Mejor vs Peor}
-Como ya se ha podido observar en, el algoritmo con mejor puntuación es \textbf{bGWO} y el peor \textbf{bABCO} (\ref{tab:fitness_svc}, \ref{tab:fitness_knn}, \ref{tab:ranking_fitness_bin}). \\[6pt]
-En las figuras de \ref{fig:convergencia_svc_2} y \ref{fig:convergencia_svc_1} se aprecia como \textbf{bABCO} muestra rendimientos muy buenos en según que conjunto de datos. Por ejemplo, en \textit{yeast} o en \textit{sonar}, el algoritmo obtiene resultados muy decentes y competitivos siendo estos dos conjuntos de datos de los más complicados de la selección, por convergencia y número de características. Pese a ello, en conjunto, no consigue superar al resto.\\[6pt]
-En cambio \textbf{bGWO} parece un adaptarse bien a todos los problemas seleccionados sin excepción. Es capaz de obtener el mínimo, en el valor \textit{fitness} de evaluación durante el entrenamiento, en casi todos los \textit{datasets}.
-
-\begin{table}[htp]
-    \centering
-    \begin{tabular}{lllll}
-        \toprule
-        {}    & Original  & Holm  & Hommel & Hochberg \\
-        \midrule
-        dummy & 6.104E-05 & \textbf{0.001} & \textbf{0.001}  & \textbf{0.001}    \\
-        abco  & 0.003     & \textbf{0.029} & \textbf{0.029}  & \textbf{0.029}    \\
-        da    & 0.005     & 0.054 & 0.051  & 0.054    \\
-        goa   & 0.010     & 0.092 & 0.082  & 0.092    \\
-        fa    & 0.022     & 0.172 & 0.106  & 0.172    \\
-        de    & 0.026     & 0.179 & 0.106  & 0.179    \\
-        ga    & 0.038     & 0.230 & 0.127  & 0.191    \\
-        ba    & 0.055     & 0.277 & 0.166  & 0.191    \\
-        aco   & 0.055     & 0.277 & 0.166  & 0.191    \\
-        woa   & 0.064     & 0.277 & 0.191  & 0.191    \\
-        cs    & 0.135     & 0.277 & 0.271  & 0.271    \\
-        pso   & 0.346     & 0.346 & 0.346  & 0.346    \\
-        \bottomrule
-    \end{tabular}
-    \caption{P-valores del bGWO vs el resto - kNN - binario}
-    \label{tab:p-values_gwo_vs_rest_knn}
-\end{table}
-
-\begin{table}[htp]
-    \centering
-    \begin{tabular}{lllll}
-        \toprule
-        {}    & Original  & Holm  & Hommel & Hochberg \\
-        \midrule
-        dummy & 3.052E-04 & \textbf{0.004} & \textbf{0.004}  & \textbf{0.004}    \\
-        abco  & 0.002     & \textbf{0.024} & \textbf{0.022}  & \textbf{0.024}    \\
-        ba    & 0.004     & \textbf{0.043} & \textbf{0.037}  & \textbf{0.043}    \\
-        da    & 0.005     & \textbf{0.048} & \textbf{0.043}  & \textbf{0.048}    \\
-        goa   & 0.008     & 0.066 & 0.066  & 0.066    \\
-        woa   & 0.073     & 0.514 & 0.367  & 0.514    \\
-        de    & 0.109     & 0.656 & 0.547  & 0.599    \\
-        fa    & 0.121     & 0.656 & 0.599  & 0.599    \\
-        ga    & 0.252     & 1.000 & 0.599  & 0.599    \\
-        cs    & 0.364     & 1.000 & 0.599  & 0.599    \\
-        aco   & 0.490     & 1.000 & 0.599  & 0.599    \\
-        pso   & 0.599     & 1.000 & 0.599  & 0.599    \\
-        \bottomrule
-    \end{tabular}
-    \caption{P-valores del bGWO vs el resto - SVC - binario}
-    \label{tab:p-values_gwo_vs_rest_svc}
-\end{table}
-
-Se procede a hacer una comparativa estadística mediante la prueba de \textit{Wilcoxon} y el test post hoc de \textit{Holm} para determinar las diferencias significativas entre el mejor algoritmo (\textbf{bGWO}) y el resto. Los resultados, presentados en las tablas \ref{tab:p-values_gwo_vs_rest_knn} y \ref{tab:p-values_gwo_vs_rest_svc}, muestran los p-valores originales y ajustados, lo que nos permite identificar cuáles de las diferencias observadas son estadísticamente significativas con un error corregido. Este análisis es crucial para validar los resultados y asegurar que las conclusiones obtenidas no sean producto del azar, proporcionando una base sólida para afirmar la superioridad de \textbf{bGWO} frente a los demás algoritmos en los conjuntos de datos evaluados, en frente al peor de ellos.\\[6pt]
-
-Si bien no se observan diferencias significativas sobre la mayoría de algoritmos, sí sobre el peor (\textbf{bABCO}) usando \textbf{kNN}. Tanto en la versión que utiliza el clasificador \textbf{SVC} como en \textbf{kNN} se obtienen resultados suficientemente significativos como para poder considerar que los resultados de \textbf{bGWO} frente a los de \textbf{bABCO} no son producto del azar. Por tanto, utilizando un valor crítico de $\alpha=0.05$ se puede rechazar la hipótesis nula. Esto no solo ocurre con \textbf{bABCO} en los resultados de \textbf{SVC}, sino que también con \textbf{bBA} y \textbf{bDA}. Por ello se puede afirmar que \textbf{bGWO} en este último clasificador es mejor, con un respaldo estadístico, frente a esos algoritmos también.
-
-# TODO - me he quedado por aquí
 
 \subsection{Clasificación y reducción}
 Como se ha mencionado al principio de la anterior sección y como se explica en la fórmula \ref{eq:fitness}, el \textit{fitness} está compuesto por las métricas de \textit{accuracy} en la clasificación y por el ratio de reducción de las características. Con ello se intenta reducir tantas características como sea posible, manteniendo un valor lo más alto posible de precisión.\\[6pt]
 Con estos aspectos aclarados, en esta sección se analizarán los algoritmos desde la perspectiva individual de cada una de las métricas que componen la función \textit{fitness}. De esta manera, se proveerá información de cuál o cuáles algoritmos son los mejores para cada una de las métricas.\\[6pt]
 Esta visión es interesante ya que, los pesos fijados por el autor para cada métrica son los estándar en la mayoría de artículos, pero es posible que en otros problemas sea necesario ajustarlos a las necesidades del mismo. Por tanto si se conocen las características de los diferentes algoritmos para cada métrica por separado, se obtendrá un conocimiento que proporcionará un uso de los mismos más flexible.
 
+\subsubsection{Mejor vs Resto}
+La metaheurística \textbf{ACO} es sin lugar a dudas la mejor en reducción de características (\ref{tab:ranking_sel_rate_bin_knn}, \ref{tab:ranking_sel_rate_bin_svc}) y a su vez, la peor en precisión según los rankings (\ref{tab:ranking_accuracy_bin_knn}, \ref{tab:ranking_accuracy_bin_svc}).
+Un ejemplo de esto es en el conjunto de datos de \textit{ionosphere}. Se puede observar como el segundo algoritmo que más reduce, que es \textbf{bGWO}, obtiene una reducción media del $74\%$, mientras que el \textbf{ACO} obtiene una reducción media del $91.5\%$, con tan solo una diferencia de $4.6\%$ en precisión a favor de \textbf{bGWO}~\ref{tab:bin_red_acc_all}. \\[6pt]
+Si bien es cierto que su precisión no es de las mejores, podría considerarse aceptable en muchos casos. Teniendo ese aspecto en cuenta, añadido a que es capaz de reducir características a un nivel muy significativo con respecto al resto de algoritmos, \textbf{ACO} se presenta como un algoritmo muy interesante para aquellos problemas en los que se pueda permitir cierto nivel de error en la precisión, pero en cambio, sea crucial una compresión del tamaño del modelo o un tiempo den entrenamiento corto.\\[6pt]
+
+Los mejores algoritmos en \textit{accuracy} son \textbf{bCS} y \textbf{bGWO} como puede observarse en las tablas \ref{tab:ranking_accuracy_bin_knn} y \ref{tab:ranking_accuracy_bin_svc}, mientras que el peor, como se ha comentado anteriormente, es el \textbf{ACO}. Si bien es cierto que \textbf{bGWO} empata en \textbf{kNN} con \textbf{bBA}, este no se ha considerado como mejor por obtener un resultado peor en \textbf{SVC} mientras que \textbf{GWO} es bueno en ambos. Pese a ello, no hay grandes diferencias en los algoritmos del top.\\[6pt]
+
+Si comparamos los p-valores~\ref{tab:p-values_aco_rest_bin_knn}, \ref{tab:p-values_aco_rest_bin_svc}, tras aplicar post hoc para mayor seguridad, de \textbf{ACO} con respecto al resto de algoritmos, se ve que claramente la mejora en reducción no se debe al azar de manera muy probable en todos los casos comparativos.
+
+\begin{table}[htp]
+    \centering
+    \begin{tabular}{lllll}
+        \toprule
+        {}    & Original  & Holm           & Hommel         & Hochberg       \\
+        \midrule
+        dummy & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        fa    & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        goa   & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        abco  & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        ba    & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        cs    & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        da    & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        de    & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        ga    & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        pso   & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        woa   & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        gwo   & 0.002     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        \bottomrule
+    \end{tabular}
+    \caption{P-valores de ACO vs el resto - knn - binario}
+    \label{tab:p-values_aco_rest_bin_knn}
+\end{table}
+
+\begin{table}[htp]
+    \centering
+    \begin{tabular}{lllll}
+        \toprule
+        {}    & Original  & Holm           & Hommel         & Hochberg       \\
+        \midrule
+        dummy & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        fa    & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        goa   & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        abco  & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        ba    & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        cs    & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        da    & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        de    & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        ga    & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        pso   & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        woa   & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        gwo   & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        \bottomrule
+    \end{tabular}
+    \caption{P-valores de ACO vs el resto - svc - binario}
+    \label{tab:p-values_aco_rest_bin_svc}
+\end{table}
+
+En cuanto a la clasificación, no se encuentran diferencias significativas entre los algoritmos, a excepción del \textbf{bCS} contra el \textbf{ACO}, el cual parece ser significativamente peor.
+
 \subsubsection{Clásicos vs Modernos}
 Se procede a comparar los algoritmos clásicos frente a los algoritmos modernos en cuanto a su capacidad clasificatoria, es decir, el valor de cada uno de ellos obtenido en \textit{accuracy}.\\[6pt]
 
-En los rankings definidos en la tabla \ref{tab:ranking_acc_bin}, queda claro que \textbf{bCS} usando el algoritmo \textbf{SVC} es capaz de obtener los mejores resultados en cuanto a la precisión en la clasificación. Le siguen algoritmos como \textbf{bDE}, \textbf{bGWO} o \textbf{bFA}.\\[6pt]
+En los rankings definidos en la tabla \ref{tab:ranking_accuracy_bin_knn} y en \ref{tab:ranking_accuracy_bin_svc}, el top de los mejores algoritmos está compuesto por los algoritmos \textbf{CS}, \textbf{FA}, \textbf{GWO}, \textbf{DE}, y \textbf{PSO} en \textbf{SVC}, y los algoritmos \textbf{WOA}, \textbf{BA}, \textbf{GWO}, \textbf{PSO}, y \textbf{FA} en \textbf{kNN}. El top de los peores algoritmos está compuesto, en cambio, por \textbf{GOA}, \textbf{ACO}, \textbf{DA}, y \textbf{GA} en \textbf{SVC}, y los algoritmos \textbf{ACO}, \textbf{DA}, \textbf{GOA}, y \textbf{GA} en \textbf{kNN}.\\[6pt]
 
-Si bien es cierto que la mayoría en el top de mejores algoritmos en \textit{accuracy} son algoritmos modernos, los clásicos no se quedan atrás. En las comparaciones obtienen muy buenos resultados, no siendo los mejores y muy lejos de ser los peores. En los algoritmos modernos hay mayor diversidad en este punto. Hay unos pocos que destacan, pero el resto parece verse superado en muchas ocasiones por los algoritmos clásicos.\\[6pt]
-
-Pese a ello, se puede apreciar en la tabla \ref{tab:p-values_accuracy} como algoritmos como \textbf{bPSO} no obtienen resultados significativos con respecto al resto de sus competidores. Si se comparan los p-valores de los algoritmos modernos con los de los clásicos, se aprecia que, a excepción de algunos algoritmos como \textbf{bDummy} (obviamente) y \textbf{ACO}, no hay diferencia estadísticamente suficientemente significativa como para determinar que un grupo de algoritmos es mejor que otro. De hecho, al corregir estos valores usando un post hoc como \textbf{Holms}, las diferencias son incluso menores.\\[6pt]
+Si bien es cierto que la mayoría en el top de mejores algoritmos en \textit{accuracy} son algoritmos modernos, los clásicos no se quedan atrás. En las comparaciones obtienen muy buenos resultados, no siendo los mejores y muy lejos de ser los peores. En los algoritmos modernos hay mayor diversidad en este punto. Hay unos pocos que destacan, pero el resto parecen verse superados en muchas ocasiones por los algoritmos clásicos.\\[6pt]
 
 \begin{figure}[htp]
     \centering
@@ -176,29 +248,22 @@ Pese a ello, se puede apreciar en la tabla \ref{tab:p-values_accuracy} como algo
         \label{fig:ranking_svc_red}
     \end{subfigure}
     \caption{Rankings para reducción de características}
-    \label{fig:rankings_red}
+    \label{fig:rankings_red_bin}
 \end{figure}
 
-Por tanto tanto un grupo como otro parece alcanzar resultados bastante satisfactorios en este sentido.
-
-En cuanto a la reducción de características, según se observa en los rankings \ref{fig:rankings_red} como \textbf{ACO} es sin duda el mejor, por mucho además. Es capaz de reducir en algunos casos hasta el $90\%$ de las características.\\[6pt]
-Si se observan los p-valores obtenidos en la tabla \ref{tab:p-values_red} y se agrupan los modernos y los clásicos, se obtienen los siguientes resultados:
+En cuanto a la reducción de características, se observa en los rankings \ref{fig:rankings_red_bin} como los mejores son algoritmos como \textbf{ACO}, \textbf{bGWO}, \textbf{GA} y \textbf{bPSO}. Incluso \textbf{bDE} es capaz de superar a varios modernos. El \textbf{bABCO}, sin embargo, parece obtener resultados pésimos, quedando el último en los rankings.\\[6pt]
+Si se observan los p-valores obtenidos en las tablas \ref{tab:p-values_sel_ratio_bin_knn} y \ref{tab:p-values_sel_ratio_bin_svc}, y se agrupan los modernos y los clásicos, se obtienen los siguientes resultados:
 \begin{itemize}
-    \item \textbf{bPSO}: A excepción del \textbf{ACO} (el mejor), \textbf{bGWO} (segundo mejor) y \textbf{bGA}, es superior a todo el resto de algoritmos con una diferencia significativa más que suficiente, incluso tras corrección post hoc con el método \textbf{Holms}.
+    \item \textbf{bPSO}: A excepción del \textbf{ACO} (el mejor), \textbf{bGWO} (segundo mejor) y \textbf{bGA}, es superior a todo el resto de algoritmos con una diferencia significativa más que suficiente tras corrección post hoc con el método \textbf{Holms}.
     \item \textbf{ACO}: Es el mejor con diferencia significativa más que suficiente como para poder afirmar que este algoritmo es muy destacable en la reducción de características.
     \item \textbf{bGA}: Ocurre lo mismo que con \textbf{bPSO}. Pese a excepciones de algoritmos por encima suyo en el ranking, \textbf{bGA} es muy superior al resto de algoritmos, con diferencias muy notables y de nuevo significativas.
-    \item \textbf{bDE}: Obtiene resultados muy buenos y estadísticamente significativos con respecto a \textbf{bBA}, \textbf{bWOA} y \textbf{bFA}. Pese a ser mejor que otros algoritmos modernos, la diferencia no es suficientemente como para rechazar la hipótesis nula.
+    \item \textbf{bDE}: Obtiene resultados muy buenos, pero en la media en comparación con todos.
     \item \textbf{bABCO}: El peor parado del grupo de los algoritmos clásicos. No parece ser una buena propuesta a la hora de reducir.
 \end{itemize}
 
-Dada estos resultados, los algoritmos clásicos salen muy bien parados en la reducción de características frente a los modernos. Si bien es cierto que hay dos algoritmos que destacan sobre el resto de los modernos (\textbf{bCS} y \textbf{bGWO}) en la reducción de características, los clásicos en conjunto, con excepción de \textbf{bABCO}, parecen una opción robusta y que, en combinación a sus resultados de precisión (\textit{accuracy}), son muy precisos a la hora de seleccionar características importantes.
+Dados estos resultados, los algoritmos clásicos salen muy bien parados en la reducción de características frente a los modernos. Si bien es cierto que hay dos algoritmos que destacan sobre el resto de los modernos (\textbf{bCS} y \textbf{bGWO}) en la reducción de características, los clásicos en conjunto, con excepción de \textbf{bABCO}, parecen una opción robusta y que, en combinación a sus resultados de precisión (\textit{accuracy}), son muy precisos a la hora de seleccionar características importantes. \\[6pt]
 
-\subsubsection{Mejor vs Segundo mejor}
-Como se ha mencionado anteriormente, la metaheurística \textbf{ACO} es sin lugar a dudas la mejor.
-Un ejemplo de esto es en el conjunto de datos de \textit{ionosphere}. Se puede observar como el segundo algoritmo que más reduce, que es \textbf{bGWO}, obtiene una reducción media del $74\%$, mientras que el \textbf{ACO} obtiene una reducción media del $91.5\%$, con tan solo una diferencia de $4.6\%$ en precisión a favor de \textbf{bGWO}~\ref{tab:bin_red_acc_all}. \\[6pt]
-Si bien es cierto que su precisión no es de las mejores, se mantiene en mitad de los rankings con el resto de algoritmos. Teniendo ese aspecto en cuenta, añadido a que es capaz de reducir características a un nivel muy significativo con respecto al resto de algoritmos, \textbf{ACO} se presenta como un algoritmo muy interesante para aquellos problemas en los que se pueda permitir cierto nivel de error en la precisión, pero en cambio, sea crucial una compresión del tamaño del modelo o un tiempo den entrenamiento corto.\\[6pt]
-
-Si comparamos los p-valores~\ref{tab:p-values_aco_rest}, tras aplicar post hoc para mayor seguridad, de \textbf{ACO} con respecto al resto de algoritmos, se ve que claramente la mejora en reducción no se debe al azar de manera muy probable.
+Por lo explicado, combinando los resultados analizados en \textit{accuracy} y en selección de características, se puede intuir que los algoritmos clásicos son muy eficientes en la reducción de características, superando a varios algoritmos modernos y además con una calidad en términos de \textit{accuracy} prácticamente idéntica.
 
 \subsubsection{bWOA vs bGWO}
 Dentro del conjunto de algoritmos analizados, hay ciertos pares que resultan interesantes por la semejanza algorítmica e inspirativa entre ambos. En esta sección, se compararán los algoritmos \textbf{bWOA} y \textbf{bGWO}. Ambos pertenecen a la categoría de algoritmos de optimización inspirados en la naturaleza y ambos se inspiran fuertemente en el comportamiento social y estrategias de caza de ciertos animales.\\[6pt]
@@ -208,26 +273,7 @@ Dentro del contexto de la caza, tanto \textbf{WOA} como \textbf{GWO} utilizan ec
     \item \textbf{bGWO}: Los lobos rodean a la presa en grupos liderados por alfa, beta y delta. Al reducir la distancia a estas posiciones líderes, los lobos de menor rango simulan el cerco y convergen hacia la presa de manera cooperativa. El acercamiento utiliza un vector de coeficientes $A$ que decrece linealmente.
 \end{itemize}
 
-Ambos algoritmos por tanto, y pese a sus diferencias, comparten una naturaleza y comportamiento parecido a la hora buscar soluciones. Al comparar ambos resultados en \textbf{accuracy}, se aprecia que estos no difieren de manera suficiente en su rendimiento como para poder rechazar la hipótesis nula. Véase en la tabla \ref{tab:p-values_accuracy}\\[6pt]
-
-Es en cambio en la comparación en la métrica de reducción de características donde se ve que \textbf{bGWO} presenta una diferencia notable con respecto a \textbf{bWOA}. Puede observarse gráficamente en las figuras \ref{fig:svc_selected_rate_gwo_woa_bin} como \textbf{bWOA} reduce considerablemente menos que \textbf{bGWO}. Comprobarse también que las diferencias entre ambos son estadísticamente significativas \ref{tab:pval_corr_gwo_woa-bin}
-
-\begin{table}[htp]
-    \centering
-    \begin{tabular}{lllll}
-        \toprule
-        {}       & Original & Holm           & Hommel         & Hochberg       \\
-        \midrule
-        woa\_knn & 0.001    & \textbf{0.003} & \textbf{0.002} & \textbf{0.002} \\
-        woa\_svc & 0.001    & \textbf{0.003} & \textbf{0.002} & \textbf{0.002} \\
-        gwo\_svc & 0.028    & \textbf{0.028} & \textbf{0.028} & \textbf{0.028} \\
-        \bottomrule
-    \end{tabular}
-    \caption{P-valores tras corrección entre bGWO-kNN y demás algoritmos en reducción de características}
-    \label{tab:pval_corr_gwo_woa-bin}
-\end{table}
-
-Incluso la versión de \textbf{bGWO} que utiliza \textit{kNN} es significativamente más discriminativa con las características seleccionadas que su versión con \textbf{SVC}.
+Ambos algoritmos por tanto, y pese a sus diferencias, comparten una naturaleza y comportamiento parecido a la hora buscar soluciones. Al comparar ambos resultados en \textit{accuracy}, se aprecia que estos no difieren de manera suficiente en su rendimiento como para poder rechazar la hipótesis nula. Véase en las tablas \ref{tab:p-values_accuracy_bin_knn}, \ref{tab:p-values_accuracy_bin_svc}.
 
 \begin{figure}[htp]
     \centering
@@ -257,497 +303,68 @@ Incluso la versión de \textbf{bGWO} que utiliza \textit{kNN} es significativame
         \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/wine/SVC_n_features_over_10_evaluations_gwo_binary_wine.jpg}
         \caption{wine}
     \end{subfigure}
-
     \caption{Reducción de características en bWOA y bGWO}
     \label{fig:svc_selected_rate_gwo_woa_bin}
 \end{figure}
 
+Es en cambio en la comparación en la métrica de reducción de características se aprecia que \textbf{bGWO} presenta una diferencia notable con respecto a \textbf{bWOA}. Puede observarse gráficamente en las figuras \ref{fig:svc_selected_rate_gwo_woa_bin} como \textbf{bWOA} reduce considerablemente menos que \textbf{bGWO}. Comprobarse también que las diferencias entre ambos son estadísticamente significativas \ref{tab:pval_corr_gwo_woa-bin_knn}, \ref{tab:pval_corr_gwo_woa-bin_svc}
+
 \begin{table}[htp]
     \centering
-    \begin{tabular}{lllll}
+    \begin{tabular}{lll}
         \toprule
-        {}         & Original  & Holm           & Hommel         & Hochberg       \\
+        {}  & gwo                & woa                \\
         \midrule
-        dummy\_svc & 6.104E-05 & \textbf{0.002} & \textbf{0.001} & \textbf{0.001} \\
-        goa\_svc   & 6.104E-05 & \textbf{0.002} & \textbf{0.001} & \textbf{0.001} \\
-        goa\_knn   & 6.104E-05 & \textbf{0.002} & \textbf{0.001} & \textbf{0.001} \\
-        fa\_knn    & 6.104E-05 & \textbf{0.002} & \textbf{0.001} & \textbf{0.001} \\
-        dummy\_knn & 6.104E-05 & \textbf{0.002} & \textbf{0.001} & \textbf{0.001} \\
-        fa\_svc    & 0.001     & \textbf{0.014} & \textbf{0.002} & \textbf{0.003} \\
-        cs\_svc    & 0.001     & \textbf{0.021} & \textbf{0.002} & \textbf{0.003} \\
-        pso\_svc   & 0.001     & \textbf{0.021} & \textbf{0.002} & \textbf{0.003} \\
-        pso\_knn   & 0.001     & \textbf{0.021} & \textbf{0.002} & \textbf{0.003} \\
-        gwo\_svc   & 0.001     & \textbf{0.021} & \textbf{0.002} & \textbf{0.003} \\
-        ga\_svc    & 0.001     & \textbf{0.021} & \textbf{0.002} & \textbf{0.003} \\
-        ga\_knn    & 0.001     & \textbf{0.021} & \textbf{0.002} & \textbf{0.003} \\
-        abco\_knn  & 0.001     & \textbf{0.021} & \textbf{0.002} & \textbf{0.003} \\
-        de\_svc    & 0.001     & \textbf{0.021} & \textbf{0.002} & \textbf{0.003} \\
-        de\_knn    & 0.001     & \textbf{0.021} & \textbf{0.002} & \textbf{0.003} \\
-        da\_svc    & 0.001     & \textbf{0.021} & \textbf{0.002} & \textbf{0.003} \\
-        da\_knn    & 0.001     & \textbf{0.021} & \textbf{0.002} & \textbf{0.003} \\
-        cs\_knn    & 0.001     & \textbf{0.021} & \textbf{0.002} & \textbf{0.003} \\
-        ba\_svc    & 0.001     & \textbf{0.021} & \textbf{0.002} & \textbf{0.003} \\
-        ba\_knn    & 0.001     & \textbf{0.021} & \textbf{0.002} & \textbf{0.003} \\
-        abco\_svc  & 0.001     & \textbf{0.021} & \textbf{0.002} & \textbf{0.003} \\
-        woa\_knn   & 0.001     & \textbf{0.021} & \textbf{0.002} & \textbf{0.003} \\
-        woa\_svc   & 0.001     & \textbf{0.021} & \textbf{0.002} & \textbf{0.003} \\
-        gwo\_knn   & 0.002     & \textbf{0.021} & \textbf{0.003} & \textbf{0.003} \\
-        aco\_svc   & 0.530     & 0.530          & 0.530          & 0.530          \\
+        gwo & -                  & - (\textbf{0.001}) \\
+        woa & + (\textbf{0.001}) & -                  \\
         \bottomrule
     \end{tabular}
-    \caption{P-valores de ACO vs el resto de algoritmos en reducción de características - binario}
-    \label{tab:p-values_aco_rest}
+    \caption{P-valores tras corrección entre bGWO y bWOA - knn}
+    \label{tab:pval_corr_gwo_woa-bin_knn}
 \end{table}
 
-
-\begin{sidewaystable}[htp]
+\begin{table}[htp]
     \centering
-    \begin{adjustbox}{width=\linewidth}
-        \begin{tabular}{lllllllllllllllllllllllllll}
-            \toprule
-            {}            & abco\_knn & abco\_svc  & aco\_knn & aco\_svc     & ba\_knn      & ba\_svc & cs\_knn    & cs\_svc        & da\_knn    & da\_svc      & de\_knn & de\_svc      & dummy\_knn & dummy\_svc & fa\_knn      & fa\_svc & ga\_knn & ga\_svc & goa\_knn & goa\_svc & gwo\_knn & gwo\_svc   & pso\_knn   & pso\_svc & woa\_knn   & woa\_svc   \\
-            \midrule
-            breast-cancer & 15        & 7          & 6        & \textbf{1.5} & 11.5         & 19      & 17         & 23             & 24         & \textbf{1.5} & 21      & 19           & 25         & 3.5        & 26           & 3.5     & 9       & 13      & 19       & 9        & 9        & 15         & 22         & 11.5     & 15         & 5          \\
-            dermatology   & 9         & 11.5       & 26       & 25           & 9            & 11.5    & 18         & \textbf{1}     & 18         & 16           & 6.5     & 18           & 20         & 24         & 4.5          & 2       & 6.5     & 15      & 22.5     & 22.5     & 3        & 21         & 4.5        & 9        & 13.5       & 13.5       \\
-            diabetes      & 18.5      & 10         & 24.5     & 13.5         & 21           & 4.5     & 18.5       & 2              & 11         & 6.5          & 18.5    & 24.5         & 22         & 18.5       & 6.5          & 8.5     & 26      & 4.5     & 13.5     & 16       & 12       & 8.5        & 15         & 3        & 23         & \textbf{1} \\
-            ecoli         & 15.5      & 10         & 20.5     & 26           & 22.5         & 8       & \textbf{1} & 3              & 5.5        & 20.5         & 13      & 11           & 13         & 24         & 8            & 22.5    & 18      & 25      & 18       & 13       & 4        & 15.5       & 2          & 18       & 5.5        & 8          \\
-            ionosphere    & 22        & 11         & 24.5     & 14           & 16           & 6       & 26         & \textbf{1.5}   & 22         & 12           & 19      & \textbf{1.5} & 24.5       & 3          & 13           & 4       & 17.5    & 6       & 17.5     & 8.5      & 20       & 8.5        & 22         & 6        & 15         & 10         \\
-            iris          & 12        & 12         & 7        & 17.5         & \textbf{1.5} & 23.5    & 12         & 17.5           & 3          & 23.5         & 12      & 4            & 17.5       & 25         & \textbf{1.5} & 17.5    & 7       & 21.5    & 7        & 26       & 7        & 17.5       & 7          & 21.5     & 12         & 17.5       \\
-            parkinsons    & 2         & 17         & 23.5     & 17           & 3.5          & 8.5     & 8.5        & 5.5            & \textbf{1} & 13.5         & 26      & 13.5         & 8.5        & 3.5        & 11           & 25      & 23.5    & 13.5    & 5.5      & 8.5      & 13.5     & 20.5       & 17         & 20.5     & 20.5       & 20.5       \\
-            sonar         & 8         & 16         & 18       & 8            & 11           & 20      & 18         & 18             & 26         & 22.5         & 4.5     & 2.5          & 22.5       & 2.5        & 22.5         & 6       & 14      & 22.5    & 11       & 14       & 25       & \textbf{1} & 8          & 11       & 14         & 4.5        \\
-            spambase-460  & 16.5      & 20         & 24       & 11           & 12.5         & 15      & \textbf{1} & 9              & 21.5       & 19           & 2.5     & 18           & 21.5       & 25         & 14           & 7.5     & 10      & 5       & 23       & 26       & 7.5      & 2.5        & 12.5       & 16.5     & 6          & 4          \\
-            spectf-heart  & 17.5      & \textbf{1} & 26       & 8            & 17.5         & 14      & 10         & 10             & 22         & 12           & 5       & 5            & 5          & 25         & 14           & 5       & 21      & 14      & 23       & 2        & 17.5     & 5          & 20         & 10       & 17.5       & 24         \\
-            waveform5000  & 20        & 8          & 26       & 25           & 19           & 4.5     & 22         & 2              & 24         & 9            & 17      & 3            & 23         & 11         & 15.5         & 6.5     & 13.5    & 4.5     & 18       & 10       & 15.5     & 12         & 13.5       & 6.5      & 21         & \textbf{1} \\
-            wdbc          & 22        & 6.5        & 25.5     & 13.5         & 3            & 16      & 6.5        & 24             & 23         & 16           & 25.5    & 13.5         & 19.5       & 10.5       & 10.5         & 10.5    & 6.5     & 19.5    & 10.5     & 2        & 19.5     & \textbf{1} & 16         & 19.5     & 6.5        & 4          \\
-            wine          & 13.5      & 19         & 9.5      & 12           & 5            & 15.5    & 13.5       & 19             & 5          & 24           & 5       & 7            & 19         & 21         & 3            & 25.5    & 15.5    & 22      & 9.5      & 25.5     & 2        & 17         & 9.5        & 9.5      & \textbf{1} & 23         \\
-            yeast         & 6         & 13         & 23       & 19.5         & 10           & 7       & 22         & 8.5            & 25         & 14.5         & 12      & 14.5         & 4.5        & 26         & 16           & 4.5     & 21      & 8.5     & 24       & 18       & 11       & 3          & \textbf{1} & 2        & 19.5       & 17         \\
-            zoo           & 13.5      & 3.5        & 18       & 13.5         & 10.5         & 3.5     & 18         & 6.5            & 16         & 6.5          & 22      & 22           & 24.5       & 2          & 24.5         & 6.5     & 13.5    & 20      & 22       & 6.5      & 13.5     & 9          & \textbf{1} & 10.5                               \\
-            Mean          & 14.067    & 11.033     & 20.133   & 15.833       & 12.067       & 12.433  & 13.633     & \textbf{9.833} & 16.600     & 14.467       & 13.567  & 10.767       & 17.833     & 16.300     & 12.700       & 10.033  & 15.567  & 13.400  & 15.700   & 14.733   & 12.567   & 10.300     & 12.233     & 11.567   & 12.733     & 10.900     \\
-            \bottomrule
-        \end{tabular}
-    \end{adjustbox}
-    \caption{Ranking de los algoritmos en \textit{accuracy} - binario}
-    \label{tab:ranking_acc_bin}
-\end{sidewaystable}
+    \begin{tabular}{lll}
+        \toprule
+        {}  & gwo                & woa                \\
+        \midrule
+        gwo & -                  & - (\textbf{0.002}) \\
+        woa & + (\textbf{0.002}) & -                  \\
+        \bottomrule
+    \end{tabular}
+    \caption{P-valores tras corrección entre bGWO y bWOA - svc}
+    \label{tab:pval_corr_gwo_woa-bin_svc}
+\end{table}
 
-\begin{sidewaystable}[htp]
-    \centering
-    \begin{adjustbox}{width=\linewidth}
-        \begin{tabular}{lllllllllllllllllllllllllll}
-            \toprule
-            {}         & abco\_knn          & abco\_svc          & aco\_knn           & aco\_svc  & ba\_knn            & ba\_svc            & cs\_knn            & cs\_svc            & da\_knn            & da\_svc            & de\_knn            & de\_svc            & dummy\_knn         & dummy\_svc         & fa\_knn            & fa\_svc            & ga\_knn   & ga\_svc   & goa\_knn           & goa\_svc  & gwo\_knn           & gwo\_svc           & pso\_knn           & pso\_svc           & woa\_knn           & woa\_svc           \\
-            \midrule
-            abco\_knn  & -                  & + (0.346)          & - (\textbf{0.015}) & = (0.530) & + (0.402)          & = (0.950)          & = (0.784)          & + (0.135)          & - (0.346)          & = (0.804)          & = (0.529)          & + (0.277)          & - (\textbf{0.008}) & - (0.233)          & = (0.679)          & + (0.208)          & = (0.649) & = (0.910) & - (0.379)          & - (0.426) & + (0.414)          & + (0.263)          & + (0.196)          & + (0.142)          & + (0.410)          & + (0.303)          \\
-            abco\_svc  & - (0.346)          & -                  & - (\textbf{0.010}) & - (0.209) & = (0.934)          & = (0.660)          & - (0.402)          & + (0.463)          & - (0.164)          & - (0.083)          & - (0.379)          & = (0.890)          & - (\textbf{0.012}) & - (0.064)          & = (0.847)          & = (0.720)          & - (0.187) & - (0.156) & - (0.083)          & - (0.095) & = (0.762)          & = (0.890)          & = (0.706)          & = (0.934)          & = (0.889)          & = (1.000)          \\
-            aco\_knn   & + (\textbf{0.015}) & + (\textbf{0.010}) & -                  & + (0.095) & + (\textbf{0.003}) & + (\textbf{0.035}) & + (\textbf{0.038}) & + (\textbf{0.017}) & + (\textbf{0.045}) & + (0.060)          & + (\textbf{0.038}) & + (\textbf{0.007}) & + (0.451)          & + (0.330)          & + (\textbf{0.026}) & + (\textbf{0.026}) & + (0.081) & + (0.073) & + (\textbf{0.021}) & + (0.280) & + (\textbf{0.012}) & + (\textbf{0.011}) & + (\textbf{0.014}) & + (\textbf{0.008}) & + (\textbf{0.004}) & + (\textbf{0.007}) \\
-            aco\_svc   & = (0.530)          & + (0.209)          & - (0.095)          & -         & + (0.132)          & + (0.330)          & + (0.454)          & + (0.167)          & = (0.847)          & = (0.530)          & + (0.330)          & + (0.116)          & = (0.754)          & = (0.934)          & + (0.105)          & + (0.117)          & = (0.712) & + (0.359) & = (0.754)          & = (0.720) & + (0.188)          & + (0.079)          & + (0.328)          & + (0.188)          & + (0.286)          & + (0.124)          \\
-            ba\_knn    & - (0.402)          & = (0.934)          & - (\textbf{0.003}) & - (0.132) & -                  & = (0.890)          & - (0.307)          & = (0.570)          & - (0.069)          & = (0.804)          & = (0.875)          & = (0.804)          & - (\textbf{0.010}) & - (0.149)          & = (0.802)          & + (0.414)          & - (0.061) & = (0.762) & - (\textbf{0.038}) & = (0.561) & = (0.802)          & = (0.762)          & = (0.616)          & = (0.784)          & = (0.950)          & = (0.720)          \\
-            ba\_svc    & = (0.950)          & = (0.660)          & - (\textbf{0.035}) & - (0.330) & = (0.890)          & -                  & = (0.851)          & + (0.094)          & - (0.252)          & - (0.162)          & = (0.804)          & + (0.490)          & - (\textbf{0.012}) & - (0.151)          & = (0.625)          & + (0.389)          & - (0.286) & = (0.689) & - (0.142)          & - (0.167) & = (0.887)          & + (0.421)          & = (0.576)          & + (0.286)          & = (0.820)          & = (0.551)          \\
-            cs\_knn    & = (0.784)          & + (0.402)          & - (\textbf{0.038}) & - (0.454) & + (0.307)          & = (0.851)          & -                  & + (0.364)          & - (0.451)          & = (0.847)          & = (0.944)          & + (0.414)          & - (\textbf{0.045}) & - (0.315)          & = (0.934)          & + (0.454)          & = (0.551) & = (0.934) & = (0.762)          & = (0.572) & = (0.762)          & + (0.359)          & = (0.720)          & + (0.451)          & = (0.576)          & = (0.530)          \\
-            cs\_svc    & - (0.135)          & - (0.463)          & - (\textbf{0.017}) & - (0.167) & = (0.570)          & - (0.094)          & - (0.364)          & -                  & - (0.083)          & - (\textbf{0.026}) & - (0.359)          & = (0.706)          & - (\textbf{0.010}) & - (0.064)          & - (0.151)          & = (0.826)          & - (0.107) & - (0.055) & - (0.052)          & - (0.095) & - (0.303)          & = (0.706)          & - (0.359)          & = (0.510)          & = (0.639)          & - (0.490)          \\
-            da\_knn    & + (0.346)          & + (0.164)          & - (\textbf{0.045}) & = (0.847) & + (0.069)          & + (0.252)          & + (0.451)          & + (0.083)          & -                  & + (0.410)          & + (0.346)          & + (0.103)          & - (0.233)          & = (0.524)          & + (0.191)          & + (0.303)          & = (0.934) & + (0.489) & = (0.934)          & = (0.890) & + (0.121)          & + (0.188)          & + (0.132)          & + (0.252)          & + (0.117)          & + (0.188)          \\
-            da\_svc    & = (0.804)          & + (0.083)          & - (0.060)          & = (0.530) & = (0.804)          & + (0.162)          & = (0.847)          & + (\textbf{0.026}) & - (0.410)          & -                  & = (0.934)          & + (0.196)          & - (0.379)          & - (0.330)          & + (0.485)          & + (0.121)          & = (0.762) & + (0.327) & - (0.478)          & - (0.359) & = (0.950)          & + (0.149)          & = (0.572)          & + (0.132)          & = (0.524)          & + (0.208)          \\
-            de\_knn    & = (0.529)          & + (0.379)          & - (\textbf{0.038}) & - (0.330) & = (0.875)          & = (0.804)          & = (0.944)          & + (0.359)          & - (0.346)          & = (0.934)          & -                  & + (0.315)          & - (0.059)          & - (0.379)          & = (0.762)          & + (0.209)          & - (0.346) & = (0.762) & - (0.421)          & = (0.616) & + (0.389)          & + (0.142)          & = (0.720)          & + (0.303)          & + (0.315)          & + (0.286)          \\
-            de\_svc    & - (0.277)          & = (0.890)          & - (\textbf{0.007}) & - (0.116) & = (0.804)          & - (0.490)          & - (0.414)          & = (0.706)          & - (0.103)          & - (0.196)          & - (0.315)          & -                  & - (0.020)          & - (0.060)          & = (0.820)          & = (0.660)          & - (0.135) & - (0.402) & - (\textbf{0.038}) & - (0.229) & -                  & = (1.000)          & = (0.733)          & = (0.720)          & = (0.978)          & = (0.847)          \\
-            dummy\_knn & + (\textbf{0.008}) & + (\textbf{0.012}) & - (0.451)          & = (0.754) & + (\textbf{0.010}) & + (\textbf{0.012}) & + (\textbf{0.045}) & + (\textbf{0.010}) & + (0.233)          & + (0.379)          & + (0.059)          & + (\textbf{0.020}) & -                  & = (0.975)          & + (0.060)          & + (0.092)          & + (0.252) & + (0.142) & + (0.155)          & = (0.600) & + (\textbf{0.028}) & + (\textbf{0.012}) & + (\textbf{0.008}) & + (\textbf{0.012}) & + (\textbf{0.048}) & + (0.052)          \\
-            dummy\_svc & + (0.233)          & + (0.064)          & - (0.330)          & = (0.934) & + (0.149)          & + (0.151)          & + (0.315)          & + (0.064)          & = (0.524)          & + (0.330)          & + (0.379)          & + (0.060)          & = (0.975)          & -                  & + (0.233)          & + (0.142)          & = (0.514) & + (0.303) & + (0.451)          & = (0.890) & + (0.209)          & + (0.055)          & + (0.277)          & + (\textbf{0.048}) & + (0.208)          & + (0.055)          \\
-            fa\_knn    & = (0.679)          & = (0.847)          & - (\textbf{0.026}) & - (0.105) & = (0.802)          & = (0.625)          & = (0.934)          & + (0.151)          & - (0.191)          & - (0.485)          & = (0.762)          & = (0.820)          & - (0.060)          & - (0.233)          & -                  & = (0.572)          & - (0.167) & = (0.944) & - (0.330)          & = (0.890) & = (0.802)          & = (0.561)          & = (0.950)          & = (0.639)          & = (0.932)          & = (0.616)          \\
-            fa\_svc    & - (0.208)          & = (0.720)          & - (\textbf{0.026}) & - (0.117) & - (0.414)          & - (0.389)          & - (0.454)          & = (0.826)          & - (0.303)          & - (0.121)          & - (0.209)          & = (0.660)          & - (0.092)          & - (0.142)          & = (0.572)          & -                  & - (0.095) & - (0.182) & - (0.187)          & - (0.209) & - (0.414)          & = (0.784)          & = (0.639)          & - (0.470)          & - (0.421)          & = (0.950)          \\
-            ga\_knn    & = (0.649)          & + (0.187)          & - (0.081)          & = (0.712) & + (0.061)          & + (0.286)          & = (0.551)          & + (0.107)          & = (0.934)          & = (0.762)          & + (0.346)          & + (0.135)          & - (0.252)          & = (0.514)          & + (0.167)          & + (0.095)          & -         & = (0.842) & = (0.906)          & = (1.000) & + (0.081)          & + (0.088)          & + (0.162)          & + (0.140)          & + (0.263)          & + (0.121)          \\
-            ga\_svc    & = (0.910)          & + (0.156)          & - (0.073)          & - (0.359) & = (0.762)          & = (0.689)          & = (0.934)          & + (0.055)          & - (0.489)          & - (0.327)          & = (0.762)          & + (0.402)          & - (0.142)          & - (0.303)          & = (0.944)          & + (0.182)          & = (0.842) & -         & = (0.524)          & - (0.454) & = (1.000)          & + (0.233)          & = (0.842)          & + (0.290)          & = (0.762)          & = (0.514)          \\
-            goa\_knn   & + (0.379)          & + (0.083)          & - (\textbf{0.021}) & = (0.754) & + (\textbf{0.038}) & + (0.142)          & = (0.762)          & + (0.052)          & = (0.934)          & + (0.478)          & + (0.421)          & + (\textbf{0.038}) & - (0.155)          & - (0.451)          & + (0.330)          & + (0.187)          & = (0.906) & = (0.524) & -                  & = (0.950) & + (0.233)          & + (0.064)          & + (0.196)          & + (0.065)          & + (0.107)          & + (0.095)          \\
-            goa\_svc   & + (0.426)          & + (0.095)          & - (0.280)          & = (0.720) & = (0.561)          & + (0.167)          & = (0.572)          & + (0.095)          & = (0.890)          & + (0.359)          & = (0.616)          & + (0.229)          & = (0.600)          & = (0.890)          & = (0.890)          & + (0.209)          & -         & + (0.454) & = (0.950)          & -         & = (0.706)          & + (0.117)          & + (0.359)          & + (0.135)          & = (0.615)          & + (0.083)          \\
-            gwo\_knn   & - (0.414)          & = (0.762)          & - (\textbf{0.012}) & - (0.188) & = (0.802)          & = (0.887)          & = (0.762)          & + (0.303)          & - (0.121)          & = (0.950)          & - (0.389)          & = (1.000)          & - (\textbf{0.028}) & - (0.209)          & = (0.802)          & + (0.414)          & - (0.081) & -         & - (0.233)          & = (0.706) & -                  & = (0.798)          & = (0.572)          & = (0.851)          & = (0.802)          & = (0.629)          \\
-            gwo\_svc   & - (0.263)          & = (0.890)          & - (\textbf{0.011}) & - (0.079) & = (0.762)          & - (0.421)          & - (0.359)          & = (0.706)          & - (0.188)          & - (0.149)          & - (0.142)          & -                  & - (\textbf{0.012}) & - (0.055)          & = (0.561)          & = (0.784)          & - (0.088) & - (0.233) & - (0.064)          & - (0.117) & = (0.798)          & -                  & = (0.599)          & = (0.660)          & = (0.675)          & = (0.727)          \\
-            pso\_knn   & - (0.196)          & = (0.706)          & - (\textbf{0.014}) & - (0.328) & = (0.616)          & = (0.576)          & = (0.720)          & + (0.359)          & - (0.132)          & = (0.572)          & = (0.720)          & = (0.733)          & - (\textbf{0.008}) & - (0.277)          & = (0.950)          & = (0.639)          & - (0.162) & = (0.842) & - (0.196)          & - (0.359) & = (0.572)          & = (0.599)          & -                  & = (0.660)          & = (0.934)          & = (0.776)          \\
-            pso\_svc   & - (0.142)          & = (0.934)          & - (\textbf{0.008}) & - (0.188) & = (0.784)          & - (0.286)          & - (0.451)          & = (0.510)          & - (0.252)          & - (0.132)          & - (0.303)          & = (0.720)          & - (\textbf{0.012}) & - (\textbf{0.048}) & = (0.639)          & + (0.470)          & - (0.140) & - (0.290) & - (0.065)          & - (0.135) & = (0.851)          & = (0.660)          & = (0.660)          & -                  & -                  & = (0.802)          \\
-            woa\_knn   & - (0.410)          & = (0.889)          & - (\textbf{0.004}) & - (0.286) & = (0.950)          & = (0.820)          & = (0.576)          & = (0.639)          & - (0.117)          & = (0.524)          & - (0.315)          & = (0.978)          & - (\textbf{0.048}) & - (0.208)          & = (0.932)          & + (0.421)          & - (0.263) & = (0.762) & - (0.107)          & = (0.615) & = (0.802)          & = (0.675)          & = (0.934)          & = (1.000)          & -                  & = (0.780)          \\
-            woa\_svc   & - (0.303)          & -                  & - (\textbf{0.007}) & - (0.124) & = (0.720)          & = (0.551)          & = (0.530)          & + (0.490)          & - (0.188)          & - (0.208)          & - (0.286)          & = (0.847)          & - (0.052)          & - (0.055)          & = (0.616)          & = (0.950)          & - (0.121) & = (0.514) & - (0.095)          & - (0.083) & = (0.629)          & = (0.727)          & = (0.776)          & = (0.802)          & = (0.780)          & -                  \\
-            \bottomrule
-        \end{tabular}
-    \end{adjustbox}
-    \caption{P-valores para todos los algoritmos en \textit{accuracy} - binario}
-    \label{tab:p-values_accuracy}
-\end{sidewaystable}
-
-\begin{sidewaystable}[htp]
-    \centering
-    \begin{adjustbox}{width=\linewidth}
-        \begin{tabular}{lllllllllllllllllllllllllll}
-            \toprule
-            {}         & abco\_knn              & abco\_svc              & aco\_knn               & aco\_svc               & ba\_knn                & ba\_svc                & cs\_knn                & cs\_svc                & da\_knn                & da\_svc                & de\_knn                & de\_svc                & dummy\_knn             & dummy\_svc             & fa\_knn                & fa\_svc                & ga\_knn                & ga\_svc                & goa\_knn               & goa\_svc               & gwo\_knn               & gwo\_svc               & pso\_knn               & pso\_svc               & woa\_knn               & woa\_svc               \\
-            \midrule
-            abco\_knn  & -                      & - (0.328)              & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.002})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & = (0.820)              & = (0.609)              & + (\textbf{1.831E-04}) & + (\textbf{3.052E-04}) & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.015})     & + (\textbf{0.018})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     \\
-            abco\_svc  & + (0.328)              & -                      & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & = (0.978)              & = (0.847)              & + (\textbf{1.831E-04}) & + (\textbf{1.831E-04}) & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.010})     & + (\textbf{0.010})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     \\
-            aco\_knn   & - (\textbf{0.001})     & - (\textbf{0.001})     & -                      & = (0.530)              & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{0.002})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     \\
-            aco\_svc   & - (\textbf{0.001})     & - (\textbf{0.001})     & = (0.530)              & -                      & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{0.002})     & - (\textbf{0.001})     & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     \\
-            ba\_knn    & - (\textbf{0.001})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & -                      & = (0.778)              & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.014})     & + (\textbf{0.003})     & + (\textbf{0.010})     & + (0.132)              & - (\textbf{6.104E-05}) & - (\textbf{1.221E-04}) & = (0.570)              & - (0.443)              & + (\textbf{0.001})     & + (\textbf{0.001})     & = (0.934)              & = (0.978)              & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.002})     & + (\textbf{0.008})     \\
-            ba\_svc    & - (\textbf{0.002})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & = (0.778)              & -                      & + (\textbf{0.002})     & + (\textbf{0.001})     & + (\textbf{0.002})     & + (\textbf{0.003})     & + (\textbf{0.010})     & + (\textbf{0.017})     & - (\textbf{0.001})     & - (\textbf{6.104E-05}) & - (0.396)              & - (0.489)              & + (\textbf{0.001})     & + (\textbf{0.001})     & = (0.639)              & = (0.804)              & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     \\
-            cs\_knn    & - (\textbf{0.001})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.002})     & -                      & = (0.529)              & - (0.149)              & - (0.286)              & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{6.104E-05}) & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.002})     & - (\textbf{0.029})     & - (\textbf{0.025})     & + (\textbf{0.001})     & + (\textbf{0.003})     & + (\textbf{0.001})     & + (\textbf{0.001})     & - (0.208)              & - (0.103)              \\
-            cs\_svc    & - (\textbf{0.001})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & = (0.529)              & -                      & - (0.330)              & = (0.851)              & - (\textbf{0.038})     & - (\textbf{0.004})     & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{1.831E-04}) & - (\textbf{6.104E-05}) & + (\textbf{0.001})     & + (\textbf{0.001})     & - (0.064)              & - (\textbf{0.033})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & - (0.346)              & - (0.279)              \\
-            da\_knn    & - (\textbf{0.001})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & - (\textbf{0.014})     & - (\textbf{0.002})     & + (0.149)              & + (0.330)              & -                      & + (0.258)              & = (0.778)              & - (0.315)              & - (\textbf{0.001})     & - (\textbf{6.104E-05}) & - (\textbf{0.005})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & = (0.524)              & - (0.394)              & + (\textbf{0.001})     & + (\textbf{0.004})     & + (\textbf{0.002})     & + (\textbf{0.001})     & + (0.485)              & + (0.328)              \\
-            da\_svc    & - (\textbf{0.001})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & - (\textbf{0.003})     & - (\textbf{0.003})     & + (0.286)              & = (0.851)              & - (0.258)              & -                      & - (0.132)              & - (0.090)              & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{0.001})     & - (\textbf{6.104E-05}) & + (\textbf{0.001})     & + (\textbf{0.002})     & - (0.389)              & - (0.244)              & + (\textbf{0.001})     & + (\textbf{0.004})     & + (\textbf{0.001})     & + (\textbf{0.001})     & = (0.950)              & = (0.706)              \\
-            de\_knn    & - (\textbf{0.001})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & - (\textbf{0.010})     & - (\textbf{0.010})     & + (\textbf{0.001})     & + (\textbf{0.038})     & = (0.778)              & + (0.132)              & -                      & = (0.724)              & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{1.831E-04}) & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & - (0.359)              & - (0.169)              & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (0.117)              & + (0.184)              \\
-            de\_svc    & - (\textbf{0.001})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & - (0.132)              & - (\textbf{0.017})     & + (\textbf{0.001})     & + (\textbf{0.004})     & + (0.315)              & + (0.090)              & = (0.724)              & -                      & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{0.017})     & - (\textbf{0.004})     & + (\textbf{0.001})     & + (\textbf{0.001})     & = (0.599)              & - (0.330)              & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.005})     & + (\textbf{0.015})     \\
-            dummy\_knn & = (0.820)              & = (0.978)              & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{0.001})     & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{0.001})     & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & -                      & - (0.410)              & + (\textbf{0.001})     & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{0.001})     & + (\textbf{0.002})     & + (\textbf{6.104E-05}) & + (\textbf{0.001})     & + (\textbf{6.104E-05}) & + (\textbf{0.001})     & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) \\
-            dummy\_svc & = (0.609)              & = (0.847)              & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{1.221E-04}) & + (\textbf{6.104E-05}) & + (\textbf{0.001})     & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (0.410)              & -                      & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{0.001})     \\
-            fa\_knn    & - (\textbf{1.831E-04}) & - (\textbf{1.831E-04}) & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & = (0.570)              & + (0.396)              & + (\textbf{0.001})     & + (\textbf{1.831E-04}) & + (\textbf{0.005})     & + (\textbf{0.001})     & + (\textbf{1.831E-04}) & + (\textbf{0.017})     & - (\textbf{0.001})     & - (\textbf{6.104E-05}) & -                      & -                      & + (\textbf{6.104E-05}) & + (\textbf{0.001})     & + (0.258)              & = (0.561)              & + (\textbf{6.104E-05}) & + (\textbf{0.001})     & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{0.002})     & + (\textbf{0.002})     \\
-            fa\_svc    & - (\textbf{3.052E-04}) & - (\textbf{1.831E-04}) & + (\textbf{0.001})     & + (\textbf{6.104E-05}) & + (0.443)              & + (0.489)              & + (\textbf{0.001})     & + (\textbf{6.104E-05}) & + (\textbf{0.001})     & + (\textbf{6.104E-05}) & + (\textbf{0.001})     & + (\textbf{0.004})     & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & = (1.000)              & -                      & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & = (0.570)              & = (0.890)              & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (\textbf{0.001})     & + (\textbf{3.052E-04}) & + (\textbf{0.001})     \\
-            ga\_knn    & - (\textbf{0.001})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.002})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & -                      & - (0.170)              & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & + (\textbf{0.031})     & = (0.950)              & - (\textbf{0.013})     & - (\textbf{0.038})     & - (\textbf{0.001})     & - (\textbf{0.001})     \\
-            ga\_svc    & - (\textbf{0.001})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.002})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.002})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{0.001})     & - (\textbf{6.104E-05}) & + (0.170)              & -                      & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & + (\textbf{0.008})     & + (0.233)              & - (0.208)              & - (0.055)              & - (\textbf{0.001})     & - (\textbf{0.001})     \\
-            goa\_knn   & - (\textbf{0.015})     & - (\textbf{0.010})     & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & = (0.934)              & = (0.639)              & + (\textbf{0.029})     & + (0.064)              & = (0.524)              & + (0.389)              & + (0.359)              & = (0.599)              & - (\textbf{0.001})     & - (\textbf{0.001})     & - (0.258)              & = (0.570)              & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & -                      & - (0.258)              & + (\textbf{6.104E-05}) & + (\textbf{3.052E-04}) & + (\textbf{0.001})     & + (\textbf{6.104E-05}) & + (0.201)              & + (0.151)              \\
-            goa\_svc   & - (\textbf{0.018})     & - (\textbf{0.010})     & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & = (0.978)              & = (0.804)              & + (\textbf{0.025})     & + (\textbf{0.033})     & + (0.394)              & + (0.244)              & + (0.169)              & + (0.330)              & - (\textbf{0.002})     & - (\textbf{0.001})     & = (0.561)              & = (0.890)              & + (\textbf{6.104E-05}) & + (\textbf{6.104E-05}) & + (0.258)              & -                      & + (\textbf{6.104E-05}) & + (\textbf{3.052E-04}) & + (\textbf{0.001})     & + (\textbf{6.104E-05}) & + (0.055)              & + (0.083)              \\
-            gwo\_knn   & - (\textbf{0.001})     & - (\textbf{0.001})     & + (\textbf{0.002})     & + (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{0.031})     & - (\textbf{0.008})     & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & -                      & - (\textbf{0.028})     & - (\textbf{0.002})     & - (\textbf{0.003})     & - (\textbf{0.001})     & - (\textbf{0.001})     \\
-            gwo\_svc   & - (\textbf{0.001})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.003})     & - (\textbf{0.001})     & - (\textbf{0.004})     & - (\textbf{0.004})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{6.104E-05}) & - (\textbf{0.001})     & - (\textbf{6.104E-05}) & = (0.950)              & - (0.233)              & - (\textbf{3.052E-04}) & - (\textbf{3.052E-04}) & + (\textbf{0.028})     & -                      & - (0.235)              & - (0.184)              & - (\textbf{0.002})     & - (\textbf{0.002})     \\
-            pso\_knn   & - (\textbf{0.001})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.002})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & + (\textbf{0.013})     & + (0.208)              & - (\textbf{0.001})     & - (\textbf{0.001})     & + (\textbf{0.002})     & + (0.235)              & -                      & = (0.950)              & - (\textbf{0.001})     & - (\textbf{0.001})     \\
-            pso\_svc   & - (\textbf{0.001})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{0.001})     & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{0.001})     & + (\textbf{0.038})     & + (0.055)              & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & + (\textbf{0.003})     & + (0.184)              & = (0.950)              & -                      & - (\textbf{0.001})     & - (\textbf{0.001})     \\
-            woa\_knn   & - (\textbf{0.001})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & - (\textbf{0.002})     & - (\textbf{0.001})     & + (0.208)              & + (0.346)              & - (0.485)              & = (0.950)              & - (0.117)              & - (\textbf{0.005})     & - (\textbf{6.104E-05}) & - (\textbf{6.104E-05}) & - (\textbf{0.002})     & - (\textbf{3.052E-04}) & + (\textbf{0.001})     & + (\textbf{0.001})     & - (0.201)              & - (0.055)              & + (\textbf{0.001})     & + (\textbf{0.002})     & + (\textbf{0.001})     & + (\textbf{0.001})     & -                      & - (0.442)              \\
-            woa\_svc   & - (\textbf{0.001})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & - (\textbf{0.008})     & - (\textbf{0.001})     & + (0.103)              & + (0.279)              & - (0.328)              & = (0.706)              & - (0.184)              & - (\textbf{0.015})     & - (\textbf{6.104E-05}) & - (\textbf{0.001})     & - (\textbf{0.002})     & - (\textbf{0.001})     & + (\textbf{0.001})     & + (\textbf{0.001})     & - (0.151)              & - (0.083)              & + (\textbf{0.001})     & + (\textbf{0.002})     & + (\textbf{0.001})     & + (\textbf{0.001})     & + (0.442)              & -                      \\
-            \bottomrule
-        \end{tabular}
-    \end{adjustbox}
-    \caption{P-valores para todos los algoritmos en \textit{reducción de características} - binario}
-    \label{tab:p-values_red}
-\end{sidewaystable}
-
-\begin{sidewaystable}[htp]
-    \centering
-    \begin{adjustbox}{width=\linewidth}
-        \begin{tabular}{lllllllllllllllll}
-            \toprule
-                      &                          & dataset       &             &          &         &            &         &            &         &              &              &              &         &         &         & \tabularnewline
-            optimizer & Data                     & breast-cancer & dermatology & diabetes & ecoli   & ionosphere & iris    & parkinsons & sonar   & spambase-460 & spectf-heart & waveform5000 & wdbc    & wine    & yeast   & zoo\tabularnewline
-            \midrule
-            abco      & Average - acc            & 74.17\%       & 88.00\%     & 73.23\%  & 77.14\% & 85.33\%    & 91.67\% & 77.50\%    & 60.00\% & 74.74\%      & 79.29\%      & 83.75\%      & 91.74\% & 71.25\% & 51.33\% & 70.00\%\tabularnewline
-                      & Average - selected\_rate & 75.56\%       & 67.65\%     & 72.50\%  & 92.86\% & 80.00\%    & 25.00\% & 84.55\%    & 92.67\% & 91.58\%      & 93.64\%      & 91.00\%      & 85.33\% & 63.85\% & 87.50\% & 51.18\%\tabularnewline
-            aco       & Average - acc            & 79.17\%       & 78.67\%     & 71.94\%  & 65.71\% & 82.00\%    & 90.00\% & 77.50\%    & 63.33\% & 81.05\%      & 75.00\%      & 73.45\%      & 90.87\% & 77.50\% & 50.00\% & 38.00\%\tabularnewline
-                      & Average - selected\_rate & 6.67\%        & 12.35\%     & 17.50\%  & 44.29\% & 8.53\%     & 25.00\% & 4.09\%     & 2.50\%  & 3.33\%       & 1.82\%       & 9.25\%       & 5.67\%  & 17.69\% & 41.25\% & 10.59\%\tabularnewline
-            ba        & Average - acc            & 66.67\%       & 88.00\%     & 74.52\%  & 77.86\% & 88.00\%    & 86.67\% & 81.25\%    & 57.78\% & 78.42\%      & 72.86\%      & 84.70\%      & 90.43\% & 75.00\% & 52.67\% & 62.00\%\tabularnewline
-                      & Average - selected\_rate & 45.56\%       & 53.82\%     & 46.25\%  & 68.57\% & 55.59\%    & 25.00\% & 55.00\%    & 66.83\% & 63.86\%      & 68.86\%      & 66.50\%      & 49.00\% & 44.62\% & 82.50\% & 41.76\%\tabularnewline
-            cs        & Average - acc            & 64.17\%       & 94.67\%     & 75.16\%  & 81.43\% & 90.00\%    & 90.00\% & 82.50\%    & 58.89\% & 82.63\%      & 74.29\%      & 85.35\%      & 88.26\% & 71.25\% & 52.33\% & 70.00\%\tabularnewline
-                      & Average - selected\_rate & 40.00\%       & 42.06\%     & 43.75\%  & 64.29\% & 44.12\%    & 25.00\% & 43.64\%    & 55.83\% & 52.11\%      & 59.77\%      & 59.75\%      & 38.00\% & 37.69\% & 71.25\% & 31.18\%\tabularnewline
-            da        & Average - acc            & 79.17\%       & 85.33\%     & 74.19\%  & 72.86\% & 84.67\%    & 86.67\% & 78.75\%    & 56.67\% & 76.32\%      & 73.57\%      & 83.70\%      & 90.43\% & 62.50\% & 50.67\% & 68.00\%\tabularnewline
-                      & Average - selected\_rate & 30.00\%       & 52.06\%     & 40.00\%  & 57.14\% & 48.53\%    & 25.00\% & 45.00\%    & 54.17\% & 60.53\%      & 51.82\%      & 55.00\%      & 46.33\% & 39.23\% & 67.50\% & 47.65\%\tabularnewline
-            de        & Average - acc            & 66.67\%       & 84.00\%     & 66.77\%  & 76.43\% & 90.00\%    & 95.00\% & 78.75\%    & 66.67\% & 76.84\%      & 75.71\%      & 85.25\%      & 90.87\% & 81.25\% & 50.67\% & 68.00\%\tabularnewline
-                      & Average - selected\_rate & 46.67\%       & 47.06\%     & 48.75\%  & 70.00\% & 49.71\%    & 25.00\% & 56.36\%    & 62.50\% & 58.25\%      & 55.68\%      & 58.75\%      & 48.67\% & 36.15\% & 77.50\% & 35.88\%\tabularnewline
-            dummy     & Average - acc            & 76.67\%       & 79.33\%     & 70.00\%  & 69.29\% & 89.33\%    & 80.00\% & 83.75\%    & 66.67\% & 67.37\%      & 65.71\%      & 83.15\%      & 91.30\% & 70.00\% & 46.17\% & 54.00\%\tabularnewline
-                      & Average - selected\_rate & 82.22\%       & 83.82\%     & 76.25\%  & 72.86\% & 77.94\%    & 60.00\% & 82.27\%    & 88.33\% & 88.77\%      & 84.55\%      & 83.50\%      & 73.67\% & 68.46\% & 90.00\% & 71.76\%\tabularnewline
-            fa        & Average - acc            & 76.67\%       & 92.67\%     & 73.55\%  & 71.43\% & 88.67\%    & 90.00\% & 72.50\%    & 64.44\% & 83.16\%      & 75.71\%      & 84.00\%      & 91.30\% & 60.00\% & 53.00\% & 78.00\%\tabularnewline
-                      & Average - selected\_rate & 47.78\%       & 55.29\%     & 50.00\%  & 65.71\% & 55.29\%    & 30.00\% & 62.73\%    & 66.00\% & 62.28\%      & 65.45\%      & 60.25\%      & 52.33\% & 50.00\% & 75.00\% & 48.24\%\tabularnewline
-            ga        & Average - acc            & 69.17\%       & 86.67\%     & 74.52\%  & 67.86\% & 88.00\%    & 88.33\% & 78.75\%    & 56.67\% & 84.21\%      & 72.86\%      & 84.75\%      & 90.00\% & 68.75\% & 52.33\% & 68.00\%\tabularnewline
-                      & Average - selected\_rate & 24.44\%       & 25.29\%     & 30.00\%  & 55.71\% & 27.65\%    & 25.00\% & 29.55\%    & 35.83\% & 38.77\%      & 40.23\%      & 42.75\%      & 21.00\% & 22.31\% & 70.00\% & 19.41\%\tabularnewline
-            goa       & Average - acc            & 73.33\%       & 81.33\%     & 70.97\%  & 75.71\% & 86.67\%    & 75.00\% & 81.25\%    & 61.11\% & 64.74\%      & 78.57\%      & 83.60\%      & 94.78\% & 60.00\% & 50.17\% & 56.00\%\tabularnewline
-                      & Average - selected\_rate & 57.78\%       & 50.88\%     & 65.00\%  & 82.86\% & 41.18\%    & 77.50\% & 57.27\%    & 49.33\% & 51.93\%      & 48.64\%      & 52.50\%      & 41.00\% & 46.15\% & 92.50\% & 38.24\%\tabularnewline
-            gwo       & Average - acc            & 68.33\%       & 82.67\%     & 73.55\%  & 75.00\% & 86.67\%    & 90.00\% & 76.25\%    & 68.89\% & 85.26\%      & 75.71\%      & 82.65\%      & 95.65\% & 72.50\% & 53.83\% & 68.00\%\tabularnewline
-                      & Average - selected\_rate & 25.56\%       & 17.06\%     & 22.50\%  & 54.29\% & 26.18\%    & 25.00\% & 30.45\%    & 54.50\% & 39.65\%      & 58.18\%      & 36.00\%      & 16.00\% & 16.92\% & 65.00\% & 16.47\%\tabularnewline
-            pso       & Average - acc            & 71.67\%       & 88.67\%     & 74.84\%  & 73.57\% & 88.00\%    & 88.33\% & 76.25\%    & 62.22\% & 77.89\%      & 74.29\%      & 84.00\%      & 90.00\% & 78.75\% & 55.50\% & 66.00\%\tabularnewline
-                      & Average - selected\_rate & 26.67\%       & 28.24\%     & 33.75\%  & 54.29\% & 29.71\%    & 25.00\% & 40.00\%    & 48.67\% & 41.40\%      & 46.36\%      & 42.75\%      & 24.67\% & 22.31\% & 58.75\% & 18.24\%\tabularnewline
-            woa       & Average - acc            & 75.83\%       & 87.33\%     & 79.03\%  & 77.86\% & 86.00\%    & 90.00\% & 76.25\%    & 65.56\% & 84.74\%      & 67.14\%      & 85.90\%      & 92.17\% & 67.50\% & 50.33\% & 64.00\%\tabularnewline
-                      & Average - selected\_rate & 46.67\%       & 47.06\%     & 38.75\%  & 61.43\% & 42.35\%    & 25.00\% & 52.73\%    & 58.00\% & 53.68\%      & 58.18\%      & 57.00\%      & 40.67\% & 40.00\% & 75.00\% & 31.18\%\tabularnewline
-            \bottomrule
-        \end{tabular}
-    \end{adjustbox}
-    \caption{Porcentajes de características seleccionadas y precisión en clasificación para cada algoritmo binario}
-    \label{tab:bin_red_acc_all}
-\end{sidewaystable}
+Por tanto, pese a no haber una diferencia estadística suficientemente fuerte entre los resultados de precisión de ambos algoritmos, si la hay en la reducción de características. Por ello se puede afirmar que \textbf{bGWO} es más interesante que \textbf{bWOA}.
 
 \clearpage
 \subsection{Tiempo de ejecución}
 Una última métrica muy importante a analizar es el tiempo de ejecución. Por definición, la mayoría de metaheurísticas deberían ser rápidas, al menos en comparación a algoritmos exactos, pues es en sustitución de estos donde brillan realmente. En el caso concreto del problema de selección de características es algo a tener muy en cuenta, pues unos de los cuellos de botella principales en el entrenamiento de grandes modelos es el tiempo de ejecución. Por tanto, en esta sección se procederá a analizar varios algoritmos y sus diferencias en cuanto a tiempos.\\[6pt]
-En esta comparativa, se dejará de lado al algoritmo \textbf{bDummy}, pues es el mejor indiscutible en rapidez debido a sus cálculos arbitrarios.
 
-\subsubsection{Clásicos vs Modernos}
-Los resultados en cuanto a tiempo de ejecución son variados. Algoritmos como \textbf{bABCO} y \textbf{GA}, siendo clásicos, son los peores según el siguiente ranking \ref{tab:bin-execution_time_ranking}. Otros sin embargo posicionan mucho mejor en comparación, véase \textbf{bPSO} o \textbf{bDE}, que son bastante más rápidos. En cuanto a los modernos, parece haber una diferencia muy grande en la clasificación de \textbf{FA} con respecto al resto.\\[6pt]
-Es muy destacable ver como uno de los mejores en casi todas las métricas anteriormente analizadas, que es el \textbf{bGWO}, aquí es el segundo peor. También apreciar que la mayoría de algoritmos modernos se encuentran en mitad de la clasificación. Destacar que a pesar del pésimo rendimiento de \textbf{bABCO} con respecto al resto de algoritmos, los clásicos \textbf{bPSO}, \textbf{bDE} y \textbf{ACO} son muy eficientes.\\[6pt]
-Si bien hay diferencias significativas en casi todas las comparativas entre algoritmos, no se observa una tendencia de un grupo siendo mejor que otro. Entre los más lentos hay modernos y clásicos, de igual forma que entre los más rápidos y los que se encuentran en la mitad.
-
-\subsubsection{Mejor vs Resto}
-En cuanto a la clasificación de los algoritmos modernos, llama la atención el rendimiento destacado de \textbf{bFA} en términos de velocidad. Este algoritmo parece sobresalir significativamente en comparación con otros algoritmos modernos y clásicos en lo que respecta al tiempo de ejecución. Este hallazgo podría tener importantes implicaciones para aplicaciones donde la velocidad de convergencia es crucial. Los resultados obtenidos en las comparaciones con el resto de algoritmos son muy similares todos entre sí, dado que todos los p-valores obtenidos indican diferencias significativas \ref{tab:fa_vs_rest-bin_exec_time}
-
-\begin{table}[htp]
-    \centering
-    \begin{tabular}{lllll}
-        \toprule
-        {}        & Original  & Holm           & Hommel             & Hochberg           \\
-        \midrule
-        abco\_knn & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        pso\_svc  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        pso\_knn  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        gwo\_svc  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        gwo\_knn  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        goa\_svc  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        goa\_knn  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        ga\_svc   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        ga\_knn   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        woa\_knn  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        de\_svc   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        da\_svc   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        da\_knn   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        cs\_svc   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        cs\_knn   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        ba\_svc   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        ba\_knn   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        aco\_svc  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        aco\_knn  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        abco\_svc & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        de\_knn   & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        woa\_svc  & 6.104E-05 & \textbf{0.001} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        fa\_svc   & 0.044     & \textbf{0.044} & \textbf{0.044}     & \textbf{0.044}     \\
-        \bottomrule
-    \end{tabular}
-    \caption{P-valores de bFA vs el resto en tiempo de ejecución - binario}
-    \label{tab:fa_vs_rest-bin_exec_time}
-\end{table}
-
-\subsubsection{GA vs DE}
-Los algoritmos \textbf{bDE} y \textbf{GA} comparten varios conceptos y similitudes fundamentales. Emplean operadores de variación, como la mutación y la recombinación (\textit{crossover}), para introducir diversidad en la población y generar nuevas soluciones. Ambos algoritmos seleccionan soluciones de la población actual (padres) para generar nuevas soluciones (descendientes) mediante estos operadores de variación. Posteriormente, las nuevas soluciones reemplazan a las soluciones menos aptas en la población, siguiendo una estrategia de selección basada en la función de \textit{fitness}.\\[6pt]
-\textbf{bDE} de hecho, como se ha explicado en secciones anteriores, surgió como una alternativa más refinada a \textbf{GA} para codificaciones continuas. Tiene sentido por tanto comparar ambas metaheurísticas entre sí.\\[6pt]
-
-Si se observa la tabla \ref{tab:bin-execution_time_ranking}, \textbf{bDE} posiciona por encima de \textbf{GA} en todos y cada uno de los conjuntos de datos utilizados, tanto su versión con \textbf{kNN} como su versión con \textbf{SVC}. Para poder rechazar la hipótesis nula y poder afirmar que \textbf{bDE} es mejor opción en cuanto a velocidad, se observan los p-valores corregidos comparando a \textbf{bDE} con \textbf{GA} en \ref{tab:de_vs_ga-bin_exec_time}.
-
-\begin{table}[htp]
-    \centering
-    \begin{tabular}{lllll}
-        \toprule
-        {}      & Original  & Holm               & Hommel             & Hochberg           \\
-        \midrule
-        ga\_knn & 6.104E-05 & \textbf{1.831E-04} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        ga\_svc & 6.104E-05 & \textbf{1.831E-04} & \textbf{1.221E-04} & \textbf{1.221E-04} \\
-        de\_svc & 0.015     & \textbf{0.015}     & \textbf{0.015}     & \textbf{0.015}     \\
-        \bottomrule
-    \end{tabular}
-    \caption{P-valores de bDE vs GA en tiempo de ejecución - binario}
-    \label{tab:de_vs_ga-bin_exec_time}
-\end{table}
-
-Hay una diferencia significativa a favor de \textbf{bDE}, de hecho la hay incluso entre versiones que usan \textbf{kNN} y \textbf{SVC}. Esto indicaría que algoritmos que usan \textbf{kNN} son más rápidos que los que usan \textbf{SVC}, debido a la sencillez de el primero con respecto al segundo y a los parámetros elegidos. Al menos ocurre tal fenómeno en esta comparación y en la anteriormente analizada con \textbf{bFA}. Queda claro además que \textbf{bDE} es mejor que \textbf{bGA} en todos los conjuntos de datos en tiempo de ejecución.
-
-\begin{sidewaystable}[htp]
-    \centering
-    \begin{adjustbox}{width=\linewidth}
-        \begin{tabular}{lllllllllllllllllllllllll}
-            \toprule
-            {}   & abco\_knn & abco\_svc & aco\_knn & aco\_svc & ba\_knn & ba\_svc & cs\_knn & cs\_svc & da\_knn & da\_svc & de\_knn & de\_svc & fa\_knn        & fa\_svc    & ga\_knn & ga\_svc & goa\_knn & goa\_svc & gwo\_knn & gwo\_svc & pso\_knn & pso\_svc & woa\_knn & woa\_svc \\
-            \midrule
-            F01  & 24        & 23        & 12       & 3        & 20      & 18      & 17      & 14.5    & 13      & 8       & 10      & 5       & \textbf{2}     & \textbf{1} & 19      & 16      & 14.5     & 7        & 22       & 21       & 9        & 4        & 11       & 6        \\
-            F02  & 23        & 24        & 7        & 15       & 11      & 21      & 8       & 19.5    & 4       & 16      & 5       & 13      & \textbf{1}     & \textbf{2} & 10      & 18      & 9        & 17       & 19.5     & 22       & 3        & 12       & 6        & 14       \\
-            F03  & 23        & 24        & 8        & 14       & 18      & 20      & 10      & 17      & 6       & 15      & 4       & 11      & \textbf{2}     & \textbf{1} & 16      & 19      & 7        & 13       & 21       & 22       & 3        & 9        & 5        & 12       \\
-            F04  & 24        & 23        & 12       & 7        & 20      & 18      & 16      & 15      & 14      & 8       & 9.5     & 4       & \textbf{2}     & \textbf{1} & 19      & 17      & 13       & 6        & 22       & 21       & 9.5      & 3        & 11       & 5        \\
-            F05  & 23        & 24        & 6        & 17       & 12      & 20      & 8       & 18      & 4       & 13      & 5       & 14      & \textbf{1}     & \textbf{2} & 10      & 19      & 9        & 16       & 21       & 22       & 3        & 11       & 7        & 15       \\
-            F06  & 24        & 23        & 11       & 7        & 20      & 17      & 18      & 9       & 15      & 8       & 13      & 6       & \textbf{2}     & \textbf{1} & 19      & 16      & 14       & 5        & 22       & 21       & 10       & 3        & 12       & 4        \\
-            F07  & 23        & 24        & 6        & 11       & 18      & 20      & 14      & 17      & 4       & 10      & 5       & 9       & \textbf{1}     & \textbf{2} & 16      & 19      & 12       & 15       & 21       & 22       & 3        & 7        & 8        & 13       \\
-            F08  & 23        & 24        & 13       & 18       & 12      & 20      & 6       & 17      & 4       & 11      & 5       & 14      & \textbf{1}     & \textbf{2} & 9       & 19      & 10       & 16       & 21       & 22       & 3        & 8        & 7        & 15       \\
-            F09  & 22        & 24        & 10       & 17       & 11      & 21      & 7       & 19      & 4       & 15      & 5       & 14      & \textbf{1}     & \textbf{2} & 9       & 20      & 8        & 18       & 13       & 23       & 3        & 12       & 6        & 16       \\
-            F10  & 22        & 24        & 8        & 16       & 11      & 21      & 6       & 18      & 4       & 13      & 5       & 14      & \textbf{1}     & \textbf{2} & 10      & 19      & 9        & 17       & 20       & 23       & 3        & 12       & 7        & 15       \\
-            F11  & 13        & 24        & 3.5      & 22       & 10      & 21      & 8       & 19      & 5       & 18      & 3.5     & 15      & \textbf{1}     & 11         & 9       & 20      & 7        & 17       & 12       & 23       & 2        & 14       & 6        & 16       \\
-            F12  & 23        & 24        & 6        & 18       & 11      & 21      & 9       & 17      & 4       & 13      & 5       & 14      & \textbf{1}     & \textbf{2} & 10      & 19.5    & 8        & 16       & 19.5     & 22       & 3        & 12       & 7        & 15       \\
-            F13  & 24        & 23        & 11       & 6        & 20      & 17      & 18      & 10      & 14      & 7       & 12      & 4       & \textbf{2}     & \textbf{1} & 19      & 16      & 15       & 8        & 22       & 21       & 9        & 3        & 13       & 5        \\
-            F14  & 22        & 24        & 8        & 13       & 11      & 21      & 9       & 19      & 4       & 17      & 6       & 14      & \textbf{1}     & \textbf{2} & 10      & 20      & 5        & 18       & 15       & 23       & 3        & 12       & 7        & 16       \\
-            F15  & 23        & 24        & 7        & 9        & 18      & 20      & 15      & 16      & 6       & 12      & 5       & 10      & \textbf{1}     & \textbf{2} & 17      & 19      & 11       & 14       & 21       & 22       & 3        & 4        & 8        & 13       \\
-            Mean & 22.400    & 23.733    & 8.567    & 12.867   & 14.867  & 19.733  & 11.267  & 16.333  & 7.000   & 12.267  & 6.533   & 10.733  & \textbf{1.333} & 2.267      & 13.467  & 18.433  & 10.100   & 13.533   & 19.467   & 22.000   & 4.633    & 8.400    & 8.067    & 12.000   \\
-            \bottomrule
-        \end{tabular}
-    \end{adjustbox}
-    \caption{Ranking de algoritmos en tiempo de ejecución - binario}
-    \label{tab:bin-execution_time_ranking}
-\end{sidewaystable}
-
-\clearpage
+Los resultados arrojan dos algoritmos con diferencias relevantes, \textbf{bFA} con una diferencia positiva y \textbf{bABCO} con una diferencia negativa. Véase en la table \ref{tab:mean_time_knn_bin}. El resto de algoritmo obtienen tiempos muy similares en todos los conjuntos de datos.
 
 \subsection{Convergencia}
-En esta última sub-sección se hará una comparativa de los diferentes algoritmos observando su capacidad de convergencia.\\[6pt]
-Inicialmente, si se observan las gráficas de convergencia de cada \textit{dataset} \ref{fig:convergencia_svc_1}, \ref{fig:convergencia_svc_2}, \ref{fig:convergencia_knn_1}, \ref{fig:convergencia_knn_2} y se analizan las curvas, se puede decir que absolutamente todos los algoritmos convergen, ya sea a una solución mejor o peor, pero todos lo hacen (incluso \textbf{Dummy}). No hay ninguno en ningún problema que retroceda en cuanto a su valor \textit{fitness} y todos poseen una curva descendiente bastante suave.\\[6pt]
-Con el tiempo, esta curva tiende a alcanzar un límite inferior, como si de una función logarítmica se tratase. Esto indica, que el algoritmo está mejorando cada vez menos porque ha encontrado un óptimo local.\\[6pt]
-Claramente, el peor algoritmo y al que más le cuesta converger es \textbf{bDummy}. Pese a ello, \textbf{bDummy} termina por superar en algunos problemas a \textbf{ACO}, que según que problema parece variar mucho en su proceso optimizatorio.\\[6pt]
-Otro algoritmo que converge más lentamente que el resto es el \textbf{bDA} y el \textbf{bGOA}. Por ejemplo, en el problema de \textit{diabetes}, representado en la figura~\ref{fig:convergencia_diabetes_svc}, se puede apreciar que el \textbf{bDA} es mejor que \textbf{bGOA} y que ambos son los más lentos a excepción del \textbf{bDummy}.
+En esta última sub-sección se analizará la convergencia de los diferentes algoritmos. Inicialmente, si se observan las gráficas de convergencia de cada \textit{dataset} \ref{fig:convergencia_svc_1}, \ref{fig:convergencia_svc_2}, \ref{fig:convergencia_knn_1}, \ref{fig:convergencia_knn_2} y se analizan las curvas, se puede decir que absolutamente todos los algoritmos convergen, ya sea a una solución mejor o peor, pero todos lo hacen (incluso \textbf{Dummy}). No hay ninguno en ningún problema que retroceda en cuanto a su valor \textit{fitness} y todos poseen una curva descendiente bastante suave. Con el tiempo, esta curva tiende a alcanzar un límite inferior, como si de una función logarítmica se tratase. Esto indica, que el algoritmo está mejorando cada vez menos porque ha encontrado un óptimo local.
 
 \begin{figure}[htp]
-    \centering
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/breast-cancer/optimizers_fitness_svc.png}
-        \caption{breast-cancer}
-        \label{fig:convergencia_breast_cancer_svc}
-    \end{subfigure}
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/dermatology/optimizers_fitness_svc.png}
-        \caption{dermatology}
-        \label{fig:convergencia_dermatology_svc}
-    \end{subfigure}
-
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/diabetes/optimizers_fitness_svc.png}
-        \caption{diabetes}
-        \label{fig:convergencia_diabetes_svc}
-    \end{subfigure}
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/ecoli/optimizers_fitness_svc.png}
-        \caption{ecoli}
-        \label{fig:convergencia_ecoli_svc}
-    \end{subfigure}
-
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/ionosphere/optimizers_fitness_svc.png}
-        \caption{ionosphere}
-        \label{fig:convergencia_ionosphere_svc}
-    \end{subfigure}
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/iris/optimizers_fitness_svc.png}
-        \caption{iris}
-        \label{fig:convergencia_iris_svc}
-    \end{subfigure}
-
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/parkinsons/optimizers_fitness_svc.png}
-        \caption{parkinsons}
-        \label{fig:convergencia_parkinsons_svc}
-    \end{subfigure}
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/sonar/optimizers_fitness_svc.png}
-        \caption{sonar}
-        \label{fig:convergencia_sonar_svc}
-    \end{subfigure}
-    \caption{Convergencia con SVC parte 1 - binario}
-    \label{fig:convergencia_svc_1}
+    \includegraphics[width=0.8\textwidth]{imagenes/fitness_charts/img/binary/waveform5000/optimizers_fitness_knn.png}
+    \caption{Convergencia de todas las metaheurísticas en waveform5000 - knn - binario}
 \end{figure}
 
 \begin{figure}[htp]
-    \centering
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/spambase-460/optimizers_fitness_svc.png}
-        \caption{spambase-460}
-        \label{fig:convergencia_spambase-460_svc}
-    \end{subfigure}
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/spectf-heart/optimizers_fitness_svc.png}
-        \caption{spectf-heart}
-        \label{fig:convergencia_spectf-heart_svc}
-    \end{subfigure}
-
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/waveform5000/optimizers_fitness_svc.png}
-        \caption{waveform5000}
-        \label{fig:convergencia_waveform5000_svc}
-    \end{subfigure}
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/wdbc/optimizers_fitness_svc.png}
-        \caption{wdbc}
-        \label{fig:convergencia_wdbc_svc}
-    \end{subfigure}
-
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/wine/optimizers_fitness_svc.png}
-        \caption{wine}
-        \label{fig:convergencia_wine_svc}
-    \end{subfigure}
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/yeast/optimizers_fitness_svc.png}
-        \caption{yeast}
-        \label{fig:convergencia_yeast_svc}
-    \end{subfigure}
-
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/zoo/optimizers_fitness_svc.png}
-        \caption{zoo}
-        \label{fig:convergencia_zoo_svc}
-    \end{subfigure}
-    \caption{Convergencia con SVC parte 2 - binario}
-    \label{fig:convergencia_svc_2}
+    \includegraphics[width=0.8\textwidth]{imagenes/fitness_charts/img/binary/wdbc/optimizers_fitness_knn.png}
+    \caption{Convergencia de todas las metaheurísticas en wdbc - knn - binario}
 \end{figure}
 
-\begin{figure}[htp]
-    \centering
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/breast-cancer/optimizers_fitness_knn.png}
-        \caption{breast-cancer}
-        \label{fig:convergencia_breast_cancer_knn}
-    \end{subfigure}
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/dermatology/optimizers_fitness_knn.png}
-        \caption{dermatology}
-        \label{fig:convergencia_dermatology_knn}
-    \end{subfigure}
+Claramente, el peor algoritmo y al que más le cuesta converger es \textbf{ACO}. Pese a ello, \textbf{ACO} parece variar mucho en su proceso optimizatorio entre distintos conjuntos de datos.\\[6pt]
+Otro algoritmo que converge más lentamente que el resto es el \textbf{bDA} y el \textbf{bGOA}. Por ejemplo, en el problema de \textit{diabetes}, representado en la figura~\ref{fig:convergencia_diabetes_svc}, se puede apreciar que el \textbf{bDA} es mejor que \textbf{bGOA} y que ambos son los más lentos a excepción del \textbf{bDummy}. \\[6pt]
 
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/diabetes/optimizers_fitness_knn.png}
-        \caption{diabetes}
-        \label{fig:convergencia_diabetes_knn}
-    \end{subfigure}
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/ecoli/optimizers_fitness_knn.png}
-        \caption{ecoli}
-        \label{fig:convergencia_ecoli_knn}
-    \end{subfigure}
+Pese a las dificultades de algunos algoritmos, todos convergen correctamente en todos los conjuntos de datos, lo cual es esperable.
 
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/ionosphere/optimizers_fitness_knn.png}
-        \caption{ionosphere}
-        \label{fig:convergencia_ionosphere_knn}
-    \end{subfigure}
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/iris/optimizers_fitness_knn.png}
-        \caption{iris}
-        \label{fig:convergencia_iris_knn}
-    \end{subfigure}
+% TODO me he quedado por aquí
 
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/parkinsons/optimizers_fitness_knn.png}
-        \caption{parkinsons}
-        \label{fig:convergencia_parkinsons_knn}
-    \end{subfigure}
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/sonar/optimizers_fitness_knn.png}
-        \caption{sonar}
-        \label{fig:convergencia_sonar_knn}
-    \end{subfigure}
-    \caption{Convergencia con kNN parte 1 - binario}
-    \label{fig:convergencia_knn_1}
-\end{figure}
-
-\begin{figure}[htp]
-    \centering
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/spambase-460/optimizers_fitness_knn.png}
-        \caption{spambase-460}
-        \label{fig:convergencia_spambase-460_knn}
-    \end{subfigure}
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/spectf-heart/optimizers_fitness_knn.png}
-        \caption{spectf-heart}
-        \label{fig:convergencia_spectf-heart_knn}
-    \end{subfigure}
-
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/waveform5000/optimizers_fitness_knn.png}
-        \caption{waveform5000}
-        \label{fig:convergencia_waveform5000_knn}
-    \end{subfigure}
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/wdbc/optimizers_fitness_knn.png}
-        \caption{wdbc}
-        \label{fig:convergencia_wdbc_knn}
-    \end{subfigure}
-
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/wine/optimizers_fitness_knn.png}
-        \caption{wine}
-        \label{fig:convergencia_wine_knn}
-    \end{subfigure}
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/yeast/optimizers_fitness_knn.png}
-        \caption{yeast}
-        \label{fig:convergencia_yeast_knn}
-    \end{subfigure}
-
-    \begin{subfigure}[htp]{0.45\textwidth}
-        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/binary/zoo/optimizers_fitness_knn.png}
-        \caption{zoo}
-        \label{fig:convergencia_zoo_knn}
-    \end{subfigure}
-    \caption{Convergencia con kNN parte 2 - binario}
-    \label{fig:convergencia_knn_2}
-\end{figure}
-
-\clearpage
 \section{Continuo}
 En esta sección se analizarán las metaheurísticos en su versión real o continua. En este apartado se ha optado por no usar en las comparativas el algoritmo \textbf{ACO} en su versión continua. Dado que \textbf{ACO} fue concebido como un algoritmo binario y que sus implementaciones, pese a haberlas, se alejan bastante de la idea original y distorsionan el algoritmo, se ha tomado la decisión de no incluirlo. Por tanto, se compararan las versiones continuas, que son las originales de cada algoritmo, entre sí. En el caso de \textbf{GA} se hace uso de operadores especiales, según se explicó en anteriores capítulos, para adaptarlo a un contexto de codificación real, siendo el único que requería de una modificación de los operadores.\\[6pt]
 La estrategia seguida en los algoritmos continuos es distinta a los binarios. En los binarios, como se ha mencionado, se eligen características, mientras que otras son rechazadas. Por otro lado, en los continuos no se llegan a descartar características, sino que se ponderan por importancia. Desde este punto de vista, se podría pensar que los continuos tienen mayor maniobrabilidad en el entrenamiento, pues se encargan de ajustar pesos en vez de eliminarlos. A priori, mayor cantidad de información es mejor. El análisis realizado en esta sección tratará de comprobar como se comportan los continuos para el problema de selección de características, partiendo del hecho de que ninguno de ellos ha sido diseñado específicamente para ello, como sí es el caso de los binarios.

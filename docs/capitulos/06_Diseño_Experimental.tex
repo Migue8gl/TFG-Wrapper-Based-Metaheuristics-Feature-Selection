@@ -96,3 +96,5 @@ Para evaluar el rendimiento de los algoritmos, se plantean las siguientes hipót
 \begin{equation}
     H_1: \text{Rendimiento}_{Alg_1} > \text{Rendimiento}_{Alg_2}
 \end{equation}
+
+Se va a usar el test de \textit{Wilcoxon}~\cite{Rey2011} junto a un \textit{post hoc} de \textit{Holms}~\cite{holm1979simple}. El test de \textit{Wilcoxon} es una prueba no paramétrica que se utiliza para comparar dos conjuntos de datos emparejados. Este test es útil cuando se quiere determinar si existe una diferencia significativa entre dos condiciones (por ejemplo, el rendimiento de dos algoritmos) sin asumir que los datos siguen una distribución normal. El procedimiento \textit{post hoc} de \textit{Holm} es una técnica utilizada para controlar la tasa de error tipo en múltiples comparaciones. En estudios donde se realizan múltiples pruebas estadísticas (como es el caso), la probabilidad de obtener resultados falsos positivos aumenta y por ello se necesite de este corrector a la hora de realizar afirmaciones sobre los tests.
