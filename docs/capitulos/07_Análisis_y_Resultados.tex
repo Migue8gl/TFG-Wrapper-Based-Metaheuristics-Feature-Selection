@@ -363,75 +363,66 @@ Otro algoritmo que converge más lentamente que el resto es el \textbf{bDA} y el
 
 Pese a las dificultades de algunos algoritmos, todos convergen correctamente en todos los conjuntos de datos, lo cual es esperable.
 
-% TODO me he quedado por aquí
-
 \section{Continuo}
-En esta sección se analizarán las metaheurísticos en su versión real o continua. En este apartado se ha optado por no usar en las comparativas el algoritmo \textbf{ACO} en su versión continua. Dado que \textbf{ACO} fue concebido como un algoritmo binario y que sus implementaciones, pese a haberlas, se alejan bastante de la idea original y distorsionan el algoritmo, se ha tomado la decisión de no incluirlo. Por tanto, se compararan las versiones continuas, que son las originales de cada algoritmo, entre sí. En el caso de \textbf{GA} se hace uso de operadores especiales, según se explicó en anteriores capítulos, para adaptarlo a un contexto de codificación real, siendo el único que requería de una modificación de los operadores.\\[6pt]
-La estrategia seguida en los algoritmos continuos es distinta a los binarios. En los binarios, como se ha mencionado, se eligen características, mientras que otras son rechazadas. Por otro lado, en los continuos no se llegan a descartar características, sino que se ponderan por importancia. Desde este punto de vista, se podría pensar que los continuos tienen mayor maniobrabilidad en el entrenamiento, pues se encargan de ajustar pesos en vez de eliminarlos. A priori, mayor cantidad de información es mejor. El análisis realizado en esta sección tratará de comprobar como se comportan los continuos para el problema de selección de características, partiendo del hecho de que ninguno de ellos ha sido diseñado específicamente para ello, como sí es el caso de los binarios.
+En esta sección se analizarán las metaheurísticas en su versión real o continua. En este apartado se ha optado por no usar en las comparativas el algoritmo \textbf{ACO} en su versión continua. Dado que \textbf{ACO} fue concebido como un algoritmo binario y que sus implementaciones, pese a haberlas, se alejan bastante de la idea original y distorsionan el algoritmo, se ha tomado la decisión de no incluirlo. Por tanto, se compararan las versiones continuas, que son las originales de cada algoritmo, entre sí. En el caso de \textbf{GA} se hace uso de operadores especiales, según se explicó en anteriores capítulos, para adaptarlo a un contexto de codificación real, siendo el único que requería de una modificación de los operadores.\\[6pt]
+La estrategia seguida en los algoritmos continuos es distinta a los binarios. En los binarios, como se ha mencionado, se eligen características, mientras que otras son rechazadas. Por otro lado, en los continuos no se llegan a descartar características, sino que se ponderan por importancia. Desde este punto de vista, se podría pensar que los continuos tienen mayor maniobrabilidad en el entrenamiento, pues se encargan de ajustar pesos en vez de eliminarlos, por tanto trabajan con más información y más rango de acción. A priori, mayor cantidad de información es mejor. El análisis realizado en esta sección tratará de comprobar como se comportan los continuos para el problema de selección de características, partiendo del hecho de que ninguno de ellos ha sido diseñado específicamente para ello, como sí es el caso de los binarios.
 
 \subsection{General}
-De igual forma que en el apartado anterior sobre los binarios, se procede a presentar una serie de \textit{boxplots} los cuales dan una primera visión sobre los algoritmos de manera general. Se presentarán unos pocos de los resultados que se han obtenido para los algoritmos continuos. Para una visión completa de todos los \textit{boxplots} se recomienda ver el anexo.
+De igual forma que en el apartado anterior sobre los binarios, se procede a presentar una serie de resultados iniciales en forma de rankings, los cuales permitirán una visión general del comportamiento.
 
 \begin{figure}[htp]
     \centering
-    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/waveform5000/optimizer_boxplot_fitness_knn_r.png}
-    \caption{Boxplot waveform5000 en kNN - real}
-    \label{fig:boxplot_waveform5000}
+    \begin{subfigure}[htp]{1\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/real/rankings_knn_avg.png}
+        \caption{Ranking por fitness para knn - real}
+        \label{fig:ranking_knn_real}
+    \end{subfigure}
+    \begin{subfigure}[htp]{1\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/real/rankings_svc_avg.png}
+        \caption{Ranking por fitness para svc - real}
+        \label{fig:ranking_svc_real}
+    \end{subfigure}
+    \caption{Rankings para fitness - real}
 \end{figure}
+
+Según se observa en las figuras de \ref{fig:ranking_knn_real} y \ref{fig:ranking_svc_real}, lo que más llama la atención es que hay algoritmos clasificados peor incluso que el \textbf{Dummy}, el cual es totalmente aleatorio. Estos son \textbf{DA} en \textbf{SVC} y \textbf{GOA} en ambos clasificadores. Parecen obtener resultados pésimos, pese a ser sus versiones originales.\\[6pt]
+En cambio, algoritmos que ya habían destacado en binario, lo vuelven a hacer en continuo, además con una puntuación muy buena con respecto al resto de metaheurísticas. Estos son \textbf{CS} y \textbf{GWO}. En el top de mejores optimizadores entran además los algoritmos de \textbf{BA} y \textbf{WOA}, los cuales si bien no eran malos en binario, no eran los mejores, más bien promedio. Se mantiene el algoritmo genético dentro del top de los cinco mejores. Los algoritmos clásicos ocupan el grueso del medio en los rankings.
+
+\subsection{Variabilidad}
 
 \begin{figure}[htp]
     \centering
-    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/yeast/optimizer_boxplot_fitness_knn_r.png}
-    \caption{Boxplot yeast en kNN - real}
-    \label{fig:boxplot_yeast}
+    \begin{subfigure}[htp]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/waveform5000/optimizer_boxplot_fitness_knn_r.png}
+        \caption{waveform5000}
+        \label{fig:boxplot_waveform5000_real} 
+    \end{subfigure}
+    \begin{subfigure}[htp]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/yeast/optimizer_boxplot_fitness_knn_r.png}
+        \caption{yeast}
+        \label{fig:boxplot_yeast_real}
+    \end{subfigure}
+    \begin{subfigure}[htp]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/spectf-heart/optimizer_boxplot_fitness_knn_r.png}
+        \caption{spectf-heart}
+        \label{fig:boxplot_spectf-heart_real}
+    \end{subfigure}
+    \begin{subfigure}[htp]{0.5\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/dermatology/optimizer_boxplot_fitness_knn_r.png}
+        \caption{dermatology}
+        \label{fig:boxplot_dermatology_real}
+    \end{subfigure}
+    \caption{\textit{Boxplots} para knn - real}
+    \label{fig:combined_boxplots}
 \end{figure}
 
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/spectf-heart/optimizer_boxplot_fitness_knn_r.png}
-    \caption{Boxplot spectf-heart en kNN - real}
-    \label{fig:boxplot_spectf-heart}
-\end{figure}
+En las figuras presentadas en \ref{fig:boxplot_waveform5000_real}, \ref{fig:boxplot_yeast_real}, \ref{fig:boxplot_spectf-heart_real}, \ref{fig:boxplot_dermatology_real} pueden observarse los resultados obtenidos para los conjuntos de datos \textbf{waveform5000}, \textbf{yeast}, \textbf{spectf-heart} y \textbf{dermatology} usando el clasificador \textbf{kNN}.\\[6pt]
 
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/dermatology/optimizer_boxplot_fitness_knn_r.png}
-    \caption{Boxplot dermatology en kNN - real}
-    \label{fig:boxplot_dermatology}
-\end{figure}
-
-En las figuras presentadas en \ref{fig:boxplot_waveform5000}, \ref{fig:boxplot_yeast}, \ref{fig:boxplot_spectf-heart}, \ref{fig:boxplot_dermatology} pueden observarse los resultados obtenidos para los conjuntos de datos \textbf{waveform5000}, \textbf{yeast}, \textbf{spectf-heart} y \textbf{dermatology} usando el clasificador \textbf{kNN}. \\[6pt]
-A primera vista, destaca ver la \textit{desviación típica} de los resultados de la mayoría de propuestas, pues es bastante pequeña en general. Esto da a entender que los resultados obtenidos en las $10$ pruebas difieren poco entre sí y por tanto son resultados bastante robustos. No se hacen saltos en el valor de \textit{fitness} de una prueba a otra.\\[6pt]
-Destacar como algoritmos muy notorios el \textbf{CS}, \textbf{GWO}, \textbf{BA} y \textbf{PSO}, que parecen obtener muy buenos resultados y ser bastante compactos en cuanto a su desviación. Por el contrario, algoritmos como \textbf{GOA} parecen obtener un rendimiento más bajo, comparable con el algoritmo de referencia \textbf{Dummy}. Si se observan las colas de \textbf{GOA} en las figuras, esta es más larga por arriba, hacia valores muy malos de \textit{fitness}. No representa el grueso de los resultados, pues es la cola, que representa un $25\%$ de los datos, pero sigue siendo un valor más que importante.\\[6pt]
-
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/waveform5000/optimizer_boxplot_fitness_svc_r.png}
-    \caption{Boxplot waveform5000 en SVC - real}
-    \label{fig:boxplot_waveform5000svc}
-\end{figure}
-
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/yeast/optimizer_boxplot_fitness_svc_r.png}
-    \caption{Boxplot yeast en SVC - real}
-    \label{fig:boxplot_yeastsvc}
-\end{figure}
-
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/spectf-heart/optimizer_boxplot_fitness_svc_r.png}
-    \caption{Boxplot spectf-heart en SVC - real}
-    \label{fig:boxplot_spectf-heartsvc}
-\end{figure}
-
-\begin{figure}[htp]
-    \centering
-    \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/dermatology/optimizer_boxplot_fitness_svc_r.png}
-    \caption{Boxplot dermatology en SVC - real}
-    \label{fig:boxplot_dermatologysvc}
-\end{figure}
-
-En las figuras \ref{fig:boxplot_dermatologysvc}, \ref{fig:boxplot_waveform5000svc}, \ref{fig:boxplot_yeastsvc} y \ref{fig:boxplot_spectf-heartsvc} usando \textbf{SVC} se observan resultados parecidos, con algunas diferencias, pero con tendencias en algoritmos dominantes y algoritmos pobres muy similares.
+A primera vista, destaca ver la \textit{desviación típica} de los resultados de la mayoría de propuestas, pues es bastante pequeña en general. Esto da a entender que los resultados obtenidos en las $10$ pruebas difieren poco entre sí y por tanto estos son bastante robustos. \\[6pt]
+Destacar como algoritmos muy notorios el \textbf{CS}, \textbf{GWO}, \textbf{BA} y \textbf{PSO}, que parecen obtener muy buenos resultados y ser bastante compactos en cuanto a su desviación. Por el contrario, algoritmos como \textbf{GOA} parecen obtener un rendimiento más bajo y ser muy variables en comparación al resto. Si se observan las colas de \textbf{GOA} en las figuras, esta es más larga por arriba, hacia valores muy altos de \textit{fitness} (se está minimizando, por tanto no es bueno). No representa el grueso de los resultados, pues es la cola, que representa un $25\%$ de los datos, pero sigue siendo un valor más que importante.\\[6pt]
 
 \subsubsection{Fitness}

@@ -139,7 +139,7 @@ def plot_fitness_all_optimizers(optimizers_fitness: dict,
         ax.set_title("Optimizer Comparison - Fitness Over Time")
     else:
         ax.set_title(title)
-    ax.legend(loc='upper right', fontsize=4, ncol=2)
+    ax.legend(loc='upper right', fontsize=6, ncol=2)
     ax.grid(True)
 
 
@@ -262,7 +262,7 @@ def plot_grouped_boxplots(data: pd.DataFrame,
     plt.xticks(range(1,
                      len(grouped_data) + 1),
                [x_name.upper() for x_name, _ in grouped_data],
-               rotation=45)
+               rotation=45, fontsize=17)
 
     # Annotate each median line
     for i, line in enumerate(bp['medians']):
