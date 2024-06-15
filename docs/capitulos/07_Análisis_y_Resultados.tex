@@ -176,7 +176,7 @@ Si bien es cierto que su precisión no es de las mejores, podría considerarse a
 
 Los mejores algoritmos en \textit{accuracy} son \textbf{bCS} y \textbf{bGWO} como puede observarse en las tablas \ref{tab:ranking_accuracy_bin_knn} y \ref{tab:ranking_accuracy_bin_svc}, mientras que el peor, como se ha comentado anteriormente, es el \textbf{ACO}. Si bien es cierto que \textbf{bGWO} empata en \textbf{kNN} con \textbf{bBA}, este no se ha considerado como mejor por obtener un resultado peor en \textbf{SVC} mientras que \textbf{GWO} es bueno en ambos. Pese a ello, no hay grandes diferencias en los algoritmos del top.\\[6pt]
 
-Si comparamos los p-valores~\ref{tab:p-values_aco_rest_bin_knn}, \ref{tab:p-values_aco_rest_bin_svc}, tras aplicar post hoc para mayor seguridad, de \textbf{ACO} con respecto al resto de algoritmos, se ve que claramente la mejora en reducción no se debe al azar de manera muy probable en todos los casos comparativos.
+Si se comparan los p-valores~\ref{tab:p-values_aco_rest_bin_knn}, \ref{tab:p-values_aco_rest_bin_svc}, tras aplicar post hoc para mayor seguridad, de \textbf{ACO} con respecto al resto de algoritmos, se ve que claramente la mejora en reducción no se debe al azar de manera muy probable en todos los casos comparativos.
 
 \begin{table}[htp]
     \centering
@@ -254,7 +254,7 @@ Si bien es cierto que la mayoría en el top de mejores algoritmos en \textit{acc
 En cuanto a la reducción de características, se observa en los rankings \ref{fig:rankings_red_bin} como los mejores son algoritmos como \textbf{ACO}, \textbf{bGWO}, \textbf{GA} y \textbf{bPSO}. Incluso \textbf{bDE} es capaz de superar a varios modernos. El \textbf{bABCO}, sin embargo, parece obtener resultados pésimos, quedando el último en los rankings.\\[6pt]
 Si se observan los p-valores obtenidos en las tablas \ref{tab:p-values_sel_ratio_bin_knn} y \ref{tab:p-values_sel_ratio_bin_svc}, y se agrupan los modernos y los clásicos, se obtienen los siguientes resultados:
 \begin{itemize}
-    \item \textbf{bPSO}: A excepción del \textbf{ACO} (el mejor), \textbf{bGWO} (segundo mejor) y \textbf{bGA}, es superior a todo el resto de algoritmos con una diferencia significativa más que suficiente tras corrección post hoc con el método \textbf{Holms}.
+    \item \textbf{bPSO}: A excepción del \textbf{ACO} (el mejor), \textbf{bGWO} (segundo mejor) y \textbf{bGA}, es superior a todo el resto de algoritmos con una diferencia significativa más que suficiente tras corrección post hoc con el método \textit{Holms}.
     \item \textbf{ACO}: Es el mejor con diferencia significativa más que suficiente como para poder afirmar que este algoritmo es muy destacable en la reducción de características.
     \item \textbf{bGA}: Ocurre lo mismo que con \textbf{bPSO}. Pese a excepciones de algoritmos por encima suyo en el ranking, \textbf{bGA} es muy superior al resto de algoritmos, con diferencias muy notables y de nuevo significativas.
     \item \textbf{bDE}: Obtiene resultados muy buenos, pero en la media en comparación con todos.
@@ -396,7 +396,7 @@ En cambio, algoritmos que ya habían destacado en binario, lo vuelven a hacer en
         \centering
         \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/waveform5000/optimizer_boxplot_fitness_knn_r.png}
         \caption{waveform5000}
-        \label{fig:boxplot_waveform5000_real} 
+        \label{fig:boxplot_waveform5000_real}
     \end{subfigure}
     \begin{subfigure}[htp]{0.5\textwidth}
         \centering
@@ -425,4 +425,175 @@ En las figuras presentadas en \ref{fig:boxplot_waveform5000_real}, \ref{fig:boxp
 A primera vista, destaca ver la \textit{desviación típica} de los resultados de la mayoría de propuestas, pues es bastante pequeña en general. Esto da a entender que los resultados obtenidos en las $10$ pruebas difieren poco entre sí y por tanto estos son bastante robustos. \\[6pt]
 Destacar como algoritmos muy notorios el \textbf{CS}, \textbf{GWO}, \textbf{BA} y \textbf{PSO}, que parecen obtener muy buenos resultados y ser bastante compactos en cuanto a su desviación. Por el contrario, algoritmos como \textbf{GOA} parecen obtener un rendimiento más bajo y ser muy variables en comparación al resto. Si se observan las colas de \textbf{GOA} en las figuras, esta es más larga por arriba, hacia valores muy altos de \textit{fitness} (se está minimizando, por tanto no es bueno). No representa el grueso de los resultados, pues es la cola, que representa un $25\%$ de los datos, pero sigue siendo un valor más que importante.\\[6pt]
 
-\subsubsection{Fitness}
+\subsection{Fitness}
+En la comparación de \textit{fitness}, los mejores algoritmos, según se ha podido observar anteriormente, eran \textbf{CS} y \textbf{GWO}. Los peores algoritmos son \textbf{GOA} y \textbf{DA}. Es interesante ver como estos dos últimos han bajado tanto de puesto en comparación a su versión en binario, teniendo en cuenta que originalmente estas dos metaheurísticas son continuas. También es muy destacable ver como los mejores lo son por mucho y los peores también, es decir, hay una diferencia bastante grande de calidad entre buenos y peores, mientras que en binario los saltos en rankings no eran tan grandes.
+
+\subsubsection{Mejor vs Resto}
+Se procede a comparar al mejor algoritmo en continuo con el resto de metaheurísticas. Este es el \textbf{CS}, el cual puede verse como supera al resto en los rankings \ref{fig:ranking_knn_real} y \ref{fig:ranking_svc_real}. Haciendo los procesados estadísticos pertinentes, se obtiene los siguientes resultados expuestos en las tablas \ref{tab:tab:p_values_fitness_real_knn} y \ref{tab:tab:p_values_fitness_real_svc}.\\[6pt]
+Pese a no haberse realizado aún la corrección post hoc de \textit{Holms}, se pueden observar resultados concluyentes para algoritmos como \textbf{GOA}. Claramente, incluso tras corrección, los resultados de \textbf{CS} son superiores frente a este y con una seguridad más que suficiente para afirmar que \textbf{CS} es mejor que \textbf{GOA}. Ocurre lo mismo con \textbf{DA} y otros tantos. En las tablas con los p-valores post hoc, se pueden apreciar los resultados estadísticos finales para \textbf{kNN} \ref{tab:p-values_cs_rest_real_knn} y \textbf{SVC} \ref{tab:p-values_cs_rest_real_svc}.
+
+\begin{table}
+    \centering
+    \begin{tabular}{lllll}
+        \toprule
+        {}    & Original  & Holm           & Hommel         & Hochberg       \\
+        \midrule
+        fa    & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        goa   & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        dummy & 1.221E-04 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        abco  & 3.052E-04 & \textbf{0.002} & \textbf{0.002} & \textbf{0.002} \\
+        da    & 0.001     & \textbf{0.008} & \textbf{0.008} & \textbf{0.008} \\
+        de    & 0.003     & \textbf{0.016} & \textbf{0.016} & \textbf{0.016} \\
+        ga    & 0.010     & 0.050          & 0.050          & 0.050          \\
+        pso   & 0.035     & 0.141          & 0.106          & 0.134          \\
+        ba    & 0.045     & 0.141          & 0.134          & 0.134          \\
+        woa   & 0.222     & 0.444          & 0.444          & 0.444          \\
+        gwo   & 0.934     & 0.934          & 0.934          & 0.934          \\
+        \bottomrule
+    \end{tabular}
+    \caption{P-valores de CS vs el resto - knn - real}
+    \label{tab:p-values_cs_rest_real_knn}
+\end{table}
+
+\begin{table}
+    \centering
+    \begin{tabular}{lllll}
+        \toprule
+        {}    & Original  & Holm           & Hommel         & Hochberg       \\
+        \midrule
+        da    & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        goa   & 1.221E-04 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        de    & 3.052E-04 & \textbf{0.003} & \textbf{0.003} & \textbf{0.003} \\
+        dummy & 0.002     & \textbf{0.016} & \textbf{0.016} & \textbf{0.016} \\
+        fa    & 0.005     & \textbf{0.034} & \textbf{0.034} & \textbf{0.034} \\
+        pso   & 0.018     & 0.110          & 0.092          & 0.110          \\
+        abco  & 0.028     & 0.140          & 0.112          & 0.140          \\
+        ba    & 0.045     & 0.178          & 0.178          & 0.178          \\
+        ga    & 0.151     & 0.454          & 0.454          & 0.454          \\
+        woa   & 0.320     & 0.640          & 0.561          & 0.561          \\
+        gwo   & 0.561     & 0.640          & 0.561          & 0.561          \\
+        \bottomrule
+    \end{tabular}
+    \caption{P-valores de CS vs el resto - svc - real}
+    \label{tab:p-values_cs_rest_real_svc}
+\end{table}
+
+Se pueden observar en las tablas que \textbf{CS} obtiene resultados significativos para \textbf{DA}, \textbf{GOA}, \textbf{DE} y \textbf{FA}. El algoritmo \textbf{ABCO} solo obtiene resultados significativamente peores con el uso de \textbf{kNN}.\\[6pt]
+Con ello, se puede afirmar que \textbf{CS} es un algoritmo muy interesante para los problemas de clasificación en continuo, superando a al resto con resultados muy superiores.
+
+\subsubsection{Clásicos vs Modernos}
+Agrupando algoritmos usando las tablas de rankings \ref{tab:ranking_fitness_real_svc}, \ref{tab:ranking_fitness_real_knn} se pueden hacer tres grupos, tanto por la diferencias de ponderación como por antigüedad de algoritmos (clásicos vs modernos). Por lo general, los clásicos, a excepción del \textbf{GA} en \textbf{SVC}, obtienen resultados muy buenos, pero promedios. Los modernos, sin embargo, se dividen en dos grupos, entre los peores y los mejores.\\[6pt]
+Esto indica que algunos de los algoritmos modernos son capaces de superar a los clásicos en sus versiones originales, como \textbf{WOA} o \textbf{BA}, los cuales obtuvieron resultados promedios en las comparaciones binarias.\\[6pt]
+Pese a ello, los clásicos obtienen resultados igualmente buenos en sus versiones originales. \textbf{PSO} y \textbf{GA} posicionan alto y superando a gran cantidad de modernos. Se mantienen muy bien con el paso de los años y su sencillez algorítmica sigue demostrando que la filosofía de \textit{la navaja de Ockham} sigue estando muy presente.\\[6pt]
+Y aunque sigan existiendo algoritmos confiables y robustos como algunos de los clásicos, con el tiempo se van diseñando algunos como \textbf{GWO} o \textbf{CS} capaces de mejorar los resultados.
+
+\subsubsection{GA vs DE}
+Los algoritmos \textbf{DE} y \textbf{GA} comparten varios conceptos y similitudes fundamentales. Emplean operadores de variación, como la mutación y la recombinación (\textit{crossover}), para introducir diversidad en la población y generar nuevas soluciones. Ambos algoritmos seleccionan soluciones de la población actual (padres) para generar nuevas soluciones (descendientes) mediante estos operadores de variación. Posteriormente, las nuevas soluciones reemplazan a las soluciones menos aptas en la población, siguiendo una estrategia de selección basada en la función de \textit{fitness}.\\[6pt]
+\textbf{DE} de hecho, como se ha explicado en secciones anteriores, surgió como una alternativa más refinada a \textbf{GA} para codificaciones continuas. Tiene sentido por tanto comparar ambas metaheurísticas entre sí.\\[6pt]
+Comparando sus resultados en los rankings \ref{fig:ranking_knn_real} y \ref{fig:ranking_svc_real}, parece que \textbf{GA} es superior a \textbf{DE}, lo cual es interesante, pues \textbf{DE} fué, como ya se ha explicado, diseñado específicamente para continuos, mientras que los genéticos para los binarios.\\[6pt]
+Si bien es cierto, los algoritmos genéticos han recibido más atención por parte del público general y quizá hayan sido más desarrollados durante el tiempo, explorando nuevos tipos de operadores. Además los genéticos han sido usado en multitud de problemas continuos con éxito. Comparando ambos, se obtienen los siguientes p-valores en \ref{tab:pval_corr_ga_de-real_knn} y \ref{tab:pval_corr_ga_de-real_svc}.
+
+\begin{table}[htp]
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        {} & de        & ga        \\
+        \midrule
+        de & -         & + (0.188) \\
+        ga & - (0.188) & -         \\
+        \bottomrule
+    \end{tabular}
+    \caption{P-valores tras corrección entre GA y DE - knn - real}
+    \label{tab:pval_corr_ga_de-real_knn}
+\end{table}
+
+\begin{table}[htp]
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        {} & de                 & ga                 \\
+        \midrule
+        de & -                  & + (\textbf{0.041}) \\
+        ga & - (\textbf{0.041}) & -                  \\
+        \bottomrule
+    \end{tabular}
+    \caption{P-valores tras corrección entre GA y DE - svc - real}
+    \label{tab:pval_corr_ga_de-real_svc}
+\end{table}
+
+En la versión de \textbf{SVC} se obtiene resultados estadísticamente significativos a favor de la superioridad de la versión continua de \textbf{GA} contra el algoritmo \textbf{DE}.
+
+\subsection{Clasificación y reducción}
+
+\begin{figure}[htp]
+    \centering
+    \begin{subfigure}[htp]{1\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/real/rankings_knn_selected_rate.png}
+        \caption{Ranking por selección de características para knn - real}
+        \label{fig:ranking_knn_real_sel_rate}
+    \end{subfigure}
+    \begin{subfigure}[htp]{1\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/real/rankings_svc_selected_rate.png}
+        \caption{Ranking por selección de características para svc - real}
+        \label{fig:ranking_svc_real_sel_rate}
+    \end{subfigure}
+    \caption{Rankings para selección de características - real}
+\end{figure}
+
+Dada la naturaleza de la composición de la ecuación de \textit{fitness}, cabría esperar resultados prácticamente iguales en \textit{accuracy}. Este hecho fue comprobado con los algoritmos binarios en secciones anteriores. Pese a ello, al observar los rankings (\ref{tab:ranking_accuracy_real_sv}, \ref{tab:ranking_accuracy_real_kn}) se percibe una diferencia con respecto al \textit{fitness}. El mejor es \textbf{GWO}, y no por mucho. De hecho, todos obtienen ponderaciones similares, por lo que parece que todos son capaces de obtener valores de precisión muy buenos. Por ello se procede a realizar un análisis con el foco de la reducción de dimensiones, que podría ser la métrica discriminatoria entre algoritmos.\\[6pt]
+Las figuras \ref{fig:ranking_svc_real_sel_rate} y \ref{fig:ranking_knn_real_sel_rate} muestran los rankings de las mejores opciones en cuanto a reducción de atributos. Da la casualidad, que los resultados son iguales que en los rankings de \textit{fitness} en \ref{tab:ranking_fitness_real_svc} y \ref{tab:ranking_fitness_real_knn}. La única diferencia notable es que la discriminación entre posiciones crece incluso más si cabe que midiendo el \textit{fitness}. Los mejores son muy buenos y los peores pésimos en reducción.\\[6pt]
+De hecho, si se observan las tablas de p-valores en \textit{accuracy} en \ref{tab:p-values_accuracy_real_svc} y \ref{tab:p-values_accuracy_real_knn}, se aprecia que en los resultados, apenas hay diferencias si quiera cercanas a la significatividad estadística, la cual se ha limitado por debajo del $5\%$. Por ello, cabría esperar esta desigualdad y diferencias tan grandes en reducción de características. Todos parecen obtener una precisión más o menos buena, pero solo algunos reducen (y lo hacen mucho).
+
+\subsubsection{Mejor vs Peor}
+\begin{figure}[htp]
+    \centering
+    \begin{subfigure}[htp]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/real/spectf-heart/SVC_n_features_over_10_evaluations_cs_real_spectf-heart.jpg}
+        \caption{spectf-heart}
+    \end{subfigure}
+    \begin{subfigure}[htp]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/real/spectf-heart/SVC_n_features_over_10_evaluations_goa_real_spectf-heart.jpg}
+        \caption{spectf-heart}
+    \end{subfigure}
+
+    \begin{subfigure}[htp]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/real/waveform5000/SVC_n_features_over_10_evaluations_cs_real_waveform5000.jpg}
+        \caption{waveform5000}
+    \end{subfigure}
+    \begin{subfigure}[htp]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/real/waveform5000/SVC_n_features_over_10_evaluations_goa_real_waveform5000.jpg}
+        \caption{waveform5000}
+    \end{subfigure}
+
+    \begin{subfigure}[htp]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/real/wine/SVC_n_features_over_10_evaluations_cs_real_wine.jpg}
+        \caption{wine}
+    \end{subfigure}
+    \begin{subfigure}[htp]{0.45\textwidth}
+        \includegraphics[width=\textwidth]{imagenes/fitness_charts/img/real/wine/SVC_n_features_over_10_evaluations_goa_real_wine.jpg}
+        \caption{wine}
+    \end{subfigure}
+    \caption{Reducción de características en CS y GOA}
+    \label{fig:svc_selected_rate_cs_goa_real}
+\end{figure}
+
+En las figuras \ref{fig:svc_selected_rate_cs_goa_real} se puede apreciar la mejora de la reducción de características con el tiempo entre algunos \textit{datasets} para \textbf{CS} y \textbf{GOA}. Como puede observarse, la diferencia es bastante grande. De hecho, se puede apreciar en la escala del \textbf{GOA}, que este apenas reduce, de hecho, a veces aumenta la cantidad de atributos elegidos. Dados estos resultados tan desfavorables para \textbf{GOA}, es obvio ver que estos no son dados por el azar casi con toda seguridad. Pese a ello se adjunta tabla con p-valores confirmando lo evidente en \ref{tab:pval_corr_best-worst-real_svc_knn}.
+
+\begin{table}
+    \centering
+    \begin{tabular}{lll}
+        \toprule
+        {}  & cs                     & goa                    \\
+        \midrule
+        cs  & -                      & - (\textbf{6.104E-05}) \\
+        goa & + (\textbf{6.104E-05}) & -                      \\
+        \bottomrule
+    \end{tabular}
+    \caption{P-valores tras corrección entre CS y GOA - knn y svc - real}
+    \label{tab:pval_corr_best-worst-real_svc_knn}
+\end{table}
+
+\subsubsection{Clásicos vs Modernos}
+Como se destacó previamente, las diferencias de \textit{accuracy} entre los algoritmos son minúsculas, por lo que no hay apenas diferencias entre los dos grupos. La característica más discriminatoria es la reducción de características y se puede observar en los rankings qué algoritmos ponderan mejor y peor (\ref{tab:ranking_sel_rate_real_svc}, \ref{tab:ranking_sel_rate_real_knn}).\\[6pt]
+De nuevo como en la comparación del fitness, se obtienen puestos promedios para el grupo de algoritmos clásicos, por lo que son capaces de reducir incluso en su versión continua, pero los que más destacan son un subgrupo de algoritmos modernos. Igualmente, si comparamos las pocas diferencias que se encuentran en \textit{accuracy} en los rankings de \ref{tab:ranking_accuracy_real_knn} y \ref{tab:ranking_accuracy_real_svc}, se puede ver como los clásicos adelantan en posición a \textbf{WOA} y \textbf{BA} en \textbf{SVC} y mejoran puestos en \textbf{kNN}. Es decir, los algoritmos clásicos obtienen mejor precisión (solo un poco), pero reducen menos, según los resultados recogidos.\\[6pt]
+Aunque la tendencia parezca esta, las diferencias son nimias y por tanto no hay ninguna mejora significativa en cuanto a \textit{accuracy}. Si hay diferencias significativas en reducción de características entre algoritmos de distintas posiciones, pero ocurre tanto para clásicos como para modernos. Por ello, dependiendo del balance entre \textit{accuracy} y reducción de características  deseado dependerá de la problemática tratada. Los clásicos parecen una opción segura por los buenos resultados obtenidos en \textit{accuracy} y los resultados promedio en reducción dimensional. Si se requieren reducciones más extremas de las dimensiones de un conjunto de datos, quizá cierta selección de modernos pueda ser aplicada con mayor éxito.
