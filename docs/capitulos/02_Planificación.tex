@@ -32,15 +32,15 @@ Las fases del ciclo de vida son:
 
 \begin{table}[htp]
       \centering
-      \begin{tabular}{c|c}
-            Tarea                         & Duración (horas) \\ \hline
-            Investigación inicial         & 20               \\
-            Diseño del software           & 19               \\
-            Investigación metaheurísticas & 85               \\
-            Implementación del software   & 76               \\
-            Pruebas y refactorizado       & 25               \\ 
-            Análisis de resultados        & 30               \\
-            Documentación                 & 91               \\ \hline
+      \begin{tabular}{c|c|c}
+            Tarea                         & Duración Prevista (h) & Duración Final (h) \\ \hline
+            Investigación inicial         & 20                    & 20                 \\
+            Diseño del software           & 10                    & 10                 \\
+            Investigación metaheurísticas & 60                    & 60                 \\
+            Implementación del software   & 70                    & 90                 \\
+            Pruebas y refactorizado       & 15                    & 25                 \\
+            Análisis de resultados        & 40                    & 20                 \\
+            Documentación                 & 90                    & 120                \\ \hline
       \end{tabular}
       \caption{Tabla de duración de cada tarea}
 \end{table}
@@ -57,14 +57,14 @@ La planificación final del proyecto se ha modificado significativamente debido 
 
 \begin{figure}[htp]
       \begin{center}
-            \includegraphics[width=1\textwidth]{imagenes/gantt-init.png}
+            \includegraphics[width=1\textwidth]{imagenes/gantt-fin.png}
       \end{center}
       \caption{Diagrama de Gantt final}
 \end{figure}
 
 El coste estimado del proyecto se divide en varios sub-costes:
 \begin{itemize}
-      \item \textbf{Sueldo}: Considerando un precio de proyecto que deba cubrir gastos y compensar, se estima un salario por investigador de $25$€/hora. El proyecto ha durado aproximadamente $8$ meses. Pese a ello, las horas trabajadas equivalen a un total de aproximadamente $400$ horas. Por tanto, el salario final total es de $10.000$€.
+      \item \textbf{Sueldo}: Considerando un precio de proyecto que deba cubrir gastos y compensar, se estima un salario por investigador de $25$€/hora. El proyecto ha durado aproximadamente $8$ meses. Pese a ello, las horas trabajadas equivalen a un total de aproximadamente $340$ horas. Por tanto, el salario final total es de $8.500$€.
       \item \textbf{Ordenador portátil}: El estudiante consta con un portátil HP Pavilion Laptop 14-ec0xxx como herramienta principal de trabajo, con un precio de $1000$€. Ha sido usado durante unos $8$ meses aproximadamente. Si se tiene en cuenta que la vida media de un portátil es de aproximadamente $4-5$ años~\cite{woidasky_use_2021} entonces el costo del ordenador sería de $133.3$€.
       \item \textbf{Servidor} Para la experimentación del proyecto se ha hecho uso del servidor de investigación ofrecido por el tutor~\cite{citicugr}, por lo que el coste real ha sido de cero. Pese a ello, se estima cuanto costaría un servicio parecido en un servidor \textit{Cloud}. Se estima el precio por mes y total dada una estimación de los servicios de \textit{Google Cloud - Compute Engine}.
 \end{itemize}
@@ -109,10 +109,10 @@ Dado este desglose, se calcula el coste final del proyecto:
       \begin{tabular}{|l|r|}
             \hline
             \textbf{Item}                    & \textbf{Costo (€)} \\ \hline
-            Salario                          & 10.000             \\
+            Salario                          & 8500             \\
             Ordenador portátil               & 133.3              \\
             Servidor CPU - GC Compute Engine & 75.84              \\
-            \textbf{Total}                   & \textbf{10.209,14} \\ \hline
+            \textbf{Total}                   & \textbf{8709.14} \\ \hline
       \end{tabular}
       \caption{Costo estimado del proyecto}
       \label{tab:proyect_budget}

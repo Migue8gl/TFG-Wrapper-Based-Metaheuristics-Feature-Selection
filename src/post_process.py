@@ -5,11 +5,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 from constants import IMG_DIR, RESULTS_DIR
-from plots import (
-    plot_all_boxplots_optimizers,
-    plot_fitness_all_optimizers,
-    plot_rankings,
-)
+from plots import (plot_all_boxplots_optimizers, plot_fitness_all_optimizers,
+                   plot_rankings, plot_mean_metrics_comparison)
 
 
 def make_rankings_for_optimizers(df_analysis_b: pd.DataFrame,
@@ -84,8 +81,7 @@ def make_rankings_for_optimizers(df_analysis_b: pd.DataFrame,
 def main():
     df_analysis_b = pd.read_csv(RESULTS_DIR + 'binary/analysis_results.csv')
     df_analysis_r = pd.read_csv(RESULTS_DIR + 'real/analysis_results.csv')
-
-    for encoding in ['binary', 'real']:
+    """for encoding in ['binary', 'real']:
         for dataset_name in df_analysis_b['dataset'].unique():
             for classifier in df_analysis_b['classifier'].unique():
                 with open(
@@ -167,7 +163,12 @@ def main():
 
     plot_rankings(binary_ranking_knn_selected_rate,
                   'Binary ranking - knn (selected_rate)')
-    plt.savefig(IMG_DIR + 'binary/rankings_knn_selected_rate.png')
+    plt.savefig(IMG_DIR + 'binary/rankings_knn_selected_rate.png')"""
+
+    for metric in ['acc', 'avg', 'selected_rate']:
+        plot_mean_metrics_comparison(df_analysis_b, df_analysis_r, metric)
+        plt.savefig(os.path.join(IMG_DIR, f'{metric}_comparison.png'))
+        plt.close()
 
 
 if __name__ == '__main__':

@@ -262,7 +262,8 @@ def plot_grouped_boxplots(data: pd.DataFrame,
     plt.xticks(range(1,
                      len(grouped_data) + 1),
                [x_name.upper() for x_name, _ in grouped_data],
-               rotation=45, fontsize=17)
+               rotation=45,
+               fontsize=17)
 
     # Annotate each median line
     for i, line in enumerate(bp['medians']):
@@ -360,3 +361,40 @@ def plot_all_boxplots_optimizers(df_analysis_b: pd.DataFrame,
             for classifier in classifiers:
                 _plot_optimizers(df_encoding, encoding, dataset_name,
                                  classifier)
+
+
+def plot_mean_metrics_comparison(binary_metrics: pd.DataFrame,
+                                 real_metrics: pd.DataFrame, metric: str):
+    """
+    Plots a bar chart comparing mean metrics between binary and real encoding.
+
+    Parameters:
+        - binary_metrics (pandas.DataFrame): Dataframe with binary metrics.
+        - real_metrics (pandas.DataFrame): Dataframe with real metrics.
+        - metric (str): Metric to compare ('acc', 'avg', 'selected_rate').
+    """
+    # Convert optimizer names to uppercase
+    binary_metrics['optimizer'] = binary_metrics['optimizer'].str.upper()
+    real_metrics['optimizer'] = real_metrics['optimizer'].str.upper()
+
+    # Create a DataFrame with the mean metrics
+    mean_metrics_df = pd.DataFrame({
+        'Binary':
+        binary_metrics.groupby('optimizer')[metric].mean(),
+        'Real':
+        real_metrics.groupby('optimizer')[metric].mean()
+    })
+
+    ax = mean_metrics_df.plot(kind='bar',
+                              figsize=(12, 8),
+                              color=['#1f77b4', '#ff7f0e'])
+
+    plt.title(
+        f'Mean {metric.capitalize()} Comparison between Binary and Real Encodings',
+        fontsize=16)
+    plt.xlabel('Optimizer', fontsize=14)
+    plt.ylabel(f'Mean {metric.capitalize()}', fontsize=14)
+    plt.xticks(rotation=45, fontsize=12)
+    plt.yticks(fontsize=12)
+    plt.legend(['Binary', 'Real'], fontsize=12)
+    plt.tight_layout()
