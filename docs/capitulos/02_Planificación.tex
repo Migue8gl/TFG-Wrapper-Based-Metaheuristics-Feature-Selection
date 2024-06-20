@@ -17,7 +17,7 @@ Las fases del ciclo de vida son:
                   \item Dragonfly Algorithm
                   \item Grasshopper Algorithm
                   \item Cuckoo Search
-                  \item Differential Algorithm
+                  \item Differential Evolution
                   \item Ant Colony Optimization
                   \item Artificial Bee Colony Optimization
                   \item Particle Swarm Optimization
@@ -43,7 +43,11 @@ Las fases del ciclo de vida son:
             Documentación                 & 90                    & 120                \\ \hline
       \end{tabular}
       \caption{Tabla de duración de cada tarea}
+      \label{tab:task_duration}
 \end{table}
+
+Es importante tener una buena estimación inicial y compararla con los tiempos reales para poder identificar desviaciones y ajustar la planificación en futuros proyectos. Esta comparación permite aprender de la experiencia y mejorar la capacidad de estimar esfuerzos de manera precisa. Por ello, en la tabla \ref{tab:task_duration} se han estimado la duración de cada una de las tareas y se han comparado con los tiempos reales. \\[6pt]
+La diferencia en tiempo entre las tareas \ref{tab:task_duration} se ha dado principalmente en la realización de la documentación, ya que ésta se ha visto infravalorada en primera instancia y ha sido desarrollada en un proceso iterativo muy exigente. La implementación software también ha sido realizada más tiempo del previsto, debido a cambios continuos durante el desarrollo del algoritmo así como múltiples funcionalidades de extracción de datos y visualizado. El incremento se ha dado sobre todo por esta última parte mencionada. Gracias a este incremento en la funcionalidad de extracción de datos, el tiempo de análisis ha sido decrementado, haciendo de este una tarea más liviana. 
 
 \begin{figure}[htp]
       \begin{center}
@@ -109,10 +113,10 @@ Dado este desglose, se calcula el coste final del proyecto:
       \begin{tabular}{|l|r|}
             \hline
             \textbf{Item}                    & \textbf{Costo (€)} \\ \hline
-            Salario                          & 8500             \\
+            Salario                          & 8500               \\
             Ordenador portátil               & 133.3              \\
             Servidor CPU - GC Compute Engine & 75.84              \\
-            \textbf{Total}                   & \textbf{8709.14} \\ \hline
+            \textbf{Total}                   & \textbf{8709.14}   \\ \hline
       \end{tabular}
       \caption{Costo estimado del proyecto}
       \label{tab:proyect_budget}

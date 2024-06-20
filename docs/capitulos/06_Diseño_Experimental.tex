@@ -1,6 +1,6 @@
 \chapter{Diseño experimental}
 En este capítulo se describirá el proceso de experimentación llevado a cabo, los conjuntos de datos usados para los distintos experimentos y los parámetros usados en cada uno de los algoritmos.\\[6pt]
-Los conjuntos de datos usados son lo siguientes:
+
 \begin{table}[htp]
     \centering
     \begin{tabular}{ l c c c c }
@@ -12,19 +12,20 @@ Los conjuntos de datos usados son lo siguientes:
         waveform5000     & 5000                & 40                       & 3               & Física        \\
         ionosphere       & 350                 & 34                       & 2               & Meteorología  \\
         dermatology      & 366                 & 34                       & 6               & Medicina      \\
-        zoo              & 101                 & 18                       & 7               & Biología      \\
-        parkinsons       & 200                 & 22                       & 2               & Medicina      \\
         wdbc             & 568                 & 29                       & 2               & Medicina      \\
+        parkinsons       & 200                 & 22                       & 2               & Medicina      \\
+        zoo              & 101                 & 18                       & 7               & Biología      \\
         wine             & 182                 & 13                       & 3               & Alimentación  \\
         breast-cancer    & 286                 & 9                        & 2               & Medicina      \\
         diabetes         & 768                 & 8                        & 2               & Medicina      \\
-        ecoli            & 336                 & 7                        & 8               & Biología      \\
         yeast            & 1483                & 8                        & 10              & Biología      \\
+        ecoli            & 336                 & 7                        & 8               & Biología      \\
         iris             & 149                 & 4                        & 3               & Biología      \\ \hline
     \end{tabular}
     \caption{Información de los conjuntos de datos ordenada por número de características}
     \label{tab:datasets_info}
 \end{table}
+
 Se han seleccionado los conjuntos de datos descritos en la tabla \ref{tab:datasets_info} por los siguientes motivos:
 \begin{itemize}
     \item \textbf{Variedad de áreas:} Se ha buscado representar una amplia gama de áreas, como Medicina, Biología, Alimentación, Meteorología, Física e Informática. Esto asegura que los problemas abordados sean variados y abarquen diferentes dominios de aplicación.

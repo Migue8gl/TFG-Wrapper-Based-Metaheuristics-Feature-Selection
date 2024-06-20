@@ -34,7 +34,7 @@ selección de características es un preprocesamiento necesario por varias razon
 \end{enumerate}
 
 Este proyecto se centra en el uso de metaheurísticas para la resolución de este problema. Las metaheurísticas son algoritmos de optimización cuyo uso principal recae en tareas cuyo resultado es difícil de obtener por medios convencionales. Ciertos problemas pueden no tener una solución algorítmica obvia o simplemente ser demasiado complejos en cuanto al tiempo de resolución de los mismos. En ambos casos, las metaheurísticas son capaces de ofrecer soluciones muy buenas y en un tiempo admisible por medio de procesos de búsqueda inspirados en múltiples ámbitos (física, biología, comportamiento social, etc). \\[6pt]
-Para la selección de características existen multitud de métodos que tratan de aplacar este problema. Algunos de los más famosos son los método de filtrado, el análisis de componentes principales (PCA) o incluso distintos tipos de regresiones como \textit{Lasso}. En este documento se estudian métodos de envoltura o \textit{Wrapper}, los cuáles hacen uso del entrenamiento y evaluación de modelos de \textit{Machine Learning} para evaluar distintos conjuntos de características. \\[6pt]
+Para la selección de características existen multitud de métodos que tratan de aplacar este problema. Algunos de los más famosos son los método de filtrado, el análisis de componentes principales (PCA) o incluso distintos tipos de regresiones como \textit{Lasso}. En este documento se estudian métodos de envoltura o \textit{Wrapper}, los cuáles hacen uso del entrenamiento y evaluación de modelos de \textit{Machine Learning} para evaluar distintos conjuntos de características. Este documento se centra en el uso de métodos \textit{Wrapper} o de envoltura debido a que el objetivo principal es comparar y analizar distintas alternativas metaheurísticas. \\[6pt]
 El reciente interés del problema de la selección de características en el ámbito de las
 metaheurísticas en los últimos años es más que evidente. Puede comprobarse como en los
 últimos años hay una tendencia en la publicación de artículos presentando nuevos métodos
@@ -50,7 +50,15 @@ superaban al resto en alguna métrica concreta sin llegar a la rigurosidad adecu
 
 Por lo expuesto, la motivación principal de este trabajo es la de proveer información todo lo objetiva posible por medio de un análisis comparativo entre los
 algoritmos optimizatorios metaheurísticos más populares y más citados junto con los
-algoritmos más robustos y clásicos en el campo de la optimización pseudo estocástica. Se plantea una serie de estudios y comparaciones entre los algoritmos, haciendo uso de sus versiones en codificación binaria y su versiones en codificación continua o real. Se realizarán análisis sobre los resultados de forma que se obtengan respuestas a una serie de preguntas. ¿Son buenos en \textit{Feature Selection} los algoritmos continuos que también lo son en binario?, ¿qué algoritmos modernos son más prometedores?, ¿los clásicos siguen siendo una opción viable frente a los modernos?
+algoritmos más robustos y clásicos en el campo de la optimización pseudo estocástica. Se plantea una serie de estudios y comparaciones entre los algoritmos, haciendo uso de sus versiones en codificación binaria y su versiones en codificación continua o real. Se realizarán análisis sobre los resultados de forma que se obtengan respuestas a una serie de preguntas de investigación.
+
+\begin{itemize}
+      \item ¿Son buenos en \textit{Feature Selection} los algoritmos continuos que también lo son en binario?
+      \item ¿Qué algoritmos modernos son más prometedores?
+      \item ¿Los clásicos siguen siendo una opción viable frente a los modernos?
+\end{itemize}
+
+En este trabajo, se abordará exitosamente la respuesta a esta serie de preguntas.
 
 \section{Objetivos}
 \textbf{Objetivo General:}
@@ -84,5 +92,5 @@ datos.\\[6pt]
 
       \item Evaluar los resultados de las metaheurísticas en problemas de selección de característica
             usando distintos como algoritmos de aprendizaje los métodos \textit{kNN} y \textit{SVM}. Se realizará
-            una comparativa a nivel de eficiencia en tiempo, estabilidad y calidad de los resultados.
+            una comparativa a nivel de eficiencia en tiempo y calidad de los resultados.
 \end{enumerate}
