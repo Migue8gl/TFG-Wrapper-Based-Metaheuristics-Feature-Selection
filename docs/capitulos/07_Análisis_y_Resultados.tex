@@ -1,16 +1,17 @@
 \chapter{Análisis y resultados}
 En este capítulo se van a discutir los resultados obtenidos tras realizar los experimentos descritos en el capítulo anterior. Se mostrarán gráficas que ilustren la curva de convergencia de los algoritmos en algunos conjunto de datos, para cada clasificador (kNN y SVC) y en cada versión del algoritmo, es decir, original y versión binaria. Junto a eso también se han elaborado una gráficas de ``cajas y bigotes'' o \textit{boxplots} que ilustran no solo los mejores resultados, si no su robustez y estabilidad tras varias iteraciones. \\[6pt]
+Para facilitar las comparaciones se han elaborado unos rankings entre algoritmos. Para cada \textit{dataset} se evalúa el desempeño de todos los algoritmos. A cada algoritmo se le asigna una posición relativa (ranking) en función de su desempeño en ese \textit{dataset}. Por ejemplo, el algoritmo con mejor desempeño recibe el primer lugar, el segundo mejor el segundo lugar, y así sucesivamente. Una vez que todos los algoritmos han sido evaluados y clasificados en todos los conjuntos de datos disponibles, se calcula el ranking medio de cada algoritmo.
 Además se mostrarán tablas y gráficas de los ranking obtenidos en versión binaria y en versión continua para cada clasificador tras hacer la media de los resultados en todos los conjuntos de datos.\\[6pt]
 Por último, los resultados vendrán expuestos en forma de tabla junto a las métricas correspondientes, de forma que se facilite el análisis de los algoritmos, de las versiones reales y continuas y de los clasificadores usados.\\[6pt]
 También ser realizarán análisis estadísticos de los resultados obtenidos utilizando como herramienta la página web \textbf{TACOlab}~\cite{taco_website}, facilitada por el tutor del proyecto, de forma que se puedan hacer los mejores y más robustos tests de forma automática y sencilla.\\[6pt]
-Como detalle a tener en cuenta, se ha añadido en las comparaciones un optimizador al que se le ha llamado ``Dummy'', debido a su naturaleza totalmente aleatorio y sin criterio alguno. Se añade como algoritmo de referencia, ninguna otra metaheurística debería ser peor que esta en promedio. En caso contrario podría decirse que el algoritmo en cuestión está mal diseñado.\\[6pt]
+Como detalle a tener en cuenta, se ha añadido en las comparaciones un optimizador al que se le ha llamado ``Dummy'', debido a que es totalmente aleatorio y sin criterio alguno. Se añade como algoritmo de referencia, ninguna otra metaheurística debería ser peor que esta en promedio. En caso contrario podría decirse que el algoritmo en cuestión está mal diseñado.\\[6pt]
 Pese a que se dividirán los análisis entre binario y continuo, las versiones discretas se escribirán con la letra \textit{b} delante. Por ejemplo, el algoritmo \textbf{FA} en binario sería \textbf{bFA}.
 
 \section{Binario}
 En esta sección se discutirán y analizarán los resultados para las metaheurísticas de codificación binaria o discreta. Estas versiones tienen un enfoque del problema distinto al de las reales, pues codifican cada característica con un $0$ o un $1$, o lo que es lo mismo, descartan características. Dada su naturaleza, cabría pensar que son los algoritmos más específicos que podrían usarse para el problema se selección de características.
 
 \subsection{General}
-En esta sub-sección se presentarán los resultados generales obtenidos con las metaheurísticas binarias. Esto permitirá una visión más amplia de su desempeño y proporcionará intuiciones iniciales sobre la efectividad de cada algoritmo en distintos contextos.
+Se presentan de forma general los resultados generales obtenidos con las metaheurísticas binarias. Esto permitirá una visión más amplia de su desempeño y proporcionará intuiciones iniciales sobre la efectividad de cada algoritmo en distintos contextos.
 
 \begin{figure}[htp]
     \centering
@@ -25,6 +26,7 @@ En esta sub-sección se presentarán los resultados generales obtenidos con las 
         \label{fig:ranking_svc}
     \end{subfigure}
     \caption{Rankings para fitness - binario}
+    \label{fig:rankings_binary}
 \end{figure}
 
 Como ya se aclaró en capítulos anteriores, para obtener estos resultados se han ejecutado $10$ veces cada algoritmo en cada conjunto de datos. Se muestran los resultados generales de rankings en para \textbf{SVC} y \textbf{kNN} en \ref{fig:ranking_knn} y \ref{fig:ranking_svc}, respectivamente.\\[6pt]
@@ -33,28 +35,29 @@ Los peores son \textbf{bABCO}, \textbf{bGOA} y \textbf{bDA}. Además lo son con 
 También es apreciable que los mejores algoritmos producen mejores resultados de media en \textbf{SVC} que en \textbf{kNN}, aunque los resultados de todo el conjunto de algoritmos parecen más estables en \textbf{kNN}.
 
 \subsection{Variabilidad}
-
 \begin{figure}[htp]
     \centering
-    \begin{subfigure}[htp]{0.5\textwidth}
+    \begin{subfigure}[htp]{0.45\textwidth}
         \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/ionosphere/optimizer_boxplot_fitness_knn_b.png}
         \caption{ionosphere}
         \label{fig:boxplot_ionosphere}
     \end{subfigure}
-
-    \begin{subfigure}[htp]{0.5\textwidth}
+    \hfill
+    \begin{subfigure}[htp]{0.45\textwidth}
         \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/wdbc/optimizer_boxplot_fitness_knn_b.png}
         \caption{wdbc}
         \label{fig:boxplot_wdbc}
     \end{subfigure}
 
-    \begin{subfigure}[htp]{0.5\textwidth}
+    \vspace{0.5cm} % Espacio vertical entre las filas
+
+    \begin{subfigure}[htp]{0.45\textwidth}
         \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/diabetes/optimizer_boxplot_fitness_knn_b.png}
         \caption{diabetes}
         \label{fig:boxplot_diabetes}
     \end{subfigure}
-
-    \begin{subfigure}[htp]{0.5\textwidth}
+    \hfill
+    \begin{subfigure}[htp]{0.45\textwidth}
         \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/binary/parkinsons/optimizer_boxplot_fitness_knn_b.png}
         \caption{parkinsons}
         \label{fig:boxplot_parkinsons}
@@ -67,7 +70,7 @@ También es apreciable que los mejores algoritmos producen mejores resultados de
 Se muestran algunos de los resultados obtenidos con los algoritmos binarios en \ref{fig:boxplot_ionosphere}, \ref{fig:boxplot_wdbc}, \ref{fig:boxplot_diabetes} y \ref{fig:boxplot_parkinsons} con el clasificador \textbf{kNN}. Obviamente, no es posible incluir gráficas para todas las combinaciones posibles sin saturar el capítulo; para ello, se remite al lector al capítulo de apéndices.\\[6pt]
 Se puede observar que la mayoría de los algoritmos obtienen resultados bastante buenos en los distintos conjuntos de datos, considerándose los valores de fitness suficientemente buenos para considerarlos soluciones de calidad, obviamente considerando cada problema por separado, con las características de cada uno. Es importante destacar que no todos los conjuntos de datos presentan la misma dificultad, ya que distintos tipos de problemas presentan diferentes desafíos. En particular, se puede notar que los algoritmos aplicados al conjunto de datos \textit{ionosphere} (figura \ref{fig:boxplot_ionosphere}) muestran menos variabilidad en sus valores de fitness, reflejándose en una desviación estándar menor en comparación con los resultados de \textit{diabetes} (figura \ref{fig:boxplot_diabetes}) o \textit{parkinsons} (figura \ref{fig:boxplot_parkinsons}). Con ello, queda reflejado como a los algoritmos les cuesta menos optimizar ciertos problemas y suelen ser más estables en estos. Esto puede deberse muchos factores, por ejemplo, mayor cantidad de mínimos locales en algunos problemas en comparación a otros.\\[6pt]
 También se pueden identificar ciertos algoritmos que parecen tener un mejor desempeño en general. Por ejemplo, algoritmos como \textbf{bGWO} y \textbf{bPSO} tienden a obtener resultados muy buenos y poco variantes, mientras que otros como \textbf{ACO} y \textbf{bABCO} parecen ser menos efectivos en los conjuntos de datos analizados.\\[6pt]
-Pese a ello, se percibe una variabilidad de los resultados en \textit{fitness} bastante similar en todos los algoritmos usados. Donde un algoritmo es robusto en cuanto a variabilidad, en otro no lo es. Esto se observa en todos los problemas.
+Se percibe una variabilidad de los resultados en \textit{fitness} bastante similar en todos los algoritmos usados. Donde un algoritmo es robusto en cuanto a variabilidad, en otro no lo es. Esto se observa en todos los problemas.
 
 \subsection{Fitness}
 Se procede a comparar y analizar los distintos algoritmos basándonos en la métrica de \textit{fitness}. Como se explica en la ecuación \ref{eq:fitness}, este valor está compuesto por otras dos métricas a tener en cuenta, la precisión o \textit{accuracy} y el ratio de reducción de características. La métrica de \textit{fitness} es el marcador más importante para comprobar la calidad de un algoritmo. Pese a ello, más tarde se analizarán ambas métricas que lo componen por separado, pues es interesante obtener una visión más precisa de los resultados.\\[6pt]
@@ -94,28 +97,27 @@ Como puede observarse en las tablas \ref{tab:mean_fitness_bin_svc} y \ref{tab:me
 Como se puede observar en \ref{fig:ranking_knn} y en \ref{fig:ranking_svc}, el algoritmo con mejor puntuación es \textbf{bGWO} y el peor \textbf{bABCO} (se puede ver también su valor en los rankings de las tablas en el apéndice: \ref{tab:ranking_fitness_bin_svc}, \ref{tab:ranking_fitness_bin_knn}). \\[6pt]
 En las figuras de \ref{fig:convergencia_svc_1_bin}, \ref{fig:convergencia_svc_2_bin}, \ref{fig:convergencia_knn_1_bin} y \ref{fig:convergencia_knn_2_bin}, se aprecia como \textbf{bABCO} muestra rendimientos muy buenos en según que conjunto de datos. Por ejemplo, en \textit{yeast} o en \textit{sonar}, el algoritmo obtiene resultados muy decentes y competitivos siendo estos dos conjuntos de datos de los más complicados de la selección, por convergencia y número de características. Pese a ello, en conjunto, no consigue superar al resto.\\[6pt]
 En cambio \textbf{bGWO} parece un adaptarse bien a todos los problemas seleccionados sin excepción. Es capaz de obtener el mínimo, en el valor \textit{fitness} de evaluación durante el entrenamiento, en casi todos los \textit{datasets}.
-
 \begin{table}[htp]
     \centering
     \begin{tabular}{lllll}
         \toprule
         {}    & Original  & Holm           & Hommel         & Hochberg       \\
         \midrule
-        dummy & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
-        abco  & 0.003     & \textbf{0.029} & \textbf{0.029} & \textbf{0.029} \\
-        da    & 0.005     & 0.054          & 0.051          & 0.054          \\
-        goa   & 0.010     & 0.092          & 0.082          & 0.092          \\
-        fa    & 0.022     & 0.172          & 0.106          & 0.172          \\
-        de    & 0.026     & 0.179          & 0.106          & 0.179          \\
-        ga    & 0.038     & 0.230          & 0.127          & 0.191          \\
-        ba    & 0.055     & 0.277          & 0.166          & 0.191          \\
-        aco   & 0.055     & 0.277          & 0.166          & 0.191          \\
-        woa   & 0.064     & 0.277          & 0.191          & 0.191          \\
-        cs    & 0.135     & 0.277          & 0.271          & 0.271          \\
-        pso   & 0.346     & 0.346          & 0.346          & 0.346          \\
+        DUMMY & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        ABCO  & 0.003     & \textbf{0.029} & \textbf{0.029} & \textbf{0.029} \\
+        DA    & 0.005     & 0.054          & 0.051          & 0.054          \\
+        GOA   & 0.010     & 0.092          & 0.082          & 0.092          \\
+        FA    & 0.022     & 0.172          & 0.106          & 0.172          \\
+        DE    & 0.026     & 0.179          & 0.106          & 0.179          \\
+        GA    & 0.038     & 0.230          & 0.127          & 0.191          \\
+        BA    & 0.055     & 0.277          & 0.166          & 0.191          \\
+        ACO   & 0.055     & 0.277          & 0.166          & 0.191          \\
+        WOA   & 0.064     & 0.277          & 0.191          & 0.191          \\
+        CS    & 0.135     & 0.277          & 0.271          & 0.271          \\
+        PSO   & 0.346     & 0.346          & 0.346          & 0.346          \\
         \bottomrule
     \end{tabular}
-    \caption{P-valores del bGWO vs el resto - knn - binario}
+    \caption{P-valores del bGWO vs el resto - kNN - binario}
     \label{tab:p-values_gwo_vs_rest_knn}
 \end{table}
 
@@ -125,23 +127,24 @@ En cambio \textbf{bGWO} parece un adaptarse bien a todos los problemas seleccion
         \toprule
         {}    & Original  & Holm           & Hommel         & Hochberg       \\
         \midrule
-        dummy & 3.052E-04 & \textbf{0.004} & \textbf{0.004} & \textbf{0.004} \\
-        abco  & 0.002     & \textbf{0.024} & \textbf{0.022} & \textbf{0.024} \\
-        ba    & 0.004     & \textbf{0.043} & \textbf{0.037} & \textbf{0.043} \\
-        da    & 0.005     & \textbf{0.048} & \textbf{0.043} & \textbf{0.048} \\
-        goa   & 0.008     & 0.066          & 0.066          & 0.066          \\
-        woa   & 0.073     & 0.514          & 0.367          & 0.514          \\
-        de    & 0.109     & 0.656          & 0.547          & 0.599          \\
-        fa    & 0.121     & 0.656          & 0.599          & 0.599          \\
-        ga    & 0.252     & 1.000          & 0.599          & 0.599          \\
-        cs    & 0.364     & 1.000          & 0.599          & 0.599          \\
-        aco   & 0.490     & 1.000          & 0.599          & 0.599          \\
-        pso   & 0.599     & 1.000          & 0.599          & 0.599          \\
+        DUMMY & 3.052E-04 & \textbf{0.004} & \textbf{0.004} & \textbf{0.004} \\
+        ABCO  & 0.002     & \textbf{0.024} & \textbf{0.022} & \textbf{0.024} \\
+        BA    & 0.004     & \textbf{0.043} & \textbf{0.037} & \textbf{0.043} \\
+        DA    & 0.005     & \textbf{0.048} & \textbf{0.043} & \textbf{0.048} \\
+        GOA   & 0.008     & 0.066          & 0.066          & 0.066          \\
+        WOA   & 0.073     & 0.514          & 0.367          & 0.514          \\
+        DE    & 0.109     & 0.656          & 0.547          & 0.599          \\
+        FA    & 0.121     & 0.656          & 0.599          & 0.599          \\
+        GA    & 0.252     & 1.000          & 0.599          & 0.599          \\
+        CS    & 0.364     & 1.000          & 0.599          & 0.599          \\
+        ACO   & 0.490     & 1.000          & 0.599          & 0.599          \\
+        PSO   & 0.599     & 1.000          & 0.599          & 0.599          \\
         \bottomrule
     \end{tabular}
-    \caption{P-valores del bGWO vs el resto - svc - binario}
+    \caption{P-valores del bGWO vs el resto - SVC - binario}
     \label{tab:p-values_gwo_vs_rest_svc}
 \end{table}
+
 
 Se procede a hacer una comparativa estadística mediante la prueba de \textit{Wilcoxon} y el test post hoc de \textit{Holm} para determinar las diferencias significativas entre el mejor algoritmo (\textbf{bGWO}) y el resto. Los resultados, presentados en las tablas \ref{tab:p-values_gwo_vs_rest_knn} y \ref{tab:p-values_gwo_vs_rest_svc}, muestran los p-valores originales y ajustados, lo que nos permite identificar cuáles de las diferencias observadas son estadísticamente significativas con un error corregido. Este análisis es crucial para validar los resultados y asegurar que las conclusiones obtenidas no sean producto del azar, proporcionando una base sólida para afirmar la superioridad de \textbf{bGWO} frente a los demás algoritmos en los conjuntos de datos evaluados, en frente al peor de ellos.\\[6pt]
 
@@ -184,18 +187,18 @@ Si se comparan los p-valores~\ref{tab:p-values_aco_rest_bin_knn}, \ref{tab:p-val
         \toprule
         {}    & Original  & Holm           & Hommel         & Hochberg       \\
         \midrule
-        dummy & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
-        fa    & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
-        goa   & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
-        abco  & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
-        ba    & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
-        cs    & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
-        da    & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
-        de    & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
-        ga    & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
-        pso   & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
-        woa   & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
-        gwo   & 0.002     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        DUMMY & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        FA    & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        GOA   & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        ABCO  & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        BA    & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        CS    & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        DA    & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        DE    & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        GA    & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        PSO   & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        WOA   & 0.001     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
+        GWO   & 0.002     & \textbf{0.010} & \textbf{0.002} & \textbf{0.002} \\
         \bottomrule
     \end{tabular}
     \caption{P-valores de ACO vs el resto - knn - binario}
@@ -208,18 +211,18 @@ Si se comparan los p-valores~\ref{tab:p-values_aco_rest_bin_knn}, \ref{tab:p-val
         \toprule
         {}    & Original  & Holm           & Hommel         & Hochberg       \\
         \midrule
-        dummy & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
-        fa    & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
-        goa   & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
-        abco  & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
-        ba    & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
-        cs    & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
-        da    & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
-        de    & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
-        ga    & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
-        pso   & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
-        woa   & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
-        gwo   & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        DUMMY & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        FA    & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        GOA   & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        ABCO  & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        BA    & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        CS    & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        DA    & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        DE    & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        GA    & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        PSO   & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        WOA   & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
+        GWO   & 0.001     & \textbf{0.010} & \textbf{0.001} & \textbf{0.001} \\
         \bottomrule
     \end{tabular}
     \caption{P-valores de ACO vs el resto - svc - binario}
@@ -313,10 +316,10 @@ Es en cambio en la comparación en la métrica de reducción de características
     \centering
     \begin{tabular}{lll}
         \toprule
-        {}  & gwo                & woa                \\
+        {}  & GWO                & WOA                \\
         \midrule
-        gwo & -                  & - (\textbf{0.001}) \\
-        woa & + (\textbf{0.001}) & -                  \\
+        GWO & -                  & - (\textbf{0.001}) \\
+        WOA & + (\textbf{0.001}) & -                  \\
         \bottomrule
     \end{tabular}
     \caption{P-valores tras corrección entre bGWO y bWOA - knn}
@@ -327,10 +330,10 @@ Es en cambio en la comparación en la métrica de reducción de características
     \centering
     \begin{tabular}{lll}
         \toprule
-        {}  & gwo                & woa                \\
+        {}  & GWO                & WOA                \\
         \midrule
-        gwo & -                  & - (\textbf{0.002}) \\
-        woa & + (\textbf{0.002}) & -                  \\
+        GWO & -                  & - (\textbf{0.002}) \\
+        WOA & + (\textbf{0.002}) & -                  \\
         \bottomrule
     \end{tabular}
     \caption{P-valores tras corrección entre bGWO y bWOA - svc}
@@ -361,6 +364,7 @@ En esta última sub-sección se analizará la convergencia de los diferentes alg
 Claramente, el peor algoritmo y al que más le cuesta converger es \textbf{ACO}. Pese a ello, \textbf{ACO} parece variar mucho en su proceso optimizatorio entre distintos conjuntos de datos. Otro algoritmo que converge más lentamente que el resto es el \textbf{bDA} y el \textbf{bGOA}.
 
 Pese a las dificultades de algunos algoritmos, todos convergen correctamente en todos los conjuntos de datos, lo cual es esperable.
+\clearpage
 
 \section{Continuo}
 En esta sección se analizarán las metaheurísticas en su versión real o continua. En este apartado se ha optado por no usar en las comparativas el algoritmo \textbf{ACO} en su versión continua. Dado que \textbf{ACO} fue concebido como un algoritmo binario y que sus implementaciones, pese a haberlas, se alejan bastante de la idea original y distorsionan el algoritmo, se ha tomado la decisión de no incluirlo. Por tanto, se compararan las versiones continuas, que son las originales de cada algoritmo, entre sí. En el caso de \textbf{GA} se hace uso de operadores especiales, según se explicó en anteriores capítulos, para adaptarlo a un contexto de codificación real, siendo el único que requería de una modificación de los operadores.\\[6pt]
@@ -382,6 +386,7 @@ De igual forma que en el apartado anterior sobre los binarios, se procede a pres
         \label{fig:ranking_svc_real}
     \end{subfigure}
     \caption{Rankings para fitness - real}
+    \label{fig:rankings_real}
 \end{figure}
 
 Según se observa en las figuras de \ref{fig:ranking_knn_real} y \ref{fig:ranking_svc_real}, lo que más llama la atención es que hay algoritmos clasificados peor incluso que el \textbf{Dummy}, el cual es totalmente aleatorio. Estos son \textbf{DA} en \textbf{SVC} y \textbf{GOA} en ambos clasificadores. Parecen obtener resultados pésimos, pese a ser sus versiones originales.\\[6pt]
@@ -391,33 +396,41 @@ En cambio, algoritmos que ya habían destacado en binario, lo vuelven a hacer en
 
 \begin{figure}[htp]
     \centering
-    \begin{subfigure}[htp]{0.5\textwidth}
+
+    \begin{subfigure}[htp]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/waveform5000/optimizer_boxplot_fitness_knn_r.png}
         \caption{waveform5000}
         \label{fig:boxplot_waveform5000_real}
     \end{subfigure}
-    \begin{subfigure}[htp]{0.5\textwidth}
+    \hfill
+    \begin{subfigure}[htp]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/yeast/optimizer_boxplot_fitness_knn_r.png}
         \caption{yeast}
         \label{fig:boxplot_yeast_real}
     \end{subfigure}
-    \begin{subfigure}[htp]{0.5\textwidth}
+
+    \vspace{0.5cm} % Espacio vertical entre las filas
+
+    \begin{subfigure}[htp]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/spectf-heart/optimizer_boxplot_fitness_knn_r.png}
         \caption{spectf-heart}
         \label{fig:boxplot_spectf-heart_real}
     \end{subfigure}
-    \begin{subfigure}[htp]{0.5\textwidth}
+    \hfill
+    \begin{subfigure}[htp]{0.45\textwidth}
         \centering
         \includegraphics[width=\textwidth]{imagenes/fitness_charts/results/real/dermatology/optimizer_boxplot_fitness_knn_r.png}
         \caption{dermatology}
         \label{fig:boxplot_dermatology_real}
     \end{subfigure}
+
     \caption{\textit{Boxplots} para knn - real}
     \label{fig:combined_boxplots}
 \end{figure}
+
 
 En las figuras presentadas en \ref{fig:boxplot_waveform5000_real}, \ref{fig:boxplot_yeast_real}, \ref{fig:boxplot_spectf-heart_real}, \ref{fig:boxplot_dermatology_real} pueden observarse los resultados obtenidos para los conjuntos de datos \textbf{waveform5000}, \textbf{yeast}, \textbf{spectf-heart} y \textbf{dermatology} usando el clasificador \textbf{kNN}.\\[6pt]
 
@@ -437,17 +450,17 @@ Pese a no haberse realizado aún la corrección post hoc de \textit{Holms}, se p
         \toprule
         {}    & Original  & Holm           & Hommel         & Hochberg       \\
         \midrule
-        fa    & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
-        goa   & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
-        dummy & 1.221E-04 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
-        abco  & 3.052E-04 & \textbf{0.002} & \textbf{0.002} & \textbf{0.002} \\
-        da    & 0.001     & \textbf{0.008} & \textbf{0.008} & \textbf{0.008} \\
-        de    & 0.003     & \textbf{0.016} & \textbf{0.016} & \textbf{0.016} \\
-        ga    & 0.010     & 0.050          & 0.050          & 0.050          \\
-        pso   & 0.035     & 0.141          & 0.106          & 0.134          \\
-        ba    & 0.045     & 0.141          & 0.134          & 0.134          \\
-        woa   & 0.222     & 0.444          & 0.444          & 0.444          \\
-        gwo   & 0.934     & 0.934          & 0.934          & 0.934          \\
+        FA    & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        GOA   & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        DUMMY & 1.221E-04 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        ABCO  & 3.052E-04 & \textbf{0.002} & \textbf{0.002} & \textbf{0.002} \\
+        DA    & 0.001     & \textbf{0.008} & \textbf{0.008} & \textbf{0.008} \\
+        DE    & 0.003     & \textbf{0.016} & \textbf{0.016} & \textbf{0.016} \\
+        GA    & 0.010     & 0.050          & 0.050          & 0.050          \\
+        PSO   & 0.035     & 0.141          & 0.106          & 0.134          \\
+        BA    & 0.045     & 0.141          & 0.134          & 0.134          \\
+        WOA   & 0.222     & 0.444          & 0.444          & 0.444          \\
+        GWO   & 0.934     & 0.934          & 0.934          & 0.934          \\
         \bottomrule
     \end{tabular}
     \caption{P-valores de CS vs el resto - knn - real}
@@ -460,17 +473,17 @@ Pese a no haberse realizado aún la corrección post hoc de \textit{Holms}, se p
         \toprule
         {}    & Original  & Holm           & Hommel         & Hochberg       \\
         \midrule
-        da    & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
-        goa   & 1.221E-04 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
-        de    & 3.052E-04 & \textbf{0.003} & \textbf{0.003} & \textbf{0.003} \\
-        dummy & 0.002     & \textbf{0.016} & \textbf{0.016} & \textbf{0.016} \\
-        fa    & 0.005     & \textbf{0.034} & \textbf{0.034} & \textbf{0.034} \\
-        pso   & 0.018     & 0.110          & 0.092          & 0.110          \\
-        abco  & 0.028     & 0.140          & 0.112          & 0.140          \\
-        ba    & 0.045     & 0.178          & 0.178          & 0.178          \\
-        ga    & 0.151     & 0.454          & 0.454          & 0.454          \\
-        woa   & 0.320     & 0.640          & 0.561          & 0.561          \\
-        gwo   & 0.561     & 0.640          & 0.561          & 0.561          \\
+        DA    & 6.104E-05 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        GOA   & 1.221E-04 & \textbf{0.001} & \textbf{0.001} & \textbf{0.001} \\
+        DE    & 3.052E-04 & \textbf{0.003} & \textbf{0.003} & \textbf{0.003} \\
+        DUMMY & 0.002     & \textbf{0.016} & \textbf{0.016} & \textbf{0.016} \\
+        FA    & 0.005     & \textbf{0.034} & \textbf{0.034} & \textbf{0.034} \\
+        PSO   & 0.018     & 0.110          & 0.092          & 0.110          \\
+        ABCO  & 0.028     & 0.140          & 0.112          & 0.140          \\
+        BA    & 0.045     & 0.178          & 0.178          & 0.178          \\
+        GA    & 0.151     & 0.454          & 0.454          & 0.454          \\
+        WOA   & 0.320     & 0.640          & 0.561          & 0.561          \\
+        GWO   & 0.561     & 0.640          & 0.561          & 0.561          \\
         \bottomrule
     \end{tabular}
     \caption{P-valores de CS vs el resto - svc - real}
@@ -496,10 +509,10 @@ Si bien es cierto, los algoritmos genéticos han recibido más atención por par
     \centering
     \begin{tabular}{lll}
         \toprule
-        {} & de        & ga        \\
+        {} & DE        & GA        \\
         \midrule
-        de & -         & + (0.188) \\
-        ga & - (0.188) & -         \\
+        DE & -         & + (0.188) \\
+        GA & - (0.188) & -         \\
         \bottomrule
     \end{tabular}
     \caption{P-valores tras corrección entre GA y DE - knn - real}
@@ -510,10 +523,10 @@ Si bien es cierto, los algoritmos genéticos han recibido más atención por par
     \centering
     \begin{tabular}{lll}
         \toprule
-        {} & de                 & ga                 \\
+        {} & DE                 & GA                 \\
         \midrule
-        de & -                  & + (\textbf{0.041}) \\
-        ga & - (\textbf{0.041}) & -                  \\
+        DE & -                  & + (\textbf{0.041}) \\
+        GA & - (\textbf{0.041}) & -                  \\
         \bottomrule
     \end{tabular}
     \caption{P-valores tras corrección entre GA y DE - svc - real}
@@ -539,7 +552,7 @@ En la versión de \textbf{SVC} se obtiene resultados estadísticamente significa
     \caption{Rankings para selección de características - real}
 \end{figure}
 
-Dada la naturaleza de la composición de la ecuación de \textit{fitness}, cabría esperar resultados prácticamente iguales en \textit{accuracy}. Este hecho fue comprobado con los algoritmos binarios en secciones anteriores. Pese a ello, al observar los rankings (\ref{tab:ranking_accuracy_real_sv}, \ref{tab:ranking_accuracy_real_kn}) se percibe una diferencia con respecto al \textit{fitness}. El mejor es \textbf{GWO}, y no por mucho. De hecho, todos obtienen ponderaciones similares, por lo que parece que todos son capaces de obtener valores de precisión muy buenos. Por ello se procede a realizar un análisis con el foco de la reducción de dimensiones, que podría ser la métrica discriminatoria entre algoritmos.\\[6pt]
+Dada la naturaleza de la composición de la ecuación de \textit{fitness}, cabría esperar resultados prácticamente iguales en \textit{accuracy}. Este hecho fue comprobado con los algoritmos binarios en secciones anteriores. Pese a ello, al observar los rankings (\ref{tab:ranking_accuracy_real_svc}, \ref{tab:ranking_accuracy_real_knn}) se percibe una diferencia con respecto al \textit{fitness}. El mejor es \textbf{GWO}, y no por mucho. De hecho, todos obtienen ponderaciones similares, por lo que parece que todos son capaces de obtener valores de precisión muy buenos. Por ello se procede a realizar un análisis con el foco de la reducción de dimensiones, que podría ser la métrica discriminatoria entre algoritmos.\\[6pt]
 Las figuras \ref{fig:ranking_svc_real_sel_rate} y \ref{fig:ranking_knn_real_sel_rate} muestran los rankings de las mejores opciones en cuanto a reducción de atributos. Da la casualidad, que los resultados son iguales que en los rankings de \textit{fitness} en \ref{tab:ranking_fitness_real_svc} y \ref{tab:ranking_fitness_real_knn}. La única diferencia notable es que la discriminación entre posiciones crece incluso más si cabe que midiendo el \textit{fitness}. Los mejores son muy buenos y los peores pésimos en reducción.\\[6pt]
 De hecho, si se observan las tablas de p-valores en \textit{accuracy} en \ref{tab:p-values_accuracy_real_svc} y \ref{tab:p-values_accuracy_real_knn}, se aprecia que en los resultados, apenas hay diferencias si quiera cercanas a la significatividad estadística, la cual se ha limitado por debajo del $5\%$. Por ello, cabría esperar esta desigualdad y diferencias tan grandes en reducción de características. Todos parecen obtener una precisión más o menos buena, pero solo algunos reducen (y lo hacen mucho).
 
@@ -582,10 +595,10 @@ En las figuras \ref{fig:svc_selected_rate_cs_goa_real} se puede apreciar la mejo
     \centering
     \begin{tabular}{lll}
         \toprule
-        {}  & cs                     & goa                    \\
+        {}  & CS                     & GOA                    \\
         \midrule
-        cs  & -                      & - (\textbf{6.104E-05}) \\
-        goa & + (\textbf{6.104E-05}) & -                      \\
+        CS  & -                      & - (\textbf{6.104E-05}) \\
+        GOA & + (\textbf{6.104E-05}) & -                      \\
         \bottomrule
     \end{tabular}
     \caption{P-valores tras corrección entre CS y GOA - knn y svc - real}
@@ -614,8 +627,9 @@ Otros como \textbf{GWO} o \textbf{CS} sacan una clara ventaja al resto en veloci
     \includegraphics[width=0.8\textwidth]{imagenes/fitness_charts/img/real/diabetes/optimizers_fitness_knn.png}
     \caption{Convergencia de todas las metaheurísticas en diabetes - knn - real}
 \end{figure}
+\clearpage
 
-\section{Global}
+\section{Respuestas a las preguntas planteadas inicialmente}
 Concluidas las comparaciones de las versiones continuas y binarias de los algoritmos, se procede a analizar ciertos aspectos que motivan la creación de este documento y se mostrarán una serie de propuestas que tengan en consideración distintos contextos de uso, de forma que se aprovechen las capacidades de las mejores metaheurísticas en sus respectivos puntos fuertes.\\[6pt]
 \textbf{¿Merece pues la pena el uso de algoritmos específicos para la selección de características o las versiones originales son totalmente capaces de reducir?} En este caso, los algoritmos binarios son claramente más eficaces a la hora de reducir características, aunque esto era de esperar dada su naturaleza. La figura \ref{fig:bin_vs_real_selected_rate} lo ilustra perfectamente. Si bien algunos algoritmos como \textbf{CS} obtienen resultados ligeramente mejores en su versión original, el resto son capaces de reducir mucho más en binario.
 
@@ -641,12 +655,16 @@ Dados los distintos enfoques de cada versión, cabría esperar que los algoritmo
     \label{fig:bin_vs_real_avg}
 \end{figure}
 
-\textbf{¿Son los algoritmos buenos en su versión original igualmente eficaces en su versión binaria?} Los algoritmos mejor parados en \textbf{fitness} han sido \textbf{GWO}, \textbf{CS} y \textbf{GA} (\ref{fig:ranking_knn}, \ref{fig:ranking_svc}, \ref{fig:ranking_knn_real}, \ref{fig:ranking_svc_real}). El más robusto entre versiones de codificación es \textbf{GWO}, el cual obtiene resultados buenos con mucha diferencia del resto en prácticamente todas las pruebas realizadas. \textbf{CS} parece rendir mejor en su versión original, llegando a ser el mejor algoritmo de todos, pero su versión binaria es muy interesante y eficaz. \textbf{GA} obtiene resultados prácticamente idénticos en ambas codificaciones, por lo que la base algorítmica del genético es bastante robusta.\\[6pt]
-Por lo expuesto, los mejores algoritmos lo son también en binario. Cabe mencionar, que otros como \textbf{WOA} y \textbf{BA} parecen aprovechar mejor sus bondades en su versión original, pues caen a ser algoritmos promedios en sus versiones discretas.\\[6pt]
-\textbf{¿Cómo son los recientes en comparación con los más clásicos?} Los resultados analizados arrojan evidencia acerca de la robustez de algoritmos como \textbf{PSO}, \textbf{GA} o incluso \textbf{DE}, los cuales siguen obteniendo resultados muy aceptables. Si bien son superados por algunos algoritmos más novedosos en las comparaciones realizadas, siguen siendo mejores que otros modernos como \textbf{DA} o \textbf{GOA}.\\[6pt]
+\subsection{¿Son los algoritmos buenos en su versión original igualmente eficaces en su versión binaria?}
+Los algoritmos mejor parados en \textbf{fitness} han sido \textbf{GWO}, \textbf{CS} y \textbf{GA} (\ref{tab:rankings_real}, \ref{rankings_real}). El más robusto entre versiones de codificación es \textbf{GWO}, el cual obtiene resultados buenos con mucha diferencia del resto en prácticamente todas las pruebas realizadas. \textbf{CS} parece rendir mejor en su versión original, llegando a ser el mejor algoritmo de todos, su versión binaria es muy interesante y eficaz. \textbf{GA} obtiene resultados prácticamente idénticos en ambas codificaciones, por lo que la base algorítmica del genético es bastante robusta.\\[6pt]
+Por lo expuesto, los mejores algoritmos lo son también en binario. Cabe mencionar, que otros como \textbf{WOA} y \textbf{BA} parecen aprovechar mejor sus bondades en su versión original, pues caen a ser algoritmos promedios en sus versiones discretas.
+\subsection{¿Cómo son los recientes en comparación con los más clásicos?}
+Los resultados analizados arrojan evidencia acerca de la robustez de algoritmos como \textbf{PSO}, \textbf{GA} o incluso \textbf{DE}, los cuales siguen obteniendo resultados muy aceptables. Si bien son superados por algunos algoritmos más novedosos en las comparaciones realizadas, siguen siendo mejores que otros modernos como \textbf{DA} o \textbf{GOA}.\\[6pt]
 Además, sus versiones discretas obtienen resultados incluso mejores, incrementando significativamente sus posiciones en rankings, lo cual evidencia su flexibilidad y capacidad de adaptación a todo tipo de problemas. Llegan a ser opciones muy prometedoras para el problema de selección de características.\\[6pt]
-Expuestas las bondades de los algoritmos más clásicos, es importante recalcar la alta calidad de ciertas propuestas modernas, como \textbf{GWO}, que obtienen resultados muy superiores y de muy alta calidad.\\[6pt]
-\textbf{¿Cuáles de los recientes parecen más prometedores?} Sin duda alguna, los algoritmos \textbf{GWO} y \textbf{CS}. Ambas metaheurísticas consiguen resultados muy diferenciadores en todos y cada uno de los apartados. Quizá \textbf{GWO} es algo lento, sin salirse mucho de los tiempos medios. Han demostrado ser capaces de encontrar sub-conjuntos mínimos de características preservando e incluso aumentando en algunos casos, el porcentaje de precisión.\\[6pt]
-\textbf{¿Cuáles son las opciones más interesantes dentro de ciertos contextos?} Si las necesidades del problema son más bien balanceadas y se necesita de una reducción de características que mantenga calidad en la solución, se recomienda el uso de \textbf{GWO}. Otros algoritmos interesantes serían \textbf{CS}, \textbf{GA} o \textbf{PSO}.\\[6pt]
+Expuestas las bondades de los algoritmos más clásicos, es importante recalcar la alta calidad de ciertas propuestas modernas, como \textbf{GWO}, que obtienen resultados muy superiores y de muy alta calidad.
+\subsection{¿Cuáles de los recientes parecen más prometedores?}
+Sin duda alguna, los algoritmos \textbf{GWO} y \textbf{CS}. Ambas metaheurísticas consiguen resultados muy diferenciadores en todos y cada uno de los apartados. Quizá \textbf{GWO} es algo lento, sin salirse mucho de los tiempos medios. Han demostrado ser capaces de encontrar sub-conjuntos mínimos de características preservando e incluso aumentando en algunos casos, el porcentaje de precisión.
+\subsection{¿Cuáles son las opciones más interesantes dentro de ciertos contextos?}
+Si las necesidades del problema son más bien balanceadas y se necesita de una reducción de características que mantenga calidad en la solución, se recomienda el uso de \textbf{GWO}. Otros algoritmos interesantes serían \textbf{CS}, \textbf{GA} o \textbf{PSO}.\\[6pt]
 Si el problema requiere de una reducción extrema de dimensionalidad, perdiendo en el proceso algo de precisión, sin duda \textbf{ACO} ha demostrado ser el más discriminador en la selección de atributos.\\[6pt]
 Si los tiempos de ejecución son un problema y se requiere de un algoritmo que reduzca en el mínimo tiempo posible, entonces \textbf{FA} es la opción más recomendada. Es la metaheurística que más velozmente converge dados los resultados de los experimentos, obteniendo métricas muy aceptables.
