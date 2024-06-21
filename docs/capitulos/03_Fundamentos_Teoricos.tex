@@ -27,13 +27,13 @@ Por otro lado, la función objetivo puede ser positiva o negativa, dependiendo d
 Resumiendo, la función \textit{fitness} es un tipo particular de función objetivo que se utiliza como métrica de rendimiento~\cite{eiben2015}.
 
 \subsection{Óptimos globales o locales}
-Se conocen como punto de óptimo global (mínimo o máximo) la solución (o vector hablando en términos matemáticos) cuyo valor para la función objetivo es el más grande en todo el espacio de soluciones posible, es decir, el espacio de búsqueda. Los óptimos locales en cambio son varios, no solo uno como es el global. Son soluciones máximas o mínimas dentro de una región de soluciones.
+Se conocen como punto de óptimo global (mínimo o máximo) la solución (o vector hablando en términos matemáticos) cuyo valor para la función objetivo es el más grande o más pequeño en todo el espacio de soluciones posible, es decir, el espacio de búsqueda. Los óptimos locales en cambio son varios, no solo uno como es el global. Son pequeños picos o depresiones a lo largo de la función, los cuales marcan un máximo o mínimo dentro de un vecindario o región de soluciones.
 
 \begin{figure}[htp]
     \begin{center}
         \includegraphics[width=1\textwidth]{imagenes/min-max_points.png}
     \end{center}
-    \caption[Puntos globales y locales]{En esta figura extraída de \cite{inbook} puede observarse de manera intuitiva la diferencia entre punto global y puntos locales. El máximo global es el valor más alto para $f(x)$ en el espacio, mientras que un máximo global solo representa el valor más alto dentro de un ``vecindario"}
+    \caption[Puntos globales y locales]{En esta figura extraída de \cite{inbook} puede observarse de manera intuitiva la diferencia entre punto global y puntos locales. El máximo global es el valor más alto para $f(x)$ en el espacio, mientras que un máximo local solo representa el valor más alto dentro de un ``vecindario".}
 \end{figure}
 
 Sea $f(x)$ una función a maximizar y $x^*$ una solución óptima. Un objetivo $G(x)$ está en su máximo global sí y solo si~\cite{inbook}:
@@ -70,7 +70,7 @@ Es inmediato pensar que, a mayor cantidad de datos, mejor calidad del modelo, y 
 \end{enumerate}
 
 De hecho, como puede observarse en la figura \ref{fig:learning_from_data_vc}, el modelo más complejo tiene un error esperado mucho mayor que el simple. El $E_{out}$ o error fuera de la muestra (error de generalización) es mucho más abrupto, es decir, generaliza peor.\\[6pt]
-Por supuesto, con suficientes datos, con un $N$ (número de datos) suficientemente grande, la tendencia del error es a la baja~\cite{Mostafa2012, shalev2014understanding}. Ocurre, sin embargo, que la recolección, limpieza y transformación de datos es una tarea compleja, por ello es mejor ceñirse, de nuevo, a el modelo más pequeño que obtenga una solución con suficiente calidad.\\[6pt]
+Por supuesto, con suficientes datos, con un $N$ (número de datos) suficientemente grande, la tendencia del error es a la baja~\cite{Mostafa2012, shalev2014understanding}. Ocurre, sin embargo, que la recolección, limpieza y transformación de datos es una tarea compleja, por ello es mejor ceñirse, de nuevo, al modelo más pequeño que obtenga una solución con suficiente calidad.\\[6pt]
 
 Como se ha mencionado anteriormente, la selección de características ayuda a la reducción del ruido. Siendo $f$ la función objetivo a predecir, $H^n$ el conjunto de hipótesis o conjunto de modelos de dimensión $n$ posibles, $h^*(x)$ el mejor modelo aprendido y $x$ una variable de entrada. El ruido conocido
 como ruido estocástico es aquel que atiende a una variación aleatoria que
@@ -84,13 +84,13 @@ esa parte. Este ruido depende de $H^n$ y permanece constante para un valor dado 
 La reducción de características ayuda a manejar ambos tipos de ruido~\cite{miao_survey_2016,Mostafa2012} al simplificar el
 modelo, lo que puede reducir el impacto del ruido estocástico y disminuir la complejidad del
 modelo, lo que a su vez puede ayudar a mitigar el ruido determinista al mejorar la capacidad
-del modelo para capturar las características relevantes y descartar las irrelevantes.
+del modelo para capturar las características relevantes y descartar las irrelevantes. Una selección adecuada de características puede ayudar a identificar y centrarse en las más informativas, revelando potencialmente los verdaderos patrones subyacentes en los datos, lo que puede reducir el ruido determinista.
 Esto puede conducir a una mejor capacidad de generalización y a una reducción del sobre-ajuste.\\[6pt]
 
 \subsection{Concepto}
 El funcionamiento y motivo es explicado ya en la sección de motivación en \ref{motivation}. Por evitar redundancias se procede a explicar el concepto de manera abreviada y puntualizando en los apartados más importantes.\\[6pt]
 La selección de características es una conocida y necesaria técnica de pre-procesamiento de datos para la construcción de un modelo de aprendizaje. Su función es escoger un subconjunto óptimo de características dentro del conjunto inicial, de forma que la complejidad del modelo se reduzca.\\[6pt]
-Este problema es del tipo $NP$-Hard, como ya se ha mencionado previamente en \ref{motivation} y explicado en \ref{complexity}.
+Este problema es del tipo $NP$-Hard, como ya se ha mencionado previamente en \ref{motivation}.
 La selección de características ayuda a una serie de factores como son la interpretabilidad, mejora de la eficiencia temporal y espacial del modelo y sobre todo con la \textbf{maldición de la dimensionalidad}~\cite{venkat2018curse, bellman1957dynamic}.
 
 \subsection{Maldición de la dimensionalidad}
@@ -105,7 +105,7 @@ El término fue acuñado por Bellman en $1961$~\cite{bellman1961adaptive}. Este 
 
 Además, en espacios de alta dimensión, la medición de distancias puede volverse menos precisa. Esto se debe a que las distancias entre puntos de datos diferentes tienden a converger a un mismo valor a medida que aumenta la dimensionalidad. Esto significa que las medidas de distancia ya no son tan útiles para medir la similitud entre datos~\cite{peng_interpreting_2024, venkat2018curse}. En el trabajo de Beyer y colaboradores~\cite{beyer99nn} se observó como esto ocurría y por tanto un escaneo lineal (recorrer los puntos uno a uno) resultaba en altas dimensiones más práctico que otras técnicas complejas.
 \section{Metaheurísticas}
-Dentro de la optimización hay muchos tipos de métodos, dentro de los pseudoaleatorios pueden encontrarse las metaheurísticas. Estas son algoritmos basados en una abstracción de mayor nivel de la \textbf{heurísticas}. Mientras que las heurísticas se apoyan en el conocimiento específico del campo en el que se encuentra el problema, y están restringidas a su dominio, las metaheurísticas son aplicables a todo tipo de problemas, independientemente de su área de optimización~\cite{bianchi2009survey}. Es cierto que hay algoritmos que son más convenientes para ciertos problemas que otros, pero su aplicación es generalizada. Normalmente, las metaheurísticas son diseñadas a siguiendo una inspiración en la naturaleza, ya sea en fenómenos físicos o en el comportamiento animal. Ejemplo de estos son algoritmos como el \textit{Búsqueda Cuckoo}, \textit{Enfriamiento Simulado} o incluso \textit{Algoritmos Genéticos}.\\[6pt]
+Dentro de la optimización hay muchos tipos de métodos, dentro de los pseudoaleatorios pueden encontrarse las metaheurísticas. Estas son algoritmos basados en una abstracción de mayor nivel de la \textbf{heurísticas}. Mientras que las heurísticas se apoyan en el conocimiento específico del campo en el que se encuentra el problema, y están restringidas a su dominio, las metaheurísticas son aplicables a todo tipo de problemas, independientemente de su área de optimización~\cite{bianchi2009survey}. Es cierto que hay algoritmos que son más convenientes para ciertos problemas que otros, pero su aplicación es generalizada. Normalmente, las metaheurísticas son diseñadas siguiendo una inspiración en la naturaleza, ya sea en fenómenos físicos o en el comportamiento animal. Ejemplo de estos son algoritmos como el \textit{Búsqueda Cuckoo}, \textit{Enfriamiento Simulado} o incluso \textit{Algoritmos Genéticos}.\\[6pt]
 Las metaheurísticas son especialmente útiles en problemas cuya resolución no es factible debido a altos costos computacionales, ya sea porque es posible analíticamente pero computacionalmente costoso, o porque el problema no es abordable mediante algoritmos convencionales. Son capaces de encontrar óptimos locales lo suficientemente aceptables, soluciones no óptimas, pero si muy buenas~\cite{bianchi2009survey}.
 
 \begin{figure}[htp]
@@ -128,8 +128,8 @@ De esta forma y faltando evidencia concluyente al respecto, es interesante menci
 
 \section{Aprendizaje automático}
 El aprendizaje automático es una sub-rama de estudio de la inteligencia artificial o \textbf{IA}, la cual aglomera una serie de métodos que pueden, de manera automática, detectar patrones en conjuntos masivos de datos para predecir datos futuros~\cite{murphy2012machine}. El aprendizaje automático o \textit{machine learning} en inglés, es usado en una amplia variedad de campos por su utilidad trasversal. Algunos de ellos son la agricultura, marketing, videojuegos, meteorología, física, etc.\\[6pt]
-Los algoritmos de aprendizaje automático son capaces de encontrar patrones en los datos, como ya se ha mencionado. Por ello, es necesario nutrir a estos algoritmos con datos de calidad. Un modelo de aprendizaje automático será tan bueno como los datos que se le puedan proveer, no más. De esta forma la recoleción de datos y su procesamiento se convierten en una prioridad a la hora de crear modelos.\\[6pt]
-Hay muchas formas de estructurar los datos y muchos tipos de algoritmos acorde a estos ``inputs''. En este documento se tratará con información en formato tabular, es decir, información en tablas con filas y columnas, donde cada fila representa un registro de información y cada columna una característica asociada. Esta última es la que determinará la complejidad del modelo.
+Los algoritmos de aprendizaje automático son capaces de encontrar patrones en los datos, como ya se ha mencionado. Por ello, es necesario nutrir a estos algoritmos con datos de calidad. Un modelo de aprendizaje automático será tan bueno como los datos que se le puedan proveer, no más. De esta forma la recolección de datos y su procesamiento se convierten en una prioridad a la hora de crear modelos.\\[6pt]
+Hay muchas formas de estructurar los datos y muchos tipos de algoritmos acorde a estos ``\textit{inputs}''. En este documento se tratará con información en formato tabular, es decir, información en tablas con filas y columnas, donde cada fila representa un registro de información y cada columna una característica asociada. Esta última es la que determinará la complejidad del modelo.
 
 \subsection{Aprendizaje supervisado}
 Este subtipo de aprendizaje automático se caracteriza por tener un conjunto de datos sobre los que se entrena y una salida esperada (etiquetas) para cada punto de los datos~\cite{sah2020machine}. Es bastante costoso porque etiquetar cada dato es una tarea laboriosa y poco escalable.
@@ -152,9 +152,9 @@ Cuando los datos solo vienen en forma de entrada y no se tiene ninguna salida (n
 \end{figure}
 
 \subsection{SVM}
-Las máquinas de vectores de soportes o \textit{SVM} fueron introducidas por primera vez en~\cite{cortes_support-vector_1995}. En este documento será uno de los algoritmos de clasificación usados en la función \textit{fitness} para cuantificar la calidad de los pesos aprendidos por los algoritmos optimizadores.\\[6pt]
+Las máquinas de vectores de soporte o \textit{SVM} fueron introducidas por primera vez en~\cite{cortes_support-vector_1995}. En este documento será uno de los algoritmos de clasificación usados en la función \textit{fitness} para cuantificar la calidad de los pesos aprendidos por los algoritmos optimizadores.\\[6pt]
 Las máquinas de vectores de soporte son algoritmos cuya principal característica se basa en la creación de un hiperplano o conjunto de hiperplanos en un espacio $n$-dimensional~\cite{scikit-learn-svm,}. Este hiperplano o hiperplanos es elegido de manera que maximice el margen entre los puntos de datos de todas las clases a predecir. El margen es la distancia entre el hiperplano y los puntos de datos más cercanos de cada clase, estos puntos se denominan vectores de soporte. De esta manera se consigue minimizar el error de generalización~\cite{hastie2009elements}.\\[6pt]
-La idea más intuitiva es, que al haber más espacio entre los puntos de distintas clases, hay más posibilidad de que los puntos no vistos, los puntos a predecir, caigan en zonas correctas.
+La idea más intuitiva es, que al haber más espacio entre los puntos de distintas clases, hay más posibilidad de que los puntos no vistos, los puntos a predecir, caigan en zonas correctas. En este documento se utilizará este algoritmo como clasificador y se por ello referido como \textbf{SVC} (\textit{support vector classifier}).
 
 \begin{figure}[htp]
     \begin{center}

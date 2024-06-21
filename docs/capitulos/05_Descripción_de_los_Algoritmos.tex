@@ -37,7 +37,7 @@ En la selección por torneo, los individuos compiten entre sí en grupos pequeñ
 Para las versiones binaria y continua del algoritmo se utilizan diferentes operadores de mutación y cross-over.
 
 \subsubsection{Cruce binario}
-\textbf{One-point crossover}: Se elige al azar un punto en los cromosomas de ambos progenitores y se designa como "punto de cruce". Los bits a la derecha de ese punto se intercambian entre los dos cromosomas parentales. El resultado son dos descendientes, cada uno con información genética de ambos progenitores~\cite{DAGDIA2020283}.
+\textbf{One-point crossover}: Se elige al azar un punto en los cromosomas de ambos progenitores y se designa como ``punto de cruce''. Los bits a la derecha de ese punto se intercambian entre los dos cromosomas parentales. El resultado son dos descendientes, cada uno con información genética de ambos progenitores~\cite{DAGDIA2020283}.
 \begin{figure}[htp]
     \begin{center}
         \includegraphics[width=0.6\textwidth]{imagenes/one-point-crossover.png}
@@ -490,14 +490,14 @@ Para fomentar la exploración y evitar los óptimos locales, los vectores $A$ pu
 
 \section{Algoritmo de la luciérnaga}
 \subsection{Introducción}
-Las luciérnagas son insectos capaces de producir un brillo único, muy visible y característico sobre todo de noche. El brillo que estas producen puede llegar a tener signficados que hoy dia siguen debatiendose en la comunidad científica. Pese a ello, se conoce que este brillo tiene dos funciones fundamentales y bien definidas:
+Las luciérnagas son insectos capaces de producir un brillo único, muy visible y característico sobre todo de noche. El brillo que éstas producen puede llegar a tener significados que hoy dia siguen debatiéndose en la comunidad científica. Pese a ello, se conoce que este brillo tiene dos funciones fundamentales y bien definidas:
 \begin{enumerate}
     \item \textbf{Comunicación}: Sirve como instrumento para la comunicación entre dos luciérnagas para el apareamiento.
     \item \textbf{Atracción}: Se usa para atraer a potenciales presas de la luciérnaga.
 \end{enumerate}
 Por simplicidad del algoritmo, se asumen tres reglas sobre el comportamiento y naturaleza de las luciérnagas~\cite{yang_chapter_2014}:
 \begin{enumerate}
-    \item Las luciérnagas solo tienen un sexo, por lo que todas se ven atraídas por todas y no hay discriminación más allá de que una luciérnaga sea más atractica que otra.
+    \item Las luciérnagas solo tienen un sexo, por lo que todas se ven atraídas por todas y no hay discriminación más allá de que una luciérnaga sea más atractiva que otra.
     \item La luminosidad es proporcional a lo atractiva que es una luciérnaga para el resto.
     \item La luminosidad de una luciérnaga es determinada por los límites de la función objetivo.
 \end{enumerate}
@@ -518,7 +518,7 @@ El movimiento de un agente (luciérnaga) es descrito por la siguiente ecuación,
 \begin{equation}
     x_i^{t+1} = x_i^t + \beta_0e^{-\gamma r_{ij}^2}(x_j^t-x_i^t)+\alpha\epsilon_i^t
 \end{equation}
-Donde $\alpha$ es un parámetro de aleatoriedad y $\epsilon$ un vector de números alatorios sacados de una distribución Gaussiana o uniforme. \\[6pt]
+Donde $\alpha$ es un parámetro de aleatoriedad y $\epsilon$ un vector de números aleatorios sacados de una distribución Gaussiana o uniforme. \\[6pt]
 El parámetro $\alpha$ debe ser decrementado gradualmente de forma que las luciérnagas pasen de moverse tan aleatoriamente en un principio a converger en un punto óptimo al final~\cite{yang_chapter_2014}:
 \begin{equation}
     \alpha = \alpha_\infty + (\alpha_0-\alpha_\infty)e^{-t}

@@ -6,7 +6,7 @@ una propiedad individual medible de un fenómeno concreto. Este problema es
 considerado un problema \textbf{NP duro}~\cite{leeuwen_algorithms_1998,johnjeffery_automata}. La reducción de dimensionalidad, y con
 ello de características, suele ser necesario a la hora de crear un modelo predictivo por medio
 del aprendizaje automático ya que muchas de las características
-dentro de un conjunto de datos pueden no llegar a ser relevantes para solucionar
+dentro de un conjunto de datos pueden no llegar a ser relevantes para resolver
 aquellos problemas que se intentan solucionar, ya sea por que no aporta información,
 porque puede ser agrupada junto a otras tantas en una sola propiedad o incluso porque hay ruido
 en los datos, lo cual puede ser inevitable~\cite{Mostafa2012}.\\[6pt]
@@ -26,7 +26,7 @@ selección de características es un preprocesamiento necesario por varias razon
             dimensionalidad puede conducir a un ahorro significativo en términos de
             tiempo y recursos computacionales necesarios para el entrenamiento y la
             evaluación de modelos. Al eliminar características irrelevantes, se reduce
-            la complejidad del problema y se acelera el proceso de aprendizaje. Cabe mencionar que el coste computacional de pre-procesamiento que constituye la selección de características en sí extenso, pero merece la pena de cara a posteriores usos en la construcción de modelos. Se hace una vez y se usa siempre.
+            la complejidad del problema y se acelera el proceso de aprendizaje. Cabe mencionar que el coste computacional de pre-procesamiento que constituye la selección de características es en sí extenso, pero merece la pena de cara a posteriores usos en la construcción de modelos. Se hace una vez y se usa siempre.
 
       \item Reduce la maldición de la dimensionalidad: Cuando la dimensionalidad
             se incrementa en un problema, el volumen del espacio también lo hace, y esto ocurre de manera exponencial. De forma que para
@@ -34,11 +34,11 @@ selección de características es un preprocesamiento necesario por varias razon
 \end{enumerate}
 
 Este proyecto se centra en el uso de metaheurísticas para la resolución de este problema. Las metaheurísticas son algoritmos de optimización cuyo uso principal recae en tareas cuyo resultado es difícil de obtener por medios convencionales. Ciertos problemas pueden no tener una solución algorítmica obvia o simplemente ser demasiado complejos en cuanto al tiempo de resolución de los mismos. En ambos casos, las metaheurísticas son capaces de ofrecer soluciones muy buenas y en un tiempo admisible por medio de procesos de búsqueda inspirados en múltiples ámbitos (física, biología, comportamiento social, etc). \\[6pt]
-Para la selección de características existen multitud de métodos que tratan de aplacar este problema. Algunos de los más famosos son los método de filtrado, el análisis de componentes principales (PCA) o incluso distintos tipos de regresiones como \textit{Lasso}. En este documento se estudian métodos de envoltura o \textit{Wrapper}, los cuáles hacen uso del entrenamiento y evaluación de modelos de \textit{Machine Learning} para evaluar distintos conjuntos de características. Este documento se centra en el uso de métodos \textit{Wrapper} o de envoltura debido a que el objetivo principal es comparar y analizar distintas alternativas metaheurísticas. \\[6pt]
+Para la selección de características existen multitud de métodos que tratan de aplacar este problema. Algunos de los más famosos son los método de filtrado, el análisis de componentes principales (\textit{PCA}) o incluso distintos tipos de regresiones como \textit{Lasso}. En este documento se estudian métodos de envoltura o \textit{Wrapper}, los cuáles hacen uso del entrenamiento y evaluación de modelos de \textit{Machine Learning} para evaluar distintos conjuntos de características. Este documento se centra en el uso de métodos \textit{Wrapper} o de envoltura debido a que el objetivo principal es comparar y analizar distintas alternativas metaheurísticas. \\[6pt]
 El reciente interés del problema de la selección de características en el ámbito de las
 metaheurísticas en los últimos años es más que evidente. Puede comprobarse como en los
-últimos años hay una tendencia en la publicación de artículos presentando nuevos métodos
-metaheurísticos, mejores con respecto a los clásicos o incluso comparativas y análisis entre
+esta última época hay una tendencia en la publicación de artículos presentando nuevos métodos
+metaheurísticos, mejores con respecto a los clásicos, o incluso comparativas y análisis entre
 distintos algoritmos.\\[6pt]
 
 Esta crecimiento viene acompañado, sin embargo, de comparaciones que distan de ser objetivas
