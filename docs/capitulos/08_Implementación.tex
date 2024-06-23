@@ -38,3 +38,12 @@ Durante el desarrollo del software se utilizó el patrón de diseño \textit{Str
 
 De esta forma, a la hora de optimizar cualquier conjunto de datos, basta con llamar a un optimizador y especificar la metaheurística junto a su configuración, aunque existe una por defecto para cada ``estrategia''.\\[6pt]
 Para mayor información y revisión del código utilizado en el proyecto, se refiere al lector al siguiente enlace: \url{https://github.com/Migue8gl/TFG-Wrapper-Based-Metaheuristics-Feature-Selection}.
+
+\begin{figure}[htp]
+    \centering
+    \includegraphics[width=1\textwidth]{imagenes/experiments_flow.png}
+    \caption{Diagrama del flujo de control en la experimentación}
+    \label{fig:flow_diagram_experiments}
+\end{figure}
+
+En la figura \ref{fig:flow_diagram_experiments} se muestra el diagrama de flujo de control en la experimentación que se ha seguido durante todo el proyecto. Un \textit{script} en \textit{bash} lanza todos los experimentos para cada algoritmo y cada conjunto de datos. Dentro de ese \textit{script} se, por cada algoritmo y \textit{dataset}, dos trabajos. Uno para su versión continua y otro para su versión binaria.
