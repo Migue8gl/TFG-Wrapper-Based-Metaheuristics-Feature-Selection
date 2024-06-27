@@ -66,7 +66,7 @@ This bash script automates the process of running optimization algorithms on var
 
 # Optional argument:
 # -n MONITOR: Set to 'True' to enable thread monitoring (default: False)
-```
+``
 
 ## Directory Structure
 ```bash
