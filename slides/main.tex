@@ -1,0 +1,80 @@
+% Desenvolvido por: Prof. Dr. David Buzatto
+% Modificado por: Brian Sena. 
+% Versão 0.1
+% Data: 01/08/2023
+%\documentclass[notes, aspectratio=169]{beamer}
+\documentclass[aspectratio=169]{beamer}
+\usepackage{structure}
+\usepackage{array}
+\usepackage{graphicx}
+\usepackage{makecell}
+\usepackage{animate}
+\usepackage{changepage}
+\renewcommand\theadalign{bc}
+\renewcommand\theadfont{\bfseries}
+\renewcommand\theadgape{\Gape[4pt]}
+\renewcommand\cellgape{\Gape[4pt]}
+
+\newcommand\blfootnote[1]{%
+  \begingroup
+  \renewcommand\thefootnote{}\footnote{#1}%
+  \addtocounter{footnote}{-1}%
+  \endgroup
+}
+
+
+\captionsetup{justification=centering}
+
+
+%\usepackage[alf,abnt-emphasize=bf]{abntex2cite}
+%\usepackage[backend=biber, defernumbers=true, style=numeric-comp, bibstyle=ieee, sorting=none]{biblatex}
+\usepackage[style=verbose,maxnames=10,babel=hyphen,hyperref=true,abbreviate=true,backend=biber,mcite]{biblatex}
+% Configurando BibLaTeX
+\DefineBibliographyStrings{spanish}{
+  url = {URL},
+  andothers={et ~al\adddot}
+}
+
+\addbibresource{bibliografia/bibliografia.bib}
+
+\setbeamercovered{transparent}
+
+\setbeamertemplate{endpage}{%
+  \subsection*{Dudas, preguntas o comentarios.}
+  \begin{frame}[noframenumbering]
+      \frametitle{Agradecimientos}
+      \begin{center}
+      \Huge Gracias por su atención.
+      \par\bigskip
+      \large ¿Dudas, preguntas o comentarios?
+      \end{center}
+    \end{frame}
+}
+
+\AtEndDocument{\usebeamertemplate{endpage}}
+\begin{document}
+
+\titulo{Estudio y Análisis de Metaheurísticas Modernos para la Selección de Características}
+\autor{Miguel García López}
+\orientador{Daniel Molina Cabrera}
+\github{\url{https://github.com/Migue8gl/TFG-Wrapper-Based-Metaheuristics-Feature-Selection}}
+
+\title[TFG]{\titulo}
+\author[Miguel García López]{Miguel García López}
+\institute[UGR]{Universidad de Granada}
+\date{\today}
+
+\curso{Grado en Ingeniería Informática}
+
+\local{Granada}
+
+\input{prefacio/prefacio}
+\input{capitulos/capitulo1}
+\input{capitulos/capitulo2}
+\input{capitulos/capitulo3}
+\input{capitulos/capitulo4}
+\input{capitulos/capitulo5}
+\input{capitulos/capitulo6}
+
+\end{document} 
+

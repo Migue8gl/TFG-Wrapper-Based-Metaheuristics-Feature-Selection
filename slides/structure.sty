@@ -1,0 +1,232 @@
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{structure}[2023/08/01 Modelo para Presentaciones UGR]
+
+\RequirePackage{lmodern}
+\RequirePackage{multicol}
+\RequirePackage[T1]{fontenc}
+\RequirePackage[utf8]{inputenc}
+\RequirePackage[spanish, es-tabla]{babel}
+\RequirePackage{csquotes}
+\RequirePackage{xcolor,colortbl}
+\RequirePackage{graphicx}
+%\RequirePackage{hyperref}
+\RequirePackage{subfig}
+\RequirePackage{url}
+\RequirePackage{placeins}
+\RequirePackage{multirow}
+\RequirePackage[figuresright]{rotating}
+\RequirePackage{chemfig}
+\RequirePackage{amsmath}
+\RequirePackage{amssymb}
+\RequirePackage{tabularx}
+\RequirePackage{booktabs}
+\RequirePackage{bigints}
+\RequirePackage{listingsutf8}
+\RequirePackage{etoolbox}
+\RequirePackage[final]{pdfpages}
+\RequirePackage{bigstrut}
+\RequirePackage{beamerthemesplit}
+% \RequirePackage[spanish,hyperpageref]{backref}
+\RequirePackage{tikz}
+\RequirePackage{tkz-euclide}
+\RequirePackage{caladea,carlito}
+\RequirePackage{caption}
+\RequirePackage{newfloat}
+\RequirePackage[export]{adjustbox}
+\RequirePackage{datetime}
+\newdateformat{onlydayandmonth}{
+  \THEDAY ~de \monthname[\THEMONTH].
+}
+
+\usetikzlibrary{automata, arrows.meta, positioning, shapes}
+
+
+% \DeclareOption{hideSubsectionTitle}{
+%     \ifdefined\hide
+%     \else
+%         \newcommand{\hide}{}
+%     \fi
+% }
+
+% \AtBeginSection[]{
+%     \begin{frame}{Outline}
+%         \tableofcontents[currentsection]
+%     \end{frame} }
+
+\ProcessOptions\relax
+
+\ifdefined\hide
+    \usetheme{Frankfurt}
+\else
+    \usetheme{Darmstadt}
+\fi
+
+\renewcommand{\familydefault}{\sfdefault}
+
+\definecolor{corComentario}{RGB}{150,150,150}
+\definecolor{corString}{RGB}{206,123,0}
+\definecolor{corPalavraChave}{RGB}{0,0,230}
+
+\lstset{
+  inputencoding=utf8/latin1,
+	numbers=left,
+	stepnumber=1,
+	firstnumber=1,
+	numberstyle=\footnotesize,
+	extendedchars=true,
+	breaklines=true,
+	lineskip=0pt,
+	frame=tb,
+	basicstyle=\ttfamily\footnotesize,
+	showstringspaces=false,
+	stringstyle=\color{corString},
+	commentstyle=\color{corComentario},
+	keywordstyle=\color{corPalavraChave}
+}
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+
+\newcommand{\titulo}[1]{\def\@tituloLabel{#1}}
+\newcommand{\subtitulo}[1]{\def\@subtituloLabel{#1}}
+\newcommand{\nome}[1]{\def\@nomeLabel{#1}}
+\newcommand{\autor}[1]{\def\@autorLabel{#1}}
+\newcommand{\orientador}[1]{\def\@orientadorLabel{#1}}
+\newcommand{\curso}[1]{\def\@cursoLabel{#1}}
+\newcommand{\local}[1]{\def\@localLabel{#1}}
+\newcommand{\github}[1]{\def\@github{#1}}
+\newcommand{\dia}[1]{\def\@diaLabel{#1}}
+\newcommand{\mes}[1]{\def\@mesLabel{#1}}
+\newcommand{\ano}[1]{\def\@anoLabel{#1}}
+
+
+
+\beamertemplatenavigationsymbolsempty
+%\setbeamerfont{page number in head/foot}{size=\normalsize}
+\setbeamertemplate{footline}[frame number]
+
+\definecolor{UGRDark}{RGB}{26, 64, 31}
+\definecolor{UGRPrimary}{RGB}{34, 84, 41}
+\definecolor{UGRSecondary}{RGB}{44, 109, 53}
+\definecolor{UGRTertiary}{RGB}{39, 96, 47}
+\definecolor{UGRQuaternary}{RGB}{39, 96, 47}
+\definecolor{UGRImportant}{RGB}{29, 74, 35}
+\definecolor{UGRExamples}{RGB}{26, 64, 31}
+\setbeamercolor*{palette primary}{bg=UGRPrimary,fg=white}
+\setbeamercolor*{palette secondary}{bg=UGRSecondary,fg=white}
+\setbeamercolor*{palette tertiary}{bg=UGRTertiary,fg=white}
+\setbeamercolor*{palette quaternary}{bg=UGRQuaternary,fg=UGRPrimary}
+\setbeamercolor{palette sidebar primary}{bg=UGRPrimary,fg=white}
+\setbeamercolor{palette sidebar secondary}{bg=UGRSecondary,fg=white}
+\setbeamercolor{palette sidebar tertiary}{bg=UGRTertiary,fg=white}
+\setbeamercolor{palette sidebar quaternary}{bg=UGRQuaternary,fg=white}
+\setbeamercolor{structure}{fg=UGRPrimary}
+\setbeamercolor{caption name}{fg=black}
+\setbeamerfont{caption name}{series=\bfseries}
+\setbeamercolor{section in toc}{fg=black}
+\setbeamercolor{subsection in toc}{fg=UGRPrimary}
+\setbeamercolor{section in head/foot}{bg=UGRDark,fg=white}
+\setbeamercolor{subsection in head/foot}{bg=UGRSecondary,fg=white}
+
+\newcommand{\footlinepayoff}[1]{\renewcommand{\@footlinepayoff}{#1}}
+
+\captionsetup{labelformat=empty,labelsep=none}
+\setbeamertemplate{footline}{
+\leavevmode%
+\hbox{%
+\begin{beamercolorbox}[wd=.30\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshortauthor
+\end{beamercolorbox}%
+\begin{beamercolorbox}[wd=.21\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshortinstitute
+\end{beamercolorbox}%
+\begin{beamercolorbox}[wd=.42\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    \insertframenumber{} /  \inserttotalframenumber\hspace*{2ex} 
+\end{beamercolorbox}
+\parbox[b]{\textwidth}{\vspace{-.2cm}\hspace{.1cm}\includegraphics[scale=0.1]{imagenes/LogoUGR}} }%
+\vskip0pt%
+}
+
+\setbeamertemplate{headline}
+{%
+  \pgfuseshading{beamer@barshade}%
+  \ifbeamer@sb@subsection%
+    \vskip-10ex%
+  \else%
+    \vskip-jex%
+  \fi%
+  \begin{beamercolorbox}[ignorebg,ht=4.5ex,dp=3.75ex]{section in head/foot}
+    \scriptsize
+    \insertnavigation{\paperwidth}
+  \end{beamercolorbox}%
+  % \ifbeamer@sb@subsection%
+  %   \usebeamerfont{subsection in head/foot}%
+  %   \begin{beamercolorbox}[ht=2.5ex,dp=1.125ex,%
+  %     leftskip=.3cm,rightskip=.3cm plus1fil]{subsection in head/foot}
+  %      \scriptsize\insertsubsectionhead
+  %   \end{beamercolorbox}%
+  % \fi%
+}%
+
+
+\setbeamercolor{title}{fg=UGRPrimary,bg=white}
+\setbeamercolor{author}{fg=black}
+\setbeamercolor{date}{fg=black}
+
+\setbeamerfont{author}{size=\small}
+\setbeamerfont{date}{size=\footnotesize}
+\setbeamerfont{title}{series=\bfseries}
+\setbeamerfont{subtitle}{series=\mdseries,size=\small}
+\setbeamerfont{frametitle}{series=\bfseries}
+\setbeamerfont{framesubtitle}{series=\mdseries}
+\setbeamerfont{footline}{size=\footnotesize}
+\setbeamerfont{footnote}{size=\tiny}
+%\setbeamerfont{block title}{series=\centering\bfseries}
+
+\setbeamertemplate{blocks}[rounded]
+
+\setbeamertemplate{itemize item}{\textbullet}
+\setbeamertemplate{itemize subitem}{\textemdash}
+\setbeamertemplate{itemize subsubitem}{\ensuremath{\circ}}
+
+\setbeamertemplate{title page}{%
+  %\vskip0pt plus 1filll%
+  \hspace{-12mm}
+  \vspace{-3cm}
+  \begin{beamercolorbox}[wd=0.6\textwidth,sep=10pt,leftskip=8mm]{title}%
+    {\ifdef{\@tituloLabel}{{\usebeamerfont{title}\@tituloLabel}{\ifdef{\@subtituloLabel}{{\usebeamerfont{title}:}}{}}}{}}
+    {\ifdef{\@subtituloLabel}{{\usebeamerfont{subtitle}\@subtituloLabel}}{}}
+    \vspace{.5cm} 
+    
+    {\ifdef{\@cursoLabel}{{\usebeamerfont{author}\usebeamercolor[fg]{author}\textbf{Titulación: }\par\@cursoLabel.}}{}}
+
+    {\ifdef{\@nomeLabel}{{\usebeamerfont{author}\usebeamercolor[fg]{author}\par\@nomeLabel}}{}}
+    \vspace{.1cm} 
+    
+    {\ifdef{\@autorLabel}{{\usebeamerfont{author}\usebeamercolor[fg]{author}\textbf{Autor: }\par\@autorLabel}}{}}
+    \vspace{.1cm} 
+    
+    {\ifdef{\@orientadorLabel}{{\usebeamerfont{author}\usebeamercolor[fg]{author}\textbf{Director: }\par\@orientadorLabel}}{}}
+    \vspace{.1cm} 
+    
+    % {\ifdef{\@coorientadorLabel}{\usebeamerfont{author}\usebeamercolor[fg]{author}\textbf{Co-Tutor: }\@coorientadorLabel}{}}
+  
+    %{\ifdef{\@localLabel}{{\usebeamerfont{date}\usebeamercolor[fg]{date}\@localLabel,{ } \onlydayandmonth\today}}{}}
+    \vspace{1cm}
+    {\ifdef{\@github}{{\usebeamerfont{footnote}\usebeamercolor[fg]{author}\vfill\rule{7cm}{.5pt}\par\@github}}{}}
+      
+  \end{beamercolorbox}
+}
+
+\setbeamercolor{alerted text}{fg=UGRImportant}
+\setbeamercolor{example text}{fg=UGRExamples}
+\setbeamercolor{block title}{bg=UGRSecondary}
+
+\newenvironment{bloco}[3]{%
+  \setbeamercolor{block body}{#2}
+  \setbeamercolor{block title}{#3}
+  \begin{block}{#1}}{\end{block}}
+
+\newcommand{\citeauthorandyear}[1]{\citeauthoronline{#1} (\citeyear{#1})}
+
+\endinput

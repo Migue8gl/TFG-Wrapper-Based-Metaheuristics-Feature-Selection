@@ -1,0 +1,60 @@
+\section{Diseño Experimental}
+\subsection{Conjuntos de datos}
+\begin{frame}
+  \frametitle{Conjuntos de datos}
+  \begin{columns}
+    \column{0.5\textwidth}
+    \begin{enumerate}
+      \item Se escogen conjuntos de datos por:
+            \begin{itemize}
+              \item \textbf{Variedad de áreas}
+              \item \textbf{Diversidad de problemas}
+              \item \textbf{Número de características}
+              \item \textbf{Relevancia práctica}
+            \end{itemize}
+    \end{enumerate}
+    \column{0.5\textwidth}
+    \begin{table}[htp]
+      \centering
+      \tiny
+      \setlength{\tabcolsep}{4pt}
+      \begin{tabular}{ l r r r l }
+        \hline
+        \textbf{Dataset} & \textbf{Inst.} & \textbf{Car.} & \textbf{Cls.} & \textbf{Área} \\ \hline
+        sonar            & 207            & 60            & 2             & Biología      \\
+        spambase-460     & 459            & 54            & 2             & Informática   \\
+        spectf-heart     & 348            & 44            & 2             & Medicina      \\
+        waveform5000     & 5000           & 40            & 3             & Física        \\
+        ionosphere       & 350            & 34            & 2             & Meteorología  \\
+        dermatology      & 366            & 34            & 6             & Medicina      \\
+        wdbc             & 568            & 29            & 2             & Medicina      \\
+        parkinsons       & 200            & 22            & 2             & Medicina      \\
+        zoo              & 101            & 18            & 7             & Biología      \\
+        wine             & 182            & 13            & 3             & Alimentación  \\
+        breast-cancer    & 286            & 9             & 2             & Medicina      \\
+        diabetes         & 768            & 8             & 2             & Medicina      \\
+        yeast            & 1483           & 8             & 10            & Biología      \\
+        ecoli            & 336            & 7             & 8             & Biología      \\
+        iris             & 149            & 4             & 3             & Biología      \\ \hline
+      \end{tabular}
+      \caption{Información de conjuntos de datos por número de características}
+      \label{tab:datasets_info}
+    \end{table}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Diseño Experimental}
+  \begin{enumerate}
+    \item La función \textit{fitness} se construye con:
+          \begin{itemize}
+            \item \textbf{Accuracy} al $90\%$.
+            \item \textbf{Reducción} al $10\%$.
+          \end{itemize}
+    \item Se define como: \begin{equation}
+            fitness = acc\cdot\alpha + red\cdot(1-\alpha)
+            \label{eq:fitness}
+          \end{equation}
+          Donde $\alpha$ es la ponderación dada a la precisión o \textit{accuracy}.
+  \end{enumerate}
+\end{frame}
