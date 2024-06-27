@@ -38,6 +38,8 @@ python -m pip install -r requirements.txt
 
 ## Usage
 
+### Running the Main Script
+
 Run the main script for optimizing a problem with the following command:
 
 ```bash
@@ -56,16 +58,6 @@ python src/main.py \
 # -v VERBOSE: Set the verbosity level for output (0 for quiet, 1 for activated)
 # -b ENCODING: Specify the encoding method for categorical variables (binary with s-shaped <s>, binary with v-shaped <v>, real encoding <r>)
 # -s SCALING: Choose the type of normalization or scaling for numerical features
-``
-
-This bash script automates the process of running optimization algorithms on various datasets. It can be executed as follows:
-
-```bash
-./execute.sh [-n MONITOR]
-
-# Optional argument:
-# -n MONITOR: Set to 'True' to enable thread monitoring (default: False)
-```
 
 ## Directory Structure
 TFG-Wrapper-Based-Metaheuristics-Feature-Selection/
