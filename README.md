@@ -7,6 +7,7 @@
 - [Installation](#installation)
 - [Usage](#usage)
 - [Directory Structure](#directory-structure)
+- [Acknowledgments](#acknowledgments)
 
 ## Introduction
 
@@ -48,21 +49,21 @@ python src/main.py \
     -b ENCODING \
     -s SCALING
 
-### Command-line arguments:
-###-d DATASET: Specify the dataset to use for training and evaluation
-### -i EPOCHS: Set the number of training epochs
-### -o OPTIMIZER: Choose the optimization algorithm (e.g., GWO, PSO)
-### -v VERBOSE: Set the verbosity level for output (0 for quiet, 1 for activated)
-### -b ENCODING: Specify the encoding method for categorical variables (binary with s-shaped <s>, binary with v-shaped <v>, real encoding <r>)
-### -s SCALING: Choose the type of normalization or scaling for numerical features
+# Command-line arguments:
+# -d DATASET: Specify the dataset to use for training and evaluation
+# -i EPOCHS: Set the number of training epochs
+# -o OPTIMIZER: Choose the optimization algorithm (e.g., GWO, PSO)
+# -v VERBOSE: Set the verbosity level for output (0 for quiet, 1 for activated)
+# -b ENCODING: Specify the encoding method for categorical variables (binary with s-shaped <s>, binary with v-shaped <v>, real encoding <r>)
+# -s SCALING: Choose the type of normalization or scaling for numerical features
 
 This bash script automates the process of running optimization algorithms on various datasets. It can be executed as follows:
 
 ```bash
 ./execute.sh [-n MONITOR]
 
-### Optional argument:
-### -n MONITOR: Set to 'True' to enable thread monitoring (default: False)
+# Optional argument:
+# -n MONITOR: Set to 'True' to enable thread monitoring (default: False)
 
 ## Directory Structure
 TFG-Wrapper-Based-Metaheuristics-Feature-Selection/
@@ -78,4 +79,13 @@ TFG-Wrapper-Based-Metaheuristics-Feature-Selection/
 ├── requirements.txt          # Python dependencies
 └── MiguelGarcíaLópez-EstudioYAnalisisDeMetaheuristicasModernasFeatureSelection.pdf  # Project report
 
+## Acknowledgments
+
+We would like to express our sincere gratitude to the contributors of the [pyMetaheuristic](https://github.com/Valdecy/pyMetaheuristic) repository. Their work provided the original code for the optimization algorithms used in this project. Their efforts in developing and sharing these metaheuristic algorithms have been instrumental in the development of our project.
+
+Special thanks to:
+- [Valdecy Pereira](https://github.com/Valdecy), the main contributor of pyMetaheuristic
+- All other contributors to the pyMetaheuristic project
+
+Their open-source contribution has been invaluable in advancing the field of optimization and enabling further research and development in this area.
 
