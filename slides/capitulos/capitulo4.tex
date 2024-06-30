@@ -44,17 +44,42 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Diseño Experimental}
+  \frametitle{Función fitness}
   \begin{enumerate}
     \item La función \textit{fitness} se construye con:
           \begin{itemize}
-            \item \textbf{Accuracy} al $90\%$.
-            \item \textbf{Reducción} al $10\%$.
+            \item \textbf{Accuracy} al $90\%$
+            \item \textbf{Reducción} al $10\%$
           \end{itemize}
     \item Se define como: \begin{equation}
             fitness = acc\cdot\alpha + red\cdot(1-\alpha)
             \label{eq:fitness}
           \end{equation}
-          Donde $\alpha$ es la ponderación dada a la precisión o \textit{accuracy}.
+          Donde $\alpha$ es la ponderación dada a la precisión o \textit{accuracy}
   \end{enumerate}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Parámetros de los algoritmos}
+  \begin{table}[htp]
+    \centering
+    \begin{tabular}{c|c}
+      \hline
+      \textbf{Algoritmo} & \textbf{Parámetros}                                                                                                                          \\
+      \hline
+      GOA                & \begin{tabular}[c]{@{}c@{}}$c_{min}$: 0.00001\ $c_{max}$: 1\ F: 0.5\ L: 1.5\end{tabular}         \\
+      WOA                & Parámetro espiral: 1                                                                                                                         \\
+      ABCO               & \begin{tabular}[c]{@{}c@{}}Abeja empleada: 3\ Abeja vigilante: 3\ Límite: 3\end{tabular}                                                     \\
+      BA                 & \begin{tabular}[c]{@{}c@{}}$\alpha$: 0.9\ $\gamma$: 0.9\ $f_{min}$: 0\ $f_{max}$: 2\end{tabular} \\
+      PSO                & \begin{tabular}[c]{@{}c@{}}w: 0.9\ $c_1$: 2\ $c_2$: 2\end{tabular}                                                                           \\
+      FA                 & \begin{tabular}[c]{@{}c@{}}$\alpha_0$: 0.5\ $\beta_0$: 0.2\ $\gamma_0$: 1\end{tabular}                                                       \\
+      GA                 & \begin{tabular}[c]{@{}c@{}}Ratio de cruce: 1\ Ratio de mutación: 0.05\ Elite: 2\ $\eta$: 1\ $\alpha$: $\sqrt{0.3}$\end{tabular}  \\
+      ACO                & \begin{tabular}[c]{@{}c@{}}$\alpha$: 1\ Q: 1\ Feromona inicial: 0.1\ Ratio de evaporación: 0.049\end{tabular}                                \\
+      CS                 & \begin{tabular}[c]{@{}c@{}}Ratio de descubrimiento: 0.25\ $\alpha$: 1\ $\lambda$: 1.5\end{tabular}                                           \\
+      DE                 & \begin{tabular}[c]{@{}c@{}}F: 0.5\ Cr: 0.1\end{tabular}                                                                                      \\
+      \hline
+    \end{tabular}
+    \caption{Parámetros de diferentes algoritmos de optimización}
+  \end{table}
 \end{frame}

@@ -1,45 +1,18 @@
 \section{Conclusiones}
-\subsection{Respuestas}
+\subsection{Conclusiones}
 
 \begin{frame}
-    \frametitle{Preguntas investigadas}
-    \begin{columns}
-        \column{0.5\textwidth}
-        \begin{figure}
-            \begin{center}
-                \includegraphics[width=1\textwidth]{imagenes/chapter6/selected_rate_comparison.png}
-            \end{center}
-            \caption{Comparación binaria vs continuo en selección de características}
-        \end{figure}
-        \column{0.5\textwidth}
-        \begin{itemize}
-            \item ¿Merece pues la pena el uso de algoritmos específicos para la selección de características o las versiones originales son totalmente capaces de reducir?
-        \end{itemize}
-    \end{columns}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Preguntas investigadas}
-    \begin{figure}
-        \begin{center}
-            \includegraphics[width=0.6\textwidth]{imagenes/chapter6/avg_comparison.png}
-        \end{center}
-        \caption{Comparación de \textit{fitness} en binario vs continuo}
-    \end{figure}
-\end{frame}
-
-\begin{frame}
-    \frametitle{Preguntas investigadas}
-    \begin{columns}
-        \column{0.5\textwidth}
-        \begin{itemize}
-            \item ¿Cómo son los recientes en comparación con los más clásicos?
-            \item ¿Cuáles de los recientes parecen más prometedores?
-        \end{itemize}
-        \column{0.5\textwidth}
-        \begin{itemize}
-            \item ¿Son los algoritmos buenos en su versión original igualmente eficaces en su versión binaria?
-            \item ¿Cuáles son las opciones más interesantes dentro de ciertos contextos?
-        \end{itemize}
-    \end{columns}
+    \frametitle{Conclusiones Principales}
+    \begin{itemize}
+        \item<1-> \textcolor{green}{Algoritmos específicos vs. originales:} Ambos enfoques son capaces de reducir. Los binarios son mucho más eficaces
+        \item<2-> \textcolor{blue}{Recientes vs. clásicos:} Algunos recientes (GWO, CS) muestran excelente rendimiento, pero otros clásicos (PSO, GA) siguen siendo competitivos
+        \item<3-> \textcolor{orange}{Prometedores:} GWO y CS destacan en versiones continuas y binarias
+        \item<4-> \textcolor{purple}{Eficacia binaria vs. continua:} Generalmente similar, con ligeras ventajas para versiones continuas en algunos casos y viceversa
+        \item<5-> \textcolor{red}{Opciones por contexto:}
+            \begin{itemize}
+                \item Mejor fitness general: CS, GWO (continuo), bGWO, bPSO (binario)
+                \item Mejor reducción de características: CS, GWO (continuo), ACO (binario)
+                \item Mayor eficiencia temporal: FA (continuo y binario)
+            \end{itemize}
+    \end{itemize}
 \end{frame}
