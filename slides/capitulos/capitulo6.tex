@@ -1,18 +1,52 @@
 \section{Conclusiones}
-\subsection{Conclusiones}
 
 \begin{frame}
-    \frametitle{Conclusiones Principales}
+\frametitle{¿Algoritmos específicos vs. originales?}
+\begin{itemize}
+\item<1-> \textcolor{green}{Ambos enfoques son capaces de reducir características}
+\item<2-> \textcolor{green}{Los algoritmos binarios son mucho más eficaces}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{¿Algoritmos recientes vs. clásicos?}
+\begin{itemize}
+\item<1-> \textcolor{blue}{Algunos recientes (GWO, CS) muestran excelente rendimiento}
+\item<2-> \textcolor{blue}{Algoritmos clásicos (PSO, GA) siguen siendo competitivos}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{¿Cuáles son los algoritmos más prometedores?}
+\begin{itemize}
+\item<1-> \textcolor{orange}{GWO y CS destacan en versiones continuas y binarias}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{¿Eficacia binaria vs. continua?}
+\begin{itemize}
+\item<1-> \textcolor{purple}{Generalmente similar}
+\item<2-> \textcolor{purple}{Ligeras ventajas para versiones continuas en algunos casos y viceversa}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{¿Qué opciones elegir según el contexto?}
+\begin{itemize}
+\item<1-> \textcolor{red}{Mejor fitness general:}
     \begin{itemize}
-        \item<1-> \textcolor{green}{Algoritmos específicos vs. originales:} Ambos enfoques son capaces de reducir. Los binarios son mucho más eficaces
-        \item<2-> \textcolor{blue}{Recientes vs. clásicos:} Algunos recientes (GWO, CS) muestran excelente rendimiento, pero otros clásicos (PSO, GA) siguen siendo competitivos
-        \item<3-> \textcolor{orange}{Prometedores:} GWO y CS destacan en versiones continuas y binarias
-        \item<4-> \textcolor{purple}{Eficacia binaria vs. continua:} Generalmente similar, con ligeras ventajas para versiones continuas en algunos casos y viceversa
-        \item<5-> \textcolor{red}{Opciones por contexto:}
-            \begin{itemize}
-                \item Mejor fitness general: CS, GWO (continuo), bGWO, bPSO (binario)
-                \item Mejor reducción de características: CS, GWO (continuo), ACO (binario)
-                \item Mayor eficiencia temporal: FA (continuo y binario)
-            \end{itemize}
+    \item Continuo: CS, GWO
+    \item Binario: bGWO, bPSO
     \end{itemize}
+\item<2-> \textcolor{red}{Mejor reducción de características:}
+    \begin{itemize}
+    \item Continuo: CS, GWO
+    \item Binario: ACO
+    \end{itemize}
+\item<3-> \textcolor{red}{Mayor eficiencia temporal:}
+    \begin{itemize}
+    \item FA (tanto en versión continua como binaria)
+    \end{itemize}
+\end{itemize}
 \end{frame}
