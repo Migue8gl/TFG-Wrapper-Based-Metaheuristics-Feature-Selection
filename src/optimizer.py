@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 
-from .constants import (
+from constants import (
     ALPHA,
     DATA,
     DEFAULT_ITERATIONS,
@@ -20,7 +20,7 @@ from .constants import (
     SAMPLE,
     SVC_CLASSIFIER,  # noqa: F401
 )
-from .pyMetaheuristic.algorithm import (
+from pyMetaheuristic.algorithm import (
     ant_colony_optimization,
     artificial_bee_colony_optimization,
     bat_algorithm,
@@ -46,19 +46,19 @@ class Optimizer:
 
     # Optimizers dict with all available optimizers
     optimizers = {
-        'goa': grasshopper_optimization_algorithm,
-        'woa': whale_optimization_algorithm,
-        'da': dragonfly_algorithm,
-        'gwo': grey_wolf_optimizer,
-        'abco': artificial_bee_colony_optimization,
-        'ba': bat_algorithm,
-        'pso': particle_swarm_optimization,
-        'fa': firefly_algorithm,
-        'ga': genetic_algorithm,
-        'aco': ant_colony_optimization,
-        'cs': cuckoo_search,
-        'de': differential_evolution,
-        'dummy': dummy_optimizer
+        "goa": grasshopper_optimization_algorithm,
+        "woa": whale_optimization_algorithm,
+        "da": dragonfly_algorithm,
+        "gwo": grey_wolf_optimizer,
+        "abco": artificial_bee_colony_optimization,
+        "ba": bat_algorithm,
+        "pso": particle_swarm_optimization,
+        "fa": firefly_algorithm,
+        "ga": genetic_algorithm,
+        "aco": ant_colony_optimization,
+        "cs": cuckoo_search,
+        "de": differential_evolution,
+        "dummy": dummy_optimizer,
     }
 
     # Optimizers names
@@ -134,10 +134,10 @@ class Optimizer:
         fitness = alpha * classification_error + (1 - alpha) * selection_rate
 
         return {
-            'fitness': fitness,
-            'accuracy': classification_rate,
-            'selected_features': selection_count,
-            'selected_rate': selection_rate
+            "fitness": fitness,
+            "accuracy": classification_rate,
+            "selected_features": selection_count,
+            "selected_rate": selection_rate,
         }
 
     @staticmethod
@@ -165,17 +165,19 @@ class Optimizer:
         # Giving each characteristic an importance by multiplying the sample and weights
         sample_weighted = np.multiply(sample, weights)
         # Split into train and test data
-        x_train, x_test, y_train, y_test = train_test_split(sample_weighted,
-                                                            labels,
-                                                            test_size=0.2)
+        x_train, x_test, y_train, y_test = train_test_split(
+            sample_weighted, labels, test_size=0.2
+        )
 
         if classifier == "knn":
             classifier = KNeighborsClassifier(
                 n_neighbors=classifier_parameters["n_neighbors"],
-                weights=classifier_parameters["weights"])
+                weights=classifier_parameters["weights"],
+            )
         elif classifier == "svc":
-            classifier = SVC(C=classifier_parameters["c"],
-                             kernel=classifier_parameters["kernel"])
+            classifier = SVC(
+                C=classifier_parameters["c"], kernel=classifier_parameters["kernel"]
+            )
         else:
             classifier = KNeighborsClassifier(
                 n_neighbors=classifier_parameters["n_neighbors"],
@@ -210,8 +212,9 @@ class Optimizer:
         return Optimizer.optimizer_names
 
     @staticmethod
-    def get_default_optimizer_parameters(optimizer: str = None,
-                                         solution_len: int = 2) -> dict:
+    def get_default_optimizer_parameters(
+        optimizer: str = None, solution_len: int = 2
+    ) -> dict:
         """
         Get default parameters for the specified optimizer.
 
@@ -302,7 +305,7 @@ class Optimizer:
                 "elite": 2,
                 "eta": 1,
                 "alpha": sqrt(0.3),
-                'binary': True,
+                "binary": True,
             }
         elif optimizer_lower == "aco":  # TODO Add parameters
             parameters = {
@@ -321,7 +324,7 @@ class Optimizer:
                 "discovery_rate": 0.25,
                 "alpha_value": 1,
                 "lambda_value": 1.5,
-                'binary': 's',
+                "binary": "s",
             }
         elif optimizer_lower == "de":  # TODO Add parameters
             parameters = {
@@ -329,13 +332,13 @@ class Optimizer:
                 "iterations": DEFAULT_ITERATIONS,
                 "F": 0.5,
                 "Cr": 0.1,
-                'binary': 's',
+                "binary": "s",
             }
         elif optimizer_lower == "dummy":  # TODO Add parameters
             parameters = {
                 "swarm_size": DEFAULT_POPULATION_SIZE,
                 "iterations": DEFAULT_ITERATIONS,
-                'binary': 's',
+                "binary": "s",
             }
 
         parameters["verbose"] = True
@@ -343,16 +346,12 @@ class Optimizer:
         parameters["max_values"] = [DEFAULT_UPPER_BOUND] * (solution_len)
         parameters["target_function"] = Optimizer.fitness
         parameters["target_function_parameters"] = {
-            "weights":
-            np.random.uniform(low=DEFAULT_LOWER_BOUND,
-                              high=DEFAULT_UPPER_BOUND,
-                              size=solution_len),
-            "data":
-            None,
-            "alpha":
-            ALPHA,
-            "classifier":
-            SVC_CLASSIFIER,
+            "weights": np.random.uniform(
+                low=DEFAULT_LOWER_BOUND, high=DEFAULT_UPPER_BOUND, size=solution_len
+            ),
+            "data": None,
+            "alpha": ALPHA,
+            "classifier": SVC_CLASSIFIER,
             "classifier_parameters": {
                 "n_neighbors": DEFAULT_NEIGHBORS,
                 "weights": "uniform",

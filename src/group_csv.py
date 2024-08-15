@@ -14,11 +14,10 @@ def process_csv_file(file_path: str):
     Returns:
         df (pd.DataFrame): DataFrame processed.
     """
-    dataset_name, optimizer_name = os.path.basename(file_path).split('_')[:2]
+    dataset_name, optimizer_name = os.path.basename(file_path).split("_")[:2]
     df = pd.read_csv(file_path)
-    df['dataset'] = dataset_name
-    df['optimizer'] = optimizer_name[:
-                                     -4]  # Remove ".csv" extension from optimizer name
+    df["dataset"] = dataset_name
+    df["optimizer"] = optimizer_name[:-4]  # Remove ".csv" extension from optimizer name
     return df
 
 
@@ -35,23 +34,37 @@ def generate_analysis_results(encoding: str):
         dataset_path = os.path.join(encoding_dir, dataset_dir)
         if os.path.isdir(dataset_path):
             for filename in os.listdir(dataset_path):
-                if filename.endswith(
-                        ".csv"
-                ) and filename != 'analysis_results.csv' and 'all_fitness' not in filename:
+                if (
+                    filename.endswith(".csv")
+                    and filename != "analysis_results.csv"
+                    and "all_fitness" not in filename
+                ):
                     file_path = os.path.join(dataset_path, filename)
                     dfs.append(process_csv_file(file_path))
 
-    combined_data = pd.concat(dfs)[[
-        'classifier', 'dataset', 'optimizer', 'all_fitness', 'best', 'avg',
-        'std_dev', 'acc', 'n_features', 'selected_rate', 'execution_time'
-    ]]
+    combined_data = pd.concat(dfs)[
+        [
+            "classifier",
+            "dataset",
+            "optimizer",
+            "all_fitness",
+            "best",
+            "avg",
+            "std_dev",
+            "acc",
+            "n_features",
+            "selected_rate",
+            "execution_time",
+        ]
+    ]
 
-    combined_data.to_csv(os.path.join(encoding_dir, 'analysis_results.csv'),
-                         index=False)
+    combined_data.to_csv(
+        os.path.join(encoding_dir, "analysis_results.csv"), index=False
+    )
 
 
 def main():
-    for encoding in ['binary', 'real']:
+    for encoding in ["binary", "real"]:
         generate_analysis_results(encoding)
 
 
