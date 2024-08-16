@@ -34,7 +34,6 @@ plt.style.use(["science", "ieee"])  # Style of plots
 
 def main(*args, **kwargs):
     start_time = time.time()
-
     # Get parameters from the user
     dataset_arg = kwargs.get("-d", D2)  # Chosen dataset
     # Notifications
