@@ -38,9 +38,9 @@ def main(*args, **kwargs):
     dataset_arg = kwargs.get("-d", D2)  # Chosen dataset
     # Notifications
     notify_arg = kwargs.get("-n", False)
-    i_arg = int(kwargs.get(
-        "-i", DEFAULT_EVALS
-      ))  # Number of evaluations for each optimization process
+    i_arg = int(
+        kwargs.get("-i", DEFAULT_EVALS)
+    )  # Number of evaluations for each optimization process
     scaling_arg = kwargs.get("-s", 1)  # Type of scaling applied to dataset
     optimizer_arg = kwargs.get("-o", DEFAULT_OPTIMIZER).lower()
     verbose_arg = kwargs.get("-v", False)
