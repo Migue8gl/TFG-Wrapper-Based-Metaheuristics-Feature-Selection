@@ -1,10 +1,12 @@
 import json
 import os
+import random
 import re
 import sys
 import time
 
 import matplotlib.pyplot as plt
+import numpy as np
 import notifications
 import pandas as pd
 
@@ -32,6 +34,17 @@ from plots import (
 plt.style.use(["science", "ieee"])  # Style of plots
 
 
+def set_global_seed(seed):
+    """
+    Set seed for all random number generators for reproducibility.
+
+    Args:
+        seed (int): Seed value to use
+    """
+    random.seed(seed)
+    np.random.seed(seed)
+
+
 def main(*args, **kwargs):
     start_time = time.time()
     # Get parameters from the user
@@ -47,6 +60,9 @@ def main(*args, **kwargs):
     binary_arg = kwargs.get(
         "-b", "s"
     )  # Use optimizer with binary encoding using transfer functions
+    seed_arg = int(kwargs.get("-seed", 42))
+
+    set_global_seed(seed_arg)
 
     # Core functionality
     dataset = load_data(dataset_arg)
@@ -165,13 +181,25 @@ def main(*args, **kwargs):
             metrics_svc["test_fitness"]["std_dev"],
         ],
         "acc": [metrics_knn["test_fitness"]["acc"], metrics_svc["test_fitness"]["acc"]],
+        "acc_std_dev": [
+            metrics_knn["test_fitness"]["acc_std_dev"],
+            metrics_svc["test_fitness"]["acc_std_dev"],
+        ],
         "n_features": [
             metrics_knn["test_fitness"]["n_features"],
             metrics_svc["test_fitness"]["n_features"],
         ],
+        "n_features_std_dev": [
+            metrics_knn["test_fitness"]["n_features_std_dev"],
+            metrics_svc["test_fitness"]["n_features_std_dev"],
+        ],
         "selected_rate": [
             metrics_knn["test_fitness"]["selected_rate"],
             metrics_svc["test_fitness"]["selected_rate"],
+        ],
+        "selected_rate_std_dev": [
+            metrics_knn["test_fitness"]["selected_rate_std_dev"],
+            metrics_svc["test_fitness"]["selected_rate_std_dev"],
         ],
         "execution_time": [
             metrics_knn["execution_time"],

@@ -139,8 +139,11 @@ def k_fold_cross_validation(
             "avg": np.mean(test_fitness),
             "std_dev": std_deviation_test_fitness,
             "acc": np.mean(test_accuracy),
+            "acc_std_dev": np.std(test_accuracy),
             "n_features": np.mean(test_selected_features),
+            "n_features_std_dev": np.std(test_selected_features),
             "selected_rate": np.mean(test_selected_rate),
+            "selected_rate_std_Dev": np.std(test_selected_rate),
         },
         "execution_time": execution_time,
     }
@@ -247,8 +250,11 @@ def evaluate_optimizer(
             "avg": np.mean(test_fitness),
             "std_dev": std_deviation_test_fitness,
             "acc": np.mean(test_accuracy),
+            "acc_std_dev": np.std(test_accuracy),
             "n_features": np.mean(test_selected_features),
+            "n_features_std_dev": np.std(test_selected_features),
             "selected_rate": np.mean(test_selected_rate),
+            "selected_rate_std_Dev": np.std(test_selected_rate),
         },
         "execution_time": execution_time,
     }
