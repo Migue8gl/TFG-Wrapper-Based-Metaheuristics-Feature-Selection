@@ -52,8 +52,11 @@ def generate_analysis_results(encoding: str):
             "avg",
             "std_dev",
             "acc",
+            "acc_std_dev"
             "n_features",
+            "n_features_std_dev",
             "selected_rate",
+            "selected_rate_std_dev",
             "execution_time",
         ]
     ]
